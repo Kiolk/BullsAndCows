@@ -6,7 +6,10 @@ import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,7 +20,7 @@ import java.util.Random;
 
 import static android.R.attr.id;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
     public static int DIG = 4;
     public static int[] randomNumber = new int[10];
     String codedNumber ="";
@@ -32,11 +35,151 @@ public class MainActivity extends AppCompatActivity {
     int cnt0 = 0;
     int cnt1 = 0, cnt2 = 0, cnt3 = 0, cnt4 = 0, cnt5 = 0, cnt6 = 0, cnt7 = 0, cnt8 = 0, cnt9 = 0;
 
+    TextView numberForScreen;
+    Button number1;
+    Button number2;
+    Button number3;
+    Button number4;
+    Button number5;
+    Button number6;
+    Button number7;
+    Button number8;
+    Button number9;
+    Button number0;
+    Button enterButton;
+    Button startButton;
+    Button del;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+
+        numberForScreen = (TextView) findViewById(R.id.editText);
+        number1 = (Button) findViewById(R.id.buttom1);
+        number2 = (Button) findViewById(R.id.buttom2);
+        number3 = (Button) findViewById(R.id.buttom3);
+        number4 = (Button) findViewById(R.id.buttom4);
+        number5 = (Button) findViewById(R.id.buttom5);
+        number6 = (Button) findViewById(R.id.buttom6);
+        number7 = (Button) findViewById(R.id.buttom7);
+        number8 = (Button) findViewById(R.id.buttom8);
+        number9 = (Button) findViewById(R.id.buttom9);
+        number0 = (Button) findViewById(R.id.buttom0);
+        enterButton = (Button) findViewById(R.id.enter);
+        startButton = (Button)  findViewById(R.id.start);
+        del = (Button) findViewById(R.id.buttomDel);
+
+
+
+        View.OnClickListener clickButton = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String buf;
+                buf = numberForScreen.getText().toString();
+                switch (view.getId()){
+                    case R.id.buttom1:
+                        numberForScreen.setText(buf + 1);
+                        break;
+                    case R.id.buttom2:
+                        numberForScreen.setText(buf + 2);
+                        break;
+                    case R.id.buttom3:
+                        numberForScreen.setText(buf + 3);
+                        break;
+                    case R.id.buttom4:
+                        numberForScreen.setText(buf + 4);
+                        break;
+                    case R.id.buttom5:
+                        numberForScreen.setText(buf + 5);
+                        break;
+                    case R.id.buttom6:
+                        numberForScreen.setText(buf + 6);
+                        break;
+                    case R.id.buttom7:
+                        numberForScreen.setText(buf + 7);
+                        break;
+                    case R.id.buttom8:
+                        numberForScreen.setText(buf + 8);
+                        break;
+                    case R.id.buttom9:
+                        numberForScreen.setText(buf + 9);
+                        break;
+                    case R.id.buttom0:
+                        numberForScreen.setText(buf + 0);
+                        break;
+                    case R.id.buttomDel:
+                        if(buf.length() > 0) {
+                            buf = buf.substring(0, buf.length() - 1);
+                            numberForScreen.setText(buf);
+                        }
+                        break;
+                    case R.id.enter:
+                        if (start) {
+                            if (chekNumberForCorrect()) {
+                                getNumber();
+                                numberForScreen.setText("");
+                            } else {
+                                Context context = getApplicationContext();
+                                String message = "Enter " + DIG + "-digits number, without repeating digits!";
+                                int duration = Toast.LENGTH_LONG;
+                                Toast toast = Toast.makeText(context, message, duration);
+                                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                                toast.show();
+                            }
+                        }
+                        break;
+                    case R.id.start:
+                        submitStart();
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+        };
+        number1.setOnClickListener(clickButton);
+        number2.setOnClickListener(clickButton);
+        number3.setOnClickListener(clickButton);
+        number4.setOnClickListener(clickButton);
+        number5.setOnClickListener(clickButton);
+        number6.setOnClickListener(clickButton);
+        number7.setOnClickListener(clickButton);
+        number8.setOnClickListener(clickButton);
+        number9.setOnClickListener(clickButton);
+        number0.setOnClickListener(clickButton);
+        enterButton.setOnClickListener(clickButton);
+        startButton.setOnClickListener(clickButton);
+        del.setOnClickListener(clickButton);
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        menu.add(0, 1, 0, "Rules");
+        menu.add(0, 2, 1, "Setting");
+        menu.add(0, 3, 2, "About app");
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case 1:
+                Intent intent = new Intent(this, Rulespage.class);
+                startActivity(intent);
+                break;
+            case 2:
+                Intent intent2 = new Intent(this, Setting.class);
+                startActivityForResult(intent2, 1);
+                break;
+            case 3:
+                Intent intent3 = new Intent(this, About.class);
+                startActivity(intent3);
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
    public void onRestart(){
@@ -49,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean chekNumberForCorrect(){
-        EditText edittext = (EditText) findViewById(R.id.editText);
+         TextView edittext = (TextView) findViewById(R.id.editText);
         String number = edittext.getText().toString();
         if(number.length() == DIG){
             for(int i = 0; i < DIG; ++i){
@@ -100,23 +243,23 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public void submitEnter(View view){
-        if (start) {
-            if (chekNumberForCorrect()) {
-                getNumber();
-            } else {
-                Context context = getApplicationContext();
-                String message = "Enter " + DIG + "-digits number, without repeating digits!";
-                int duration = Toast.LENGTH_LONG;
-                Toast toast = Toast.makeText(context, message, duration);
-                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                toast.show();
-            }
-        }
-    }
+//    public void submitEnter(View view){
+//        if (start) {
+//            if (chekNumberForCorrect()) {
+//                getNumber();
+//            } else {
+//                Context context = getApplicationContext();
+//                String message = "Enter " + DIG + "-digits number, without repeating digits!";
+//                int duration = Toast.LENGTH_LONG;
+//                Toast toast = Toast.makeText(context, message, duration);
+//                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+//                toast.show();
+//            }
+//        }
+//    }
 
     public void getNumber(){
-        EditText edittext = (EditText) findViewById(R.id.editText);
+        TextView edittext = (TextView) findViewById(R.id.editText);
         String number = edittext.getText().toString();
         enteredNumber = Integer.parseInt(number);
         for(int i = DIG - 1; i >= 0; --i){
@@ -253,11 +396,12 @@ public class MainActivity extends AppCompatActivity {
         return cows;
     }
 
-    public void submitSetting(View view){
+//    public void submitSetting(View view){
+//
+//        Intent intent2 = new Intent(this, Setting.class);
+//        startActivityForResult(intent2, 1);
+//    }
 
-        Intent intent2 = new Intent(this, Setting.class);
-        startActivityForResult(intent2, 1);
-    }
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         String buf = data.getStringExtra("numberofdigits");
         DIG = Integer.parseInt(buf);
@@ -266,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
             chekRestart = DIG;
             TextView start7 = (TextView) findViewById(R.id.start);
             start7.setText("Start game");
-            EditText edittext8 = (EditText) findViewById(R.id.editText);
+            TextView edittext8 = (TextView) findViewById(R.id.editText);
             edittext8.setText("" + codedNumber);
 
             codedNumber ="";
@@ -274,15 +418,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void  submitRules(View view){
-        Intent intent = new Intent(this, Rulespage.class);
-        startActivity(intent);
-    }
+//    public void  submitRules(View view){
+//        Intent intent = new Intent(this, Rulespage.class);
+//        startActivity(intent);
+//    }
 
-    public void submitStart(View view){
-        submitStart();
-
-    }
+//    public void submitStart(View view){
+//        submitStart();
+//
+//    }
 
     public void submitStart(){
         if (!start) {
@@ -339,7 +483,7 @@ public class MainActivity extends AppCompatActivity {
             image12.setImageResource(R.drawable.zero);
 
 
-            EditText edittext = (EditText) findViewById(R.id.editText);
+            TextView edittext = (TextView) findViewById(R.id.editText);
             edittext.setText("");
             TextView test3 = (TextView) findViewById(R.id.number1);
             test3.setText("");
@@ -359,7 +503,7 @@ public class MainActivity extends AppCompatActivity {
             TextView start2 = (TextView) findViewById(R.id.start);
             start2.setText("Start game");
 
-            EditText edittext = (EditText) findViewById(R.id.editText);
+            TextView edittext = (TextView) findViewById(R.id.editText);
             edittext.setText("" + codedNumber);
 
             codedNumber ="";

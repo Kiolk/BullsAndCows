@@ -6,18 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.notepad.bullsandcows.Rulespage">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="15sp"
-        android:textColor="#000000"
-        android:padding="8dp"
-        android:text="Bulls and Cows\n
 
-This game powered by Yauheni Sliz.\n
-
-Animals in game designed by Freepik http://www.freepik.com/\n
-"/>
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="300dp"

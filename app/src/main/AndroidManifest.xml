@@ -19,13 +19,14 @@
         <activity
             android:name=".Rulespage"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Dialog">
-
-        </activity>
-        <activity android:name=".Setting"
+            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+        <activity
+            android:name=".Setting"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"
-            ></activity>
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".About"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"></activity>
     </application>
 
 </manifest>
