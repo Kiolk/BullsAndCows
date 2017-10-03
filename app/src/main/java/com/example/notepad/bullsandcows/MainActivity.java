@@ -3,6 +3,7 @@ package com.example.notepad.bullsandcows;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -20,14 +21,15 @@ import java.util.Random;
 
 import static android.R.attr.id;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
+
     public static int DIG = 4;
     public static int[] randomNumber = new int[10];
-    String codedNumber ="";
+    String codedNumber = "";
     int enteredNumber = 0;
     int cntMoves = 1;
     boolean start = false;
-
+    boolean mode;
 
     public static int[] enteredArray = new int[10];
     int chekRestart = DIG;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
         numberForScreen = (TextView) findViewById(R.id.editText);
@@ -68,17 +70,16 @@ public class MainActivity extends AppCompatActivity  {
         number9 = (Button) findViewById(R.id.buttom9);
         number0 = (Button) findViewById(R.id.buttom0);
         enterButton = (Button) findViewById(R.id.enter);
-        startButton = (Button)  findViewById(R.id.start);
+        startButton = (Button) findViewById(R.id.start);
         del = (Button) findViewById(R.id.buttomDel);
 
-
-
         View.OnClickListener clickButton = new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 String buf;
                 buf = numberForScreen.getText().toString();
-                switch (view.getId()){
+                switch (view.getId()) {
                     case R.id.buttom1:
                         numberForScreen.setText(buf + 1);
                         break;
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity  {
                         numberForScreen.setText(buf + 0);
                         break;
                     case R.id.buttomDel:
-                        if(buf.length() > 0) {
+                        if (buf.length() > 0) {
                             buf = buf.substring(0, buf.length() - 1);
                             numberForScreen.setText(buf);
                         }
@@ -155,15 +156,15 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 1, 0, "Rules");
         menu.add(0, 2, 1, "Setting");
         menu.add(0, 3, 2, "About app");
         return super.onCreateOptionsMenu(menu);
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case 1:
                 Intent intent = new Intent(this, Rulespage.class);
                 startActivity(intent);
@@ -182,58 +183,62 @@ public class MainActivity extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-   public void onRestart(){
-       super.onRestart();
-
-   }
-
-    public static void main(String[] argc){
+    public void onRestart() {
+        super.onRestart();
 
     }
 
-    public boolean chekNumberForCorrect(){
-         TextView edittext = (TextView) findViewById(R.id.editText);
+    public static void main(String[] argc) {
+
+    }
+
+    public boolean chekNumberForCorrect() {
+        TextView edittext = (TextView) findViewById(R.id.editText);
         String number = edittext.getText().toString();
-        if(number.length() == DIG){
-            for(int i = 0; i < DIG; ++i){
-                if(number.charAt(i) < '0' || number.charAt(i) > '9')
+        if (number.length() == DIG) {
+            for (int i = 0; i < DIG; ++i) {
+                if (number.charAt(i) < '0' || number.charAt(i) > '9') {
                     return false;
+                }
             }
             int numberForCheking = Integer.parseInt(number);
             int k = 1;
-            for (int i = 0; i < DIG - 1; ++i){
+            for (int i = 0; i < DIG - 1; ++i) {
                 k = k * 10;
             }
-            if(numberForCheking >= k){
-                int [] numberArray;
-                numberArray = new int [DIG];
-                for(int i = DIG - 1; i >= 0; --i){
+            if (numberForCheking >= k) {
+                int[] numberArray;
+                numberArray = new int[DIG];
+                for (int i = DIG - 1; i >= 0; --i) {
                     numberArray[i] = numberForCheking % 10;
                     numberForCheking = numberForCheking / 10;
                 }
-                for(int i = 0, cnt = 0; i < DIG; ++i){
-                    for(int j = 0; j < DIG; ++j){
-                        if(numberArray[i] == numberArray[j])
+                for (int i = 0, cnt = 0; i < DIG; ++i) {
+                    for (int j = 0; j < DIG; ++j) {
+                        if (numberArray[i] == numberArray[j]) {
                             ++cnt;
-                        if(cnt > DIG)
+                        }
+                        if (cnt > DIG) {
                             return false;
+                        }
                     }
                 }
                 return true;
-            }
-            else if(number.charAt(0) == '0' && numberForCheking >= k / 10){
-                int [] numberArray;
-                numberArray = new int [DIG];
-                for(int i = DIG - 1; i >= 1; --i){
+            } else if (number.charAt(0) == '0' && numberForCheking >= k / 10) {
+                int[] numberArray;
+                numberArray = new int[DIG];
+                for (int i = DIG - 1; i >= 1; --i) {
                     numberArray[i] = numberForCheking % 10;
                     numberForCheking = numberForCheking / 10;
                 }
-                for(int i = 0, cnt = 0; i < DIG; ++i){
-                    for(int j = 0; j < DIG; ++j){
-                        if(numberArray[i] == numberArray[j])
+                for (int i = 0, cnt = 0; i < DIG; ++i) {
+                    for (int j = 0; j < DIG; ++j) {
+                        if (numberArray[i] == numberArray[j]) {
                             ++cnt;
-                        if(cnt > DIG)
+                        }
+                        if (cnt > DIG) {
                             return false;
+                        }
                     }
                 }
 
@@ -258,20 +263,20 @@ public class MainActivity extends AppCompatActivity  {
 //        }
 //    }
 
-    public void getNumber(){
+    public void getNumber() {
         TextView edittext = (TextView) findViewById(R.id.editText);
         String number = edittext.getText().toString();
         enteredNumber = Integer.parseInt(number);
-        for(int i = DIG - 1; i >= 0; --i){
+        for (int i = DIG - 1; i >= 0; --i) {
             enteredArray[i] = enteredNumber % 10;
             enteredNumber = enteredNumber / 10;
         }
         shiftData();
         TextView test3 = (TextView) findViewById(R.id.number1);
         test3.setText(number);
-        if(chekingBulls() == DIG) {
+        if (chekingBulls() == DIG) {
             TextView test5 = (TextView) findViewById(R.id.number1);
-            test5.setText("Won!" );
+            test5.setText("Won!");
         }
         TextView test1 = (TextView) findViewById(R.id.number2);
         test1.setText("" + chekingBulls());
@@ -286,7 +291,7 @@ public class MainActivity extends AppCompatActivity  {
         ++cntMoves;
     }
 
-    public void shiftData(){
+    public void shiftData() {
         TextView copyE1 = (TextView) findViewById(R.id.cntMoveE);
         TextView fromD1 = (TextView) findViewById(R.id.cntMoveD);
         copyE1.setText("" + fromD1.getText());
@@ -298,7 +303,6 @@ public class MainActivity extends AppCompatActivity  {
         fromB1.setText("" + fromA1.getText());
         TextView from = (TextView) findViewById(R.id.cntMove);
         fromA1.setText("" + from.getText());
-
 
         TextView copyE2 = (TextView) findViewById(R.id.number1E);
         TextView fromD2 = (TextView) findViewById(R.id.number1D);
@@ -336,61 +340,55 @@ public class MainActivity extends AppCompatActivity  {
         TextView from4 = (TextView) findViewById(R.id.number3);
         fromA4.setText("" + from4.getText());
 
-
-
-        if( cntMoves == 2){
+        if (cntMoves == 2) {
             ImageView image = (ImageView) findViewById(R.id.imageView1A);
             image.setImageResource(R.drawable.bullgood);
             ImageView image2 = (ImageView) findViewById(R.id.imageViewA);
             image2.setImageResource(R.drawable.cowgood);
-        }
-        else if( cntMoves == 3){
+        } else if (cntMoves == 3) {
             ImageView image = (ImageView) findViewById(R.id.imageView1B);
             image.setImageResource(R.drawable.bullgood);
             ImageView image2 = (ImageView) findViewById(R.id.imageViewB);
             image2.setImageResource(R.drawable.cowgood);
-        }
-        else if( cntMoves == 4){
+        } else if (cntMoves == 4) {
             ImageView image = (ImageView) findViewById(R.id.imageView1C);
             image.setImageResource(R.drawable.bullgood);
             ImageView image2 = (ImageView) findViewById(R.id.imageViewC);
             image2.setImageResource(R.drawable.cowgood);
-        }
-        else if( cntMoves == 5){
+        } else if (cntMoves == 5) {
             ImageView image = (ImageView) findViewById(R.id.imageView1D);
             image.setImageResource(R.drawable.bullgood);
             ImageView image2 = (ImageView) findViewById(R.id.imageViewD);
             image2.setImageResource(R.drawable.cowgood);
-        }
-
-        else if( cntMoves == 6){
+        } else if (cntMoves == 6) {
             ImageView image = (ImageView) findViewById(R.id.imageView1E);
             image.setImageResource(R.drawable.bullgood);
             ImageView image2 = (ImageView) findViewById(R.id.imageViewE);
             image2.setImageResource(R.drawable.cowgood);
 
-
         }
 
     }
 
-   public int chekingBulls(){
+    public int chekingBulls() {
         int bulls = 0;
-        for(int i = 0; i < DIG; ++i){
-            if (randomNumber[i] == enteredArray[i])
+        for (int i = 0; i < DIG; ++i) {
+            if (randomNumber[i] == enteredArray[i]) {
                 ++bulls;
+            }
         }
         return bulls;
     }
 
-    public int chekingCows(){
+    public int chekingCows() {
         int cows = 0;
         int i = 0;
         int j = 0;
-        for(i = 0; i < DIG; ++i) {
+        for (i = 0; i < DIG; ++i) {
             for (j = 0; j < DIG; ++j) {
-            if (enteredArray[i] == randomNumber[j])
-                ++cows;
+                if (enteredArray[i] == randomNumber[j]) {
+                    ++cows;
+                }
             }
         }
         return cows;
@@ -402,18 +400,26 @@ public class MainActivity extends AppCompatActivity  {
 //        startActivityForResult(intent2, 1);
 //    }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         String buf = data.getStringExtra("numberofdigits");
+        mode = data.getBooleanExtra("modeState", mode);
+        if (mode) {
+            LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
+            lyaoutmain.setBackgroundColor(Color.BLACK);
+        } else {
+            LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
+            lyaoutmain.setBackgroundColor(Color.WHITE);
+        }
         DIG = Integer.parseInt(buf);
         //submitStart();
-        if(chekRestart != DIG && start){
+        if (chekRestart != DIG && start) {
             chekRestart = DIG;
             TextView start7 = (TextView) findViewById(R.id.start);
             start7.setText("Start game");
             TextView edittext8 = (TextView) findViewById(R.id.editText);
             edittext8.setText("" + codedNumber);
 
-            codedNumber ="";
+            codedNumber = "";
             start = false;
         }
     }
@@ -428,7 +434,7 @@ public class MainActivity extends AppCompatActivity  {
 //
 //    }
 
-    public void submitStart(){
+    public void submitStart() {
         if (!start) {
             crateRandomNumber();
             TextView start1 = (TextView) findViewById(R.id.start);
@@ -438,7 +444,15 @@ public class MainActivity extends AppCompatActivity  {
             enteredNumber = 0;
             cntMoves = 1;
             cnt0 = 3;
-            cnt1 = 3; cnt2 = 3; cnt3 = 3; cnt4 = 3; cnt5 = 3; cnt6 = 3; cnt7 = 3; cnt8 = 3; cnt9 = 3;
+            cnt1 = 3;
+            cnt2 = 3;
+            cnt3 = 3;
+            cnt4 = 3;
+            cnt5 = 3;
+            cnt6 = 3;
+            cnt7 = 3;
+            cnt8 = 3;
+            cnt9 = 3;
             submit0();
             submit1();
             submit2();
@@ -482,7 +496,6 @@ public class MainActivity extends AppCompatActivity  {
             ImageView image12 = (ImageView) findViewById(R.id.imageViewE);
             image12.setImageResource(R.drawable.zero);
 
-
             TextView edittext = (TextView) findViewById(R.id.editText);
             edittext.setText("");
             TextView test3 = (TextView) findViewById(R.id.number1);
@@ -495,47 +508,48 @@ public class MainActivity extends AppCompatActivity  {
             test4.setText("");
             enteredNumber = 0;
             cntMoves = 1;
-            for(int i = 0; i < 4; ++i)
-            shiftData();
+            for (int i = 0; i < 4; ++i) {
+                shiftData();
+            }
 
-        }
-        else{
+        } else {
             TextView start2 = (TextView) findViewById(R.id.start);
             start2.setText("Start game");
 
             TextView edittext = (TextView) findViewById(R.id.editText);
             edittext.setText("" + codedNumber);
 
-            codedNumber ="";
+            codedNumber = "";
             start = false;
         }
 
     }
 
-    public void crateRandomNumber(){
-        for(int i = 0, j = 0; i < DIG; ++i){
+    public void crateRandomNumber() {
+        for (int i = 0, j = 0; i < DIG; ++i) {
             Random r = new Random();
             int k = r.nextInt(9);
-            if (i == 0)
+            if (i == 0) {
                 randomNumber[i] = k;
-            else {
+            } else {
                 for (j = 0; j < i; ++j) {
                     if (randomNumber[j] == k) {
                         --i;
                         break;
+                    } else {
+                        randomNumber[i] = k;
                     }
-                    else randomNumber[i] = k;
                 }
             }
 
         }
-        for(int i = 0; i < DIG; ++i){
+        for (int i = 0; i < DIG; ++i) {
             codedNumber = codedNumber + randomNumber[i];
         }
 
     }
 
-    public void submit0(View view){
+    public void submit0(View view) {
         submit0();
     }
 
@@ -558,7 +572,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit1(View view){
+    public void submit1(View view) {
         submit1();
     }
 
@@ -581,7 +595,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit2(View view){
+    public void submit2(View view) {
         submit2();
     }
 
@@ -604,7 +618,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit3(View view){
+    public void submit3(View view) {
         submit3();
     }
 
@@ -627,7 +641,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit4(View view){
+    public void submit4(View view) {
         submit4();
     }
 
@@ -650,7 +664,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit5(View view){
+    public void submit5(View view) {
         submit5();
     }
 
@@ -673,7 +687,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit6(View view){
+    public void submit6(View view) {
         submit6();
     }
 
@@ -696,7 +710,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit7(View view){
+    public void submit7(View view) {
         submit7();
     }
 
@@ -719,7 +733,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit8(View view){
+    public void submit8(View view) {
         submit8();
     }
 
@@ -742,7 +756,7 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
-    public void submit9(View view){
+    public void submit9(View view) {
         submit9();
     }
 

@@ -1,4 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    android:id="@+id/mainLyaout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,116 +19,121 @@
             android:id="@+id/help0"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit0"
             android:text="0"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
 
         <TextView
             android:id="@+id/help1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit1"
             android:text="1"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
 
         <TextView
             android:id="@+id/help2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit2"
             android:text="2"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
 
         <TextView
             android:id="@+id/help3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit3"
             android:text="3"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
+
         <TextView
             android:id="@+id/help4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit4"
             android:text="4"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
+
         <TextView
             android:id="@+id/help5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit5"
             android:text="5"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
+
         <TextView
             android:id="@+id/help6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit6"
             android:text="6"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
+
         <TextView
             android:id="@+id/help7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit7"
             android:text="7"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
+
         <TextView
             android:id="@+id/help8"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit8"
             android:text="8"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
 
         <TextView
             android:id="@+id/help9"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_weight="1"
+            android:background="#EEEEEE"
+            android:gravity="center"
             android:onClick="submit9"
             android:text="9"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:background="#EEEEEE"
-            android:layout_margin="4dp"/>
+            android:textSize="30sp"/>
 
     </LinearLayout>
 
@@ -134,39 +141,33 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#ffffff">
+        >
 
         <TextView
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
-            android:inputType="text"
-            android:textSize="60sp"
-            android:text=""
-            android:hint="number"
-            android:gravity="center"
             android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:hint="number"
+            android:inputType="text"
+            android:text=""
+            android:textSize="60sp"
 
 
             />
 
 
-
-
-
-
     </LinearLayout>
-
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
-        android:orientation="vertical"
-        android:background="#ffffff">
-        
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -178,27 +179,28 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"/>
 
             <TextView
                 android:id="@+id/number1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:textSize="48sp"
                 android:text=""
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="48sp"/>
+
             <TextView
                 android:id="@+id/number2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageView1"
@@ -212,9 +214,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
-                android:text = ""
                 android:gravity="center"
+                android:text=""
+                android:textSize="30sp"
                 android:textStyle="bold"/>
 
             <ImageView
@@ -222,7 +224,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-               />
+                />
         </LinearLayout>
 
 
@@ -237,52 +239,53 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
+                android:text=""
 
-                android:text = ""/>
+                android:textSize="30sp"/>
 
             <TextView
                 android:id="@+id/number1A"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:textSize="48sp"
                 android:text=""
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="48sp"/>
+
             <TextView
                 android:id="@+id/number2A"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageView1A"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                 />
+                />
 
             <TextView
                 android:id="@+id/number3A"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageViewA"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                 />
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -296,52 +299,53 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
+                android:text=""
 
-                android:text = ""/>
+                android:textSize="30sp"/>
 
             <TextView
                 android:id="@+id/number1B"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:textSize="48sp"
                 android:text=""
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="48sp"/>
+
             <TextView
                 android:id="@+id/number2B"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageView1B"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                 />
+                />
 
             <TextView
                 android:id="@+id/number3B"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageViewB"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                 />
+                />
         </LinearLayout>
 
 
@@ -356,52 +360,53 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
+                android:text=""
 
-                android:text = ""/>
+                android:textSize="30sp"/>
 
             <TextView
                 android:id="@+id/number1C"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:textSize="48sp"
                 android:text=""
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="48sp"/>
+
             <TextView
                 android:id="@+id/number2C"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageView1C"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                                />
+                />
 
             <TextView
                 android:id="@+id/number3C"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageViewC"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                 />
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -415,52 +420,53 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
+                android:text=""
 
-                android:text = ""/>
+                android:textSize="30sp"/>
 
             <TextView
                 android:id="@+id/number1D"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:textSize="48sp"
                 android:text=""
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="48sp"/>
+
             <TextView
                 android:id="@+id/number2D"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageView1D"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                 />
+                />
 
             <TextView
                 android:id="@+id/number3D"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageViewD"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                 />
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -475,28 +481,29 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
+                android:text=""
 
-                android:text = ""/>
+                android:textSize="30sp"/>
 
             <TextView
                 android:id="@+id/number1E"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:textSize="48sp"
                 android:text=""
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="48sp"/>
+
             <TextView
                 android:id="@+id/number2E"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageView1E"
@@ -510,10 +517,10 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="30sp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text = ""/>
+                android:text=""
+                android:textSize="30sp"
+                android:textStyle="bold"/>
 
             <ImageView
                 android:id="@+id/imageViewE"
@@ -524,10 +531,6 @@
         </LinearLayout>
 
 
-
-
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -535,41 +538,47 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <Button
+                android:id="@+id/buttom1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="1"
-                android:id="@+id/buttom1"/>
+                android:text="1"/>
+
             <Button
+                android:id="@+id/buttom2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="2"
-                android:id="@+id/buttom2"/>
+                android:text="2"/>
+
             <Button
+                android:id="@+id/buttom3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="3"
-                android:id="@+id/buttom3"/>
+                android:text="3"/>
+
             <Button
+                android:id="@+id/buttom4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="4"
-                android:id="@+id/buttom4"/>
+                android:text="4"/>
+
             <Button
+                android:id="@+id/buttom5"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="5"
-                android:id="@+id/buttom5"/>
+                android:text="5"/>
 
         </LinearLayout>
 
@@ -579,36 +588,41 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             >
+
             <Button
+                android:id="@+id/buttom6"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="6"
-                android:id="@+id/buttom6"/>
+                android:text="6"/>
+
             <Button
+                android:id="@+id/buttom7"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="7"
-                android:id="@+id/buttom7"/>
+                android:text="7"/>
+
             <Button
+                android:id="@+id/buttom8"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="8"
-                android:id="@+id/buttom8"/>
+                android:text="8"/>
+
             <Button
+                android:id="@+id/buttom9"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="9"
-                android:id="@+id/buttom9"/>
+                android:text="9"/>
+
             <Button
+                android:id="@+id/buttom0"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="0"
-                android:id="@+id/buttom0"/>
+                android:text="0"/>
 
         </LinearLayout>
 
@@ -617,12 +631,13 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <Button
+                android:id="@+id/start"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:text="Start game"
-                android:id="@+id/start"/>
+                android:text="Start game"/>
 
             <Button
                 android:id="@+id/enter"
@@ -632,11 +647,11 @@
                 android:text="Enter"/>
 
             <Button
+                android:id="@+id/buttomDel"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Del"
-                android:id="@+id/buttomDel"/>
+                android:text="Del"/>
         </LinearLayout>
 
 
