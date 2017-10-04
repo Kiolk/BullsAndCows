@@ -14,6 +14,7 @@ public class Setting extends AppCompatActivity {
     public static int numberOfDigits = 4;
     Button modButton;
     static boolean mode;
+    //comm
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
