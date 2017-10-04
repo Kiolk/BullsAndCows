@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 Intent intent2 = new Intent(this, Setting.class);
+                intent2.putExtra("modeState", mode);
                 startActivityForResult(intent2, 1);
                 break;
             case 3:
@@ -401,6 +402,9 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
         String buf = data.getStringExtra("numberofdigits");
         mode = data.getBooleanExtra("modeState", mode);
         if (mode) {

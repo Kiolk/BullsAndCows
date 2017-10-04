@@ -21,11 +21,13 @@ public class Setting extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_setting);
         modButton = (Button) findViewById(R.id.modeButton);
-//        if (mode){
-//            modButton.setText("Night mode");
-//        } else {
-//            modButton.setText("Daily mode");
-//        }
+        Intent intent = getIntent();
+        mode = intent.getBooleanExtra("modeState", mode);
+                if (!mode){
+            modButton.setText("Night mode");
+        } else {
+            modButton.setText("Daily mode");
+        }
         TextView text = (TextView) findViewById(R.id.text);
         text.setText("" + numberOfDigits);
 
