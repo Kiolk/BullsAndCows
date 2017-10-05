@@ -402,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             String buf = data.getStringExtra("numberofdigits");
             mode = data.getBooleanExtra("modeState", mode);
             if (mode) {

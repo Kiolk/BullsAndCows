@@ -33,9 +33,7 @@ public class Setting extends AppCompatActivity {
         text.setText("" + numberOfDigits);
 
 
-        Intent intent3 = new Intent();
-        intent3.putExtra("numberofdigits", numberOfDigits);
-        setResult(RESULT_OK, intent3);
+
 
         modButton.setOnClickListener(clickButton);
     }
@@ -81,4 +79,5 @@ public class Setting extends AppCompatActivity {
         setResult(RESULT_OK, intent3);
         finish();
     }
+
 }
