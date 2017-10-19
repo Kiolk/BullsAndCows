@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ public class Setting extends AppCompatActivity {
     public static int numberOfDigits = 4;
     Button modButton;
     static boolean mode;
+    EditText mNikEditText;
     //comm
 
     @Override
@@ -22,18 +24,17 @@ public class Setting extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_setting);
         modButton = (Button) findViewById(R.id.modeButton);
+        mNikEditText = (EditText) findViewById(R.id.set_nik_edit_text);
         Intent intent = getIntent();
         mode = intent.getBooleanExtra("modeState", mode);
-                if (!mode){
+        if (!mode) {
             modButton.setText("Night mode");
         } else {
             modButton.setText("Daily mode");
         }
+        mNikEditText.setText(intent.getStringExtra("nikOfUser"));
         TextView text = (TextView) findViewById(R.id.text);
         text.setText("" + numberOfDigits);
-
-
-
 
         modButton.setOnClickListener(clickButton);
     }
@@ -59,15 +60,19 @@ public class Setting extends AppCompatActivity {
     };
 
     public void submitMinus(View view) {
-        numberOfDigits -= 1;
-        TextView text = (TextView) findViewById(R.id.text);
-        text.setText("" + numberOfDigits);
+        if (numberOfDigits >= 1) {
+            numberOfDigits -= 1;
+            TextView text = (TextView) findViewById(R.id.text);
+            text.setText("" + numberOfDigits);
+        }
     }
 
     public void submitPlus(View view) {
-        numberOfDigits += 1;
-        TextView text = (TextView) findViewById(R.id.text);
-        text.setText("" + numberOfDigits);
+        if (numberOfDigits <= 10) {
+            numberOfDigits += 1;
+            TextView text = (TextView) findViewById(R.id.text);
+            text.setText("" + numberOfDigits);
+        }
     }
 
     public void submitApply(View view) {
@@ -76,6 +81,7 @@ public class Setting extends AppCompatActivity {
         Intent intent3 = new Intent();
         intent3.putExtra("numberofdigits", number);
         intent3.putExtra("modeState", mode);
+        intent3.putExtra("nikOfUser", mNikEditText.getText().toString());
         setResult(RESULT_OK, intent3);
         finish();
     }

@@ -87,6 +87,20 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <EditText
+                android:id="@+id/set_nik_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/set_your_name_hint"
+                android:textSize="38sp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <ImageView

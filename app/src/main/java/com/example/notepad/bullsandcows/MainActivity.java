@@ -2,6 +2,7 @@ package com.example.notepad.bullsandcows;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -11,17 +12,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
-
-import static android.R.attr.id;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String SAVED_TEXT = "saved-text";
+    ArrayList<String> mMoves = new ArrayList<>();
+    ArrayList<String> mNumbers = new ArrayList<>();
+    ArrayList<String> mCows = new ArrayList<>();
+    ArrayList<String> mBuls = new ArrayList<>();
 
     public static int DIG = 4;
     public static int[] randomNumber = new int[10];
@@ -30,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     int cntMoves = 1;
     boolean start = false;
     boolean mode;
+    SharedPreferences mSaveNikName;
 
     public static int[] enteredArray = new int[10];
     int chekRestart = DIG;
@@ -51,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
     Button enterButton;
     Button startButton;
     Button del;
+    TextView mTimer;
+    TextView mNikOfUser;
+    private long mTimerCount = 0;
+    Timer mTimerTimer;
+    WriteReadFile mWriteReadFile = new WriteReadFile();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
         enterButton = (Button) findViewById(R.id.enter);
         startButton = (Button) findViewById(R.id.start);
         del = (Button) findViewById(R.id.buttomDel);
+        mTimer = (TextView) findViewById(R.id.timer_text_view);
+        mNikOfUser = (TextView) findViewById(R.id.user_name_text_view);
+        loadNikName();
+
+        // mTimerTimer = new Timer();
 
         View.OnClickListener clickButton = new View.OnClickListener() {
 
@@ -121,6 +143,8 @@ public class MainActivity extends AppCompatActivity {
                             if (chekNumberForCorrect()) {
                                 getNumber();
                                 numberForScreen.setText("");
+                                chekinNumberForWin();
+
                             } else {
                                 Context context = getApplicationContext();
                                 String message = "Enter " + DIG + "-digits number, without repeating digits!";
@@ -129,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                                 toast.show();
                             }
+                            creatListViewWithMoves();
                         }
                         break;
                     case R.id.start:
@@ -156,10 +181,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveNikName();
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 1, 0, "Rules");
         menu.add(0, 2, 1, "Setting");
         menu.add(0, 3, 2, "About app");
+        menu.add(0, 4, 3, "Records");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -172,11 +204,17 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 Intent intent2 = new Intent(this, Setting.class);
                 intent2.putExtra("modeState", mode);
+                intent2.putExtra("nikOfUser", mNikOfUser.getText());
                 startActivityForResult(intent2, 1);
                 break;
             case 3:
                 Intent intent3 = new Intent(this, About.class);
                 startActivity(intent3);
+                break;
+            case 4:
+                Intent intent4 = new Intent(this, Records.class);
+                startActivity(intent4);
+                break;
             default:
                 break;
         }
@@ -249,24 +287,11 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-//    public void submitEnter(View view){
-//        if (start) {
-//            if (chekNumberForCorrect()) {
-//                getNumber();
-//            } else {
-//                Context context = getApplicationContext();
-//                String message = "Enter " + DIG + "-digits number, without repeating digits!";
-//                int duration = Toast.LENGTH_LONG;
-//                Toast toast = Toast.makeText(context, message, duration);
-//                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-//                toast.show();
-//            }
-//        }
-//    }
-
     public void getNumber() {
         TextView edittext = (TextView) findViewById(R.id.editText);
         String number = edittext.getText().toString();
+        mNumbers.add(number);
+        mMoves.add("" + cntMoves);
         enteredNumber = Integer.parseInt(number);
         for (int i = DIG - 1; i >= 0; --i) {
             enteredArray[i] = enteredNumber % 10;
@@ -275,10 +300,8 @@ public class MainActivity extends AppCompatActivity {
         shiftData();
         TextView test3 = (TextView) findViewById(R.id.number1);
         test3.setText(number);
-        if (chekingBulls() == DIG) {
-            TextView test5 = (TextView) findViewById(R.id.number1);
-            test5.setText("Won!");
-        }
+        mBuls.add("" + chekingBulls());
+        chekinNumberForWin();
         TextView test1 = (TextView) findViewById(R.id.number2);
         test1.setText("" + chekingBulls());
         ImageView image = (ImageView) findViewById(R.id.imageView1);
@@ -287,9 +310,29 @@ public class MainActivity extends AppCompatActivity {
         ImageView image2 = (ImageView) findViewById(R.id.imageView);
         image2.setImageResource(R.drawable.cowgood);
         test2.setText("" + (chekingCows() - chekingBulls()));
+        mCows.add("" + (chekingCows() - chekingBulls()));
         TextView test4 = (TextView) findViewById(R.id.cntMove);
         test4.setText("" + cntMoves);
         ++cntMoves;
+    }
+
+    public void chekinNumberForWin() {
+        if (chekingBulls() == DIG) {
+            TextView test5 = (TextView) findViewById(R.id.number1);
+            test5.setText("Won!");
+            TextView wonText = (TextView) findViewById(R.id.editText);
+            wonText.setText("WON!");
+            mTimerTimer.cancel();
+            String numberOfMoves = "" + cntMoves;
+            String numberOfCodedDigits = "" + DIG;
+//            RecordObject recordObject = new RecordObject(numberOfMoves, mTimer.getText().toString(), mNikOfUser.getText().toString(), numberOfMoves, "12.10.2017 13.30.00");
+//            mWriteReadFile.writeSerileazedObject(recordObject, this);
+//            RecordObject dffff = mWriteReadFile.readDeserileasedObject(this);
+//            String txt = dffff.getNikName();
+//            Toast.makeText(this, txt, Toast.LENGTH_LONG).show();
+            mWriteReadFile.writeInFile(numberOfMoves, mNikOfUser.getText().toString(), mTimer.getText().toString(), numberOfCodedDigits, this);
+            mWriteReadFile.readFile(this);
+        }
     }
 
     public void shiftData() {
@@ -395,16 +438,12 @@ public class MainActivity extends AppCompatActivity {
         return cows;
     }
 
-//    public void submitSetting(View view){
-//
-//        Intent intent2 = new Intent(this, Setting.class);
-//        startActivityForResult(intent2, 1);
-//    }
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             String buf = data.getStringExtra("numberofdigits");
             mode = data.getBooleanExtra("modeState", mode);
+            mNikOfUser.setText(data.getStringExtra("nikOfUser"));
+            creatListViewWithMoves();
             if (mode) {
                 LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
                 lyaoutmain.setBackgroundColor(Color.BLACK);
@@ -458,7 +497,9 @@ public class MainActivity extends AppCompatActivity {
                 t24.setTextColor(Color.WHITE);
                 TextView t25 = (TextView) findViewById(R.id.editText);
                 t25.setTextColor(Color.WHITE);
+
             } else {
+
                 LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
                 lyaoutmain.setBackgroundColor(Color.WHITE);
                 TextView t1 = (TextView) findViewById(R.id.number3E);
@@ -513,7 +554,6 @@ public class MainActivity extends AppCompatActivity {
                 t25.setTextColor(Color.BLACK);
             }
             DIG = Integer.parseInt(buf);
-            //submitStart();
             if (chekRestart != DIG && start) {
                 chekRestart = DIG;
                 TextView start7 = (TextView) findViewById(R.id.start);
@@ -529,22 +569,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    public void  submitRules(View view){
-//        Intent intent = new Intent(this, Rulespage.class);
-//        startActivity(intent);
-//    }
-
-//    public void submitStart(View view){
-//        submitStart();
-//
-//    }
-
     public void submitStart() {
         if (!start) {
             crateRandomNumber();
             TextView start1 = (TextView) findViewById(R.id.start);
             start1.setText("Show number");
-
+            startTimer();
             start = true;
             enteredNumber = 0;
             cntMoves = 1;
@@ -575,6 +605,9 @@ public class MainActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(context, message, duration);
             toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
             toast.show();
+
+            cleanListView();
+            creatListViewWithMoves();
 
             ImageView image = (ImageView) findViewById(R.id.imageView1D);
             image.setImageResource(R.drawable.zero);
@@ -623,11 +656,44 @@ public class MainActivity extends AppCompatActivity {
 
             TextView edittext = (TextView) findViewById(R.id.editText);
             edittext.setText("" + codedNumber);
+            cleanListView();
 
             codedNumber = "";
             start = false;
+            mTimerTimer.cancel();
         }
 
+    }
+
+    public void startTimer() {
+        mTimerCount = 0;
+        mTimer.setText("");
+        mTimerTimer = new Timer();
+        mTimerTimer.scheduleAtFixedRate(new TimerTask() {
+
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Date pDate = new Date(mTimerCount * 1000);
+                        DateFormat format = new SimpleDateFormat("mm:ss");
+                        String formatedTime = format.format(pDate);
+                        mTimer.setText("" + formatedTime);
+                        ++mTimerCount;
+                    }
+                });
+            }
+        }, 1000, 1000);
+
+    }
+
+    public void cleanListView() {
+        mMoves.clear();
+        mCows.clear();
+        mBuls.clear();
+        mNumbers.clear();
     }
 
     public void crateRandomNumber() {
@@ -884,4 +950,46 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void creatListViewWithMoves() {
+        ListView listOfMoves = (ListView) findViewById(R.id.list_of_moves_list_view);
+        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), mMoves, mNumbers, mBuls, mCows, mode);
+        listOfMoves.setAdapter(customAdapter);
+        //checkColorMod();
+    }
+
+    public void checkColorMod() {
+        if (cntMoves > 1) {
+            if (mode) {
+                TextView pBull = (TextView) findViewById(R.id.bulls_list_text_view);
+                pBull.setTextColor(Color.WHITE);
+                TextView pCow = (TextView) findViewById(R.id.cows_list_text_view);
+                pCow.setTextColor(Color.WHITE);
+                TextView pNumber = (TextView) findViewById(R.id.number_list_text_view);
+                pNumber.setTextColor(Color.WHITE);
+                TextView pCnt = (TextView) findViewById(R.id.cnt_move_list_text_view);
+                pCnt.setTextColor(Color.WHITE);
+            } else {
+                TextView pBull = (TextView) findViewById(R.id.bulls_list_text_view);
+                pBull.setTextColor(Color.BLACK);
+                TextView pCow = (TextView) findViewById(R.id.cows_list_text_view);
+                pCow.setTextColor(Color.BLACK);
+                TextView pNumber = (TextView) findViewById(R.id.number_list_text_view);
+                pNumber.setTextColor(Color.BLACK);
+                TextView pCnt = (TextView) findViewById(R.id.cnt_move_list_text_view);
+                pCnt.setTextColor(Color.BLACK);
+            }
+        }
+    }
+    public void saveNikName(){
+        mSaveNikName = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSaveNikName.edit();
+        editor.putString(SAVED_TEXT, mNikOfUser.getText().toString());
+        editor.commit();
+    }
+
+    public void loadNikName(){
+        mSaveNikName = getPreferences(MODE_PRIVATE);
+        String savedText = mSaveNikName.getString(SAVED_TEXT, "");
+        mNikOfUser.setText(savedText);
+    }
 }
