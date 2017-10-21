@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                             if (checkNumberForCorrect()) {
                                 getNumber();
                                 numberForScreen.setText("");
-                                checkinNumberForWin();
+                                checkNumberForWin();
 
                             } else {
                                 Context context = getApplicationContext();
@@ -301,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
         TextView test3 = (TextView) findViewById(R.id.number1);
         test3.setText(number);
         mBuls.add("" + chekingBulls());
-        checkinNumberForWin();
+        checkNumberForWin();
         TextView test1 = (TextView) findViewById(R.id.number2);
         test1.setText("" + chekingBulls());
         ImageView image = (ImageView) findViewById(R.id.imageView1);
@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
         ++cntMoves;
     }
 
-    public void checkinNumberForWin() {
+    public void checkNumberForWin() {
         if (chekingBulls() == DIG) {
             TextView test5 = (TextView) findViewById(R.id.number1);
             test5.setText("Won!");
