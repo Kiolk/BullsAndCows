@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private long mTimerCount = 0;
     Timer mTimerTimer;
     WriteReadFile mWriteReadFile = new WriteReadFile();
+    Boolean mCurrentVersionOfApp = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
         mTimer = (TextView) findViewById(R.id.timer_text_view);
         mNikOfUser = (TextView) findViewById(R.id.user_name_text_view);
         loadNikName();
-
-        // mTimerTimer = new Timer();
 
         View.OnClickListener clickButton = new View.OnClickListener() {
 
@@ -140,10 +139,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.enter:
                         if (start) {
-                            if (chekNumberForCorrect()) {
+                            if (checkNumberForCorrect()) {
                                 getNumber();
                                 numberForScreen.setText("");
-                                chekinNumberForWin();
+                                checkinNumberForWin();
 
                             } else {
                                 Context context = getApplicationContext();
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                                 toast.show();
                             }
-                            creatListViewWithMoves();
+                            createListViewWithMoves();
                         }
                         break;
                     case R.id.start:
@@ -178,7 +177,8 @@ public class MainActivity extends AppCompatActivity {
         enterButton.setOnClickListener(clickButton);
         startButton.setOnClickListener(clickButton);
         del.setOnClickListener(clickButton);
-
+        startWelcomePage();
+//        getDrawerToggleDelegate();
     }
 
     @Override
@@ -231,9 +231,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public boolean chekNumberForCorrect() {
-        TextView edittext = (TextView) findViewById(R.id.editText);
-        String number = edittext.getText().toString();
+    public boolean checkNumberForCorrect() {
+        TextView editText = (TextView) findViewById(R.id.editText);
+        String number = editText.getText().toString();
         if (number.length() == DIG) {
             for (int i = 0; i < DIG; ++i) {
                 if (number.charAt(i) < '0' || number.charAt(i) > '9') {
@@ -288,8 +288,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getNumber() {
-        TextView edittext = (TextView) findViewById(R.id.editText);
-        String number = edittext.getText().toString();
+        TextView editText = (TextView) findViewById(R.id.editText);
+        String number = editText.getText().toString();
         mNumbers.add(number);
         mMoves.add("" + cntMoves);
         enteredNumber = Integer.parseInt(number);
@@ -297,11 +297,11 @@ public class MainActivity extends AppCompatActivity {
             enteredArray[i] = enteredNumber % 10;
             enteredNumber = enteredNumber / 10;
         }
-        shiftData();
+        //shiftData();
         TextView test3 = (TextView) findViewById(R.id.number1);
         test3.setText(number);
         mBuls.add("" + chekingBulls());
-        chekinNumberForWin();
+        checkinNumberForWin();
         TextView test1 = (TextView) findViewById(R.id.number2);
         test1.setText("" + chekingBulls());
         ImageView image = (ImageView) findViewById(R.id.imageView1);
@@ -316,103 +316,98 @@ public class MainActivity extends AppCompatActivity {
         ++cntMoves;
     }
 
-    public void chekinNumberForWin() {
+    public void checkinNumberForWin() {
         if (chekingBulls() == DIG) {
             TextView test5 = (TextView) findViewById(R.id.number1);
             test5.setText("Won!");
             TextView wonText = (TextView) findViewById(R.id.editText);
             wonText.setText("WON!");
             mTimerTimer.cancel();
-            String numberOfMoves = "" + cntMoves;
+            String numberOfMoves = "" + (cntMoves - 1);
             String numberOfCodedDigits = "" + DIG;
-//            RecordObject recordObject = new RecordObject(numberOfMoves, mTimer.getText().toString(), mNikOfUser.getText().toString(), numberOfMoves, "12.10.2017 13.30.00");
-//            mWriteReadFile.writeSerileazedObject(recordObject, this);
-//            RecordObject dffff = mWriteReadFile.readDeserileasedObject(this);
-//            String txt = dffff.getNikName();
-//            Toast.makeText(this, txt, Toast.LENGTH_LONG).show();
             mWriteReadFile.writeInFile(numberOfMoves, mNikOfUser.getText().toString(), mTimer.getText().toString(), numberOfCodedDigits, this);
             mWriteReadFile.readFile(this);
         }
     }
 
-    public void shiftData() {
-        TextView copyE1 = (TextView) findViewById(R.id.cntMoveE);
-        TextView fromD1 = (TextView) findViewById(R.id.cntMoveD);
-        copyE1.setText("" + fromD1.getText());
-        TextView fromC1 = (TextView) findViewById(R.id.cntMoveC);
-        fromD1.setText("" + fromC1.getText());
-        TextView fromB1 = (TextView) findViewById(R.id.cntMoveB);
-        fromC1.setText("" + fromB1.getText());
-        TextView fromA1 = (TextView) findViewById(R.id.cntMoveA);
-        fromB1.setText("" + fromA1.getText());
-        TextView from = (TextView) findViewById(R.id.cntMove);
-        fromA1.setText("" + from.getText());
-
-        TextView copyE2 = (TextView) findViewById(R.id.number1E);
-        TextView fromD2 = (TextView) findViewById(R.id.number1D);
-        copyE2.setText("" + fromD2.getText());
-        TextView fromC2 = (TextView) findViewById(R.id.number1C);
-        fromD2.setText("" + fromC2.getText());
-        TextView fromB2 = (TextView) findViewById(R.id.number1B);
-        fromC2.setText("" + fromB2.getText());
-        TextView fromA2 = (TextView) findViewById(R.id.number1A);
-        fromB2.setText("" + fromA2.getText());
-        TextView from2 = (TextView) findViewById(R.id.number1);
-        fromA2.setText("" + from2.getText());
-
-        TextView copyE3 = (TextView) findViewById(R.id.number2E);
-        TextView fromD3 = (TextView) findViewById(R.id.number2D);
-        copyE3.setText("" + fromD3.getText());
-        TextView fromC3 = (TextView) findViewById(R.id.number2C);
-        fromD3.setText("" + fromC3.getText());
-        TextView fromB3 = (TextView) findViewById(R.id.number2B);
-        fromC3.setText("" + fromB3.getText());
-        TextView fromA3 = (TextView) findViewById(R.id.number2A);
-        fromB3.setText("" + fromA3.getText());
-        TextView from3 = (TextView) findViewById(R.id.number2);
-        fromA3.setText("" + from3.getText());
-
-        TextView copyE4 = (TextView) findViewById(R.id.number3E);
-        TextView fromD4 = (TextView) findViewById(R.id.number3D);
-        copyE4.setText("" + fromD4.getText());
-        TextView fromC4 = (TextView) findViewById(R.id.number3C);
-        fromD4.setText("" + fromC4.getText());
-        TextView fromB4 = (TextView) findViewById(R.id.number3B);
-        fromC4.setText("" + fromB4.getText());
-        TextView fromA4 = (TextView) findViewById(R.id.number3A);
-        fromB4.setText("" + fromA4.getText());
-        TextView from4 = (TextView) findViewById(R.id.number3);
-        fromA4.setText("" + from4.getText());
-
-        if (cntMoves == 2) {
-            ImageView image = (ImageView) findViewById(R.id.imageView1A);
-            image.setImageResource(R.drawable.bullgood);
-            ImageView image2 = (ImageView) findViewById(R.id.imageViewA);
-            image2.setImageResource(R.drawable.cowgood);
-        } else if (cntMoves == 3) {
-            ImageView image = (ImageView) findViewById(R.id.imageView1B);
-            image.setImageResource(R.drawable.bullgood);
-            ImageView image2 = (ImageView) findViewById(R.id.imageViewB);
-            image2.setImageResource(R.drawable.cowgood);
-        } else if (cntMoves == 4) {
-            ImageView image = (ImageView) findViewById(R.id.imageView1C);
-            image.setImageResource(R.drawable.bullgood);
-            ImageView image2 = (ImageView) findViewById(R.id.imageViewC);
-            image2.setImageResource(R.drawable.cowgood);
-        } else if (cntMoves == 5) {
-            ImageView image = (ImageView) findViewById(R.id.imageView1D);
-            image.setImageResource(R.drawable.bullgood);
-            ImageView image2 = (ImageView) findViewById(R.id.imageViewD);
-            image2.setImageResource(R.drawable.cowgood);
-        } else if (cntMoves == 6) {
-            ImageView image = (ImageView) findViewById(R.id.imageView1E);
-            image.setImageResource(R.drawable.bullgood);
-            ImageView image2 = (ImageView) findViewById(R.id.imageViewE);
-            image2.setImageResource(R.drawable.cowgood);
-
-        }
-
-    }
+//    public void shiftData() {
+//        TextView copyE1 = (TextView) findViewById(R.id.cntMoveE);
+//        TextView fromD1 = (TextView) findViewById(R.id.cntMoveD);
+//        copyE1.setText("" + fromD1.getText());
+//        TextView fromC1 = (TextView) findViewById(R.id.cntMoveC);
+//        fromD1.setText("" + fromC1.getText());
+//        TextView fromB1 = (TextView) findViewById(R.id.cntMoveB);
+//        fromC1.setText("" + fromB1.getText());
+//        TextView fromA1 = (TextView) findViewById(R.id.cntMoveA);
+//        fromB1.setText("" + fromA1.getText());
+//        TextView from = (TextView) findViewById(R.id.cntMove);
+//        fromA1.setText("" + from.getText());
+//
+//        TextView copyE2 = (TextView) findViewById(R.id.number1E);
+//        TextView fromD2 = (TextView) findViewById(R.id.number1D);
+//        copyE2.setText("" + fromD2.getText());
+//        TextView fromC2 = (TextView) findViewById(R.id.number1C);
+//        fromD2.setText("" + fromC2.getText());
+//        TextView fromB2 = (TextView) findViewById(R.id.number1B);
+//        fromC2.setText("" + fromB2.getText());
+//        TextView fromA2 = (TextView) findViewById(R.id.number1A);
+//        fromB2.setText("" + fromA2.getText());
+//        TextView from2 = (TextView) findViewById(R.id.number1);
+//        fromA2.setText("" + from2.getText());
+//
+//        TextView copyE3 = (TextView) findViewById(R.id.number2E);
+//        TextView fromD3 = (TextView) findViewById(R.id.number2D);
+//        copyE3.setText("" + fromD3.getText());
+//        TextView fromC3 = (TextView) findViewById(R.id.number2C);
+//        fromD3.setText("" + fromC3.getText());
+//        TextView fromB3 = (TextView) findViewById(R.id.number2B);
+//        fromC3.setText("" + fromB3.getText());
+//        TextView fromA3 = (TextView) findViewById(R.id.number2A);
+//        fromB3.setText("" + fromA3.getText());
+//        TextView from3 = (TextView) findViewById(R.id.number2);
+//        fromA3.setText("" + from3.getText());
+//
+//        TextView copyE4 = (TextView) findViewById(R.id.number3E);
+//        TextView fromD4 = (TextView) findViewById(R.id.number3D);
+//        copyE4.setText("" + fromD4.getText());
+//        TextView fromC4 = (TextView) findViewById(R.id.number3C);
+//        fromD4.setText("" + fromC4.getText());
+//        TextView fromB4 = (TextView) findViewById(R.id.number3B);
+//        fromC4.setText("" + fromB4.getText());
+//        TextView fromA4 = (TextView) findViewById(R.id.number3A);
+//        fromB4.setText("" + fromA4.getText());
+//        TextView from4 = (TextView) findViewById(R.id.number3);
+//        fromA4.setText("" + from4.getText());
+//
+//        if (cntMoves == 2) {
+//            ImageView image = (ImageView) findViewById(R.id.imageView1A);
+//            image.setImageResource(R.drawable.bullgood);
+//            ImageView image2 = (ImageView) findViewById(R.id.imageViewA);
+//            image2.setImageResource(R.drawable.cowgood);
+//        } else if (cntMoves == 3) {
+//            ImageView image = (ImageView) findViewById(R.id.imageView1B);
+//            image.setImageResource(R.drawable.bullgood);
+//            ImageView image2 = (ImageView) findViewById(R.id.imageViewB);
+//            image2.setImageResource(R.drawable.cowgood);
+//        } else if (cntMoves == 4) {
+//            ImageView image = (ImageView) findViewById(R.id.imageView1C);
+//            image.setImageResource(R.drawable.bullgood);
+//            ImageView image2 = (ImageView) findViewById(R.id.imageViewC);
+//            image2.setImageResource(R.drawable.cowgood);
+//        } else if (cntMoves == 5) {
+//            ImageView image = (ImageView) findViewById(R.id.imageView1D);
+//            image.setImageResource(R.drawable.bullgood);
+//            ImageView image2 = (ImageView) findViewById(R.id.imageViewD);
+//            image2.setImageResource(R.drawable.cowgood);
+//        } else if (cntMoves == 6) {
+//            ImageView image = (ImageView) findViewById(R.id.imageView1E);
+//            image.setImageResource(R.drawable.bullgood);
+//            ImageView image2 = (ImageView) findViewById(R.id.imageViewE);
+//            image2.setImageResource(R.drawable.cowgood);
+//
+//        }
+//
+//    }
 
     public int chekingBulls() {
         int bulls = 0;
@@ -439,133 +434,153 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            String buf = data.getStringExtra("numberofdigits");
-            mode = data.getBooleanExtra("modeState", mode);
-            mNikOfUser.setText(data.getStringExtra("nikOfUser"));
-            creatListViewWithMoves();
-            if (mode) {
-                LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
-                lyaoutmain.setBackgroundColor(Color.BLACK);
-                TextView t1 = (TextView) findViewById(R.id.number3E);
-                t1.setTextColor(Color.WHITE);
-                TextView t2 = (TextView) findViewById(R.id.number2E);
-                t2.setTextColor(Color.WHITE);
-                TextView t3 = (TextView) findViewById(R.id.number1E);
-                t3.setTextColor(Color.WHITE);
-                TextView t4 = (TextView) findViewById(R.id.cntMove);
-                t4.setTextColor(Color.WHITE);
-                TextView t5 = (TextView) findViewById(R.id.number1);
-                t5.setTextColor(Color.WHITE);
-                TextView t6 = (TextView) findViewById(R.id.cntMoveA);
-                t6.setTextColor(Color.WHITE);
-                TextView t7 = (TextView) findViewById(R.id.cntMoveB);
-                t7.setTextColor(Color.WHITE);
-                TextView t8 = (TextView) findViewById(R.id.cntMoveC);
-                t8.setTextColor(Color.WHITE);
-                TextView t9 = (TextView) findViewById(R.id.cntMoveD);
-                t9.setTextColor(Color.WHITE);
-                TextView t10 = (TextView) findViewById(R.id.cntMoveE);
-                t10.setTextColor(Color.WHITE);
-                TextView t11 = (TextView) findViewById(R.id.number1A);
-                t11.setTextColor(Color.WHITE);
-                TextView t12 = (TextView) findViewById(R.id.number1B);
-                t12.setTextColor(Color.WHITE);
-                TextView t13 = (TextView) findViewById(R.id.number1C);
-                t13.setTextColor(Color.WHITE);
-                TextView t14 = (TextView) findViewById(R.id.number1D);
-                t14.setTextColor(Color.WHITE);
-                TextView t15 = (TextView) findViewById(R.id.number2);
-                t15.setTextColor(Color.WHITE);
-                TextView t16 = (TextView) findViewById(R.id.number2A);
-                t16.setTextColor(Color.WHITE);
-                TextView t17 = (TextView) findViewById(R.id.number2B);
-                t17.setTextColor(Color.WHITE);
-                TextView t18 = (TextView) findViewById(R.id.number2C);
-                t18.setTextColor(Color.WHITE);
-                TextView t19 = (TextView) findViewById(R.id.number2D);
-                t19.setTextColor(Color.WHITE);
-                TextView t20 = (TextView) findViewById(R.id.number3);
-                t20.setTextColor(Color.WHITE);
-                TextView t21 = (TextView) findViewById(R.id.number3A);
-                t21.setTextColor(Color.WHITE);
-                TextView t22 = (TextView) findViewById(R.id.number3B);
-                t22.setTextColor(Color.WHITE);
-                TextView t23 = (TextView) findViewById(R.id.number3D);
-                t23.setTextColor(Color.WHITE);
-                TextView t24 = (TextView) findViewById(R.id.number3C);
-                t24.setTextColor(Color.WHITE);
-                TextView t25 = (TextView) findViewById(R.id.editText);
-                t25.setTextColor(Color.WHITE);
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    String buf = data.getStringExtra("numberofdigits");
+                    mode = data.getBooleanExtra("modeState", mode);
+                    mNikOfUser.setText(data.getStringExtra("nikOfUser"));
+                    createListViewWithMoves();
+                    if (mode) {
+                        LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
+                        lyaoutmain.setBackgroundColor(Color.BLACK);
+//                TextView t1 = (TextView) findViewById(R.id.number3E);
+//                t1.setTextColor(Color.WHITE);
+//                TextView t2 = (TextView) findViewById(R.id.number2E);
+//                t2.setTextColor(Color.WHITE);
+//                TextView t3 = (TextView) findViewById(R.id.number1E);
+//                t3.setTextColor(Color.WHITE);
+//                TextView t4 = (TextView) findViewById(R.id.cntMove);
+//                t4.setTextColor(Color.WHITE);
+//                TextView t5 = (TextView) findViewById(R.id.number1);
+//                t5.setTextColor(Color.WHITE);
+//                TextView t6 = (TextView) findViewById(R.id.cntMoveA);
+//                t6.setTextColor(Color.WHITE);
+//                TextView t7 = (TextView) findViewById(R.id.cntMoveB);
+//                t7.setTextColor(Color.WHITE);
+//                TextView t8 = (TextView) findViewById(R.id.cntMoveC);
+//                t8.setTextColor(Color.WHITE);
+//                TextView t9 = (TextView) findViewById(R.id.cntMoveD);
+//                t9.setTextColor(Color.WHITE);
+//                TextView t10 = (TextView) findViewById(R.id.cntMoveE);
+//                t10.setTextColor(Color.WHITE);
+//                TextView t11 = (TextView) findViewById(R.id.number1A);
+//                t11.setTextColor(Color.WHITE);
+//                TextView t12 = (TextView) findViewById(R.id.number1B);
+//                t12.setTextColor(Color.WHITE);
+//                TextView t13 = (TextView) findViewById(R.id.number1C);
+//                t13.setTextColor(Color.WHITE);
+//                TextView t14 = (TextView) findViewById(R.id.number1D);
+//                t14.setTextColor(Color.WHITE);
+//                TextView t15 = (TextView) findViewById(R.id.number2);
+//                t15.setTextColor(Color.WHITE);
+//                TextView t16 = (TextView) findViewById(R.id.number2A);
+//                t16.setTextColor(Color.WHITE);
+//                TextView t17 = (TextView) findViewById(R.id.number2B);
+//                t17.setTextColor(Color.WHITE);
+//                TextView t18 = (TextView) findViewById(R.id.number2C);
+//                t18.setTextColor(Color.WHITE);
+//                TextView t19 = (TextView) findViewById(R.id.number2D);
+//                t19.setTextColor(Color.WHITE);
+//                TextView t20 = (TextView) findViewById(R.id.number3);
+//                t20.setTextColor(Color.WHITE);
+//                TextView t21 = (TextView) findViewById(R.id.number3A);
+//                t21.setTextColor(Color.WHITE);
+//                TextView t22 = (TextView) findViewById(R.id.number3B);
+//                t22.setTextColor(Color.WHITE);
+//                TextView t23 = (TextView) findViewById(R.id.number3D);
+//                t23.setTextColor(Color.WHITE);
+//                TextView t24 = (TextView) findViewById(R.id.number3C);
+//                t24.setTextColor(Color.WHITE);
+                        TextView t25 = (TextView) findViewById(R.id.editText);
+                        t25.setTextColor(Color.WHITE);
 
-            } else {
+                    } else {
 
-                LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
-                lyaoutmain.setBackgroundColor(Color.WHITE);
-                TextView t1 = (TextView) findViewById(R.id.number3E);
-                t1.setTextColor(Color.BLACK);
-                TextView t2 = (TextView) findViewById(R.id.number2E);
-                t2.setTextColor(Color.BLACK);
-                TextView t3 = (TextView) findViewById(R.id.number1E);
-                t3.setTextColor(Color.BLACK);
-                TextView t4 = (TextView) findViewById(R.id.cntMove);
-                t4.setTextColor(Color.BLACK);
-                TextView t5 = (TextView) findViewById(R.id.number1);
-                t5.setTextColor(Color.BLACK);
-                TextView t6 = (TextView) findViewById(R.id.cntMoveA);
-                t6.setTextColor(Color.BLACK);
-                TextView t7 = (TextView) findViewById(R.id.cntMoveB);
-                t7.setTextColor(Color.BLACK);
-                TextView t8 = (TextView) findViewById(R.id.cntMoveC);
-                t8.setTextColor(Color.BLACK);
-                TextView t9 = (TextView) findViewById(R.id.cntMoveD);
-                t9.setTextColor(Color.BLACK);
-                TextView t10 = (TextView) findViewById(R.id.cntMoveE);
-                t10.setTextColor(Color.BLACK);
-                TextView t11 = (TextView) findViewById(R.id.number1A);
-                t11.setTextColor(Color.BLACK);
-                TextView t12 = (TextView) findViewById(R.id.number1B);
-                t12.setTextColor(Color.BLACK);
-                TextView t13 = (TextView) findViewById(R.id.number1C);
-                t13.setTextColor(Color.BLACK);
-                TextView t14 = (TextView) findViewById(R.id.number1D);
-                t14.setTextColor(Color.BLACK);
-                TextView t15 = (TextView) findViewById(R.id.number2);
-                t15.setTextColor(Color.BLACK);
-                TextView t16 = (TextView) findViewById(R.id.number2A);
-                t16.setTextColor(Color.BLACK);
-                TextView t17 = (TextView) findViewById(R.id.number2B);
-                t17.setTextColor(Color.BLACK);
-                TextView t18 = (TextView) findViewById(R.id.number2C);
-                t18.setTextColor(Color.BLACK);
-                TextView t19 = (TextView) findViewById(R.id.number2D);
-                t19.setTextColor(Color.BLACK);
-                TextView t20 = (TextView) findViewById(R.id.number3);
-                t20.setTextColor(Color.BLACK);
-                TextView t21 = (TextView) findViewById(R.id.number3A);
-                t21.setTextColor(Color.BLACK);
-                TextView t22 = (TextView) findViewById(R.id.number3B);
-                t22.setTextColor(Color.BLACK);
-                TextView t23 = (TextView) findViewById(R.id.number3D);
-                t23.setTextColor(Color.BLACK);
-                TextView t24 = (TextView) findViewById(R.id.number3C);
-                t24.setTextColor(Color.BLACK);
-                TextView t25 = (TextView) findViewById(R.id.editText);
-                t25.setTextColor(Color.BLACK);
-            }
-            DIG = Integer.parseInt(buf);
-            if (chekRestart != DIG && start) {
-                chekRestart = DIG;
-                TextView start7 = (TextView) findViewById(R.id.start);
-                start7.setText("Start game");
-                TextView edittext8 = (TextView) findViewById(R.id.editText);
-                edittext8.setText("" + codedNumber);
+                        LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
+                        lyaoutmain.setBackgroundColor(Color.WHITE);
+//                TextView t1 = (TextView) findViewById(R.id.number3E);
+//                t1.setTextColor(Color.BLACK);
+//                TextView t2 = (TextView) findViewById(R.id.number2E);
+//                t2.setTextColor(Color.BLACK);
+//                TextView t3 = (TextView) findViewById(R.id.number1E);
+//                t3.setTextColor(Color.BLACK);
+//                TextView t4 = (TextView) findViewById(R.id.cntMove);
+//                t4.setTextColor(Color.BLACK);
+//                TextView t5 = (TextView) findViewById(R.id.number1);
+//                t5.setTextColor(Color.BLACK);
+//                TextView t6 = (TextView) findViewById(R.id.cntMoveA);
+//                t6.setTextColor(Color.BLACK);
+//                TextView t7 = (TextView) findViewById(R.id.cntMoveB);
+//                t7.setTextColor(Color.BLACK);
+//                TextView t8 = (TextView) findViewById(R.id.cntMoveC);
+//                t8.setTextColor(Color.BLACK);
+//                TextView t9 = (TextView) findViewById(R.id.cntMoveD);
+//                t9.setTextColor(Color.BLACK);
+//                TextView t10 = (TextView) findViewById(R.id.cntMoveE);
+//                t10.setTextColor(Color.BLACK);
+//                TextView t11 = (TextView) findViewById(R.id.number1A);
+//                t11.setTextColor(Color.BLACK);
+//                TextView t12 = (TextView) findViewById(R.id.number1B);
+//                t12.setTextColor(Color.BLACK);
+//                TextView t13 = (TextView) findViewById(R.id.number1C);
+//                t13.setTextColor(Color.BLACK);
+//                TextView t14 = (TextView) findViewById(R.id.number1D);
+//                t14.setTextColor(Color.BLACK);
+//                TextView t15 = (TextView) findViewById(R.id.number2);
+//                t15.setTextColor(Color.BLACK);
+//                TextView t16 = (TextView) findViewById(R.id.number2A);
+//                t16.setTextColor(Color.BLACK);
+//                TextView t17 = (TextView) findViewById(R.id.number2B);
+//                t17.setTextColor(Color.BLACK);
+//                TextView t18 = (TextView) findViewById(R.id.number2C);
+//                t18.setTextColor(Color.BLACK);
+//                TextView t19 = (TextView) findViewById(R.id.number2D);
+//                t19.setTextColor(Color.BLACK);
+//                TextView t20 = (TextView) findViewById(R.id.number3);
+//                t20.setTextColor(Color.BLACK);
+//                TextView t21 = (TextView) findViewById(R.id.number3A);
+//                t21.setTextColor(Color.BLACK);
+//                TextView t22 = (TextView) findViewById(R.id.number3B);
+//                t22.setTextColor(Color.BLACK);
+//                TextView t23 = (TextView) findViewById(R.id.number3D);
+//                t23.setTextColor(Color.BLACK);
+//                TextView t24 = (TextView) findViewById(R.id.number3C);
+//                t24.setTextColor(Color.BLACK);
+                        TextView t25 = (TextView) findViewById(R.id.editText);
+                        t25.setTextColor(Color.BLACK);
+                    }
+                    DIG = Integer.parseInt(buf);
+                    if (chekRestart != DIG && start) {
+                        chekRestart = DIG;
+                        TextView start7 = (TextView) findViewById(R.id.start);
+                        start7.setText("Start game");
+                        TextView edittext8 = (TextView) findViewById(R.id.editText);
+                        edittext8.setText("" + codedNumber);
 
-                codedNumber = "";
-                start = false;
-            }
-        } else {
-            Toast.makeText(this, "We  back without change", Toast.LENGTH_LONG).show();
+                        codedNumber = "";
+                        start = false;
+                    }
+                } else {
+                    Toast.makeText(this, "We  back without change", Toast.LENGTH_LONG).show();
+                }
+            case 2:
+                if(resultCode == RESULT_OK){
+                    mNikOfUser.setText(data.getStringExtra("nikOfUser"));
+                    mCurrentVersionOfApp = data.getBooleanExtra("version", mCurrentVersionOfApp);
+                    if(!mCurrentVersionOfApp){
+                        Toast.makeText(this, "Update your app", Toast.LENGTH_LONG).show();
+                        finish();
+//                        startWelcomePage();
+                    }
+                }else{
+                    Toast.makeText(this, "We back without confirm name", Toast.LENGTH_LONG).show();
+//                    finish();
+                    startWelcomePage();
+                }
+                break;
+            default:
+                break;
         }
     }
 
@@ -578,26 +593,26 @@ public class MainActivity extends AppCompatActivity {
             start = true;
             enteredNumber = 0;
             cntMoves = 1;
-            cnt0 = 3;
-            cnt1 = 3;
-            cnt2 = 3;
-            cnt3 = 3;
-            cnt4 = 3;
-            cnt5 = 3;
-            cnt6 = 3;
-            cnt7 = 3;
-            cnt8 = 3;
-            cnt9 = 3;
-            submit0();
-            submit1();
-            submit2();
-            submit3();
-            submit4();
-            submit5();
-            submit6();
-            submit7();
-            submit8();
-            submit9();
+//            cnt0 = 3;
+//            cnt1 = 3;
+//            cnt2 = 3;
+//            cnt3 = 3;
+//            cnt4 = 3;
+//            cnt5 = 3;
+//            cnt6 = 3;
+//            cnt7 = 3;
+//            cnt8 = 3;
+//            cnt9 = 3;
+//            submit0();
+//            submit1();
+//            submit2();
+//            submit3();
+//            submit4();
+//            submit5();
+//            submit6();
+//            submit7();
+//            submit8();
+//            submit9();
 
             Context context = getApplicationContext();
             String message = "Enter " + DIG + "-digits number, without repeating digits!";
@@ -607,48 +622,48 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
 
             cleanListView();
-            creatListViewWithMoves();
+            createListViewWithMoves();
 
-            ImageView image = (ImageView) findViewById(R.id.imageView1D);
-            image.setImageResource(R.drawable.zero);
-            ImageView image2 = (ImageView) findViewById(R.id.imageViewD);
-            image2.setImageResource(R.drawable.zero);
-            ImageView image3 = (ImageView) findViewById(R.id.imageView1C);
-            image3.setImageResource(R.drawable.zero);
-            ImageView image4 = (ImageView) findViewById(R.id.imageViewC);
-            image4.setImageResource(R.drawable.zero);
-            ImageView image5 = (ImageView) findViewById(R.id.imageView1B);
-            image5.setImageResource(R.drawable.zero);
-            ImageView image6 = (ImageView) findViewById(R.id.imageViewB);
-            image6.setImageResource(R.drawable.zero);
-            ImageView image7 = (ImageView) findViewById(R.id.imageView1A);
-            image7.setImageResource(R.drawable.zero);
-            ImageView image8 = (ImageView) findViewById(R.id.imageViewA);
-            image8.setImageResource(R.drawable.zero);
-            ImageView image9 = (ImageView) findViewById(R.id.imageView1);
-            image9.setImageResource(R.drawable.zero);
-            ImageView image10 = (ImageView) findViewById(R.id.imageView);
-            image10.setImageResource(R.drawable.zero);
-            ImageView image11 = (ImageView) findViewById(R.id.imageView1E);
-            image11.setImageResource(R.drawable.zero);
-            ImageView image12 = (ImageView) findViewById(R.id.imageViewE);
-            image12.setImageResource(R.drawable.zero);
+//            ImageView image = (ImageView) findViewById(R.id.imageView1D);
+//            image.setImageResource(R.drawable.zero);
+//            ImageView image2 = (ImageView) findViewById(R.id.imageViewD);
+//            image2.setImageResource(R.drawable.zero);
+//            ImageView image3 = (ImageView) findViewById(R.id.imageView1C);
+//            image3.setImageResource(R.drawable.zero);
+//            ImageView image4 = (ImageView) findViewById(R.id.imageViewC);
+//            image4.setImageResource(R.drawable.zero);
+//            ImageView image5 = (ImageView) findViewById(R.id.imageView1B);
+//            image5.setImageResource(R.drawable.zero);
+//            ImageView image6 = (ImageView) findViewById(R.id.imageViewB);
+//            image6.setImageResource(R.drawable.zero);
+//            ImageView image7 = (ImageView) findViewById(R.id.imageView1A);
+//            image7.setImageResource(R.drawable.zero);
+//            ImageView image8 = (ImageView) findViewById(R.id.imageViewA);
+//            image8.setImageResource(R.drawable.zero);
+//            ImageView image9 = (ImageView) findViewById(R.id.imageView1);
+//            image9.setImageResource(R.drawable.zero);
+//            ImageView image10 = (ImageView) findViewById(R.id.imageView);
+//            image10.setImageResource(R.drawable.zero);
+//            ImageView image11 = (ImageView) findViewById(R.id.imageView1E);
+//            image11.setImageResource(R.drawable.zero);
+//            ImageView image12 = (ImageView) findViewById(R.id.imageViewE);
+//            image12.setImageResource(R.drawable.zero);
 
             TextView edittext = (TextView) findViewById(R.id.editText);
             edittext.setText("");
-            TextView test3 = (TextView) findViewById(R.id.number1);
-            test3.setText("");
-            TextView test1 = (TextView) findViewById(R.id.number2);
-            test1.setText("");
-            TextView test2 = (TextView) findViewById(R.id.number3);
-            test2.setText("");
-            TextView test4 = (TextView) findViewById(R.id.cntMove);
-            test4.setText("");
+//            TextView test3 = (TextView) findViewById(R.id.number1);
+//            test3.setText("");
+//            TextView test1 = (TextView) findViewById(R.id.number2);
+//            test1.setText("");
+//            TextView test2 = (TextView) findViewById(R.id.number3);
+//            test2.setText("");
+//            TextView test4 = (TextView) findViewById(R.id.cntMove);
+//            test4.setText("");
             enteredNumber = 0;
-            cntMoves = 1;
-            for (int i = 0; i < 5; ++i) {
-                shiftData();
-            }
+//            cntMoves = 1;
+//            for (int i = 0; i < 5; ++i) {
+//                //shiftData();
+//            }
 
         } else {
             TextView start2 = (TextView) findViewById(R.id.start);
@@ -720,266 +735,268 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void submit0(View view) {
-        submit0();
-    }
+//    public void submit0(View view) {
+//        submit0();
+//    }
+//
+//    public void submit0() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help0);
+//            if (cnt0 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt0 = 1;
+//            } else if (cnt0 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt0 = 2;
+//            } else if (cnt0 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt0 = 3;
+//            } else if (cnt0 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt0 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit1(View view) {
+//        submit1();
+//    }
+//
+//    public void submit1() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help1);
+//            if (cnt1 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt1 = 1;
+//            } else if (cnt1 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt1 = 2;
+//            } else if (cnt1 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt1 = 3;
+//            } else if (cnt1 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt1 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit2(View view) {
+//        submit2();
+//    }
+//
+//    public void submit2() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help2);
+//            if (cnt2 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt2 = 1;
+//            } else if (cnt2 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt2 = 2;
+//            } else if (cnt2 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt2 = 3;
+//            } else if (cnt2 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt2 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit3(View view) {
+//        submit3();
+//    }
+//
+//    public void submit3() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help3);
+//            if (cnt3 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt3 = 1;
+//            } else if (cnt3 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt3 = 2;
+//            } else if (cnt3 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt3 = 3;
+//            } else if (cnt3 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt3 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit4(View view) {
+//        submit4();
+//    }
+//
+//    public void submit4() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help4);
+//            if (cnt4 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt4 = 1;
+//            } else if (cnt4 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt4 = 2;
+//            } else if (cnt4 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt4 = 3;
+//            } else if (cnt4 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt4 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit5(View view) {
+//        submit5();
+//    }
+//
+//    public void submit5() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help5);
+//            if (cnt5 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt5 = 1;
+//            } else if (cnt5 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt5 = 2;
+//            } else if (cnt5 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt5 = 3;
+//            } else if (cnt5 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt5 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit6(View view) {
+//        submit6();
+//    }
+//
+//    public void submit6() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help6);
+//            if (cnt6 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt6 = 1;
+//            } else if (cnt6 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt6 = 2;
+//            } else if (cnt6 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt6 = 3;
+//            } else if (cnt6 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt6 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit7(View view) {
+//        submit7();
+//    }
+//
+//    public void submit7() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help7);
+//            if (cnt7 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt7 = 1;
+//            } else if (cnt7 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt7 = 2;
+//            } else if (cnt7 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt7 = 3;
+//            } else if (cnt7 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt7 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit8(View view) {
+//        submit8();
+//    }
+//
+//    public void submit8() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help8);
+//            if (cnt8 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt8 = 1;
+//            } else if (cnt8 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt8 = 2;
+//            } else if (cnt8 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt8 = 3;
+//            } else if (cnt8 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt8 = 0;
+//            }
+//        }
+//    }
+//
+//    public void submit9(View view) {
+//        submit9();
+//    }
+//
+//    public void submit9() {
+//        if (start) {
+//            TextView help0 = (TextView) findViewById(R.id.help9);
+//            if (cnt9 == 0) {
+//                help0.setBackgroundColor(0xFFFFFF00);
+//                cnt9 = 1;
+//            } else if (cnt9 == 1) {
+//                help0.setBackgroundColor(0xFF76FF03);
+//                cnt9 = 2;
+//            } else if (cnt9 == 2) {
+//                help0.setBackgroundColor(0xFFFF3D00);
+//                cnt9 = 3;
+//            } else if (cnt9 == 3) {
+//                help0.setBackgroundColor(0xFFEEEEEE);
+//                cnt9 = 0;
+//            }
+//        }
+//    }
 
-    public void submit0() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help0);
-            if (cnt0 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt0 = 1;
-            } else if (cnt0 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt0 = 2;
-            } else if (cnt0 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt0 = 3;
-            } else if (cnt0 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt0 = 0;
-            }
-        }
-    }
-
-    public void submit1(View view) {
-        submit1();
-    }
-
-    public void submit1() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help1);
-            if (cnt1 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt1 = 1;
-            } else if (cnt1 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt1 = 2;
-            } else if (cnt1 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt1 = 3;
-            } else if (cnt1 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt1 = 0;
-            }
-        }
-    }
-
-    public void submit2(View view) {
-        submit2();
-    }
-
-    public void submit2() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help2);
-            if (cnt2 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt2 = 1;
-            } else if (cnt2 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt2 = 2;
-            } else if (cnt2 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt2 = 3;
-            } else if (cnt2 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt2 = 0;
-            }
-        }
-    }
-
-    public void submit3(View view) {
-        submit3();
-    }
-
-    public void submit3() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help3);
-            if (cnt3 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt3 = 1;
-            } else if (cnt3 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt3 = 2;
-            } else if (cnt3 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt3 = 3;
-            } else if (cnt3 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt3 = 0;
-            }
-        }
-    }
-
-    public void submit4(View view) {
-        submit4();
-    }
-
-    public void submit4() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help4);
-            if (cnt4 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt4 = 1;
-            } else if (cnt4 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt4 = 2;
-            } else if (cnt4 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt4 = 3;
-            } else if (cnt4 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt4 = 0;
-            }
-        }
-    }
-
-    public void submit5(View view) {
-        submit5();
-    }
-
-    public void submit5() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help5);
-            if (cnt5 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt5 = 1;
-            } else if (cnt5 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt5 = 2;
-            } else if (cnt5 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt5 = 3;
-            } else if (cnt5 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt5 = 0;
-            }
-        }
-    }
-
-    public void submit6(View view) {
-        submit6();
-    }
-
-    public void submit6() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help6);
-            if (cnt6 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt6 = 1;
-            } else if (cnt6 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt6 = 2;
-            } else if (cnt6 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt6 = 3;
-            } else if (cnt6 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt6 = 0;
-            }
-        }
-    }
-
-    public void submit7(View view) {
-        submit7();
-    }
-
-    public void submit7() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help7);
-            if (cnt7 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt7 = 1;
-            } else if (cnt7 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt7 = 2;
-            } else if (cnt7 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt7 = 3;
-            } else if (cnt7 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt7 = 0;
-            }
-        }
-    }
-
-    public void submit8(View view) {
-        submit8();
-    }
-
-    public void submit8() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help8);
-            if (cnt8 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt8 = 1;
-            } else if (cnt8 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt8 = 2;
-            } else if (cnt8 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt8 = 3;
-            } else if (cnt8 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt8 = 0;
-            }
-        }
-    }
-
-    public void submit9(View view) {
-        submit9();
-    }
-
-    public void submit9() {
-        if (start) {
-            TextView help0 = (TextView) findViewById(R.id.help9);
-            if (cnt9 == 0) {
-                help0.setBackgroundColor(0xFFFFFF00);
-                cnt9 = 1;
-            } else if (cnt9 == 1) {
-                help0.setBackgroundColor(0xFF76FF03);
-                cnt9 = 2;
-            } else if (cnt9 == 2) {
-                help0.setBackgroundColor(0xFFFF3D00);
-                cnt9 = 3;
-            } else if (cnt9 == 3) {
-                help0.setBackgroundColor(0xFFEEEEEE);
-                cnt9 = 0;
-            }
-        }
-    }
-
-    public void creatListViewWithMoves() {
+    public void createListViewWithMoves() {
         ListView listOfMoves = (ListView) findViewById(R.id.list_of_moves_list_view);
         CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), mMoves, mNumbers, mBuls, mCows, mode);
         listOfMoves.setAdapter(customAdapter);
         //checkColorMod();
     }
 
-    public void checkColorMod() {
-        if (cntMoves > 1) {
-            if (mode) {
-                TextView pBull = (TextView) findViewById(R.id.bulls_list_text_view);
-                pBull.setTextColor(Color.WHITE);
-                TextView pCow = (TextView) findViewById(R.id.cows_list_text_view);
-                pCow.setTextColor(Color.WHITE);
-                TextView pNumber = (TextView) findViewById(R.id.number_list_text_view);
-                pNumber.setTextColor(Color.WHITE);
-                TextView pCnt = (TextView) findViewById(R.id.cnt_move_list_text_view);
-                pCnt.setTextColor(Color.WHITE);
-            } else {
-                TextView pBull = (TextView) findViewById(R.id.bulls_list_text_view);
-                pBull.setTextColor(Color.BLACK);
-                TextView pCow = (TextView) findViewById(R.id.cows_list_text_view);
-                pCow.setTextColor(Color.BLACK);
-                TextView pNumber = (TextView) findViewById(R.id.number_list_text_view);
-                pNumber.setTextColor(Color.BLACK);
-                TextView pCnt = (TextView) findViewById(R.id.cnt_move_list_text_view);
-                pCnt.setTextColor(Color.BLACK);
-            }
-        }
-    }
+//    public void checkColorMod() {
+//        if (cntMoves > 1) {
+//            if (mode) {
+//                TextView pBull = (TextView) findViewById(R.id.bulls_list_text_view);
+//                pBull.setTextColor(Color.WHITE);
+//                TextView pCow = (TextView) findViewById(R.id.cows_list_text_view);
+//                pCow.setTextColor(Color.WHITE);
+//                TextView pNumber = (TextView) findViewById(R.id.number_list_text_view);
+//                pNumber.setTextColor(Color.WHITE);
+//                TextView pCnt = (TextView) findViewById(R.id.cnt_move_list_text_view);
+//                pCnt.setTextColor(Color.WHITE);
+//            } else {
+//                TextView pBull = (TextView) findViewById(R.id.bulls_list_text_view);
+//                pBull.setTextColor(Color.BLACK);
+//                TextView pCow = (TextView) findViewById(R.id.cows_list_text_view);
+//                pCow.setTextColor(Color.BLACK);
+//                TextView pNumber = (TextView) findViewById(R.id.number_list_text_view);
+//                pNumber.setTextColor(Color.BLACK);
+//                TextView pCnt = (TextView) findViewById(R.id.cnt_move_list_text_view);
+//                pCnt.setTextColor(Color.BLACK);
+//            }
+//        }
+//    }
+
+
     public void saveNikName(){
         mSaveNikName = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = mSaveNikName.edit();
@@ -991,5 +1008,12 @@ public class MainActivity extends AppCompatActivity {
         mSaveNikName = getPreferences(MODE_PRIVATE);
         String savedText = mSaveNikName.getString(SAVED_TEXT, "");
         mNikOfUser.setText(savedText);
+    }
+
+    public void startWelcomePage(){
+        Intent welcomeIntent = new Intent(this, Welcome.class);
+        welcomeIntent.putExtra("nikOfUser", mNikOfUser.getText());
+        welcomeIntent.putExtra("version", mCurrentVersionOfApp);
+        startActivityForResult(welcomeIntent, 2);
     }
 }

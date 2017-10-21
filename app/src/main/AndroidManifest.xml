@@ -2,6 +2,8 @@
 <manifest package="com.example.notepad.bullsandcows"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/bullgood"
@@ -32,6 +34,11 @@
             android:name=".Records"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat">
+        </activity>
+        <activity
+            android:name=".Welcome"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert">
         </activity>
     </application>
 

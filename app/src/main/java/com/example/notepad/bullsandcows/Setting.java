@@ -60,7 +60,7 @@ public class Setting extends AppCompatActivity {
     };
 
     public void submitMinus(View view) {
-        if (numberOfDigits >= 1) {
+        if (numberOfDigits > 1) {
             numberOfDigits -= 1;
             TextView text = (TextView) findViewById(R.id.text);
             text.setText("" + numberOfDigits);
@@ -68,7 +68,7 @@ public class Setting extends AppCompatActivity {
     }
 
     public void submitPlus(View view) {
-        if (numberOfDigits <= 10) {
+        if (numberOfDigits < 10) {
             numberOfDigits += 1;
             TextView text = (TextView) findViewById(R.id.text);
             text.setText("" + numberOfDigits);

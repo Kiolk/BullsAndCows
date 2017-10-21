@@ -38,11 +38,12 @@ public class WriteReadFile {
 //        FileOutputStream fOS = new FileOutputStream("Result.txt", MODE_PRIVATE);
 //        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(("Result.txt", MODE_PRIVATE)));
         FileOutputStream fileOutputStream = null;
-        Long timeOfWon = System.currentTimeMillis();
+        Long timeOfWon = System.currentTimeMillis() + (3600000*3);
         Date date = new Date(timeOfWon);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
         DateFormat dateFormat = simpleDateFormat;
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
         String wonTimeString = dateFormat.format(date);
         try{
             fileOutputStream = pContext.openFileOutput("Result.txt", MODE_PRIVATE);

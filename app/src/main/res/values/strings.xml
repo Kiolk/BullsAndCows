@@ -6,4 +6,12 @@
     <string name="nik_name_title">Nik name</string>
     <string name="moves_title">Moves</string>
     <string name="time_title">Time</string>
+    <string name="welcome_text">Welcome!
+    Yor start fanny logical game.
+    Good luck!</string>
+    <string name="welcome_hint">Entered your name</string>
+    <string name="confirm_you_name">Confirm your name</string>
+    <string name="version">Version of application</string>
+    <string name="highest_version">Your app has current version</string>
+    <string name="visit_site_of_app_button">Visit site of project</string>
 </resources>
