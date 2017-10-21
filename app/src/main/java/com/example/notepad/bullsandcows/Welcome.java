@@ -127,7 +127,7 @@ public class Welcome extends AppCompatActivity {
             String name = params[0];
             try {
 
-                URL url = new URL("http://bullsandcows-183521.appspot.com/hello");
+                URL url = new URL(BuildConfig.BACKEND_APP_VERSION_URL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setDoInput(true);

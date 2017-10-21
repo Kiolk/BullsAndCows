@@ -17,7 +17,7 @@ import javax.servlet.http.*;
 public class MyServlet extends HttpServlet {
 
     public static final String NAME_OF_APP = "BullsAndCows";
-    public static final String VERSION_OF_APP = "1.1";
+    public static final String VERSION_OF_APP = "1";
     public static final String POWERED = "Yauheni Slizh";
     public static final String FEATURES = "Adds backend";
 

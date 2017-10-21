@@ -12,9 +12,32 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug{
+            buildConfigField "String", "BACKEND_APP_VERSION_URL", "\"http://bullsandcows-183521.appspot.com/hello\""
+        }
         release {
+            buildConfigField "String", "BACKEND_APP_VERSION_URL", "\"http://bullsandcowsrealese.appspot.com/hello\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "store"
+
+    productFlavors {
+        GooglePlay {
+            flavorDimension "store"
+            versionName "1.0"
+            versionCode 1
+            buildConfigField "String", "HOME_SITE", "\"http://site1.com\""
+            buildConfigField "int", "BUILD_TIME", "${System.currentTimeSeconds()}"
+        }
+        Amazon {
+            flavorDimension "store"
+            versionName "2.0 for Amazon"
+            versionCode 2
+            buildConfigField "String", "HOME_SITE", "\"http://site2.com\""
+            buildConfigField "int", "BUILD_TIME", "${System.currentTimeSeconds()}"
         }
     }
 }
