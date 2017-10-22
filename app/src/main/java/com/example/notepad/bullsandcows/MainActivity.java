@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -192,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         menu.add(0, 2, 1, "Setting");
         menu.add(0, 3, 2, "About app");
         menu.add(0, 4, 3, "Records");
+        menu.add(0, 5, 4, "Online records");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -214,6 +217,10 @@ public class MainActivity extends AppCompatActivity {
             case 4:
                 Intent intent4 = new Intent(this, Records.class);
                 startActivity(intent4);
+                break;
+            case 5:
+                Intent intent5 = new Intent(this, OnlineRecords.class);
+                startActivity(intent5);
                 break;
             default:
                 break;
@@ -301,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
         TextView test3 = (TextView) findViewById(R.id.number1);
         test3.setText(number);
         mBuls.add("" + chekingBulls());
-        checkNumberForWin();
+        //checkNumberForWin();
         TextView test1 = (TextView) findViewById(R.id.number2);
         test1.setText("" + chekingBulls());
         ImageView image = (ImageView) findViewById(R.id.imageView1);
@@ -325,6 +332,13 @@ public class MainActivity extends AppCompatActivity {
             mTimerTimer.cancel();
             String numberOfMoves = "" + (cntMoves - 1);
             String numberOfCodedDigits = "" + DIG;
+            RecordsToNet note = new RecordsToNet();
+            note.setDate(System.currentTimeMillis());
+            note.setTime(mTimer.getText().toString());
+            note.setNikName(mNikOfUser.getText().toString());
+            note.setMoves(numberOfMoves);
+            note.setCodes(numberOfCodedDigits);
+            new RecordAsyncTaskPost().execute(note);
             mWriteReadFile.writeInFile(numberOfMoves, mNikOfUser.getText().toString(), mTimer.getText().toString(), numberOfCodedDigits, this);
             mWriteReadFile.readFile(this);
         }

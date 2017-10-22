@@ -40,6 +40,11 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.Dialog.Alert">
         </activity>
+        <activity
+            android:name=".OnlineRecords"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.AppCompat">
+        </activity>
     </application>
 
 </manifest>
