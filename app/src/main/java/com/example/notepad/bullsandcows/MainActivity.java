@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -18,6 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.text.DateFormat;
@@ -1025,9 +1028,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startWelcomePage(){
-        Intent welcomeIntent = new Intent(this, Welcome.class);
-        welcomeIntent.putExtra("nikOfUser", mNikOfUser.getText());
-        welcomeIntent.putExtra("version", mCurrentVersionOfApp);
-        startActivityForResult(welcomeIntent, 2);
+//        ConnectivityManager check = (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+//        CheckConnection dff = new CheckConnectnion();
+        if(new CheckConnection().checkConnection(this)) {
+            Intent welcomeIntent = new Intent(this, Welcome.class);
+            welcomeIntent.putExtra("nikOfUser", mNikOfUser.getText());
+            welcomeIntent.putExtra("version", mCurrentVersionOfApp);
+            startActivityForResult(welcomeIntent, 2);
+        }else{
+            Toast.makeText(this, Constants.DISCONNECT_SERVER, Toast.LENGTH_LONG).show();
+        }
     }
 }
