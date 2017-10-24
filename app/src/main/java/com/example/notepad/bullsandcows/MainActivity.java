@@ -1,11 +1,16 @@
 package com.example.notepad.bullsandcows;
 
+
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -13,12 +18,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notepad.bullsandcows.fragments.WinFragment;
+import com.example.notepad.bullsandcows.services.WinSoundService;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
@@ -30,6 +38,7 @@ import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
     Timer mTimerTimer;
     WriteReadFile mWriteReadFile = new WriteReadFile();
     Boolean mCurrentVersionOfApp = true;
+    WinFragment mWinFragment;
+    FragmentTransaction mTransaction;
+    FrameLayout mFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         del = (Button) findViewById(R.id.buttomDel);
         mTimer = (TextView) findViewById(R.id.timer_text_view);
         mNikOfUser = (TextView) findViewById(R.id.user_name_text_view);
+        mWinFragment = new WinFragment();
+        mFrameLayout = (FrameLayout) findViewById(R.id.win_container);
         loadNikName();
 
         View.OnClickListener clickButton = new View.OnClickListener() {
@@ -344,6 +358,8 @@ public class MainActivity extends AppCompatActivity {
             new RecordAsyncTaskPost().execute(note);
             mWriteReadFile.writeInFile(numberOfMoves, mNikOfUser.getText().toString(), mTimer.getText().toString(), numberOfCodedDigits, this);
             mWriteReadFile.readFile(this);
+            showWinFragment();
+            setWinText();
         }
     }
 
@@ -582,15 +598,15 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "We  back without change", Toast.LENGTH_LONG).show();
                 }
             case 2:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     mNikOfUser.setText(data.getStringExtra("nikOfUser"));
                     mCurrentVersionOfApp = data.getBooleanExtra("version", mCurrentVersionOfApp);
-                    if(!mCurrentVersionOfApp){
+                    if (!mCurrentVersionOfApp) {
                         Toast.makeText(this, "Update your app", Toast.LENGTH_LONG).show();
                         finish();
 //                        startWelcomePage();
                     }
-                }else{
+                } else {
                     Toast.makeText(this, "We back without confirm name", Toast.LENGTH_LONG).show();
 //                    finish();
                     startWelcomePage();
@@ -1013,30 +1029,56 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    }
 
-
-    public void saveNikName(){
+    public void saveNikName() {
         mSaveNikName = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = mSaveNikName.edit();
         editor.putString(SAVED_TEXT, mNikOfUser.getText().toString());
         editor.commit();
     }
 
-    public void loadNikName(){
+    public void loadNikName() {
         mSaveNikName = getPreferences(MODE_PRIVATE);
         String savedText = mSaveNikName.getString(SAVED_TEXT, "");
         mNikOfUser.setText(savedText);
     }
 
-    public void startWelcomePage(){
+    public void startWelcomePage() {
 //        ConnectivityManager check = (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 //        CheckConnection dff = new CheckConnectnion();
-        if(new CheckConnection().checkConnection(this)) {
+        if (new CheckConnection().checkConnection(this)) {
             Intent welcomeIntent = new Intent(this, Welcome.class);
             welcomeIntent.putExtra("nikOfUser", mNikOfUser.getText());
             welcomeIntent.putExtra("version", mCurrentVersionOfApp);
             startActivityForResult(welcomeIntent, 2);
-        }else{
+        } else {
             Toast.makeText(this, Constants.DISCONNECT_SERVER, Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    public void showWinFragment() {
+        mFrameLayout.setVisibility(View.VISIBLE);
+        mTransaction = getFragmentManager().beginTransaction();
+        mTransaction.add(R.id.win_container, mWinFragment);
+        mTransaction.commit();
+        FragmentManager fM = getFragmentManager();
+        fM.executePendingTransactions();
+        startService(new Intent (this, WinSoundService.class));
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(500);
+    }
+
+    public void closeWinFragment(View view) {
+        mFrameLayout.setVisibility(View.INVISIBLE);
+        mTransaction = getFragmentManager().beginTransaction();
+        mTransaction.remove(mWinFragment);
+        mTransaction.commit();
+        stopService(new Intent(this, WinSoundService.class));
+    }
+
+    public void setWinText(){
+        Fragment winFragment = getFragmentManager().findFragmentById(R.id.win_container);
+        ((TextView)winFragment.getView().findViewById(R.id.win_text_view)).setText("Congratulation, " + mNikOfUser.getText().toString() + "! You are win!");
+        ((TextView)winFragment.getView().findViewById(R.id.win_result_text_view)).setText("You result: " + DIG + "-digits number, your find on " + (cntMoves - 1) + " moves, by " + mTimer.getText());
     }
 }

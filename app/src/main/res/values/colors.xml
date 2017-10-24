@@ -6,4 +6,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="title_color">#ff9900</color>
     <color name="colorOfText">#FFFFFF</color>
+    <color name="win_background_color">#3C91E6</color>
 </resources>

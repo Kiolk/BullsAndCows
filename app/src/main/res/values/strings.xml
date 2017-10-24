@@ -14,4 +14,6 @@
     <string name="version">Version of application</string>
     <string name="highest_version">Your app has current version</string>
     <string name="visit_site_of_app_button">Visit site of project</string>
+    <string name="win_massage">Congratulation! You are win!</string>
+    <string name="win_result_massage">You result:</string>
 </resources>
