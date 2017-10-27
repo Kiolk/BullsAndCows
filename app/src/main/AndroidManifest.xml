@@ -52,7 +52,9 @@
 
         <service android:name=".services.WinSoundService">
         </service>
+        <service android:name=".services.RefreshOnlineRecordService">
 
+        </service>
         <activity android:name=".RegistrationPage">
         </activity>
     </application>

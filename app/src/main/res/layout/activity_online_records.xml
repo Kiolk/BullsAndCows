@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -83,8 +82,11 @@
             android:id="@+id/list_of_record_online_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            ></ListView>
+            android:layout_gravity="center">
+
+        </ListView>
+
+
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -95,6 +97,17 @@
             />
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
 
+        <Button
+            android:id="@+id/refresh_records_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/REFRESH_RECORDS"
+            android:padding="4dp"/>
+    </LinearLayout>
 
 </LinearLayout>

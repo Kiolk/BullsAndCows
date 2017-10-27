@@ -1,16 +1,21 @@
 package com.example.notepad.bullsandcows;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.notepad.bullsandcows.services.RefreshOnlineRecordService;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
@@ -31,24 +36,47 @@ import java.util.TimeZone;
 
 public class OnlineRecords extends AppCompatActivity {
 
+    public static final String TEXT_FOR_INTENT = "text for intent";
     ArrayList<String> mCods = new ArrayList<>();
     ArrayList<String> mDate = new ArrayList<>();
     ArrayList<String> mNikName = new ArrayList<>();
     ArrayList<String> mMoves = new ArrayList<>();
     ArrayList<String> mTime = new ArrayList<>();
+    Button mRefreshButton;
+    MyBroadcastReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_records);
-      if(new CheckConnection().checkConnection(this)){
-        new GetOnlineRecordsAsyncTask().execute("ss");
-        }else{
+        if (new CheckConnection().checkConnection(this)) {
+            new GetOnlineRecordsAsyncTask().execute("ss");
+        } else {
             Toast.makeText(this, Constants.DISCONNECT_SERVER, Toast.LENGTH_LONG).show();
         }
+        mReceiver = new MyBroadcastReceiver();
+        IntentFilter mIntentFilter = new IntentFilter(RefreshOnlineRecordService.ACTION_REFRESH_ONLINE_RECORD_SERVICE);
+        mIntentFilter.addCategory(Intent.CATEGORY_DEFAULT);
+        registerReceiver(mReceiver, mIntentFilter);
+        mRefreshButton = (Button) findViewById(R.id.refresh_records_button);
+        mRefreshButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View pView) {
+                Intent intent = new Intent(OnlineRecords.this, RefreshOnlineRecordService.class);
+                intent.putExtra(TEXT_FOR_INTENT, "Refresh");
+                startService(intent);
+            }
+        });
     }
 
-    class GetOnlineRecordsAsyncTask extends AsyncTask<String, Void, String> {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mReceiver);
+    }
+
+    private class GetOnlineRecordsAsyncTask extends AsyncTask<String, Void, String> {
 
         private RecordsToNetApi myApiService = null;
         ProgressBar mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -98,8 +126,7 @@ public class OnlineRecords extends AppCompatActivity {
             }
 
             try {
-                String cod = myApiService.list().execute().toString();  //(recordsToNet).execute().toString();
-                return cod;//(recordsToNet).execute().toString();
+                return myApiService.list().execute().toString();
             } catch (IOException pE) {
                 pE.printStackTrace();
             }
@@ -114,13 +141,21 @@ public class OnlineRecords extends AppCompatActivity {
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
         DateFormat dateFormat = simpleDateFormat;
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
-        String wonTimeString = dateFormat.format(date);
-        return wonTimeString;
+        return dateFormat.format(date);
     }
 
     public void setItemsOfRecors() {
         ListView onlineRecods = (ListView) findViewById(R.id.list_of_record_online_list_view);
         CustomAdapterForRecords customAdapterForRecords = new CustomAdapterForRecords(mCods, mDate, mNikName, mMoves, mTime, this);
         onlineRecods.setAdapter(customAdapterForRecords);
+    }
+
+    class MyBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context pContext, Intent pIntent) {
+            String result = pIntent.getStringExtra(RefreshOnlineRecordService.SERVICE_RESPONSE_KEY);
+            Toast.makeText(OnlineRecords.this, result, Toast.LENGTH_LONG).show();
+        }
     }
 }
