@@ -43,6 +43,8 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
 
     public static final String SAVED_TEXT = "saved-text";
+    public static final String SAVED_PASSWORD = "Saved_password";
+    public static final String SAVED_KEEP_PASSWORD = "Saved_keep_password";
     ArrayList<String> mMoves = new ArrayList<>();
     ArrayList<String> mNumbers = new ArrayList<>();
     ArrayList<String> mCows = new ArrayList<>();
@@ -83,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     Timer mTimerTimer;
     WriteReadFile mWriteReadFile = new WriteReadFile();
     Boolean mCurrentVersionOfApp = true;
+    String passwordOfUser;
+    Boolean mKeepPassword;
     WinFragment mWinFragment;
     FragmentTransaction mTransaction;
     FrameLayout mFrameLayout;
@@ -601,13 +605,15 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     mNikOfUser.setText(data.getStringExtra("nikOfUser"));
                     mCurrentVersionOfApp = data.getBooleanExtra("version", mCurrentVersionOfApp);
+                    mKeepPassword = data.getBooleanExtra("keepPassword", false);
+                    passwordOfUser = data.getStringExtra("password");
                     if (!mCurrentVersionOfApp) {
                         Toast.makeText(this, "Update your app", Toast.LENGTH_LONG).show();
                         finish();
 //                        startWelcomePage();
                     }
                 } else {
-                    Toast.makeText(this, "We back without confirm name", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "You not logened", Toast.LENGTH_LONG).show();
 //                    finish();
                     startWelcomePage();
                 }
@@ -1030,16 +1036,30 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void saveNikName() {
-        mSaveNikName = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = mSaveNikName.edit();
-        editor.putString(SAVED_TEXT, mNikOfUser.getText().toString());
-        editor.commit();
+        if(mKeepPassword) {
+            mSaveNikName = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = mSaveNikName.edit();
+            editor.putString(SAVED_TEXT, mNikOfUser.getText().toString());
+            editor.putString(SAVED_PASSWORD, passwordOfUser);
+            editor.putBoolean(SAVED_KEEP_PASSWORD, mKeepPassword);
+            editor.commit();
+        }else {
+            SharedPreferences.Editor editor = mSaveNikName.edit();
+            editor.putString(SAVED_TEXT, "");
+            editor.putString(SAVED_PASSWORD, "");
+            editor.putBoolean(SAVED_KEEP_PASSWORD, false);
+            editor.commit();
+        }
     }
 
     public void loadNikName() {
         mSaveNikName = getPreferences(MODE_PRIVATE);
-        String savedText = mSaveNikName.getString(SAVED_TEXT, "");
-        mNikOfUser.setText(savedText);
+        if(mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false)) {
+            String savedText = mSaveNikName.getString(SAVED_TEXT, "");
+            mNikOfUser.setText(savedText);
+            passwordOfUser = mSaveNikName.getString(SAVED_PASSWORD, "");
+            mKeepPassword = mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false);
+        }
     }
 
     public void startWelcomePage() {
@@ -1049,6 +1069,8 @@ public class MainActivity extends AppCompatActivity {
             Intent welcomeIntent = new Intent(this, Welcome.class);
             welcomeIntent.putExtra("nikOfUser", mNikOfUser.getText());
             welcomeIntent.putExtra("version", mCurrentVersionOfApp);
+            welcomeIntent.putExtra("password", passwordOfUser);
+            welcomeIntent.putExtra("keepPassword", mKeepPassword);
             startActivityForResult(welcomeIntent, 2);
         } else {
             Toast.makeText(this, Constants.DISCONNECT_SERVER, Toast.LENGTH_LONG).show();

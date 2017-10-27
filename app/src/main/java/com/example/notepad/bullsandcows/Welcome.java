@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,15 +30,20 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class Welcome extends AppCompatActivity {
 
     TextView mInfoVersionTextView;
     EditText mUserName;
+    EditText mLogin;
+    EditText mPassword;
     Boolean mCurrentVersionAppWelcome;
+    Boolean mKeepPassword;
     String mNameOfUserWelcome;
     Button mConfirmNameButton;
     Button mVisitCheckVersion;
+    Button mLoginButton;
+    Button mRegistrationButton;
+    CheckBox mCheckBox;
     String mNewVersion = "";
 
     @Override
@@ -48,11 +54,21 @@ public class Welcome extends AppCompatActivity {
         mConfirmNameButton = (Button) findViewById(R.id.welcome_confirm_nik_name_button);
         mInfoVersionTextView = (TextView) findViewById(R.id.info_about_version_text_view);
         mVisitCheckVersion = (Button) findViewById(R.id.check_version_app_button);
+        mLoginButton = (Button) findViewById(R.id.login_button);
+        mRegistrationButton = (Button) findViewById(R.id.registration_welcome_button);
+        mLogin = (EditText) findViewById(R.id.login_welcome_page_edit_text);
+        mPassword = (EditText) findViewById(R.id.password_welcome_page_edit_text);
+        mCheckBox = (CheckBox) findViewById(R.id.keep_password_check_box);
 
         Intent intent = getIntent();
         mCurrentVersionAppWelcome = intent.getBooleanExtra("version", false);
         mNameOfUserWelcome = intent.getStringExtra("nikOfUser");
-        mUserName.setText(mNameOfUserWelcome);
+        mPassword.setText(intent.getStringExtra("password"));
+        mKeepPassword = intent.getBooleanExtra("keepPassword", false);
+        mLogin.setText(mNameOfUserWelcome);
+        if(mKeepPassword){
+            mCheckBox.setChecked(true);
+        }
 
         View.OnClickListener clickButton = new View.OnClickListener() {
 
@@ -69,6 +85,22 @@ public class Welcome extends AppCompatActivity {
                     case R.id.check_version_app_button:
                         mCurrentVersionAppWelcome = true;
                         checkVersionOfApp();
+                        break;
+                    case R.id.registration_welcome_button:
+                        Intent intentRegistration = new Intent(Welcome.this, RegistrationPage.class);
+                        intentRegistration.putExtra("nameOfUser", "");
+                        intentRegistration.putExtra("password", "");
+                        startActivityForResult(intentRegistration, 3);
+                        break;
+                    case R.id.login_button:
+                        String name = mLogin.getText().toString();
+                        String password = mPassword.getText().toString();
+                        if (name.length() > 0 && password.length() > 0) {
+                            new checkUserLoginAndPassword().execute(name, password);
+                        }else{
+                            Toast.makeText(Welcome.this, "Login or password is wrong", Toast.LENGTH_LONG).show();
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -76,7 +108,28 @@ public class Welcome extends AppCompatActivity {
         };
         mConfirmNameButton.setOnClickListener(clickButton);
         mVisitCheckVersion.setOnClickListener(clickButton);
+        mRegistrationButton.setOnClickListener(clickButton);
+        mLoginButton.setOnClickListener(clickButton);
         new CheckingVersionOfApp().execute(BuildConfig.VERSION_NAME);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 3:
+                if (requestCode == RESULT_OK) {
+                    //TODO find bug why not send information from Registration page
+                    mLogin.setText(data.getStringExtra("nameOfUser"));
+                    mPassword.setText(data.getStringExtra("password"));
+                    mUserName.setText(data.getStringExtra("nameOfUser"));
+                } else {
+
+                }
+                break;
+            default:
+                break;
+        }
+
     }
 
     public void checkVersionOfApp() {
@@ -93,7 +146,7 @@ public class Welcome extends AppCompatActivity {
         }
     }
 
-    class CheckingVersionOfApp extends AsyncTask <String, Void, String>{
+    class CheckingVersionOfApp extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -108,12 +161,12 @@ public class Welcome extends AppCompatActivity {
                 String appActualVersion = object.getString("mVersionOfApp");
                 mNewVersion = appActualVersion;
                 String versionOfAnnOnPhone = "" + BuildConfig.VERSION_CODE;
-                if(!(appActualVersion.equalsIgnoreCase(versionOfAnnOnPhone))){
+                if (!(appActualVersion.equalsIgnoreCase(versionOfAnnOnPhone))) {
 
                     mCurrentVersionAppWelcome = false;
                 }
                 checkVersionOfApp();
-            }catch (JSONException pE){
+            } catch (JSONException pE) {
                 pE.printStackTrace();
             }
 
@@ -181,4 +234,39 @@ public class Welcome extends AppCompatActivity {
             return result.toString();
         }
     }
+    private class checkUserLoginAndPassword extends UserCheckExist{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... pStrings) {
+            return super.doInBackground(pStrings);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean pBoolean) {
+            super.onPostExecute(pBoolean);
+            if(pBoolean == true){
+                Toast.makeText(Welcome.this, "You succese logened", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent();
+                intent.putExtra("nikOfUser", mLogin.getText().toString());
+                intent.putExtra("version", mCurrentVersionAppWelcome);
+                intent.putExtra("password", mPassword.getText().toString());
+                if(mCheckBox.isChecked()){
+                    mKeepPassword = true;
+                }else{
+                    mKeepPassword = false;
+                }
+                intent.putExtra("keepPassword", mKeepPassword);
+                setResult(RESULT_OK, intent);
+                finish();
+            }else{
+                Toast.makeText(Welcome.this, "Login or password is wrong", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
 }
