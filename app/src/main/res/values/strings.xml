@@ -30,4 +30,9 @@
     <string name="user_already_exist">"User with this name already Exist\n Choose other name"</string>
     <string name="keep_password_and_login">Keep login and password</string>
     <string name="REFRESH_RECORDS">Refresh records</string>
+    <string name="START_DOWNLOAD_NEW_VERSION">Start load new version</string>
+    <string name="FINISH_DOWNLOAD_NEW_VERSION">Finish download version</string>
+    <string name="FAILED_DOWNLOAD_NEW_VERSION">Failed download</string>
+    <string name="TRY_AGAIN">Try download again</string>
+    <string name="VISIT_SITE">Visit site of project</string>
 </resources>

@@ -20,9 +20,10 @@ public class Records extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records);
-        mResultTextView = (TextView) findViewById(R.id.records_text_view);
+        //TODO has bug if open first time. File not exist in this moment
+//        mResultTextView = (TextView) findViewById(R.id.records_text_view);
         WriteReadFile writeReadFile = new WriteReadFile();
-        mResultTextView.setText(writeReadFile.readFile(this));
+//        mResultTextView.setText(writeReadFile.readFile(this));
 //        RecordObject recordObject = writeReadFile.readDeserileasedObject(this);
 //        String resultText = recordObject.getNikName();
 //        mResultTextView.setText(resultText);

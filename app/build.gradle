@@ -28,7 +28,7 @@ android {
         GooglePlay {
             flavorDimension "store"
             versionName "1.0"
-            versionCode 1
+            versionCode 2
             buildConfigField "String", "HOME_SITE", "\"http://site1.com\""
             buildConfigField "int", "BUILD_TIME", "${System.currentTimeSeconds()}"
         }

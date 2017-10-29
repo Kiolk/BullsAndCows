@@ -1,18 +1,20 @@
 package com.example.notepad.bullsandcows;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +47,8 @@ public class Welcome extends AppCompatActivity {
     Button mRegistrationButton;
     CheckBox mCheckBox;
     String mNewVersion = "";
+    String mUrlNewVersionOfApp = "";
+    String mNameNewApp = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +87,21 @@ public class Welcome extends AppCompatActivity {
                         finish();
                         break;
                     case R.id.check_version_app_button:
-                        mCurrentVersionAppWelcome = true;
-                        checkVersionOfApp();
+                        if(mCurrentVersionAppWelcome){
+                            Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Kiolk/BullsAndCows"));
+                            startActivity(intent1);
+                        }else{
+                            if(new CheckConnection().checkConnection(Welcome.this)){
+                                new LoadNewVersionOfApp(Welcome.this, mVisitCheckVersion, mUrlNewVersionOfApp, mNameNewApp);
+                                //TODO not very clear representation that new version of application download on phone
+                            } else{
+                                Toast.makeText(Welcome.this, "Load new version of app not possible. Don't have connection to internet", Toast.LENGTH_LONG).show();
+                            }
+                            mCurrentVersionAppWelcome = true;
+                            checkVersionOfApp();
+                        }
+
+
                         break;
                     case R.id.registration_welcome_button:
                         Intent intentRegistration = new Intent(Welcome.this, RegistrationPage.class);
@@ -135,14 +152,14 @@ public class Welcome extends AppCompatActivity {
     public void checkVersionOfApp() {
         if (mCurrentVersionAppWelcome) {
             mInfoVersionTextView.setText("Your app in actual version");
-//            mVisitCheckVersion.setBackgroundColor(Color.YELLOW);
-//            mVisitCheckVersion.setText("Visit site of project");
-//            mVisitCheckVersion.setTextSize(40);
+            mVisitCheckVersion.setText(R.string.VISIT_SITE);
+            mVisitCheckVersion.setEnabled(true);
+            mVisitCheckVersion.setTextColor(Color.WHITE);
         } else {
             mInfoVersionTextView.setText("Your app is old version");
-            mVisitCheckVersion.setBackgroundColor(Color.RED);
-            mVisitCheckVersion.setText("Press for upgrade yor upp for version " + mNewVersion);
-            mVisitCheckVersion.setTextSize(40);
+//            mVisitCheckVersion.setBackgroundColor(Color.RED);
+            mVisitCheckVersion.setText("Press for upgrade yor app for version " + mNewVersion);
+            mVisitCheckVersion.setTextColor(Color.RED);
         }
     }
 
@@ -160,6 +177,8 @@ public class Welcome extends AppCompatActivity {
                 JSONObject object = new JSONObject(pS);
                 String appActualVersion = object.getString("mVersionOfApp");
                 mNewVersion = appActualVersion;
+                mUrlNewVersionOfApp = object.getString("mUrlNewVersionOfApp");
+                mNameNewApp = object.getString("mNameOfApp");
                 String versionOfAnnOnPhone = "" + BuildConfig.VERSION_CODE;
                 if (!(appActualVersion.equalsIgnoreCase(versionOfAnnOnPhone))) {
 

@@ -7,14 +7,25 @@ public class VersionOfApp {
     private Long mDateOfRelease;
     private String mPowered;
     private String mFeatures;
+    private String mUrlNewVersionOfApp;
 
-    public VersionOfApp(String pNameOfApp, String pVersionOfApp, Long pDateOfRelease, String pPowered, String pFeatures) {
+    public VersionOfApp(String pNameOfApp, String pVersionOfApp, Long pDateOfRelease, String pPowered, String pFeatures, String pUrlNewVersionOfApp) {
         mNameOfApp = pNameOfApp;
         mVersionOfApp = pVersionOfApp;
         mDateOfRelease = pDateOfRelease;
         mPowered = pPowered;
         mFeatures = pFeatures;
+        mUrlNewVersionOfApp = pUrlNewVersionOfApp;
     }
+
+    public String getUrlNewVersionOfApp() {
+        return mUrlNewVersionOfApp;
+    }
+
+    public void setUrlNewVersionOfApp(String pUrlNewVersionOfApp) {
+        mUrlNewVersionOfApp = pUrlNewVersionOfApp;
+    }
+
 
     public String getNameOfApp() {
         return mNameOfApp;
