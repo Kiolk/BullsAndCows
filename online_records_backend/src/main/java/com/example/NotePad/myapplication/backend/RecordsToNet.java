@@ -2,15 +2,16 @@ package com.example.NotePad.myapplication.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 @Entity
 public class RecordsToNet {
 
     @Id
     Long mDate;
-
+    @Index
     String mNikName;
-
+    @Index
     String mCodes;
 
     String mMoves;

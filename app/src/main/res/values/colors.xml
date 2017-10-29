@@ -7,4 +7,6 @@
     <color name="title_color">#ff9900</color>
     <color name="colorOfText">#FFFFFF</color>
     <color name="win_background_color">#3C91E6</color>
+    <color name="ERROR_EDIT_TEXT">#f44336</color>
+    <color name="CORRECT_EDIT_TEXT">#4caf50</color>
 </resources>

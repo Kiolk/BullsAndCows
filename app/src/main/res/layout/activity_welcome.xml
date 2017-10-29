@@ -46,6 +46,7 @@
             android:layout_weight="2">
 
             <EditText
+                android:inputType="textPassword"
                 android:id="@+id/password_welcome_page_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

@@ -13,6 +13,9 @@ import android.widget.Toast;
 import com.example.notepad.bullsandcows.utils.ParsUserFactory;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class RegistrationPage extends AppCompatActivity {
 
     EditText mUserNAme;
@@ -34,6 +37,7 @@ public class RegistrationPage extends AppCompatActivity {
         mCountry = (EditText) findViewById(R.id.country_registration_edit_text);
         mEmail = (EditText) findViewById(R.id.email_registration_edit_text);
         mRegisterButton = (Button) findViewById(R.id.registration_button);
+        mRegisterButton.setEnabled(false);
         infoTextView = (TextView) findViewById(R.id.information_status_text_view);
 
 
@@ -58,6 +62,41 @@ public class RegistrationPage extends AppCompatActivity {
 
         mRegisterButton.setOnClickListener(clickBtn);
 
+        mUserNAme.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View pView, boolean pB) {
+                if(!pB){
+                     new CheckingAvaliableNikName().execute(mUserNAme.getText().toString());
+                }
+            }
+        });
+
+        mPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View pView, boolean pB) {
+                if(mPassword.getText().toString() != null){
+                    mPassword.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
+                }
+            }
+        });
+
+        mPassword2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View pView, boolean pB) {
+                if(mPassword2.getText().toString().equals(mPassword.getText().toString())){
+                    mPassword2.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
+                    if(mUserNAme.getText().toString() != null) {
+                        mRegisterButton.setEnabled(true);
+                    }
+                }else{
+                    mPassword2.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
+                    mRegisterButton.setEnabled(false);
+                }
+            }
+        });
     }
 
     class eExsmol extends NewUserPost {
@@ -87,7 +126,6 @@ public class RegistrationPage extends AppCompatActivity {
 
     class CheckingExistUser extends UserCheckExist{
 
-
         @Override
         protected void onPostExecute(Boolean pBoolean) {
             super.onPostExecute(pBoolean);
@@ -99,6 +137,21 @@ public class RegistrationPage extends AppCompatActivity {
                 Toast.makeText(RegistrationPage.this, "User not exist in server", Toast.LENGTH_LONG).show();
                 new NewUserPost().execute(mUser);
                 finish();
+            }
+        }
+    }
+
+    class CheckingAvaliableNikName extends UserCheckExist{
+
+        @Override
+        protected void onPostExecute(Boolean pBoolean) {
+            super.onPostExecute(pBoolean);
+            if(pBoolean){
+                mUserNAme.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
+//                mRegisterButton.setEnabled(false);
+            }else{
+                mUserNAme.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
+//                mRegisterButton.setEnabled(true);
             }
         }
     }
