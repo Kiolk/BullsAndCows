@@ -35,4 +35,19 @@
     <string name="FAILED_DOWNLOAD_NEW_VERSION">Failed download</string>
     <string name="TRY_AGAIN">Try download again</string>
     <string name="VISIT_SITE">Visit site of project</string>
+    <string name="BUTTON_1">1</string>
+    <string name="BUTTON_2">2</string>
+    <string name="BUTTON_3">3</string>
+    <string name="BUTTON_4">4</string>
+    <string name="BUTTON_5">5</string>
+    <string name="BUTTON_6">6</string>
+    <string name="BUTTON_7">7</string>
+    <string name="BUTTON_8">8</string>
+    <string name="BUTTON_9">9</string>
+    <string name="BUTTON_0">0</string>
+    <string name="SHOW_NAMBER">Show number</string>
+    <string name="START_GAME">Start game</string>
+    <string name="ENTER">Enter</string>
+    <string name="DELETE">Del</string>
+
 </resources>

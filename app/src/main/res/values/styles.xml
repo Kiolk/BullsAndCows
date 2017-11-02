@@ -1,12 +1,37 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#000000</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorButtonNormal">#FF9800</item>
+    </style>
+
+    <style name="Buttons">
+        <item name="android:background">@drawable/ripple_selector_for_button</item>
+        <item name="android:layout_marginBottom">@dimen/SIZE_OF_MARGINE</item>
+        <item name="android:layout_marginRight">@dimen/SIZE_OF_MARGINE</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/SIZE_OF_BUTTON_TEXT</item>
+        <item name="android:textColor">@color/LIGHT_COLOR</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="Buttons.Down">
+        <item name="android:background">@color/RED_BUTTON</item>
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="upper_bar">
+        <item name="android:background">@drawable/myrect</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:layout_margin">4dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
 </resources>

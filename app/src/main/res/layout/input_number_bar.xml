@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editText"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    android:background="@drawable/myrect"
+    android:elevation="6dp"
+    android:gravity="center"
+    android:hint="number"
+    android:inputType="text"
+    android:textSize="50sp"
+    tools:text="4567"
+    android:shadowColor="@color/TEXT_SHADOW"
+    android:shadowDx="1"
+    android:shadowDy="1"
+    android:shadowRadius="2"
+    tools:showIn="@layout/activity_main"/>

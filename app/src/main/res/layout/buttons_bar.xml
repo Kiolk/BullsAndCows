@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/LIGHT_GREY"
+              android:elevation="20dp"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/buttom1"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:elevation="20dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_1"/>
+
+        <TextView
+            android:id="@+id/buttom2"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_2"/>
+
+        <TextView
+            android:id="@+id/buttom3"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_3"/>
+
+        <TextView
+            android:id="@+id/buttom4"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_4"/>
+
+        <TextView
+            android:id="@+id/buttom5"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_5"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/buttom6"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_6"/>
+
+        <TextView
+            android:id="@+id/buttom7"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_7"/>
+
+        <TextView
+            android:id="@+id/buttom8"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_8"/>
+
+        <TextView
+            android:id="@+id/buttom9"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_9"/>
+
+        <TextView
+            android:id="@+id/buttom0"
+            style="@style/Buttons"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="0.2"
+            android:text="@string/BUTTON_0"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/start"
+            style="@style/Buttons.Down"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:text="@string/START_GAME"/>
+
+        <TextView
+            android:id="@+id/enter"
+            style="@style/Buttons.Down"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="0.4"
+            android:text="@string/ENTER"/>
+
+        <TextView
+            android:id="@+id/buttomDel"
+            style="@style/Buttons.Down"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_weight="0.2"
+            android:text="@string/DELETE"/>
+    </LinearLayout>
+
+</LinearLayout>
+

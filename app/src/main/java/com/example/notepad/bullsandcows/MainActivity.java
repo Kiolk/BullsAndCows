@@ -1,6 +1,7 @@
 package com.example.notepad.bullsandcows;
 
-
+import android.animation.Animator;
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -17,6 +18,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -61,26 +63,23 @@ public class MainActivity extends AppCompatActivity {
 
     public static int[] enteredArray = new int[10];
     int chekRestart = DIG;
-
-    int cnt0 = 0;
-    int cnt1 = 0, cnt2 = 0, cnt3 = 0, cnt4 = 0, cnt5 = 0, cnt6 = 0, cnt7 = 0, cnt8 = 0, cnt9 = 0;
-
     TextView numberForScreen;
-    Button number1;
-    Button number2;
-    Button number3;
-    Button number4;
-    Button number5;
-    Button number6;
-    Button number7;
-    Button number8;
-    Button number9;
-    Button number0;
-    Button enterButton;
-    Button startButton;
-    Button del;
+    TextView number1;
+    TextView number2;
+    TextView number3;
+    TextView number4;
+    TextView number5;
+    TextView number6;
+    TextView number7;
+    TextView number8;
+    TextView number9;
+    TextView number0;
+    TextView enterButton;
+    TextView startButton;
+    TextView del;
     TextView mTimer;
     TextView mNikOfUser;
+    ImageView mOptionMenu;
     private long mTimerCount = 0;
     Timer mTimerTimer;
     WriteReadFile mWriteReadFile = new WriteReadFile();
@@ -94,27 +93,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+       // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
         numberForScreen = (TextView) findViewById(R.id.editText);
-        number1 = (Button) findViewById(R.id.buttom1);
-        number2 = (Button) findViewById(R.id.buttom2);
-        number3 = (Button) findViewById(R.id.buttom3);
-        number4 = (Button) findViewById(R.id.buttom4);
-        number5 = (Button) findViewById(R.id.buttom5);
-        number6 = (Button) findViewById(R.id.buttom6);
-        number7 = (Button) findViewById(R.id.buttom7);
-        number8 = (Button) findViewById(R.id.buttom8);
-        number9 = (Button) findViewById(R.id.buttom9);
-        number0 = (Button) findViewById(R.id.buttom0);
-        enterButton = (Button) findViewById(R.id.enter);
-        startButton = (Button) findViewById(R.id.start);
-        del = (Button) findViewById(R.id.buttomDel);
+        number1 = (TextView) findViewById(R.id.buttom1);
+        number2 = (TextView) findViewById(R.id.buttom2);
+        number3 = (TextView) findViewById(R.id.buttom3);
+        number4 = (TextView) findViewById(R.id.buttom4);
+        number5 = (TextView) findViewById(R.id.buttom5);
+        number6 = (TextView) findViewById(R.id.buttom6);
+        number7 = (TextView) findViewById(R.id.buttom7);
+        number8 = (TextView) findViewById(R.id.buttom8);
+        number9 = (TextView) findViewById(R.id.buttom9);
+        number0 = (TextView) findViewById(R.id.buttom0);
+        enterButton = (TextView) findViewById(R.id.enter);
+        startButton = (TextView) findViewById(R.id.start);
+        del = (TextView) findViewById(R.id.buttomDel);
         mTimer = (TextView) findViewById(R.id.timer_text_view);
         mNikOfUser = (TextView) findViewById(R.id.user_name_text_view);
         mWinFragment = new WinFragment();
         mFrameLayout = (FrameLayout) findViewById(R.id.win_container);
+        mOptionMenu = (ImageView) findViewById(R.id.option_menu_image_view);
         loadNikName();
 
         View.OnClickListener clickButton = new View.OnClickListener() {
@@ -124,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 String buf;
                 buf = numberForScreen.getText().toString();
                 switch (view.getId()) {
+                    case R.id.option_menu_image_view:
+                        openOptionsMenu();
+                        break;
                     case R.id.buttom1:
                         numberForScreen.setText(buf + 1);
                         break;
@@ -187,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
+
         number1.setOnClickListener(clickButton);
         number2.setOnClickListener(clickButton);
         number3.setOnClickListener(clickButton);
@@ -199,9 +203,9 @@ public class MainActivity extends AppCompatActivity {
         number0.setOnClickListener(clickButton);
         enterButton.setOnClickListener(clickButton);
         startButton.setOnClickListener(clickButton);
+        mOptionMenu.setOnClickListener(clickButton);
         del.setOnClickListener(clickButton);
         startWelcomePage();
-//        getDrawerToggleDelegate();
     }
 
     @Override
@@ -326,28 +330,28 @@ public class MainActivity extends AppCompatActivity {
             enteredNumber = enteredNumber / 10;
         }
         //shiftData();
-        TextView test3 = (TextView) findViewById(R.id.number1);
-        test3.setText(number);
+//        TextView test3 = (TextView) findViewById(R.id.number1);
+//        test3.setText(number);
         mBuls.add("" + chekingBulls());
         //checkNumberForWin();
-        TextView test1 = (TextView) findViewById(R.id.number2);
-        test1.setText("" + chekingBulls());
-        ImageView image = (ImageView) findViewById(R.id.imageView1);
-        image.setImageResource(R.drawable.bullgood);
-        TextView test2 = (TextView) findViewById(R.id.number3);
-        ImageView image2 = (ImageView) findViewById(R.id.imageView);
-        image2.setImageResource(R.drawable.cowgood);
-        test2.setText("" + (chekingCows() - chekingBulls()));
+//        TextView test1 = (TextView) findViewById(R.id.number2);
+//        test1.setText("" + chekingBulls());
+//        ImageView image = (ImageView) findViewById(R.id.imageView1);
+//        image.setImageResource(R.drawable.bullgood);
+//        TextView test2 = (TextView) findViewById(R.id.number3);
+//        ImageView image2 = (ImageView) findViewById(R.id.imageView);
+//        image2.setImageResource(R.drawable.cowgood);
+//        test2.setText("" + (chekingCows() - chekingBulls()));
         mCows.add("" + (chekingCows() - chekingBulls()));
-        TextView test4 = (TextView) findViewById(R.id.cntMove);
-        test4.setText("" + cntMoves);
+//        TextView test4 = (TextView) findViewById(R.id.cntMove);
+//        test4.setText("" + cntMoves);
         ++cntMoves;
     }
 
     public void checkNumberForWin() {
         if (chekingBulls() == DIG) {
-            TextView test5 = (TextView) findViewById(R.id.number1);
-            test5.setText("Won!");
+//            TextView test5 = (TextView) findViewById(R.id.number1);
+//            test5.setText("Won!");
             TextView wonText = (TextView) findViewById(R.id.editText);
             wonText.setText("WON!");
             mTimerTimer.cancel();
@@ -1036,14 +1040,14 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     public void saveNikName() {
-        if(mKeepPassword) {
+        if (mKeepPassword) {
             mSaveNikName = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor = mSaveNikName.edit();
             editor.putString(SAVED_TEXT, mNikOfUser.getText().toString());
             editor.putString(SAVED_PASSWORD, passwordOfUser);
             editor.putBoolean(SAVED_KEEP_PASSWORD, mKeepPassword);
             editor.commit();
-        }else {
+        } else {
             SharedPreferences.Editor editor = mSaveNikName.edit();
             editor.putString(SAVED_TEXT, "");
             editor.putString(SAVED_PASSWORD, "");
@@ -1054,7 +1058,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadNikName() {
         mSaveNikName = getPreferences(MODE_PRIVATE);
-        if(mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false)) {
+        if (mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false)) {
             String savedText = mSaveNikName.getString(SAVED_TEXT, "");
             mNikOfUser.setText(savedText);
             passwordOfUser = mSaveNikName.getString(SAVED_PASSWORD, "");
@@ -1080,14 +1084,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void showWinFragment() {
         mFrameLayout.setVisibility(View.VISIBLE);
+        animationShow(mFrameLayout);
         mTransaction = getFragmentManager().beginTransaction();
         mTransaction.add(R.id.win_container, mWinFragment);
         mTransaction.commit();
         FragmentManager fM = getFragmentManager();
         fM.executePendingTransactions();
-        startService(new Intent (this, WinSoundService.class));
+        startService(new Intent(this, WinSoundService.class));
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(500);
+
+    }
+    @TargetApi(21)
+    public void animationShow(View pView){
+        int cx = (pView.getLeft() + pView.getRight()) / 2;
+        int cy = (pView.getBottom() + pView.getTop()) / 2;
+        int finalRadius = Math.max(pView.getWidth(), pView.getHeight());
+        Animator anim = ViewAnimationUtils.createCircularReveal(pView, cx, cy, 0, finalRadius);
+        anim.start();
     }
 
     public void closeWinFragment(View view) {
@@ -1098,9 +1112,9 @@ public class MainActivity extends AppCompatActivity {
         stopService(new Intent(this, WinSoundService.class));
     }
 
-    public void setWinText(){
+    public void setWinText() {
         Fragment winFragment = getFragmentManager().findFragmentById(R.id.win_container);
-        ((TextView)winFragment.getView().findViewById(R.id.win_text_view)).setText("Congratulation, " + mNikOfUser.getText().toString() + "! You are win!");
-        ((TextView)winFragment.getView().findViewById(R.id.win_result_text_view)).setText("You result: " + DIG + "-digits number, your find on " + (cntMoves - 1) + " moves, by " + mTimer.getText());
+        ((TextView) winFragment.getView().findViewById(R.id.win_text_view)).setText("Congratulation, " + mNikOfUser.getText().toString() + "! You are win!");
+        ((TextView) winFragment.getView().findViewById(R.id.win_result_text_view)).setText("You result: " + DIG + "-digits number, your find on " + (cntMoves - 1) + " moves, by " + mTimer.getText());
     }
 }

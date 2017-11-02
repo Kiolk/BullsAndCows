@@ -9,4 +9,13 @@
     <color name="win_background_color">#3C91E6</color>
     <color name="ERROR_EDIT_TEXT">#f44336</color>
     <color name="CORRECT_EDIT_TEXT">#4caf50</color>
+    <color name="LIGHT_GREY">#D1D3D4</color>
+    <color name="MING_COLOR">#467082</color>
+    <color name="LIGHT_COLOR">#F2F3F3</color>
+    <color name="OTHER_BUTTON">#FFC857</color>
+    <color name="RED_BUTTON">#ED474F</color>
+    <color name="TEXT_SHADOW">#7F000000</color>
+    <drawable name="BACKGROUND_COLOR_BUTTON">#467082</drawable>
+    <drawable name="PRESS_BUTTON">#303F9F</drawable>
+    <drawable name="SELECT_BUTTON">#ED474F</drawable>
 </resources>

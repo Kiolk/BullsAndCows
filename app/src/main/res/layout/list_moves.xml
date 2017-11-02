@@ -3,13 +3,15 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="horizontal"
-              android:padding="8dp">
+    android:layout_margin="8dp"
+    android:elevation="4dp"
+    android:background="@drawable/myrect">
 
     <TextView
         android:id="@+id/cnt_move_list_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:textColor="@android:color/black"
         android:textSize="40sp"/>
 
