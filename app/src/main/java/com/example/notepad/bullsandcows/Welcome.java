@@ -1,9 +1,14 @@
 package com.example.notepad.bullsandcows;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -92,6 +97,20 @@ public class Welcome extends AppCompatActivity {
                             startActivity(intent1);
                         }else{
                             if(new CheckConnection().checkConnection(Welcome.this)){
+
+                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Welcome.this).
+                                        setSmallIcon(R.drawable.bullgood).
+                                        setContentTitle("Start download new version").
+                                        setContentText("New version of Bulls and cows app");
+                                Intent resultIntent = new Intent(Welcome.this, MainActivity.class);
+                                TaskStackBuilder stackBuilder = TaskStackBuilder.create(Welcome.this);
+                                stackBuilder.addParentStack(MainActivity.class);
+                                stackBuilder.addNextIntent(resultIntent);
+                                PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+                                mBuilder.setContentIntent(resultPendingIntent);
+                                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                notificationManager.notify(1, mBuilder.build());
+
                                 new LoadNewVersionOfApp(Welcome.this, mVisitCheckVersion, mUrlNewVersionOfApp, mNameNewApp);
                                 //TODO not very clear representation that new version of application download on phone
                             } else{

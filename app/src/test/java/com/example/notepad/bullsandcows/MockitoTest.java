@@ -1,5 +1,7 @@
 package com.example.notepad.bullsandcows;
 
+import com.example.notepad.bullsandcows.utils.RandomNumberGenerator;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -82,5 +84,35 @@ public class MockitoTest {
         Mockito.doReturn("45632").when(mRandomNumberGenerator).generateRandomNumber(cod);
         String codedNumber = mRandomNumberGenerator.generateRandomNumber(cod);
         assertEquals(5, codedNumber.length());
+    }
+
+    @Test
+    public void testCheckNumberOfBulls(){
+        assertEquals(2, new RandomNumberGenerator().checkNumberOfBulls("2345", "8395"));
+        assertEquals(4, new RandomNumberGenerator().checkNumberOfBulls("2345", "2345"));
+        assertEquals(0, new RandomNumberGenerator().checkNumberOfBulls("2345", "0123"));
+        assertEquals(1, new RandomNumberGenerator().checkNumberOfBulls("2345", "2786"));
+    }
+
+    @Test
+    public void testCheckNumberOfCows(){
+        assertEquals(0, new RandomNumberGenerator().checkNumberOfCows("2345", "8395"));
+        assertEquals(4, new RandomNumberGenerator().checkNumberOfCows("1234", "4321"));
+        assertEquals(2, new RandomNumberGenerator().checkNumberOfCows("6759", "6579"));
+        assertEquals(1, new RandomNumberGenerator().checkNumberOfCows("1845", "8345"));
+        assertEquals(1, new RandomNumberGenerator().checkNumberOfCows("18", "83"));
+        assertEquals(2, new RandomNumberGenerator().checkNumberOfCows("184", "148"));
+        assertEquals(10, new RandomNumberGenerator().checkNumberOfCows("1234567890", "0987654321"));
+    }
+
+    @Test
+    public void testCheckNumberForCorrectInput(){
+        assertEquals(true, new RandomNumberGenerator().checkNumberForCorrectInput("12345", 5));
+        assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("1234", 5));
+        assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("123", 6));
+        assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("", 4));
+        assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("12342", 5));
+        assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("5677", 4));
+
     }
 }

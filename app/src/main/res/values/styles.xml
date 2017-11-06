@@ -34,4 +34,10 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="ShadowOfBlock">
+        <item name="android:background">@drawable/myrect</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:layout_margin">4dp</item>
+    </style>
+
 </resources>
