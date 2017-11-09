@@ -101,6 +101,12 @@
 
         </LinearLayout>
 
+        <Button
+            android:id="@+id/choice_language_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/CHOICE_LANGUAGE_BUTTON"/>
+
     </LinearLayout>
 
     <ImageView

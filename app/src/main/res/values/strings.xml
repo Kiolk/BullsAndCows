@@ -49,4 +49,17 @@
     <string name="START_GAME">Start game</string>
     <string name="ENTER">Enter</string>
     <string name="DELETE">Del</string>
+    <string name="GUEST">Guest</string>
+    <string name="NOT_CONNECT_TO_INTERNET">"Don't have connection to internet"</string>
+    <string name="SUCCESS_LOGGED">You success logged</string>
+    <string name="ENGLISH_LANGUAGE">English</string>
+    <string name="BELARUS_LANGUAGE">Belarus</string>
+    <string name="CHOICE_LANGUAGE_BUTTON">Language setting</string>
+    <string name="WON_MESSAGE">WON!</string>
+    <string name="CONGRATULATIONS">Congratulations, </string>
+    <string name="YOU_WIN">! You Won!</string>
+    <string name="YOUR_RESULT">You result: </string>
+    <string name="NUMBER_OF_DIGITS">-digits number, your find on </string>
+    <string name="WIN_TIME"> moves, by </string>
+    <string name="LANGUAGE_COD">ENG</string>
 </resources>

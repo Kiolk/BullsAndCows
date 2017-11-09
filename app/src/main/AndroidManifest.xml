@@ -43,8 +43,7 @@
         </activity>
         <activity
             android:name=".Welcome"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert">
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".OnlineRecords"
@@ -55,9 +54,12 @@
         <service android:name=".services.WinSoundService">
         </service>
         <service android:name=".services.RefreshOnlineRecordService">
-
         </service>
+
         <activity android:name=".RegistrationPage">
+        </activity>
+        <activity android:name=".ChoiceLanguageActivity"
+                  android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

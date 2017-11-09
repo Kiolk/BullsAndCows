@@ -10,10 +10,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.example.notepad.bullsandcows.utils.Constants;
+
 public class Setting extends AppCompatActivity {
 
     public static int numberOfDigits = 4;
     Button modButton;
+    private Button mChoiceLanguage;
     static boolean mode;
     EditText mNikEditText;
     //comm
@@ -25,7 +28,10 @@ public class Setting extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
         modButton = (Button) findViewById(R.id.modeButton);
         mNikEditText = (EditText) findViewById(R.id.set_nik_edit_text);
+        mChoiceLanguage = (Button) findViewById(R.id.choice_language_button);
+
         Intent intent = getIntent();
+        numberOfDigits = intent.getIntExtra(Constants.CODED_DIGITS, 4);
         mode = intent.getBooleanExtra("modeState", mode);
         if (!mode) {
             modButton.setText("Night mode");
@@ -36,28 +42,36 @@ public class Setting extends AppCompatActivity {
         TextView text = (TextView) findViewById(R.id.text);
         text.setText("" + numberOfDigits);
 
+
+
+        View.OnClickListener clickButton = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.modeButton:
+                        if (!mode) {
+                            modButton.setText("Daily mode");
+                            mode = true;
+                        } else {
+                            modButton.setText("Night mode");
+                            mode = false;
+                        }
+                        break;
+                    case R.id.choice_language_button:
+                        Intent intent2 = new Intent(Setting.this, ChoiceLanguageActivity.class);
+                        startActivity(intent2);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
         modButton.setOnClickListener(clickButton);
+        mChoiceLanguage.setOnClickListener(clickButton);
     }
 
-    View.OnClickListener clickButton = new View.OnClickListener() {
 
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.modeButton:
-                    if (!mode) {
-                        modButton.setText("Daily mode");
-                        mode = true;
-                    } else {
-                        modButton.setText("Night mode");
-                        mode = false;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     public void submitMinus(View view) {
         if (numberOfDigits > 1) {

@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,7 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.Constants;
+import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
+import com.example.notepad.bullsandcows.utils.TypeWriter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +43,10 @@ import java.util.Map;
 
 public class Welcome extends AppCompatActivity {
 
+    public static final String IS_CHECKED_KEEP_PASSWORD = "isCheckedKeepPassword";
+    public static final String DEFAULT_PASSWORD_FOR_GUEST = "1111";
     TextView mInfoVersionTextView;
+    TextView mWelcomeInformationTextView;
     EditText mUserName;
     EditText mLogin;
     EditText mPassword;
@@ -54,13 +61,24 @@ public class Welcome extends AppCompatActivity {
     String mNewVersion = "";
     String mUrlNewVersionOfApp = "";
     String mNameNewApp = "";
+    Boolean mIsJoinToOnline;
+
+    SharedPreferences mPreferencesFromWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        mUserName = (EditText) findViewById(R.id.user_name_welcome_edit_text);
-        mConfirmNameButton = (Button) findViewById(R.id.welcome_confirm_nik_name_button);
+        initialization();
+        if (CheckConnection.checkConnection(Welcome.this)) {
+            new CheckingVersionOfApp().execute(BuildConfig.VERSION_NAME);
+        }
+        loadDataFromPreferences();
+    }
+
+    private void initialization() {
+//        mUserName = (EditText) findViewById(R.id.user_name_welcome_edit_text);
+//        mConfirmNameButton = (Button) findViewById(R.id.welcome_confirm_nik_name_button);
         mInfoVersionTextView = (TextView) findViewById(R.id.info_about_version_text_view);
         mVisitCheckVersion = (Button) findViewById(R.id.check_version_app_button);
         mLoginButton = (Button) findViewById(R.id.login_button);
@@ -68,36 +86,21 @@ public class Welcome extends AppCompatActivity {
         mLogin = (EditText) findViewById(R.id.login_welcome_page_edit_text);
         mPassword = (EditText) findViewById(R.id.password_welcome_page_edit_text);
         mCheckBox = (CheckBox) findViewById(R.id.keep_password_check_box);
+        mWelcomeInformationTextView = (TextView) findViewById(R.id.welcome_text_text_view);
+        mWelcomeInformationTextView.setTypeface(CustomFonts.getTypeFace(Welcome.this, CustomFonts.AASSUANBRK));
 
-        Intent intent = getIntent();
-        mCurrentVersionAppWelcome = intent.getBooleanExtra("version", false);
-        mNameOfUserWelcome = intent.getStringExtra("nikOfUser");
-        mPassword.setText(intent.getStringExtra("password"));
-        mKeepPassword = intent.getBooleanExtra("keepPassword", false);
-        mLogin.setText(mNameOfUserWelcome);
-        if(mKeepPassword){
-            mCheckBox.setChecked(true);
-        }
 
         View.OnClickListener clickButton = new View.OnClickListener() {
 
             @Override
             public void onClick(View pView) {
                 switch (pView.getId()) {
-                    case R.id.welcome_confirm_nik_name_button:
-                        Intent intent = new Intent();
-                        intent.putExtra("nikOfUser", mUserName.getText().toString());
-                        intent.putExtra("version", mCurrentVersionAppWelcome);
-                        setResult(RESULT_OK, intent);
-                        finish();
-                        break;
                     case R.id.check_version_app_button:
-                        if(mCurrentVersionAppWelcome){
-                            Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Kiolk/BullsAndCows"));
-                            startActivity(intent1);
-                        }else{
-                            if(new CheckConnection().checkConnection(Welcome.this)){
-
+                        if (CheckConnection.checkConnection(Welcome.this)) {
+                            if (mCurrentVersionAppWelcome) {
+                                Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Kiolk/BullsAndCows"));
+                                startActivity(intent1);
+                            } else {
                                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Welcome.this).
                                         setSmallIcon(R.drawable.bullgood).
                                         setContentTitle("Start download new version").
@@ -113,14 +116,12 @@ public class Welcome extends AppCompatActivity {
 
                                 new LoadNewVersionOfApp(Welcome.this, mVisitCheckVersion, mUrlNewVersionOfApp, mNameNewApp);
                                 //TODO not very clear representation that new version of application download on phone
-                            } else{
-                                Toast.makeText(Welcome.this, "Load new version of app not possible. Don't have connection to internet", Toast.LENGTH_LONG).show();
+                                mCurrentVersionAppWelcome = true;
+                                checkVersionOfApp();
                             }
-                            mCurrentVersionAppWelcome = true;
-                            checkVersionOfApp();
+                        } else {
+                            CheckConnection.showToastAboutDisconnection(Welcome.this);
                         }
-
-
                         break;
                     case R.id.registration_welcome_button:
                         Intent intentRegistration = new Intent(Welcome.this, RegistrationPage.class);
@@ -132,8 +133,14 @@ public class Welcome extends AppCompatActivity {
                         String name = mLogin.getText().toString();
                         String password = mPassword.getText().toString();
                         if (name.length() > 0 && password.length() > 0) {
-                            new checkUserLoginAndPassword().execute(name, password);
-                        }else{
+                            if (CheckConnection.checkConnection(Welcome.this)) {
+                                new CheckUserLoginAndPassword().execute(name, password);
+                            } else {
+                                mIsJoinToOnline = false;
+                                startMainActivity();
+                                Toast.makeText(Welcome.this, "You continue offline game", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
                             Toast.makeText(Welcome.this, "Login or password is wrong", Toast.LENGTH_LONG).show();
                         }
                         break;
@@ -142,11 +149,16 @@ public class Welcome extends AppCompatActivity {
                 }
             }
         };
-        mConfirmNameButton.setOnClickListener(clickButton);
+//        mConfirmNameButton.setOnClickListener(clickButton);
         mVisitCheckVersion.setOnClickListener(clickButton);
         mRegistrationButton.setOnClickListener(clickButton);
         mLoginButton.setOnClickListener(clickButton);
-        new CheckingVersionOfApp().execute(BuildConfig.VERSION_NAME);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveDataInPreferences();
     }
 
     @Override
@@ -171,12 +183,12 @@ public class Welcome extends AppCompatActivity {
     public void checkVersionOfApp() {
         if (mCurrentVersionAppWelcome) {
             mInfoVersionTextView.setText("Your app in actual version");
+            new TypeWriter(Welcome.this).animateText(mInfoVersionTextView.getText());
             mVisitCheckVersion.setText(R.string.VISIT_SITE);
             mVisitCheckVersion.setEnabled(true);
             mVisitCheckVersion.setTextColor(Color.WHITE);
         } else {
             mInfoVersionTextView.setText("Your app is old version");
-//            mVisitCheckVersion.setBackgroundColor(Color.RED);
             mVisitCheckVersion.setText("Press for upgrade yor app for version " + mNewVersion);
             mVisitCheckVersion.setTextColor(Color.RED);
         }
@@ -272,7 +284,8 @@ public class Welcome extends AppCompatActivity {
             return result.toString();
         }
     }
-    private class checkUserLoginAndPassword extends UserCheckExist{
+
+    private class CheckUserLoginAndPassword extends UserCheckExist {
 
         @Override
         protected void onPreExecute() {
@@ -287,23 +300,46 @@ public class Welcome extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean pBoolean) {
             super.onPostExecute(pBoolean);
-            if(pBoolean == true){
-                Toast.makeText(Welcome.this, "You succese logened", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent();
-                intent.putExtra("nikOfUser", mLogin.getText().toString());
-                intent.putExtra("version", mCurrentVersionAppWelcome);
-                intent.putExtra("password", mPassword.getText().toString());
-                if(mCheckBox.isChecked()){
-                    mKeepPassword = true;
-                }else{
-                    mKeepPassword = false;
-                }
-                intent.putExtra("keepPassword", mKeepPassword);
-                setResult(RESULT_OK, intent);
-                finish();
-            }else{
+            if (pBoolean == true) {
+                Toast.makeText(Welcome.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+                mIsJoinToOnline = true;
+                startMainActivity();
+            } else {
                 Toast.makeText(Welcome.this, "Login or password is wrong", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(Welcome.this, MainActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Constants.NIK_NAME_OF_USER, mLogin.getText().toString());
+        intent.putExtra(Constants.PASSWORD_OF_USER,mPassword.getText().toString());
+        intent.putExtra(Constants.KEEP_PASSWORD, mCheckBox.isChecked());
+        intent.putExtra(Constants.JOIN_TO_ONLINE, mIsJoinToOnline);
+        startActivity(intent);
+        finish();
+    }
+
+    private void saveDataInPreferences() {
+        mPreferencesFromWelcome = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = mPreferencesFromWelcome.edit();
+        editor.putString(Constants.NIK_NAME_OF_USER, mLogin.getText().toString());
+        editor.putString(Constants.PASSWORD_OF_USER, mPassword.getText().toString());
+        editor.putBoolean(IS_CHECKED_KEEP_PASSWORD, mCheckBox.isChecked());
+        editor.commit();
+    }
+
+    private void loadDataFromPreferences() {
+        mPreferencesFromWelcome = getPreferences(MODE_PRIVATE);
+        mCheckBox.setChecked(mPreferencesFromWelcome.getBoolean(IS_CHECKED_KEEP_PASSWORD, false));
+        if (mCheckBox.isChecked()) {
+            mLogin.setText(mPreferencesFromWelcome.getString(Constants.NIK_NAME_OF_USER, getResources().getString(R.string.GUEST)));
+            mPassword.setText((mPreferencesFromWelcome.getString(Constants.PASSWORD_OF_USER, DEFAULT_PASSWORD_FOR_GUEST)));
+        } else {
+            mLogin.setText(getResources().getString(R.string.GUEST));
+            mPassword.setText(DEFAULT_PASSWORD_FOR_GUEST);
+//            mPassword.setEnabled(false);
         }
     }
 

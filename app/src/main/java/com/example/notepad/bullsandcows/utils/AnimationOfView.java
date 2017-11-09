@@ -13,6 +13,7 @@ public class AnimationOfView {
         int cy = (pView.getBottom() + pView.getTop()) / 2;
         int finalRadius = Math.max(pView.getWidth(), pView.getHeight());
         Animator anim = ViewAnimationUtils.createCircularReveal(pView, cx, cy, 0, finalRadius);
+        anim.setDuration(2000);
         anim.start();
     }
 

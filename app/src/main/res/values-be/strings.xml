@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ENGLISH_LANGUAGE">Ангельская</string>
+    <string name="BELARUS_LANGUAGE">Беларуская</string>
+    <string name="WON_MESSAGE">Перамога!</string>
+    <string name="CHOICE_LANGUAGE_BUTTON">Абярыце мову</string>
+    <string name="CONGRATULATIONS">Віньшуем, </string>
+    <string name="YOU_WIN">! Ты перамог!</string>
+    <string name="YOUR_RESULT">Твой вынік: </string>
+    <string name="NUMBER_OF_DIGITS">-лік ты адгадаў за </string>
+    <string name="WIN_TIME"> хадоў, за </string>
+    <string name="LANGUAGE_COD">БЕЛ</string>
+</resources>
