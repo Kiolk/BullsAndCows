@@ -11,4 +11,7 @@ public class Constants {
     public static final String CODED_DIGITS = "codedNumberOfDigits";
     public static final String CODE_OF_LANGUAGE = "codeOfLanguage";
     public static final String KEEP_PASSWORD = "keepPasswordOfUser";
+    public static final String MODE_STATE = "modeState";
+
+
 }

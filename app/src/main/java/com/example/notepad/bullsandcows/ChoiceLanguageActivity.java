@@ -46,7 +46,7 @@ public class ChoiceLanguageActivity extends AppCompatActivity {
                         break;
                 }
 //                setLocale(language);
-                new LanguageLocale().setLocale(language, ChoiceLanguageActivity.this);
+                LanguageLocale.setLocale(language, ChoiceLanguageActivity.this);
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }

@@ -7,7 +7,7 @@
     <string name="moves_title">Moves</string>
     <string name="time_title">Time</string>
     <string name="welcome_text">Welcome!
-    Yor start fanny logical game.
+    You start funny logical game.
     Good luck!</string>
     <string name="welcome_hint">Entered your name</string>
     <string name="confirm_you_name">Confirm your name</string>
@@ -45,7 +45,7 @@
     <string name="BUTTON_8">8</string>
     <string name="BUTTON_9">9</string>
     <string name="BUTTON_0">0</string>
-    <string name="SHOW_NAMBER">Show number</string>
+    <string name="SHOW_NUMBER">Show number</string>
     <string name="START_GAME">Start game</string>
     <string name="ENTER">Enter</string>
     <string name="DELETE">Del</string>
@@ -62,4 +62,7 @@
     <string name="NUMBER_OF_DIGITS">-digits number, your find on </string>
     <string name="WIN_TIME"> moves, by </string>
     <string name="LANGUAGE_COD">ENG</string>
+    <string name="ENTER_NUMBER">Enter </string>
+    <string name="TOAST_MESSAGE_WITH_RULE">-digits number, without repeating digits!</string>
+    <string name="WE_BACK_WITHOUT_CHANGE">We back without change</string>
 </resources>

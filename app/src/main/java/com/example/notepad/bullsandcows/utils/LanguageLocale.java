@@ -7,7 +7,7 @@ import java.util.Locale;
 
 public class LanguageLocale {
 
-    public void setLocale(String pLanguage, Context pContext) {
+    public static void setLocale(String pLanguage, Context pContext) {
         if(pLanguage.equalsIgnoreCase("")){
             return;
         }

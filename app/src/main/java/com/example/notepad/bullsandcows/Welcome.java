@@ -23,7 +23,6 @@ import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
-import com.example.notepad.bullsandcows.utils.TypeWriter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +44,7 @@ public class Welcome extends AppCompatActivity {
 
     public static final String IS_CHECKED_KEEP_PASSWORD = "isCheckedKeepPassword";
     public static final String DEFAULT_PASSWORD_FOR_GUEST = "1111";
+    public static final int REGISTRATION_REQUEST_CODE = 3;
     TextView mInfoVersionTextView;
     TextView mWelcomeInformationTextView;
     EditText mUserName;
@@ -77,8 +77,6 @@ public class Welcome extends AppCompatActivity {
     }
 
     private void initialization() {
-//        mUserName = (EditText) findViewById(R.id.user_name_welcome_edit_text);
-//        mConfirmNameButton = (Button) findViewById(R.id.welcome_confirm_nik_name_button);
         mInfoVersionTextView = (TextView) findViewById(R.id.info_about_version_text_view);
         mVisitCheckVersion = (Button) findViewById(R.id.check_version_app_button);
         mLoginButton = (Button) findViewById(R.id.login_button);
@@ -127,7 +125,7 @@ public class Welcome extends AppCompatActivity {
                         Intent intentRegistration = new Intent(Welcome.this, RegistrationPage.class);
                         intentRegistration.putExtra("nameOfUser", "");
                         intentRegistration.putExtra("password", "");
-                        startActivityForResult(intentRegistration, 3);
+                        startActivityForResult(intentRegistration, REGISTRATION_REQUEST_CODE);
                         break;
                     case R.id.login_button:
                         String name = mLogin.getText().toString();
@@ -149,7 +147,6 @@ public class Welcome extends AppCompatActivity {
                 }
             }
         };
-//        mConfirmNameButton.setOnClickListener(clickButton);
         mVisitCheckVersion.setOnClickListener(clickButton);
         mRegistrationButton.setOnClickListener(clickButton);
         mLoginButton.setOnClickListener(clickButton);
@@ -164,12 +161,11 @@ public class Welcome extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 3:
-                if (requestCode == RESULT_OK) {
+            case REGISTRATION_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
                     //TODO find bug why not send information from Registration page
                     mLogin.setText(data.getStringExtra("nameOfUser"));
                     mPassword.setText(data.getStringExtra("password"));
-                    mUserName.setText(data.getStringExtra("nameOfUser"));
                 } else {
 
                 }
@@ -183,7 +179,7 @@ public class Welcome extends AppCompatActivity {
     public void checkVersionOfApp() {
         if (mCurrentVersionAppWelcome) {
             mInfoVersionTextView.setText("Your app in actual version");
-            new TypeWriter(Welcome.this).animateText(mInfoVersionTextView.getText());
+//            new TypeWriter(Welcome.this).animateText(mInfoVersionTextView.getText());
             mVisitCheckVersion.setText(R.string.VISIT_SITE);
             mVisitCheckVersion.setEnabled(true);
             mVisitCheckVersion.setTextColor(Color.WHITE);

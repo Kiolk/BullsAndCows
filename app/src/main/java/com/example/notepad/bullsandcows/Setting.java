@@ -18,7 +18,7 @@ public class Setting extends AppCompatActivity {
     Button modButton;
     private Button mChoiceLanguage;
     static boolean mode;
-    EditText mNikEditText;
+//    EditText mNikEditText;
     //comm
 
     @Override
@@ -27,7 +27,7 @@ public class Setting extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_setting);
         modButton = (Button) findViewById(R.id.modeButton);
-        mNikEditText = (EditText) findViewById(R.id.set_nik_edit_text);
+//        mNikEditText = (EditText) findViewById(R.id.set_nik_edit_text);
         mChoiceLanguage = (Button) findViewById(R.id.choice_language_button);
 
         Intent intent = getIntent();
@@ -38,7 +38,7 @@ public class Setting extends AppCompatActivity {
         } else {
             modButton.setText("Daily mode");
         }
-        mNikEditText.setText(intent.getStringExtra("nikOfUser"));
+//        mNikEditText.setText(intent.getStringExtra("nikOfUser"));
         TextView text = (TextView) findViewById(R.id.text);
         text.setText("" + numberOfDigits);
 
@@ -93,9 +93,9 @@ public class Setting extends AppCompatActivity {
         TextView text = (TextView) findViewById(R.id.text);
         String number = text.getText().toString();
         Intent intent3 = new Intent();
-        intent3.putExtra("numberofdigits", number);
-        intent3.putExtra("modeState", mode);
-        intent3.putExtra("nikOfUser", mNikEditText.getText().toString());
+        intent3.putExtra(Constants.CODED_DIGITS, number);
+        intent3.putExtra(Constants.MODE_STATE, mode);
+//        intent3.putExtra("nikOfUser", mNikEditText.getText().toString());
         setResult(RESULT_OK, intent3);
         finish();
     }

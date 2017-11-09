@@ -10,4 +10,8 @@
     <string name="NUMBER_OF_DIGITS">-лік ты адгадаў за </string>
     <string name="WIN_TIME"> хадоў, за </string>
     <string name="LANGUAGE_COD">БЕЛ</string>
+    <string name="SHOW_NUMBER">Паказаць лік</string>
+    <string name="START_GAME">Пачаць</string>
+    <string name="ENTER">Дадаць</string>
+    <string name="DELETE">Выд</string>
 </resources>
