@@ -19,10 +19,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.utils.CheckConnection;
-import com.example.notepad.bullsandcows.utils.Constants;
-import com.example.notepad.bullsandcows.utils.CustomFonts;
-import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
+import com.example.notepad.bullsandcows.Utils.CheckConnection;
+import com.example.notepad.bullsandcows.Utils.Constants;
+import com.example.notepad.bullsandcows.Utils.CustomFonts;
+import com.example.notepad.bullsandcows.Utils.LoadNewVersionOfApp;
 
 import org.json.JSONException;
 import org.json.JSONObject;

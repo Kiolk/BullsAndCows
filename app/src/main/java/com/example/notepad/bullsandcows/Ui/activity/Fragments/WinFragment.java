@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows.fragments;
+package com.example.notepad.bullsandcows.Ui.activity.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;

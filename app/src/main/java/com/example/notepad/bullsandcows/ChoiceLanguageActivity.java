@@ -1,14 +1,13 @@
 package com.example.notepad.bullsandcows;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.notepad.bullsandcows.utils.Constants;
-import com.example.notepad.bullsandcows.utils.LanguageLocale;
+import com.example.notepad.bullsandcows.Utils.Constants;
+import com.example.notepad.bullsandcows.Utils.LanguageLocale;
 
 import java.util.Locale;
 

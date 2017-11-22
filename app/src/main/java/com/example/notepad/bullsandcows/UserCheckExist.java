@@ -2,7 +2,6 @@ package com.example.notepad.bullsandcows;
 
 import android.os.AsyncTask;
 
-import com.example.notepad.bullsandcows.utils.ParsUserFactory;
 import com.example.notepad.myapplication.backend.userDataBaseApi.UserDataBaseApi;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 import com.google.api.client.extensions.android.http.AndroidHttp;

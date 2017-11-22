@@ -1,12 +1,9 @@
 package com.example.notepad.bullsandcows;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,10 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.services.RefreshOnlineRecordService;
-import com.example.notepad.bullsandcows.utils.CheckConnection;
-import com.example.notepad.bullsandcows.utils.Constants;
+import com.example.notepad.bullsandcows.Utils.CheckConnection;
+import com.example.notepad.bullsandcows.Utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
-import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 

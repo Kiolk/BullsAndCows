@@ -9,15 +9,12 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.notepad.bullsandcows.utils.AnimationOfView;
-import com.example.notepad.bullsandcows.utils.Constants;
-import com.example.notepad.bullsandcows.utils.CustomFonts;
-import com.example.notepad.bullsandcows.utils.LanguageLocale;
+import com.example.notepad.bullsandcows.Utils.AnimationOfView;
+import com.example.notepad.bullsandcows.Utils.CustomFonts;
 
 public class SplashStart extends Activity {
 

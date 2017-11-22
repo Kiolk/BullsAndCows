@@ -21,13 +21,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.fragments.WinFragment;
+import com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCard;
+import com.example.notepad.bullsandcows.Ui.activity.Fragments.WinFragment;
 import com.example.notepad.bullsandcows.services.WinSoundService;
-import com.example.notepad.bullsandcows.utils.AnimationOfView;
-import com.example.notepad.bullsandcows.utils.Constants;
-import com.example.notepad.bullsandcows.utils.CustomFonts;
-import com.example.notepad.bullsandcows.utils.LanguageLocale;
-import com.example.notepad.bullsandcows.utils.RandomNumberGenerator;
+import com.example.notepad.bullsandcows.Utils.AnimationOfView;
+import com.example.notepad.bullsandcows.Utils.Constants;
+import com.example.notepad.bullsandcows.Utils.CustomFonts;
+import com.example.notepad.bullsandcows.Utils.LanguageLocale;
+import com.example.notepad.bullsandcows.Utils.RandomNumberGenerator;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.text.DateFormat;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEFAULT_NIK_OF_USER = "Guest";
     public static final String DEFAULT_PASSWORD_OF_USER = "1111";
     public static final String ENGLISH_LANGUAGE_COD = "en";
+    public static final String ONLINE_CARD_RECORDS = "Records";
 
     ArrayList<String> mMoves = new ArrayList<>();
     ArrayList<String> mNumbers = new ArrayList<>();
@@ -338,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
         menu.add(0, 3, 2, ABOUT_APP);
         menu.add(0, 4, 3, RECORDS);
         menu.add(0, 5, 4, ONLINE_RECORDS);
+        menu.add(0, 6, 5, ONLINE_CARD_RECORDS);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -365,6 +368,10 @@ public class MainActivity extends AppCompatActivity {
             case 5:
                 Intent intent5 = new Intent(this, OnlineRecords.class);
                 startActivity(intent5);
+                break;
+            case 6:
+                Intent intent6 = new Intent(this, RecordsCard.class);
+                startActivity(intent6);
                 break;
             default:
                 break;

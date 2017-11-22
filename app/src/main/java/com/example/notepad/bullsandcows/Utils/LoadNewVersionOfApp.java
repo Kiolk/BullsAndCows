@@ -1,22 +1,16 @@
-package com.example.notepad.bullsandcows.utils;
+package com.example.notepad.bullsandcows.Utils;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Button;
 
-import com.example.notepad.bullsandcows.MainActivity;
 import com.example.notepad.bullsandcows.R;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;

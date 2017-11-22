@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows.utils;
+package com.example.notepad.bullsandcows.Utils;
 
 import android.content.Context;
 import android.graphics.Typeface;

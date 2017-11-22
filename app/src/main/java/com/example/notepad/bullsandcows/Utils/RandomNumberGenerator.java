@@ -1,6 +1,4 @@
-package com.example.notepad.bullsandcows.utils;
-
-import android.widget.TextView;
+package com.example.notepad.bullsandcows.Utils;
 
 import java.util.Random;
 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp">
+
+
+    <RelativeLayout
+        android:id="@+id/record_card_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/picture_of_user_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/bullgood" />
+
+        <TextView
+            android:id="@+id/user_name_card_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/picture_of_user_image_view"
+            android:paddingStart="5sp"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            tools:text="Kiolk" />
+
+
+            <LinearLayout
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@+id/picture_of_user_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="5sp"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/coded_number_card_text_view"
+                    style="@style/upper_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    tools:text="4"/>
+                <TextView
+                    android:id="@+id/moves_card_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    style="@style/upper_bar"
+                    tools:text="Moves : "/>
+                <TextView
+                    android:id="@+id/time_card_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    style="@style/upper_bar"
+                    tools:text="12:22"/>
+            </LinearLayout>
+
+        <TextView
+            android:id="@+id/date_win_card_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/picture_of_user_image_view"
+            android:layout_toRightOf="@+id/picture_of_user_image_view"
+            android:gravity="end"
+            tools:text="15:54 / 22 Nov 2017 " />
+    </RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

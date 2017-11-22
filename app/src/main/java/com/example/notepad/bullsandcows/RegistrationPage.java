@@ -10,11 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.utils.ParsUserFactory;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RegistrationPage extends AppCompatActivity {
 
