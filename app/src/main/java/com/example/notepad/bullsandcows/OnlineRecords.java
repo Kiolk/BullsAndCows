@@ -1,6 +1,7 @@
 package com.example.notepad.bullsandcows;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -126,7 +127,15 @@ public class OnlineRecords extends AppCompatActivity {
             }
 
             try {
-                return myApiService.list().execute().toString();
+//                ContentValues cv = new ContentValues();
+//                cv.put("cursor", "one");
+//                cv.put("limit", 10);
+//                String jso = myApiService.list().execute().toString();
+                String cursor = "CjoSNGoZZ35vbmxpbmVyZWNvcmRidWxzYW5kY293c3IXCxIMUmVjb3Jkc1RvTmV0GIGk8JX5KwwYACAA";
+                String json = myApiService.list().setCursor(cursor).execute().toString();
+                String cursor2 = "";
+//                String json2 = myApiService.list().setCursor(cursor).execute().toString();
+                return json;
             } catch (IOException pE) {
                 pE.printStackTrace();
             }
