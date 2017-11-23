@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="8dp"
-    tools:context="com.example.notepad.bullsandcows.RegistrationPage">
+    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.RegistrationPage">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -103,17 +103,16 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/country_registration_edit_text"
+        <Spinner
+            android:id="@+id/country_registration_spinner"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:hint=""/>
+            android:layout_weight="6" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="3"
+            android:layout_weight="2"
             android:gravity="end|center_vertical"
             android:text="@string/country"
             android:textSize="20sp"/>

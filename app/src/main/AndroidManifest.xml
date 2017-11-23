@@ -52,7 +52,7 @@
         <service android:name=".services.WinSoundService"></service>
         <service android:name=".services.RefreshOnlineRecordService"></service>
 
-        <activity android:name=".RegistrationPage"></activity>
+        <activity android:name=".Ui.activity.Activiteis.RegistrationPage"></activity>
         <activity
             android:name=".ChoiceLanguageActivity"
             android:parentActivityName=".MainActivity"></activity>

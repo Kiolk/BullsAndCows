@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notepad.bullsandcows.Ui.activity.Activiteis.RegistrationPage;
 import com.example.notepad.bullsandcows.Utils.CheckConnection;
 import com.example.notepad.bullsandcows.Utils.Constants;
 import com.example.notepad.bullsandcows.Utils.CustomFonts;

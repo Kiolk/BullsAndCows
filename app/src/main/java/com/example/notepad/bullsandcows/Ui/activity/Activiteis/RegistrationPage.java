@@ -1,15 +1,23 @@
-package com.example.notepad.bullsandcows;
+package com.example.notepad.bullsandcows.Ui.activity.Activiteis;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notepad.bullsandcows.NewUserPost;
+import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.UserCheckExist;
+import com.example.notepad.bullsandcows.Utils.Constants;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 public class RegistrationPage extends AppCompatActivity {
@@ -17,11 +25,12 @@ public class RegistrationPage extends AppCompatActivity {
     EditText mUserNAme;
     EditText mPassword;
     EditText mPassword2;
-    EditText mCountry;
+//    EditText mCountry;
     EditText mEmail;
     Button mRegisterButton;
     UserDataBase mUser;
     TextView infoTextView;
+    Spinner mSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +39,28 @@ public class RegistrationPage extends AppCompatActivity {
         mUserNAme = (EditText) findViewById(R.id.name_registration_edit_text);
         mPassword = (EditText) findViewById(R.id.password_registration_edit_text);
         mPassword2 = (EditText) findViewById(R.id.password2_registration_edit_text);
-        mCountry = (EditText) findViewById(R.id.country_registration_edit_text);
+//        mCountry = (EditText) findViewById(R.id.country_registration_edit_text);
         mEmail = (EditText) findViewById(R.id.email_registration_edit_text);
         mRegisterButton = (Button) findViewById(R.id.registration_button);
         mRegisterButton.setEnabled(false);
         infoTextView = (TextView) findViewById(R.id.information_status_text_view);
 
+        mSpinner = (Spinner) findViewById(R.id.country_registration_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.countries_array));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(adapter);
+        mSpinner.setPromptId(R.string.COUNTRY_SPINNER);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(RegistrationPage.this, "Country: " + mSpinner.getSelectedItem().toString() + ". Position: " + i, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         View.OnClickListener clickBtn = new View.OnClickListener() {
 
@@ -46,7 +71,9 @@ public class RegistrationPage extends AppCompatActivity {
                 mUser = new UserDataBase();
                 mUser.setUserName(mUserNAme.getText().toString());
                 mUser.setPassword(mPassword.getText().toString());
-                mUser.setCountry(mCountry.getText().toString());
+              //  mUser.setCountry(mCountry.getText().toString());
+                mUser.setCountry(mSpinner.getSelectedItem().toString());
+                Log.d(Constants.TAG, "User country: " + mUser.getCountry());
                 mUser.setEmail(mEmail.getText().toString());
                 Intent intent = new Intent();
                 intent.putExtra("nameOfUser", mUserNAme.getText().toString());
@@ -120,7 +147,7 @@ public class RegistrationPage extends AppCompatActivity {
         }
     }
 
-    class CheckingExistUser extends UserCheckExist{
+    class CheckingExistUser extends UserCheckExist {
 
         @Override
         protected void onPostExecute(Boolean pBoolean) {
