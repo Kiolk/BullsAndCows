@@ -5,7 +5,7 @@
               android:orientation="horizontal"
     android:layout_margin="8dp"
     android:elevation="4dp"
-    android:background="@drawable/myrect">
+    android:background="@drawable/my_rect">
 
     <TextView
         android:id="@+id/cnt_move_list_text_view"
@@ -52,6 +52,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/cowgood"/>
+        android:src="@drawable/cow_good"/>
 
 </LinearLayout>

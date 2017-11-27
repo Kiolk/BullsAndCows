@@ -22,11 +22,14 @@ public class ParsUserFactory {
 //        return null;
 //    }
 
+//    remove com.example.notepad.myapplication.backend.userDataBaseApi.model. and just import UserDataBase
     public com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase parseForUserDataForModel (String pS){
         com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase oneUser = new com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase();
 
         try {
             JSONObject userJson = new JSONObject(pS);
+
+//            move to constant
             oneUser.setUserName(userJson.getString("userName"));
             oneUser.setPassword(userJson.getString("password"));
             oneUser.setCountry(userJson.getString("country"));

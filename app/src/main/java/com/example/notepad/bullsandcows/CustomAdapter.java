@@ -18,8 +18,10 @@ class CustomAdapter extends BaseAdapter{
     ArrayList<String> mCows = new ArrayList<>();
     ArrayList<String> mBuls = new ArrayList<>();
     LayoutInflater mLayoutInflater;
+//    move colormode to enum
     Boolean mColorMode;
 
+//    why custom?
     public CustomAdapter (Context aplicationContext, ArrayList<String> mMoves, ArrayList<String> mNumbers, ArrayList<String> mBuls, ArrayList<String> mCows, Boolean pBoolean){
         this.mContext = aplicationContext;
         this.mMoves = mMoves;
@@ -73,12 +75,16 @@ class CustomAdapter extends BaseAdapter{
         }
         TextView cnt = (TextView) pView.findViewById(R.id.cnt_move_list_text_view);
         cnt.setText(mMoves.get(pI));
+
         TextView number = (TextView) pView.findViewById(R.id.number_list_text_view);
         number.setText(mNumbers.get(pI));
+
         TextView bulls = (TextView) pView.findViewById(R.id.bulls_list_text_view);
         bulls.setText(mBuls.get(pI));
+
         TextView cows = (TextView) pView.findViewById(R.id.cows_list_text_view);
         cows.setText(mCows.get(pI));
+
         return pView;
     }
 }

@@ -1,8 +1,6 @@
 <LinearLayout
     android:id="@+id/mainLyaout"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,6 +10,8 @@
         android:layout_height="0dp"
         android:layout_weight="0.5"
         android:orientation="horizontal">
+
+        <!--remove </include>-->
         <include layout="@layout/upper_bar"></include>
     </LinearLayout>
 
@@ -20,8 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
-        android:padding="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <include layout="@layout/result_bar"/>
 

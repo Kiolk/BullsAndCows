@@ -2,7 +2,6 @@ package com.example.notepad.bullsandcows;
 
 import android.os.AsyncTask;
 
-import com.example.notepad.bullsandcows.utils.ParsUserFactory;
 import com.example.notepad.myapplication.backend.userDataBaseApi.UserDataBaseApi;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -12,8 +11,9 @@ import java.io.IOException;
 
 public class UserCheckExist extends AsyncTask<String, Void, Boolean> {
 
-    UserDataBaseApi myApiService = null;
-    Boolean result = false;
+    //    private
+    private UserDataBaseApi myApiService = null;
+    private Boolean result = false;
 
     @Override
     protected Boolean doInBackground(String... pStrings) {

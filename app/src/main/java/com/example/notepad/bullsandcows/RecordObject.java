@@ -1,7 +1,9 @@
 package com.example.notepad.bullsandcows;
 
+//RecordModel
 public class RecordObject {
 
+//    'm' prefix
     private String numberOfCodedDigits;
     private String timeOfWin;
     private String nikName;

@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.ConnectionUtils;
 import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
 
 import org.json.JSONException;
@@ -91,7 +91,8 @@ public class Welcome extends AppCompatActivity {
                             Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Kiolk/BullsAndCows"));
                             startActivity(intent1);
                         }else{
-                            if(new CheckConnection().checkConnection(Welcome.this)){
+//                            move to utils
+                            if(new ConnectionUtils().checkConnection(Welcome.this)){
                                 new LoadNewVersionOfApp(Welcome.this, mVisitCheckVersion, mUrlNewVersionOfApp, mNameNewApp);
                                 //TODO not very clear representation that new version of application download on phone
                             } else{

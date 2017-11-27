@@ -6,4 +6,6 @@ public interface CheckInternetConnection {
 
     public boolean checkConnection(Context pContext);
 
+    void connect();
+
 }

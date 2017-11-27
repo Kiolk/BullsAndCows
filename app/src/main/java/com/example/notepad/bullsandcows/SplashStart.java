@@ -12,6 +12,7 @@ public class SplashStart extends Activity {
     Handler mHandler;
     ProgressBar mProgressBar;
 
+//    https://www.bignerdranch.com/blog/splash-screens-the-right-way/
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

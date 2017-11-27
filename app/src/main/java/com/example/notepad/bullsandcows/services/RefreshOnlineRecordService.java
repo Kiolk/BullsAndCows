@@ -39,6 +39,7 @@ public class RefreshOnlineRecordService extends IntentService {
         Intent response = new Intent();
         response.setAction(ACTION_REFRESH_ONLINE_RECORD_SERVICE);
         response.addCategory(Intent.CATEGORY_DEFAULT);
+//        hardcode
         mString = "Service end work. Don't have new records";
         response.putExtra(SERVICE_RESPONSE_KEY, mString);
         sendBroadcast(response);

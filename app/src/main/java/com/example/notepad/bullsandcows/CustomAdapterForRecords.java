@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+//RecordResultAdapter
 public class CustomAdapterForRecords extends BaseAdapter {
 
+//    ResultModel resultModel
     ArrayList<String> mCodNumbers = new ArrayList<>();
     ArrayList<String> mDateWon = new ArrayList<>();
     ArrayList<String> mNikName = new ArrayList<>();

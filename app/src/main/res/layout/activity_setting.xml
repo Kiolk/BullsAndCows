@@ -46,6 +46,7 @@
                 android:textSize="38sp"
                 />
 
+            <!--remove onClick move to findViewbyId-->
             <Button
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -108,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:padding="8dp"
-        app:srcCompat="@drawable/cowgood"/>
+        app:srcCompat="@drawable/cow_good"/>
 
 
 </RelativeLayout>

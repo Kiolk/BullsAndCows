@@ -8,9 +8,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,7 +26,7 @@ import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.fragments.WinFragment;
 import com.example.notepad.bullsandcows.services.WinSoundService;
-import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.ConnectionUtils;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
@@ -40,22 +37,25 @@ import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String SAVED_TEXT = "saved-text";
     public static final String SAVED_PASSWORD = "Saved_password";
     public static final String SAVED_KEEP_PASSWORD = "Saved_keep_password";
+
     ArrayList<String> mMoves = new ArrayList<>();
     ArrayList<String> mNumbers = new ArrayList<>();
     ArrayList<String> mCows = new ArrayList<>();
     ArrayList<String> mBuls = new ArrayList<>();
 
+//    use 'm' prefix
     public static int DIG = 4;
+//    hardcode
     public static int[] randomNumber = new int[10];
-    String codedNumber = "";
-    int enteredNumber = 0;
+//    StringUtils.EMPTY
+    String mCodedNumber = "";
+    int mEnteredNumber = 0;
     int cntMoves = 1;
     boolean start = false;
     boolean mode;
@@ -91,11 +91,83 @@ public class MainActivity extends AppCompatActivity {
     FrameLayout mFrameLayout;
 
     @Override
+    public void onClick(View pView) {
+        String buf;
+        buf = numberForScreen.getText().toString();
+        switch (view.getId()) {
+            case R.id.option_menu_image_view:
+                openOptionsMenu();
+                break;
+            case R.id.buttom1:
+                numberForScreen.setText(buf + 1);
+                break;
+            case R.id.buttom2:
+                numberForScreen.setText(buf + 2);
+                break;
+            case R.id.buttom3:
+                numberForScreen.setText(buf + 3);
+                break;
+            case R.id.buttom4:
+                numberForScreen.setText(buf + 4);
+                break;
+            case R.id.buttom5:
+                numberForScreen.setText(buf + 5);
+                break;
+            case R.id.buttom6:
+                numberForScreen.setText(buf + 6);
+                break;
+            case R.id.buttom7:
+                numberForScreen.setText(buf + 7);
+                break;
+            case R.id.buttom8:
+                numberForScreen.setText(buf + 8);
+                break;
+            case R.id.buttom9:
+                numberForScreen.setText(buf + 9);
+                break;
+            case R.id.buttom0:
+                numberForScreen.setText(buf + 0);
+                break;
+            case R.id.buttomDel:
+                if (buf.length() > 0) {
+                    buf = buf.substring(0, buf.length() - 1);
+                    numberForScreen.setText(buf);
+                }
+                break;
+            case R.id.enter:
+                if (start) {
+                    if (checkNumberForCorrect()) {
+                        getNumber();
+                        numberForScreen.setText("");
+                        checkNumberForWin();
+
+                    } else {
+                        Context context = getApplicationContext();
+                        String message = "Enter " + DIG + "-digits number, without repeating digits!";
+                        int duration = Toast.LENGTH_LONG;
+                        Toast toast = Toast.makeText(context, message, duration);
+                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                        toast.show();
+                    }
+                    createListViewWithMoves();
+                }
+                break;
+            case R.id.start:
+                submitStart();
+                break;
+            default:
+                break;
+
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
+//        move to initViews method
         numberForScreen = (TextView) findViewById(R.id.editText);
         number1 = (TextView) findViewById(R.id.buttom1);
         number2 = (TextView) findViewById(R.id.buttom2);
@@ -115,116 +187,34 @@ public class MainActivity extends AppCompatActivity {
         mWinFragment = new WinFragment();
         mFrameLayout = (FrameLayout) findViewById(R.id.win_container);
         mOptionMenu = (ImageView) findViewById(R.id.option_menu_image_view);
-        loadNikName();
 
-        View.OnClickListener clickButton = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                String buf;
-                buf = numberForScreen.getText().toString();
-                switch (view.getId()) {
-                    case R.id.option_menu_image_view:
-                        openOptionsMenu();
-                        break;
-                    case R.id.buttom1:
-                        numberForScreen.setText(buf + 1);
-                        break;
-                    case R.id.buttom2:
-                        numberForScreen.setText(buf + 2);
-                        break;
-                    case R.id.buttom3:
-                        numberForScreen.setText(buf + 3);
-                        break;
-                    case R.id.buttom4:
-                        numberForScreen.setText(buf + 4);
-                        break;
-                    case R.id.buttom5:
-                        numberForScreen.setText(buf + 5);
-                        break;
-                    case R.id.buttom6:
-                        numberForScreen.setText(buf + 6);
-                        break;
-                    case R.id.buttom7:
-                        numberForScreen.setText(buf + 7);
-                        break;
-                    case R.id.buttom8:
-                        numberForScreen.setText(buf + 8);
-                        break;
-                    case R.id.buttom9:
-                        numberForScreen.setText(buf + 9);
-                        break;
-                    case R.id.buttom0:
-                        numberForScreen.setText(buf + 0);
-                        break;
-                    case R.id.buttomDel:
-                        if (buf.length() > 0) {
-                            buf = buf.substring(0, buf.length() - 1);
-                            numberForScreen.setText(buf);
-                        }
-                        break;
-                    case R.id.enter:
-                        if (start) {
-                            if (checkNumberForCorrect()) {
-                                getNumber();
-                                numberForScreen.setText("");
-                                checkNumberForWin();
-
-                            } else {
-                                Context context = getApplicationContext();
-                                String message = "Enter " + DIG + "-digits number, without repeating digits!";
-                                int duration = Toast.LENGTH_LONG;
-                                Toast toast = Toast.makeText(context, message, duration);
-                                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                                toast.show();
-                            }
-                            createListViewWithMoves();
-                        }
-                        break;
-                    case R.id.start:
-                        submitStart();
-                        break;
-                    default:
-                        break;
-
-                }
-            }
-        };
-
-        number1.setOnClickListener(clickButton);
-        number2.setOnClickListener(clickButton);
-        number3.setOnClickListener(clickButton);
-        number4.setOnClickListener(clickButton);
-        number5.setOnClickListener(clickButton);
-        number6.setOnClickListener(clickButton);
-        number7.setOnClickListener(clickButton);
-        number8.setOnClickListener(clickButton);
-        number9.setOnClickListener(clickButton);
-        number0.setOnClickListener(clickButton);
-        enterButton.setOnClickListener(clickButton);
-        startButton.setOnClickListener(clickButton);
-        mOptionMenu.setOnClickListener(clickButton);
-        del.setOnClickListener(clickButton);
         startWelcomePage();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         saveNikName();
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 1, 0, "Rules");
-        menu.add(0, 2, 1, "Setting");
-        menu.add(0, 3, 2, "About app");
-        menu.add(0, 4, 3, "Records");
-        menu.add(0, 5, 4, "Online records");
-        return super.onCreateOptionsMenu(menu);
+    private void initViews() {
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu pMenu) {
+        pMenu.add(0, 1, 0, "Rules");
+        pMenu.add(0, 2, 1, "Setting");
+        pMenu.add(0, 3, 2, "About app");
+        pMenu.add(0, 4, 3, "Records");
+        pMenu.add(0, 5, 4, "Online records");
+
+        return super.onCreateOptionsMenu(pMenu);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+//            moto to constant
             case 1:
                 Intent intent = new Intent(this, Rulespage.class);
                 startActivity(intent);
@@ -254,11 +244,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+//    remove
     public void onRestart() {
         super.onRestart();
 
     }
 
+//    remove
     public static void main(String[] argc) {
 
     }
@@ -266,24 +258,30 @@ public class MainActivity extends AppCompatActivity {
     public boolean checkNumberForCorrect() {
         TextView editText = (TextView) findViewById(R.id.editText);
         String number = editText.getText().toString();
+
         if (number.length() == DIG) {
             for (int i = 0; i < DIG; ++i) {
                 if (number.charAt(i) < '0' || number.charAt(i) > '9') {
                     return false;
                 }
             }
+
             int numberForCheking = Integer.parseInt(number);
             int k = 1;
+
             for (int i = 0; i < DIG - 1; ++i) {
                 k = k * 10;
             }
+
             if (numberForCheking >= k) {
                 int[] numberArray;
                 numberArray = new int[DIG];
+
                 for (int i = DIG - 1; i >= 0; --i) {
                     numberArray[i] = numberForCheking % 10;
                     numberForCheking = numberForCheking / 10;
                 }
+
                 for (int i = 0, cnt = 0; i < DIG; ++i) {
                     for (int j = 0; j < DIG; ++j) {
                         if (numberArray[i] == numberArray[j]) {
@@ -294,14 +292,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+
                 return true;
             } else if (number.charAt(0) == '0' && numberForCheking >= k / 10) {
                 int[] numberArray;
                 numberArray = new int[DIG];
+
                 for (int i = DIG - 1; i >= 1; --i) {
                     numberArray[i] = numberForCheking % 10;
                     numberForCheking = numberForCheking / 10;
                 }
+
                 for (int i = 0, cnt = 0; i < DIG; ++i) {
                     for (int j = 0; j < DIG; ++j) {
                         if (numberArray[i] == numberArray[j]) {
@@ -324,11 +325,14 @@ public class MainActivity extends AppCompatActivity {
         String number = editText.getText().toString();
         mNumbers.add(number);
         mMoves.add("" + cntMoves);
-        enteredNumber = Integer.parseInt(number);
+        mEnteredNumber = Integer.parseInt(number);
+
         for (int i = DIG - 1; i >= 0; --i) {
-            enteredArray[i] = enteredNumber % 10;
-            enteredNumber = enteredNumber / 10;
+            enteredArray[i] = mEnteredNumber % 10;
+            mEnteredNumber = mEnteredNumber / 10;
         }
+
+//        remove commented code
         //shiftData();
 //        TextView test3 = (TextView) findViewById(R.id.number1);
 //        test3.setText(number);
@@ -597,9 +601,9 @@ public class MainActivity extends AppCompatActivity {
                         TextView start7 = (TextView) findViewById(R.id.start);
                         start7.setText("Start game");
                         TextView edittext8 = (TextView) findViewById(R.id.editText);
-                        edittext8.setText("" + codedNumber);
+                        edittext8.setText("" + mCodedNumber);
 
-                        codedNumber = "";
+                        mCodedNumber = "";
                         start = false;
                     }
                 } else {
@@ -634,7 +638,7 @@ public class MainActivity extends AppCompatActivity {
             start1.setText("Show number");
             startTimer();
             start = true;
-            enteredNumber = 0;
+            mEnteredNumber = 0;
             cntMoves = 1;
 //            cnt0 = 3;
 //            cnt1 = 3;
@@ -702,7 +706,7 @@ public class MainActivity extends AppCompatActivity {
 //            test2.setText("");
 //            TextView test4 = (TextView) findViewById(R.id.cntMove);
 //            test4.setText("");
-            enteredNumber = 0;
+            mEnteredNumber = 0;
 //            cntMoves = 1;
 //            for (int i = 0; i < 5; ++i) {
 //                //shiftData();
@@ -713,10 +717,10 @@ public class MainActivity extends AppCompatActivity {
             start2.setText("Start game");
 
             TextView edittext = (TextView) findViewById(R.id.editText);
-            edittext.setText("" + codedNumber);
+            edittext.setText("" + mCodedNumber);
             cleanListView();
 
-            codedNumber = "";
+            mCodedNumber = "";
             start = false;
             mTimerTimer.cancel();
         }
@@ -773,7 +777,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
         for (int i = 0; i < DIG; ++i) {
-            codedNumber = codedNumber + randomNumber[i];
+            mCodedNumber = mCodedNumber + randomNumber[i];
         }
 
     }
@@ -1068,8 +1072,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void startWelcomePage() {
 //        ConnectivityManager check = (ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-//        CheckConnection dff = new CheckConnectnion();
-        if (new CheckConnection().checkConnection(this)) {
+//        ConnectionUtils dff = new CheckConnectnion();
+        if (new ConnectionUtils().checkConnection(this)) {
             Intent welcomeIntent = new Intent(this, Welcome.class);
             welcomeIntent.putExtra("nikOfUser", mNikOfUser.getText());
             welcomeIntent.putExtra("version", mCurrentVersionOfApp);

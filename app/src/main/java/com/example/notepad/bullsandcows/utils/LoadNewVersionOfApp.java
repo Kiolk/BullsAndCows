@@ -2,6 +2,7 @@ package com.example.notepad.bullsandcows.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class LoadNewVersionOfApp {
         protected void onPreExecute() {
             super.onPreExecute();
             mButton.setEnabled(false);
+//            rename mButton
             mButton.setText(R.string.START_DOWNLOAD_NEW_VERSION);
         }
 

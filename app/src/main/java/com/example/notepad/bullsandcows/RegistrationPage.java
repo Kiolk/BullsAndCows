@@ -18,6 +18,7 @@ import java.util.TimerTask;
 
 public class RegistrationPage extends AppCompatActivity {
 
+//    private
     EditText mUserNAme;
     EditText mPassword;
     EditText mPassword2;
@@ -27,10 +28,28 @@ public class RegistrationPage extends AppCompatActivity {
     UserDataBase mUser;
     TextView infoTextView;
 
+    private View.OnFocusChangeListener PasswordFocusChangeListener = new View.OnFocusChangeListener() {
+
+        @Override
+        public void onFocusChange(View pView, boolean pB) {
+            if(mPassword2.getText().toString().equals(mPassword.getText().toString())){
+                mPassword2.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
+                if(mUserNAme.getText().toString() != null) {
+                    mRegisterButton.setEnabled(true);
+                }
+            }else{
+                mPassword2.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
+                mRegisterButton.setEnabled(false);
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_age);
+
+//        initViews method
         mUserNAme = (EditText) findViewById(R.id.name_registration_edit_text);
         mPassword = (EditText) findViewById(R.id.password_registration_edit_text);
         mPassword2 = (EditText) findViewById(R.id.password2_registration_edit_text);
@@ -41,6 +60,7 @@ public class RegistrationPage extends AppCompatActivity {
         infoTextView = (TextView) findViewById(R.id.information_status_text_view);
 
 
+//        implement View.OnCliclListener
         View.OnClickListener clickBtn = new View.OnClickListener() {
 
             @Override
@@ -82,23 +102,10 @@ public class RegistrationPage extends AppCompatActivity {
             }
         });
 
-        mPassword2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View pView, boolean pB) {
-                if(mPassword2.getText().toString().equals(mPassword.getText().toString())){
-                    mPassword2.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
-                    if(mUserNAme.getText().toString() != null) {
-                        mRegisterButton.setEnabled(true);
-                    }
-                }else{
-                    mPassword2.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
-                    mRegisterButton.setEnabled(false);
-                }
-            }
-        });
+        mPassword2.setOnFocusChangeListener(PasswordFocusChangeListener);
     }
 
+//    move to file
     class eExsmol extends NewUserPost {
 
         @Override

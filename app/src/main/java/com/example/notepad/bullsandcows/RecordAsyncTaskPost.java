@@ -38,6 +38,7 @@ public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, String> {
 
 
         try{
+//            inline variable
             String cod = myApiService.insert(recordsToNet).execute().toString();
             return cod;//(recordsToNet).execute().toString();
         }catch (IOException pE){

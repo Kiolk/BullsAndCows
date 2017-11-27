@@ -18,6 +18,7 @@ public class NewUserPost extends AsyncTask<UserDataBase, Void, String> {
     @Override
     protected String doInBackground(UserDataBase... pUserDataBases) {
 
+//        move url to constant
         if (myApiService == null) {
             UserDataBaseApi.Builder builder = new UserDataBaseApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("https://onlinerecordbulsandcows.appspot.com/_ah/api/");

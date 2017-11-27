@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.services.RefreshOnlineRecordService;
-import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.ConnectionUtils;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
@@ -36,6 +34,7 @@ import java.util.TimeZone;
 
 public class OnlineRecords extends AppCompatActivity {
 
+//    rename to EXTRA_TEXT
     public static final String TEXT_FOR_INTENT = "text for intent";
     ArrayList<String> mCods = new ArrayList<>();
     ArrayList<String> mDate = new ArrayList<>();
@@ -49,11 +48,14 @@ public class OnlineRecords extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_records);
-        if (new CheckConnection().checkConnection(this)) {
+
+        if (new ConnectionUtils().checkConnection(this)) {
+//            mote to constant
             new GetOnlineRecordsAsyncTask().execute("ss");
         } else {
             Toast.makeText(this, Constants.DISCONNECT_SERVER, Toast.LENGTH_LONG).show();
         }
+
         mReceiver = new MyBroadcastReceiver();
         IntentFilter mIntentFilter = new IntentFilter(RefreshOnlineRecordService.ACTION_REFRESH_ONLINE_RECORD_SERVICE);
         mIntentFilter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -76,6 +78,7 @@ public class OnlineRecords extends AppCompatActivity {
         unregisterReceiver(mReceiver);
     }
 
+//    move to file
     private class GetOnlineRecordsAsyncTask extends AsyncTask<String, Void, String> {
 
         private RecordsToNetApi myApiService = null;
@@ -90,6 +93,9 @@ public class OnlineRecords extends AppCompatActivity {
         @Override
         protected void onPostExecute(String pS) {
             super.onPostExecute(pS);
+
+//            move to clearAll method();
+//            resultModel.clear();
             mCods.clear();
             mTime.clear();
             mMoves.clear();
@@ -101,6 +107,7 @@ public class OnlineRecords extends AppCompatActivity {
                 int arryIndex = detailsOneRecord.length();
                 for (int i = 0; i < arryIndex; ++i) {
                     JSONObject record = detailsOneRecord.getJSONObject(i);
+//                    move to constant
                     mCods.add(i, record.getString("codes"));
                     Long dateOfRecord = record.getLong("date");
                     String date = convertTimeToString(dateOfRecord);
@@ -126,6 +133,7 @@ public class OnlineRecords extends AppCompatActivity {
             }
 
             try {
+//                check for null
                 return myApiService.list().execute().toString();
             } catch (IOException pE) {
                 pE.printStackTrace();
@@ -135,6 +143,7 @@ public class OnlineRecords extends AppCompatActivity {
         }
     }
 
+//    mote to DateUtils
     public String convertTimeToString(Long pLong) {
         Date date = new Date(pLong + (3600000 * 3));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");

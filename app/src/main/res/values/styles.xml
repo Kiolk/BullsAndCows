@@ -26,7 +26,7 @@
     </style>
 
     <style name="upper_bar">
-        <item name="android:background">@drawable/myrect</item>
+        <item name="android:background">@drawable/my_rect</item>
         <item name="android:elevation">4dp</item>
         <item name="android:layout_margin">4dp</item>
         <item name="android:gravity">center</item>
