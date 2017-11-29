@@ -19,7 +19,7 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class RecordsCard extends AppCompatActivity {
+public class RecordsCardActivity extends AppCompatActivity {
 
     RecyclerView mRecordRecyclerView;
     ArrayList<RecordModel> recordModelArrayList;

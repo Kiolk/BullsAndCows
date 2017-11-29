@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.Ui.activity.Activiteis.RegistrationPage;
+import com.example.notepad.bullsandcows.Ui.activity.Activiteis.RegistrationPageActivity;
 import com.example.notepad.bullsandcows.Utils.CheckConnection;
 import com.example.notepad.bullsandcows.Utils.Constants;
 import com.example.notepad.bullsandcows.Utils.CustomFonts;
@@ -123,7 +123,7 @@ public class Welcome extends AppCompatActivity {
                         }
                         break;
                     case R.id.registration_welcome_button:
-                        Intent intentRegistration = new Intent(Welcome.this, RegistrationPage.class);
+                        Intent intentRegistration = new Intent(Welcome.this, RegistrationPageActivity.class);
                         intentRegistration.putExtra("nameOfUser", "");
                         intentRegistration.putExtra("password", "");
                         startActivityForResult(intentRegistration, REGISTRATION_REQUEST_CODE);

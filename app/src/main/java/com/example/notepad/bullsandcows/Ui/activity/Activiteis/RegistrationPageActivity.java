@@ -20,7 +20,7 @@ import com.example.notepad.bullsandcows.UserCheckExist;
 import com.example.notepad.bullsandcows.Utils.Constants;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
-public class RegistrationPage extends AppCompatActivity {
+public class RegistrationPageActivity extends AppCompatActivity {
 
     EditText mUserNAme;
     EditText mPassword;
@@ -53,7 +53,7 @@ public class RegistrationPage extends AppCompatActivity {
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(RegistrationPage.this, "Country: " + mSpinner.getSelectedItem().toString() + ". Position: " + i, Toast.LENGTH_LONG).show();
+                Toast.makeText(RegistrationPageActivity.this, "Country: " + mSpinner.getSelectedItem().toString() + ". Position: " + i, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -139,9 +139,9 @@ public class RegistrationPage extends AppCompatActivity {
 //            ParsUserFactory user = new ParsUserFactory();
 //             com.example.NotePad.myapplication.backend.UserDataBase oneUser = user.parseForUserData(pS);
 //            if(pS.equals("f")){
-//                Toast.makeText(RegistrationPage.this, pS, Toast.LENGTH_LONG).show();
+//                Toast.makeText(RegistrationPageActivity.this, pS, Toast.LENGTH_LONG).show();
 //            }else{
-//                Toast.makeText(RegistrationPage.this, pS, Toast.LENGTH_LONG).show();
+//                Toast.makeText(RegistrationPageActivity.this, pS, Toast.LENGTH_LONG).show();
 //            }
             super.onPostExecute(pS);
         }
@@ -153,11 +153,11 @@ public class RegistrationPage extends AppCompatActivity {
         protected void onPostExecute(Boolean pBoolean) {
             super.onPostExecute(pBoolean);
             if (pBoolean){
-                Toast.makeText(RegistrationPage.this, "User exist", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegistrationPageActivity.this, "User exist", Toast.LENGTH_LONG).show();
                 infoTextView.setText(getResources().getString(R.string.user_already_exist));
                 infoTextView.setBackgroundColor(Color.RED);
             }else{
-                Toast.makeText(RegistrationPage.this, "User not exist in server", Toast.LENGTH_LONG).show();
+                Toast.makeText(RegistrationPageActivity.this, "User not exist in server", Toast.LENGTH_LONG).show();
                 new NewUserPost().execute(mUser);
                 finish();
             }

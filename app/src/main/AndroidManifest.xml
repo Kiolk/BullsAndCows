@@ -34,7 +34,7 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
-            android:name=".About"
+            android:name=".Ui.activity.Activiteis.AboutActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
@@ -52,11 +52,11 @@
         <service android:name=".services.WinSoundService"></service>
         <service android:name=".services.RefreshOnlineRecordService"></service>
 
-        <activity android:name=".Ui.activity.Activiteis.RegistrationPage"></activity>
+        <activity android:name=".Ui.activity.Activiteis.RegistrationPageActivity"></activity>
         <activity
             android:name=".ChoiceLanguageActivity"
             android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".Ui.activity.Activiteis.RecordsCard"></activity>
+        <activity android:name=".Ui.activity.Activiteis.RecordsCardActivity"></activity>
     </application>
 
 </manifest>

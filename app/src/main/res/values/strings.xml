@@ -66,6 +66,8 @@
     <string name="TOAST_MESSAGE_WITH_RULE">-digits number, without repeating digits!</string>
     <string name="WE_BACK_WITHOUT_CHANGE">We back without change</string>
     <string name="COUNTRY_SPINNER">Choose country</string>
+    <string name="ABOUT_APP">About application</string>
+    <string name="ABOUT_DEVELOPER">About developer</string>
 
 
     <string-array name="countries_array">

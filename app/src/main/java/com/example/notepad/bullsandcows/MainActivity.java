@@ -21,7 +21,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCard;
+import com.example.notepad.bullsandcows.Ui.activity.Activiteis.AboutActivity;
+import com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCardActivity;
 import com.example.notepad.bullsandcows.Ui.activity.Fragments.WinFragment;
 import com.example.notepad.bullsandcows.services.WinSoundService;
 import com.example.notepad.bullsandcows.Utils.AnimationOfView;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int SETTING_REQUEST_CODE = 1;
     public static final String RULES = "Rules";
     public static final String SETTING = "Setting";
-    public static final String ABOUT_APP = "About app";
+    public static final String ABOUT_APP = "AboutActivity app";
     public static final String RECORDS = "Records";
     public static final String ONLINE_RECORDS = "Online records";
     public static final String DEFAULT_NIK_OF_USER = "Guest";
@@ -358,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent2, SETTING_REQUEST_CODE);
                 break;
             case 3:
-                Intent intent3 = new Intent(this, About.class);
+                Intent intent3 = new Intent(this, AboutActivity.class);
                 startActivity(intent3);
                 break;
             case 4:
@@ -370,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent5);
                 break;
             case 6:
-                Intent intent6 = new Intent(this, RecordsCard.class);
+                Intent intent6 = new Intent(this, RecordsCardActivity.class);
                 startActivity(intent6);
                 break;
             default:

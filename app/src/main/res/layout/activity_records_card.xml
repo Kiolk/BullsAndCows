@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCard"
+    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCardActivity"
     android:background="@color/LIGHT_BLUE">
 
     <android.support.v7.widget.RecyclerView

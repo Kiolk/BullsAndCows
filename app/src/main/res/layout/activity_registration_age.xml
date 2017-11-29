@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="8dp"
-    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.RegistrationPage">
+    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.RegistrationPageActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
