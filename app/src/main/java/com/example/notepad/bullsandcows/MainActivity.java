@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.language_cod_text_view:
                         Intent intentLanguage = new Intent(MainActivity.this, ChoiceLanguageActivity.class);
-                        startActivityForResult(intentLanguage, REQUEST_CODE_CHOICE_LANGUAGE, null);
+                        startActivity(intentLanguage);
                         break;
                     default:
                         break;
