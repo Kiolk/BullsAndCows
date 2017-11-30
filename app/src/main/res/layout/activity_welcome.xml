@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/LIGHT_COLOR"
     android:orientation="vertical"
-    tools:context="com.example.notepad.bullsandcows.Welcome">
+    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.WelcomeActivity">
 
     <LinearLayout
         style="@style/upper_bar"

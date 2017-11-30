@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.notepad.bullsandcows.Ui.activity.Activiteis.WelcomeActivity;
 import com.example.notepad.bullsandcows.Utils.AnimationOfView;
 import com.example.notepad.bullsandcows.Utils.CustomFonts;
 
@@ -61,7 +62,7 @@ public class SplashStart extends Activity {
 
             @Override
             public void run() {
-                Intent intent = new Intent(SplashStart.this, Welcome.class);
+                Intent intent = new Intent(SplashStart.this, WelcomeActivity.class);
                 startActivity(intent);
                 finish();
             }

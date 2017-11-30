@@ -42,7 +42,7 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat"></activity>
         <activity
-            android:name=".Welcome"
+            android:name=".Ui.activity.Activiteis.WelcomeActivity"
             android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".OnlineRecords"

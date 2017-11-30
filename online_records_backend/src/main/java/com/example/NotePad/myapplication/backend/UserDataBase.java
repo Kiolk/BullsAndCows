@@ -13,6 +13,8 @@ public class UserDataBase {
 
     private String mCountry;
 
+    private String mEmail;
+
     public String getUserName() {
         return mUserName;
     }
@@ -44,6 +46,4 @@ public class UserDataBase {
     public void setEmail(String pEmail) {
         mEmail = pEmail;
     }
-
-    private String mEmail;
 }

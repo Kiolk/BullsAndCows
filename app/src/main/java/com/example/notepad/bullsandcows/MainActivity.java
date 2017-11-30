@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.Ui.activity.Activiteis.AboutActivity;
 import com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCardActivity;
+import com.example.notepad.bullsandcows.Ui.activity.Activiteis.WelcomeActivity;
 import com.example.notepad.bullsandcows.Ui.activity.Fragments.WinFragment;
 import com.example.notepad.bullsandcows.services.WinSoundService;
 import com.example.notepad.bullsandcows.Utils.AnimationOfView;
@@ -293,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
                         submitStart();
                         break;
                     case R.id.connection_to_online_image_view:
-                        Intent intent = new Intent(MainActivity.this, Welcome.class);
+                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
                         startActivity(intent);
                         finish();
                         break;
@@ -577,7 +578,7 @@ public class MainActivity extends AppCompatActivity {
 
 //    public void startWelcomePage() {
 //        if (new CheckConnection().checkConnection(this)) {
-//            Intent welcomeIntent = new Intent(this, Welcome.class);
+//            Intent welcomeIntent = new Intent(this, WelcomeActivity.class);
 //            welcomeIntent.putExtra("nikOfUser", mNikOfUser.getText());
 //            welcomeIntent.putExtra("version", mCurrentVersionOfApp);
 //            welcomeIntent.putExtra("password", passwordOfUser);
