@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.UserManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
@@ -140,14 +139,37 @@ public class WelcomeActivity extends AppCompatActivity {
                         if (name.length() > 0 && password.length() > 0) {
                             if (CheckConnection.checkConnection(WelcomeActivity.this)) {
 //                                new CheckUserLoginAndPassword().execute(name, password);
-                                UserBaseManager userManager = new UserBaseManager();
-                                if(userManager.isNikPasswordCorrect(name, password)){
+                                UserBaseManager userManager = new UserBaseManager(){
+
+                                    @Override
+                                    public void nikPasswordCorrectCallback() {
+                                        super.nikPasswordCorrectCallback();
+                                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+                                        mIsJoinToOnline = true;
+                                        startMainActivity();
+                                    }
+
+                                    @Override
+                                    public void nikCorrectPasswordWrongCallback() {
+                                        super.nikCorrectPasswordWrongCallback();
+                                        Toast.makeText(WelcomeActivity.this, "Login or password is wrong", Toast.LENGTH_LONG).show();
+                                    }
+
+                                };
+
+                                userManager.checkInfoAboutUser(name, password);
+                               /*
+
+                                //TODO create Callback Listener
+
+
+                                if(userManager.checkInfoAboutUser(name, password)){
                                     Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
                                     mIsJoinToOnline = true;
                                     startMainActivity();
                                 }else{
                                     Toast.makeText(WelcomeActivity.this, "Login or password is wrong", Toast.LENGTH_LONG).show();
-                                }
+                                }*/
                             } else {
                                 mIsJoinToOnline = false;
                                 startMainActivity();
