@@ -18,6 +18,9 @@ public class VersionOfApp {
         mUrlNewVersionOfApp = pUrlNewVersionOfApp;
     }
 
+    public VersionOfApp(){
+    }
+
     public String getUrlNewVersionOfApp() {
         return mUrlNewVersionOfApp;
     }

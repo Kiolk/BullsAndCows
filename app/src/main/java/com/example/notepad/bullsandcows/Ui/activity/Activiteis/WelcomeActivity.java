@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -19,31 +18,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.NotePad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.BuildConfig;
+import com.example.notepad.bullsandcows.Data.Managers.AppInfoManager;
 import com.example.notepad.bullsandcows.Data.Managers.UserBaseManager;
 import com.example.notepad.bullsandcows.MainActivity;
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.UserCheckExist;
 import com.example.notepad.bullsandcows.Utils.CheckConnection;
 import com.example.notepad.bullsandcows.Utils.Constants;
 import com.example.notepad.bullsandcows.Utils.CustomFonts;
 import com.example.notepad.bullsandcows.Utils.LoadNewVersionOfApp;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -51,6 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public static final String DEFAULT_PASSWORD_FOR_GUEST = "1111";
     public static final int REGISTRATION_REQUEST_CODE = 3;
 
+    VersionOfApp mVersionOfApp;
     TextView mInfoVersionTextView;
     TextView mWelcomeInformationTextView;
     EditText mLogin;
@@ -72,12 +57,26 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         initView();
-
-        if (CheckConnection.checkConnection(WelcomeActivity.this)) {
-            new CheckingVersionOfApp().execute(BuildConfig.VERSION_NAME);
-        }
-
+        checkAppActualVersion();
         loadDataFromPreferences();
+    }
+
+    private void checkAppActualVersion() {
+        if (CheckConnection.checkConnection(WelcomeActivity.this)) {
+//            new CheckingVersionOfApp().execute(BuildConfig.VERSION_NAME);
+            AppInfoManager appManager = new AppInfoManager(BuildConfig.VERSION_NAME){
+                @Override
+                public VersionOfApp getInfoAppCallback(VersionOfApp versionOfApp) {
+                    mVersionOfApp = super.getInfoAppCallback(versionOfApp);
+                    String newVersion = mVersionOfApp.getVersionOfApp();
+
+                    checkAppVersion(Integer.parseInt(newVersion));
+
+                    return mVersionOfApp;
+                }
+            };
+            appManager.getCurrentAppInfo();
+        }
     }
 
     private void initView() {
@@ -120,10 +119,10 @@ public class WelcomeActivity extends AppCompatActivity {
                             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                             notificationManager.notify(1, mBuilder.build());
 
-                            new LoadNewVersionOfApp(WelcomeActivity.this, mVisitCheckVersion, mUrlNewVersionOfApp, mNameNewApp);
+                            new LoadNewVersionOfApp(WelcomeActivity.this, mVisitCheckVersion, mVersionOfApp.getUrlNewVersionOfApp(),mVersionOfApp.getNameOfApp());
                             //TODO not very clear representation that new version of application download on phone
                             mCurrentVersionAppWelcome = true;
-                            checkVersionOfApp();
+//                            checkVersionOfApp();
                         }
                     } else {
                         CheckConnection.showToastAboutDisconnection(WelcomeActivity.this);
@@ -206,7 +205,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    public void checkVersionOfApp() {
+   /* public void checkVersionOfApp() {
         if (mCurrentVersionAppWelcome) {
             mInfoVersionTextView.setText("Your app in actual version");
 //            new TypeWriter(WelcomeActivity.this).animateText(mInfoVersionTextView.getText());
@@ -218,9 +217,26 @@ public class WelcomeActivity extends AppCompatActivity {
             mVisitCheckVersion.setText("Press for upgrade yor app for version " + mNewVersion);
             mVisitCheckVersion.setTextColor(Color.RED);
         }
+    }*/
+
+    public void checkAppVersion(int pVersionApp){
+        if (pVersionApp == BuildConfig.VERSION_CODE) {
+            mInfoVersionTextView.setText("Your app in actual version");
+//            new TypeWriter(WelcomeActivity.this).animateText(mInfoVersionTextView.getText());
+            mVisitCheckVersion.setText(R.string.VISIT_SITE);
+            mVisitCheckVersion.setEnabled(true);
+            mVisitCheckVersion.setTextColor(Color.WHITE);
+            mCurrentVersionAppWelcome = true;
+        } else {
+            mInfoVersionTextView.setText("Your app is old version");
+            mVisitCheckVersion.setText("Press for upgrade yor app for version " + mNewVersion);
+            mVisitCheckVersion.setTextColor(Color.RED);
+            mCurrentVersionAppWelcome = false;
+        }
     }
 
-    class CheckingVersionOfApp extends AsyncTask<String, Void, String> {
+
+ /*   class CheckingVersionOfApp extends AsyncTask<String, Void, String> {
 
         @Override
         protected void onPreExecute() {
@@ -334,7 +350,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 Toast.makeText(WelcomeActivity.this, "Login or password is wrong", Toast.LENGTH_LONG).show();
             }
         }
-    }
+    }*/
 
     private void startMainActivity() {
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
