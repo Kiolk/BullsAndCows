@@ -68,6 +68,8 @@
     <string name="COUNTRY_SPINNER">Choose country</string>
     <string name="ABOUT_APP">About application</string>
     <string name="ABOUT_DEVELOPER">About developer</string>
+    <string name="LOGIN_OR_PASSWORD_WRONG">"Login or password is wrong"</string>
+    <string name="CONTINUE_OFFLINE_GAME">You continue offline game</string>
 
 
     <string-array name="countries_array">

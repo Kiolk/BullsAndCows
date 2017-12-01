@@ -19,7 +19,7 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 
 public class RegistrationPageActivity extends AppCompatActivity {
 
-    private EditText mUserNAme;
+    private EditText mUserName;
     private EditText mPassword;
     private EditText mPassword2;
     private EditText mEmail;
@@ -35,7 +35,7 @@ public class RegistrationPageActivity extends AppCompatActivity {
 
         initView();
         initCountrySpinner();
-        mUserNAme.setOnFocusChangeListener(nameFocusListener);
+        mUserName.setOnFocusChangeListener(nameFocusListener);
         mPassword.setOnFocusChangeListener(passFocusListener);
         mPassword2.setOnFocusChangeListener(pass2FocusListener);
         mRegisterButton.setOnClickListener(clickBtn);
@@ -50,17 +50,17 @@ public class RegistrationPageActivity extends AppCompatActivity {
 
                     @Override
                     public void nikFreeCallback() {
-                        mUserNAme.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
+                        mUserName.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
                         mNikFree = true;
                     }
 
                     @Override
                     public void nikCorrectPasswordWrongCallback() {
-                        mUserNAme.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
+                        mUserName.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
                     }
                 };
-                if (mUserNAme.length() != 0) {
-                    userInfo.checkInfoAboutUser(mUserNAme.getText().toString(), "1111");
+                if (mUserName.length() != 0) {
+                    userInfo.checkInfoAboutUser(mUserName.getText().toString(), "1111");
                 }
 
             }
@@ -114,7 +114,7 @@ public class RegistrationPageActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        mUserNAme = findViewById(R.id.name_registration_edit_text);
+        mUserName = findViewById(R.id.name_registration_edit_text);
         mPassword = findViewById(R.id.password_registration_edit_text);
         mPassword2 = findViewById(R.id.password2_registration_edit_text);
         mEmail = findViewById(R.id.email_registration_edit_text);
@@ -130,7 +130,7 @@ public class RegistrationPageActivity extends AppCompatActivity {
 
     private void setInfoAboutUser() {
         mUser = new UserDataBase();
-        mUser.setUserName(mUserNAme.getText().toString());
+        mUser.setUserName(mUserName.getText().toString());
         mUser.setPassword(mPassword.getText().toString());
         mUser.setCountry(mSpinner.getSelectedItem().toString());
         Log.d(Constants.TAG, "User country: " + mUser.getCountry());
@@ -145,13 +145,13 @@ public class RegistrationPageActivity extends AppCompatActivity {
             setInfoAboutUser();
 
             Intent intent = new Intent();
-            intent.putExtra("nameOfUser", mUserNAme.getText().toString());
-            intent.putExtra("password", mPassword.getText().toString());
+            intent.putExtra(Constants.REGISTRATION_NAME_OF_USER, mUserName.getText().toString());
+            intent.putExtra(Constants.REGISTRATION_PASSWORD, mPassword.getText().toString());
             setResult(RESULT_OK, intent);
 
             UserBaseManager userAdd = new UserBaseManager();
             userAdd.createNewUser(mUser);
-            Toast.makeText(RegistrationPageActivity.this, "User not exist in server", Toast.LENGTH_LONG).show();
+
             finish();
         }
     };

@@ -12,6 +12,9 @@ public class Constants {
     public static final String CODE_OF_LANGUAGE = "codeOfLanguage";
     public static final String KEEP_PASSWORD = "keepPasswordOfUser";
     public static final String MODE_STATE = "modeState";
+    public static final String REGISTRATION_NAME_OF_USER = "nameOfUser";
+    public static final String REGISTRATION_PASSWORD = "password";
+    public static final String EMPTY_STRING = "";
 
 
 }
