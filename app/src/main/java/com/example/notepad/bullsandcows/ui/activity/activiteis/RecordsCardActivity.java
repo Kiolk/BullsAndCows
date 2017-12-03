@@ -1,25 +1,29 @@
 package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.models.RequestRecordModel;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
-import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
+import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.util.ArrayList;
 
-public class RecordsCardActivity extends AppCompatActivity {
+public class RecordsCardActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ArrayList<RecordsToNet> recordModelArrayList;
     private RecordRecyclerViewAdapter adapter;
@@ -27,13 +31,21 @@ public class RecordsCardActivity extends AppCompatActivity {
     private String mCursor;
     private boolean isLoading;
     private ProgressBar mRecordsProgressBar;
+    private UserInfoRecordFragment mUserInfoFragment;
+    private FrameLayout mInfoFrameLayout;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records_card);
         mRecordsProgressBar = findViewById(R.id.records_load_progress_bar);
+        mInfoFrameLayout = findViewById(R.id.user_info_record_frame_layout);
+        mInfoFrameLayout.setOnClickListener(this);
+
         mCursor = null;
+        mUserInfoFragment = new UserInfoRecordFragment();
 
         initRecordManager();
 
@@ -64,7 +76,13 @@ public class RecordsCardActivity extends AppCompatActivity {
 
     private void firstTimeShowRecycler() {
         RecyclerView mRecordRecyclerView = findViewById(R.id.records_recycler_view);
-        adapter = new RecordRecyclerViewAdapter(this, recordModelArrayList);
+        adapter = new RecordRecyclerViewAdapter(this, recordModelArrayList) {
+
+            @Override
+            public void showInfoFragment() {
+                showInfoUserFragment();
+            }
+        };
 
         mRecordRecyclerView.setHasFixedSize(false);
         mRecordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -94,7 +112,11 @@ public class RecordsCardActivity extends AppCompatActivity {
                 return response;
             }
         };
-        manager.getRecordSBackend(new RequestRecordModel(mCursor));
+
+        if (CheckConnection.checkConnection(this)) {
+            showProgressBar();
+            manager.getRecordSBackend(new RequestRecordModel(mCursor));
+        }
     }
 
     private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
@@ -128,5 +150,26 @@ public class RecordsCardActivity extends AppCompatActivity {
 
     private void closeProgressBar() {
         mRecordsProgressBar.setVisibility(View.GONE);
+    }
+
+    private void showInfoUserFragment() {
+        mInfoFrameLayout.setVisibility(View.VISIBLE);
+        mFragmentTransaction = getFragmentManager().beginTransaction();
+        mFragmentTransaction.add(R.id.user_info_record_frame_layout, mUserInfoFragment);
+        mFragmentTransaction.commit();
+        mFragmentManager = getFragmentManager();
+        mFragmentManager.executePendingTransactions();
+    }
+
+    private void closeInfoUserFragment() {
+        mInfoFrameLayout.setVisibility(View.INVISIBLE);
+        mFragmentTransaction = getFragmentManager().beginTransaction();
+        mFragmentTransaction.remove(mUserInfoFragment);
+        mFragmentTransaction.commit();
+    }
+
+    @Override
+    public void onClick(View v) {
+        closeInfoUserFragment();
     }
 }

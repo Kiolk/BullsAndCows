@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'MyKey'
+            keyPassword '788yau9191'
+            storePassword '788yau9191'
+            storeFile file('/home/yauhen/Downloads/android-studio/bin/Key/myandroid.jks')
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
@@ -24,9 +32,7 @@ android {
     aaptOptions {
         cruncherEnabled = false
     }
-
     flavorDimensions "store"
-
     productFlavors {
         GooglePlay {
             flavorDimension "store"
@@ -47,6 +53,7 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-v4:26.1.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

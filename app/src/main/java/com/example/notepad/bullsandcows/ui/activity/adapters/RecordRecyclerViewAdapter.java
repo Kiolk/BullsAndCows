@@ -9,19 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
+import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
 import com.example.notepad.bullsandcows.utils.Converters;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.util.ArrayList;
 
-public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder> {
+public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder> implements UserInfoRecordListener{
 
-    ArrayList<RecordsToNet> modelArrayList;
-    Context mContext;
+    private ArrayList<RecordsToNet> modelArrayList;
+    private Context mContext;
+    private UserNikClickListener.ClickUserNik mClickNik;
 
     public RecordRecyclerViewAdapter(Context mContext, ArrayList<RecordsToNet> modelArrayList) {
         this.modelArrayList = modelArrayList;
@@ -37,8 +41,8 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
 
     @Override
-    public void onBindViewHolder(RecordsViewHolder holder, int position) {
-        RecordsToNet model = modelArrayList.get(position);
+    public void onBindViewHolder(final RecordsViewHolder holder, final int position) {
+        final RecordsToNet model = modelArrayList.get(position);
         if (position % 2 == 0) {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_DARK));
         } else {
@@ -56,6 +60,13 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         holder.mNikNameTextView.setText(model.getNikName());
         holder.mMovesTextView.setText(model.getMoves());
         holder.mTimeTextView.setText(model.getTime());
+        holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
+            @Override
+            public void clickItemNik(View pView, int pPosition) {
+//                Toast.makeText(mContext, "NikName of user: " + model.getNikName() + ". Position: " + pPosition, Toast.LENGTH_LONG).show();
+                showInfoFragment();
+            }
+        });
     }
 
 
@@ -69,7 +80,12 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         return super.getItemId(position);
     }
 
-    public class RecordsViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void showInfoFragment() {
+
+    }
+
+    public class RecordsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mCodTextView;
         TextView mDateTextView;
@@ -77,19 +93,33 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         TextView mMovesTextView;
         TextView mTimeTextView;
         RelativeLayout mRelativeLayout;
+        UserNikClickListener.ClickUserNik mUserNikListener;
 
 
-        public RecordsViewHolder(View itemView) {
+        RecordsViewHolder(View itemView) {
             super(itemView);
-            mRelativeLayout = (RelativeLayout) itemView.findViewById(R.id.record_card_relative_layout);
-            mCodTextView = (TextView) itemView.findViewById(R.id.coded_number_card_text_view);
-            mDateTextView = (TextView) itemView.findViewById(R.id.date_win_card_text_view);
-            mNikNameTextView = (TextView) itemView.findViewById(R.id.user_name_card_text_view);
+            mRelativeLayout = itemView.findViewById(R.id.record_card_relative_layout);
+            mCodTextView = itemView.findViewById(R.id.coded_number_card_text_view);
+            mDateTextView = itemView.findViewById(R.id.date_win_card_text_view);
+            mNikNameTextView = itemView.findViewById(R.id.user_name_card_text_view);
             mNikNameTextView.setTypeface(CustomFonts.getTypeFace(mContext, CustomFonts.BLACKGROTESKC));
-            mMovesTextView = (TextView) itemView.findViewById(R.id.moves_card_text_view);
-            mTimeTextView = (TextView) itemView.findViewById(R.id.time_card_view);
+            mMovesTextView = itemView.findViewById(R.id.moves_card_text_view);
+            mTimeTextView = itemView.findViewById(R.id.time_card_view);
+            mNikNameTextView.setOnClickListener(this);
         }
 
 
+
+        @Override
+        public void onClick(View v) {
+            if (mUserNikListener != null) {
+                mUserNikListener.clickItemNik(v, getAdapterPosition());
+                Toast.makeText(mContext, "NikName of user: " + mNikNameTextView.getText() + ". Position: " + getAdapterPosition(), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        public void setClickNikListener(UserNikClickListener.ClickUserNik pUserNikListener){
+            mUserNikListener = pUserNikListener;
+        }
     }
 }

@@ -29,6 +29,8 @@
             android:paddingStart="5sp"
             android:textSize="32sp"
             android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true"
             tools:text="Kiolk" />
 
 
