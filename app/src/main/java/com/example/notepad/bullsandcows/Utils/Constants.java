@@ -15,6 +15,7 @@ public class Constants {
     public static final String REGISTRATION_NAME_OF_USER = "nameOfUser";
     public static final String REGISTRATION_PASSWORD = "password";
     public static final String EMPTY_STRING = "";
+    public static final long BACK_EPOCH_TIME_NOTATION = 3008586288000L;
 
 
 }

@@ -40,6 +40,8 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.example.notepad.bullsandcows.Utils.Constants.BACK_EPOCH_TIME_NOTATION;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String SAVED_TEXT = "saved-text";
@@ -402,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
             String numberOfMoves = "" + (cntMoves - 1);
             String numberOfCodedDigits = "" + DIG;
             RecordsToNet note = new RecordsToNet();
-            note.setDate(System.currentTimeMillis());
+            note.setDate(BACK_EPOCH_TIME_NOTATION - System.currentTimeMillis());
             note.setTime(mTimer.getText().toString());
             note.setNikName(mNikOfUser.getText().toString());
             note.setMoves(numberOfMoves);

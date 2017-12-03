@@ -1,88 +1,132 @@
 package com.example.notepad.bullsandcows.Ui.activity.Activiteis;
 
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
-import com.example.notepad.bullsandcows.Data.Factories.RecordJsonFactory;
-import com.example.notepad.bullsandcows.Data.Models.RecordModel;
+import com.example.notepad.bullsandcows.Data.Managers.RecordsManager;
+import com.example.notepad.bullsandcows.Data.Models.RequestRecordModel;
+import com.example.notepad.bullsandcows.Data.Models.ResponseRecordModel;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.Ui.activity.Adapters.RecordRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.Utils.CheckConnection;
-import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.example.notepad.bullsandcows.Utils.Constants;
+import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class RecordsCardActivity extends AppCompatActivity {
 
-    RecyclerView mRecordRecyclerView;
-    ArrayList<RecordModel> recordModelArrayList;
-    RecordRecyclerViewAdapter adapter;
-    Handler mHandler;
+    private ArrayList<RecordsToNet> recordModelArrayList;
+    private RecordRecyclerViewAdapter adapter;
+    private RecordsManager mRecordsManager;
+    private String mCursor;
+    private boolean isLoading;
+    private ProgressBar mRecordsProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records_card);
-        initializationHandler();
-//        firstTimeShowRecycler();
-        if(CheckConnection.checkConnection(this)){
-            getDataFromBackend();
+        mRecordsProgressBar = findViewById(R.id.records_load_progress_bar);
+        mCursor = null;
+
+        initRecordManager();
+
+        if (CheckConnection.checkConnection(this)) {
+            showProgressBar();
+            mRecordsManager.getRecordSBackend(new RequestRecordModel(mCursor));
         }
-//        firstTimeShowRecycler();
+    }
+
+    private void initRecordManager() {
+        mRecordsManager = new RecordsManager() {
+
+            @Override
+            public ResponseRecordModel getResponseBackendCallback(ResponseRecordModel pResponse) {
+                ResponseRecordModel response = super.getResponseBackendCallback(pResponse);
+                Log.d(Constants.TAG, ", cursor :" + response.getmCursor());
+                recordModelArrayList = response.getmRecordsArray();
+
+                closeProgressBar();
+                firstTimeShowRecycler();
+
+                mCursor = response.getmCursor();
+
+                return response;
+            }
+        };
     }
 
     private void firstTimeShowRecycler() {
-        mRecordRecyclerView = findViewById(R.id.records_recycler_view);
+        RecyclerView mRecordRecyclerView = findViewById(R.id.records_recycler_view);
+        adapter = new RecordRecyclerViewAdapter(this, recordModelArrayList);
+
         mRecordRecyclerView.setHasFixedSize(false);
         mRecordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecordRecyclerViewAdapter(this, recordModelArrayList);
+        mRecordRecyclerView.addOnScrollListener(mScrollListener);
         mRecordRecyclerView.setAdapter(adapter);
+
         adapter.notifyDataSetChanged();
     }
 
-    private void getDataFromBackend (){
-        Thread myThread = new Thread(new Runnable() {
+    private void updateAdapter() {
+        RecordsManager manager = new RecordsManager() {
+
             @Override
-            public void run() {
-                RecordsToNetApi myApiService = null;
+            public ResponseRecordModel getResponseBackendCallback(ResponseRecordModel pResponse) {
+                ResponseRecordModel response = super.getResponseBackendCallback(pResponse);
 
-                if (myApiService == null) {
-                    RecordsToNetApi.Builder builder = new RecordsToNetApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                            .setRootUrl("https://onlinerecordbulsandcows.appspot.com/_ah/api/");
+                closeProgressBar();
 
-                    myApiService = builder.build();
+                if (response.getmRecordsArray() != null) {
+                    mCursor = response.getmCursor();
+                    isLoading = false;
+
+                    recordModelArrayList.addAll(response.getmRecordsArray());
+                    adapter.notifyDataSetChanged();
                 }
 
-                try {
-                    String cursor = "CjoSNGoZZ35vbmxpbmVyZWNvcmRidWxzYW5kY293c3IXCxIMUmVjb3Jkc1RvTmV0GIGk8JX5KwwYACAA";
-                    String json = myApiService.list().setCursor(cursor).execute().toString();
-                    Message msg = new Message();
-                    msg.obj = RecordJsonFactory.getArrayRecordsFromJson(json);
-                    mHandler.sendMessage(msg);
-                } catch (IOException pE) {
-                    pE.printStackTrace();
-                }
-            }
-        });
-        myThread.start();
-    }
-
-    private void initializationHandler(){
-        mHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                recordModelArrayList = (ArrayList<RecordModel>) msg.obj;
-                firstTimeShowRecycler();
-//                adapter.notifyDataSetChanged();
+                return response;
             }
         };
+        manager.getRecordSBackend(new RequestRecordModel(mCursor));
+    }
+
+    private RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+            int visibleItems = manager.getChildCount();
+            int totalNumberItems = manager.getItemCount();
+            int firstVisible = ((LinearLayoutManager) manager).findFirstVisibleItemPosition();
+
+            if (!isLoading && totalNumberItems <= visibleItems + firstVisible) {
+                isLoading = true;
+
+                Log.d("MyLogs", "Stay near last position " + mCursor);
+                showProgressBar();
+                updateAdapter();
+            }
+        }
+    };
+
+    private void showProgressBar() {
+        mRecordsProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void closeProgressBar() {
+        mRecordsProgressBar.setVisibility(View.GONE);
     }
 }

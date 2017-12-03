@@ -5,13 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-/**
- * Created by yauhen on 22.11.17.
- */
-
 public class Converters {
     public static String convertTimeToString(Long pLong) {
-        Date date = new Date(pLong + (3600000 * 3));
+        Date date = new Date((Constants.BACK_EPOCH_TIME_NOTATION  - pLong) + (3600000 * 3));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
         DateFormat dateFormat = simpleDateFormat;

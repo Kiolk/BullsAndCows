@@ -1,9 +1,5 @@
 package com.example.notepad.bullsandcows.Data.Models;
 
-/**
- * Created by yauhen on 22.11.17.
- */
-
 public class RecordModel {
     
     private String mCod;

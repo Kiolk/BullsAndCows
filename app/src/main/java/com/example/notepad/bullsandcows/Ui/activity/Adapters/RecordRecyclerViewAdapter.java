@@ -10,22 +10,21 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+
 import com.example.notepad.bullsandcows.Data.Models.RecordModel;
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.Utils.Converters;
 import com.example.notepad.bullsandcows.Utils.CustomFonts;
+import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.util.ArrayList;
 
-/**
- * Created by yauhen on 22.11.17.
- */
-
 public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder> {
 
-    ArrayList<RecordModel> modelArrayList;
+    ArrayList<RecordsToNet> modelArrayList;
     Context mContext;
 
-    public RecordRecyclerViewAdapter(Context mContext, ArrayList<RecordModel> modelArrayList) {
+    public RecordRecyclerViewAdapter(Context mContext, ArrayList<RecordsToNet> modelArrayList) {
         this.modelArrayList = modelArrayList;
         this.mContext = mContext;
     }
@@ -40,30 +39,35 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     @Override
     public void onBindViewHolder(RecordsViewHolder holder, int position) {
-        RecordModel model = modelArrayList.get(position);
+        RecordsToNet model = modelArrayList.get(position);
         if (position % 2 == 0) {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_DARK));
         } else {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_LIGHT));
         }
-        if (Integer.parseInt(model.getmMoves()) <= 5 && Integer.parseInt(model.getmCod()) == 4) {
+        if (Integer.parseInt(model.getMoves()) <= 5 && Integer.parseInt(model.getCodes()) == 4) {
             holder.mRelativeLayout.setPadding(10, 10, 10, 10);
             holder.mRelativeLayout.setBackgroundColor(Color.RED);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 holder.mRelativeLayout.setElevation(24);
             }
         }
-        holder.mCodTextView.setText(model.getmCod());
-        holder.mDateTextView.setText(model.getmDate());
-        holder.mNikNameTextView.setText(model.getmNikName());
-        holder.mMovesTextView.setText(model.getmMoves());
-        holder.mTimeTextView.setText(model.getmTime());
+        holder.mCodTextView.setText(model.getCodes());
+        holder.mDateTextView.setText(Converters.convertTimeToString(model.getDate()));
+        holder.mNikNameTextView.setText(model.getNikName());
+        holder.mMovesTextView.setText(model.getMoves());
+        holder.mTimeTextView.setText(model.getTime());
     }
 
 
     @Override
     public int getItemCount() {
         return (null != modelArrayList ? modelArrayList.size() : 0);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 
     public class RecordsViewHolder extends RecyclerView.ViewHolder {

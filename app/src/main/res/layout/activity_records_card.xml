@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCardActivity"
-    android:background="@color/LIGHT_BLUE">
+    android:background="@color/LIGHT_BLUE"
+    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCardActivity">
+
+    <ProgressBar
+        android:id="@+id/records_load_progress_bar"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/records_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/records_load_progress_bar">
 
     </android.support.v7.widget.RecyclerView>
 
