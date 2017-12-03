@@ -13,9 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.notepad.bullsandcows.Ui.activity.Activiteis.WelcomeActivity;
-import com.example.notepad.bullsandcows.Utils.AnimationOfView;
-import com.example.notepad.bullsandcows.Utils.CustomFonts;
+import com.example.notepad.bullsandcows.ui.activity.activiteis.WelcomeActivity;
+import com.example.notepad.bullsandcows.utils.AnimationOfView;
+import com.example.notepad.bullsandcows.utils.CustomFonts;
 
 public class SplashStart extends Activity {
 

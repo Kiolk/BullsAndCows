@@ -14,8 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.services.RefreshOnlineRecordService;
-import com.example.notepad.bullsandcows.Utils.CheckConnection;
-import com.example.notepad.bullsandcows.Utils.Constants;
+import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;

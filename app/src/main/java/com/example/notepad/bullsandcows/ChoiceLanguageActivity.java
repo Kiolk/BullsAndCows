@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.notepad.bullsandcows.Utils.Constants;
-import com.example.notepad.bullsandcows.Utils.LanguageLocale;
+import com.example.notepad.bullsandcows.utils.Constants;
+import com.example.notepad.bullsandcows.utils.LanguageLocale;
 
 import java.util.Locale;
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/LIGHT_BLUE"
-    tools:context="com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCardActivity">
+    tools:context=".ui.activity.activiteis.RecordsCardActivity">
 
     <ProgressBar
         android:id="@+id/records_load_progress_bar"

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.notepad.bullsandcows.Utils.Constants;
+import com.example.notepad.bullsandcows.utils.Constants;
 
 public class Setting extends AppCompatActivity {
 

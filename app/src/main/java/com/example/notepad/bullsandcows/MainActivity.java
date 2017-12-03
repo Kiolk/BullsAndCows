@@ -21,16 +21,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.Ui.activity.Activiteis.AboutActivity;
-import com.example.notepad.bullsandcows.Ui.activity.Activiteis.RecordsCardActivity;
-import com.example.notepad.bullsandcows.Ui.activity.Activiteis.WelcomeActivity;
-import com.example.notepad.bullsandcows.Ui.activity.Fragments.WinFragment;
+import com.example.notepad.bullsandcows.ui.activity.activiteis.AboutActivity;
+import com.example.notepad.bullsandcows.ui.activity.activiteis.RecordsCardActivity;
+import com.example.notepad.bullsandcows.ui.activity.activiteis.WelcomeActivity;
+import com.example.notepad.bullsandcows.ui.activity.fragments.WinFragment;
 import com.example.notepad.bullsandcows.services.WinSoundService;
-import com.example.notepad.bullsandcows.Utils.AnimationOfView;
-import com.example.notepad.bullsandcows.Utils.Constants;
-import com.example.notepad.bullsandcows.Utils.CustomFonts;
-import com.example.notepad.bullsandcows.Utils.LanguageLocale;
-import com.example.notepad.bullsandcows.Utils.RandomNumberGenerator;
+import com.example.notepad.bullsandcows.utils.AnimationOfView;
+import com.example.notepad.bullsandcows.utils.Constants;
+import com.example.notepad.bullsandcows.utils.CustomFonts;
+import com.example.notepad.bullsandcows.utils.LanguageLocale;
+import com.example.notepad.bullsandcows.utils.RandomNumberGenerator;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.text.DateFormat;
@@ -40,7 +40,7 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.example.notepad.bullsandcows.Utils.Constants.BACK_EPOCH_TIME_NOTATION;
+import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
 
 public class MainActivity extends AppCompatActivity {
 
