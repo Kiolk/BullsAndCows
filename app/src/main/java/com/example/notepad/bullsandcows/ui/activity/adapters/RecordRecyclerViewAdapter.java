@@ -25,9 +25,8 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     private ArrayList<RecordsToNet> modelArrayList;
     private Context mContext;
-    private UserNikClickListener.ClickUserNik mClickNik;
 
-    public RecordRecyclerViewAdapter(Context mContext, ArrayList<RecordsToNet> modelArrayList) {
+    protected RecordRecyclerViewAdapter(Context mContext, ArrayList<RecordsToNet> modelArrayList) {
         this.modelArrayList = modelArrayList;
         this.mContext = mContext;
     }
@@ -64,7 +63,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             @Override
             public void clickItemNik(View pView, int pPosition) {
 //                Toast.makeText(mContext, "NikName of user: " + model.getNikName() + ". Position: " + pPosition, Toast.LENGTH_LONG).show();
-                showInfoFragment();
+                showInfoFragment(model.getNikName());
             }
         });
     }
@@ -81,8 +80,8 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
     }
 
     @Override
-    public void showInfoFragment() {
-
+    public String showInfoFragment(String pUserName) {
+        return pUserName;
     }
 
     public class RecordsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -118,7 +117,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             }
         }
 
-        public void setClickNikListener(UserNikClickListener.ClickUserNik pUserNikListener){
+        void setClickNikListener(UserNikClickListener.ClickUserNik pUserNikListener){
             mUserNikListener = pUserNikListener;
         }
     }

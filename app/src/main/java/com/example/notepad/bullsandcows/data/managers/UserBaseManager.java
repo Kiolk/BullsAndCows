@@ -42,6 +42,8 @@ public class UserBaseManager implements UserInfoCallback {
                 mUserModelFromBackend = (UserDataBase) msg.obj;
                 Log.d("MyLogs", "get message");
 
+                getFullUserInfoCallback(mUserModelFromBackend);
+
                 if (mUserModelFromBackend.getUserName().equals(FREE_USER_NAME_ON_BACKEND)) {
                     nikCorrectPasswordWrongCallback();
                     nikFreeCallback();
@@ -125,5 +127,10 @@ public class UserBaseManager implements UserInfoCallback {
     @Override
     public void nikCorrectPasswordWrongCallback() {
 
+    }
+
+    @Override
+    public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
+        return pUserData;
     }
 }

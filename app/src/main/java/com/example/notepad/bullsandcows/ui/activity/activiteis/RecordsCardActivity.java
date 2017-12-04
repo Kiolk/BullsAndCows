@@ -1,5 +1,6 @@
 package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -10,9 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
+import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.RequestRecordModel;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
@@ -20,6 +23,7 @@ import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFrag
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
+import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import java.util.ArrayList;
 
@@ -79,8 +83,11 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
         adapter = new RecordRecyclerViewAdapter(this, recordModelArrayList) {
 
             @Override
-            public void showInfoFragment() {
+            public String showInfoFragment(String pUserName) {
+                String userName = super.showInfoFragment(pUserName);
                 showInfoUserFragment();
+                getUserInformation(userName);
+                return userName;
             }
         };
 
@@ -90,6 +97,23 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
         mRecordRecyclerView.setAdapter(adapter);
 
         adapter.notifyDataSetChanged();
+    }
+
+    private void getUserInformation(String pUserName) {
+        UserBaseManager userManager = new UserBaseManager(){
+            @Override
+            public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
+                UserDataBase user = super.getFullUserInfoCallback(pUserData);
+                setInfoUserFragment(user);
+                return pUserData;
+            }
+        };
+        userManager.checkInfoAboutUser(pUserName, "1111");
+    }
+
+    private void setInfoUserFragment(UserDataBase user) {
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.user_info_record_frame_layout);
+        ((TextView) fragment.getView().findViewById(R.id.nik_info_fragment_text_view)).setText(user.getUserName());
     }
 
     private void updateAdapter() {
