@@ -8,10 +8,15 @@ import com.example.notepad.bullsandcows.data.factories.RecordJsonFactory;
 import com.example.notepad.bullsandcows.data.models.RequestRecordModel;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
 import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
+import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.server.spi.response.CollectionResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class RecordsManager implements RecordsCallbacks {

@@ -70,6 +70,10 @@
     <string name="ABOUT_DEVELOPER">About developer</string>
     <string name="LOGIN_OR_PASSWORD_WRONG">"Login or password is wrong"</string>
     <string name="CONTINUE_OFFLINE_GAME">You continue offline game</string>
+    <string name="RULES_MENU">Rules</string>
+    <string name="SETTING_MENU">Settings</string>
+    <string name="ABOUT_MENU">About</string>
+    <string name="RECORDS_MENU">Records</string>
 
 
     <string-array name="countries_array">

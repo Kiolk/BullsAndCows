@@ -10,8 +10,10 @@ import android.graphics.Color;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView mOptionMenu;
     ImageView mJoinToOnlineImage;
     FrameLayout mFrameLayout;
+    Toolbar mToolBar;
 
     public static int DIG = 4;
     String mCodedNumber = "";
@@ -218,7 +221,8 @@ public class MainActivity extends AppCompatActivity {
         mFrameLayout = (FrameLayout) findViewById(R.id.win_container);
         mOptionMenu = (ImageView) findViewById(R.id.option_menu_image_view);
         mJoinToOnlineImage = (ImageView) findViewById(R.id.connection_to_online_image_view);
-
+        mToolBar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(mToolBar);
         View.OnClickListener clickButton = new View.OnClickListener() {
 
             @Override
@@ -339,41 +343,44 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 1, 0, RULES);
-        menu.add(0, 2, 1, SETTING);
-        menu.add(0, 3, 2, ABOUT_APP);
-        menu.add(0, 4, 3, RECORDS);
-        menu.add(0, 5, 4, ONLINE_RECORDS);
-        menu.add(0, 6, 5, ONLINE_CARD_RECORDS);
-        return super.onCreateOptionsMenu(menu);
+//        menu.add(0, 1, 0, RULES);
+//        menu.add(0, 2, 1, SETTING);
+//        menu.add(0, 3, 2, ABOUT_APP);
+//        menu.add(0, 4, 3, RECORDS);
+//        menu.add(0, 5, 4, ONLINE_RECORDS);
+//        menu.add(0, 6, 5, ONLINE_CARD_RECORDS);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+//        return super.onCreateOptionsMenu(menu);
+        return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case 1:
+            case R.id.rules_item_menu:
                 Intent intent = new Intent(this, Rulespage.class);
                 startActivity(intent);
                 break;
-            case 2:
+            case R.id.settings_item_menu:
                 Intent intent2 = new Intent(this, Setting.class);
                 intent2.putExtra(Constants.MODE_STATE, mode);
 //                intent2.putExtra("nikOfUser", mNikOfUser.getText());
                 intent2.putExtra(Constants.CODED_DIGITS, DIG);
                 startActivityForResult(intent2, SETTING_REQUEST_CODE);
                 break;
-            case 3:
+            case R.id.about_item_menu:
                 Intent intent3 = new Intent(this, AboutActivity.class);
                 startActivity(intent3);
                 break;
-            case 4:
-                Intent intent4 = new Intent(this, Records.class);
-                startActivity(intent4);
-                break;
-            case 5:
-                Intent intent5 = new Intent(this, OnlineRecords.class);
-                startActivity(intent5);
-                break;
-            case 6:
+//            case 4:
+//                Intent intent4 = new Intent(this, Records.class);
+//                startActivity(intent4);
+//                break;
+//            case 5:
+//                Intent intent5 = new Intent(this, OnlineRecords.class);
+//                startActivity(intent5);
+//                break;
+            case R.id.record_item_menu:
                 Intent intent6 = new Intent(this, RecordsCardActivity.class);
                 startActivity(intent6);
                 break;

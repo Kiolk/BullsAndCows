@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/rules_item_menu"
+        android:icon="@drawable/bullgood"
+        android:title="@string/RULES_MENU" />
+    <item
+        android:id="@+id/settings_item_menu"
+        android:icon="@drawable/cowgood"
+        android:title="@string/SETTING_MENU" />
+    <item
+        android:id="@+id/about_item_menu"
+        android:icon="@android:drawable/arrow_down_float"
+        android:title="@string/ABOUT_MENU" />
+    <item
+        android:id="@+id/record_item_menu"
+        android:icon="@android:drawable/gallery_thumb"
+        android:title="@string/RECORDS_MENU" />
+</menu>

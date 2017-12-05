@@ -1,5 +1,6 @@
 package com.example.NotePad.myapplication.backend;
 
+import com.google.appengine.repackaged.com.google.gson.annotations.SerializedName;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
@@ -7,6 +8,7 @@ import com.googlecode.objectify.annotation.Id;
 public class UserDataBase {
 
     @Id
+    @SerializedName("name")
     private String mUserName;
 
     private String mPassword;
