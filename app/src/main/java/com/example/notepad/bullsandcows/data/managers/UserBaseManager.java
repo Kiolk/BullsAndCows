@@ -15,7 +15,7 @@ import java.io.IOException;
 public class UserBaseManager implements UserInfoCallback {
 
     private static final String FREE_USER_NAME_ON_BACKEND = "Free user name";
-    private static final String USER_BACKEND_URL = "https://onlinerecordbulsandcows.appspot.com/_ah/api/";
+    private static final String USER_BACKEND_URL = "https://myjson-182914.appspot.com/_ah/api/";
 
     private UserDataBase mUserModel;
     private UserDataBase mUserModelFromBackend;

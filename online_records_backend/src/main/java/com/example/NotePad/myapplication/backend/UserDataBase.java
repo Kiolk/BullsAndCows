@@ -1,8 +1,11 @@
 package com.example.NotePad.myapplication.backend;
 
+
 import com.google.appengine.repackaged.com.google.gson.annotations.SerializedName;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+
+import java.util.ArrayList;
 
 @Entity
 public class UserDataBase {
@@ -16,6 +19,16 @@ public class UserDataBase {
     private String mCountry;
 
     private String mEmail;
+
+    private ArrayList<RecordsToNet> mBestUserRecords;
+
+    public ArrayList<RecordsToNet> getBestUserRecords() {
+        return mBestUserRecords;
+    }
+
+    public void setBestUserRecords(ArrayList<RecordsToNet> pBestUserRecords) {
+        mBestUserRecords = pBestUserRecords;
+    }
 
     public String getUserName() {
         return mUserName;
