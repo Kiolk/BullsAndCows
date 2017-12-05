@@ -20,13 +20,13 @@ public class UserDataBase {
 
     private String mEmail;
 
-    private ArrayList<RecordsToNet> mBestUserRecords;
+    private ArrayList<BestUserRecords> mBestUserRecords;
 
-    public ArrayList<RecordsToNet> getBestUserRecords() {
+    public ArrayList<BestUserRecords> getBestUserRecords() {
         return mBestUserRecords;
     }
 
-    public void setBestUserRecords(ArrayList<RecordsToNet> pBestUserRecords) {
+    public void setBestUserRecords(ArrayList<BestUserRecords> pBestUserRecords) {
         mBestUserRecords = pBestUserRecords;
     }
 
