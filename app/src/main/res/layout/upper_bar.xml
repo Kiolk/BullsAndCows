@@ -41,7 +41,7 @@
         android:gravity="center"
         android:textColor="@color/colorAccent"
         android:textSize="20sp"
-        tools:text="00:23"/>
+        tools:text="00:23" />
 
     <ImageView
         android:id="@+id/option_menu_image_view"

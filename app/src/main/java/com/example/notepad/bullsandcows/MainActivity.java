@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.ui.activity.activiteis.AboutActivity;
 import com.example.notepad.bullsandcows.ui.activity.activiteis.RecordsCardActivity;
 import com.example.notepad.bullsandcows.ui.activity.activiteis.WelcomeActivity;
@@ -34,6 +35,7 @@ import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.LanguageLocale;
 import com.example.notepad.bullsandcows.utils.RandomNumberGenerator;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
+import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -215,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
         startButton = (TextView) findViewById(R.id.start);
         del = (TextView) findViewById(R.id.buttomDel);
         mTimer = (TextView) findViewById(R.id.timer_text_view);
+        mTimer.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.DIGITAL_FONT));
         mNikOfUser = (TextView) findViewById(R.id.user_name_text_view);
         mCodOfLanguage = (TextView) findViewById(R.id.language_cod_text_view);
         mWinFragment = new WinFragment();
@@ -411,12 +414,24 @@ public class MainActivity extends AppCompatActivity {
             String numberOfMoves = "" + (cntMoves - 1);
             String numberOfCodedDigits = "" + DIG;
             RecordsToNet note = new RecordsToNet();
+
             note.setDate(BACK_EPOCH_TIME_NOTATION - System.currentTimeMillis());
             note.setTime(mTimer.getText().toString());
             note.setNikName(mNikOfUser.getText().toString());
             note.setMoves(numberOfMoves);
             note.setCodes(numberOfCodedDigits);
+            BestUserRecords recordForCheck = new BestUserRecords();
+            recordForCheck.setCodes(note.getCodes());
+            recordForCheck.setDate(note.getDate());
+            recordForCheck.setMoves(note.getMoves());
+            recordForCheck.setNikName(note.getNikName());
+            recordForCheck.setTime(note.getTime());
+
+            UserBaseManager userManager = new UserBaseManager();
+            userManager.checkNewBestRecord(recordForCheck);
+
             new RecordAsyncTaskPost().execute(note);
+
             mWriteReadFile.writeInFile(numberOfMoves, mNikOfUser.getText().toString(), mTimer.getText().toString(), numberOfCodedDigits, this);
             mWriteReadFile.readFile(this);
             showWinFragment();

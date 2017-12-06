@@ -85,6 +85,7 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
             @Override
             public String showInfoFragment(String pUserName) {
                 String userName = super.showInfoFragment(pUserName);
+                closeInfoUserFragment();
                 showInfoUserFragment();
                 getUserInformation(userName);
                 return userName;
@@ -104,16 +105,12 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
             @Override
             public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
                 UserDataBase user = super.getFullUserInfoCallback(pUserData);
-                setInfoUserFragment(user);
+                mUserInfoFragment.showInfoAboutUser(RecordsCardActivity.this,user.getBestUserRecords());
+
                 return pUserData;
             }
         };
         userManager.checkInfoAboutUser(pUserName, "1111");
-    }
-
-    private void setInfoUserFragment(UserDataBase user) {
-        Fragment fragment = getFragmentManager().findFragmentById(R.id.user_info_record_frame_layout);
-        ((TextView) fragment.getView().findViewById(R.id.nik_info_fragment_text_view)).setText(user.getUserName());
     }
 
     private void updateAdapter() {

@@ -8,12 +8,14 @@ This class generate random number for game. Checking input number.
 
 public class RandomNumberGenerator implements IRandomNumberGenerator{
 
+    public static final int NUMBER_TO_9 = 10;
+
     public String generateRandomNumber(int pNumberOfDigits) {
         int[] randomNumber = new int[10];
         String result = "";
         for (int i = 0, j = 0; i < pNumberOfDigits; ++i) {
             Random r = new Random();
-            int k = r.nextInt(9);
+            int k = r.nextInt(NUMBER_TO_9);
             if (i == 0) {
                 randomNumber[i] = k;
             } else {

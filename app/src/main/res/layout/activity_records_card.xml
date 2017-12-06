@@ -26,7 +26,6 @@
         android:id="@+id/user_info_record_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="40dp"
         android:visibility="gone">
 
     </FrameLayout>

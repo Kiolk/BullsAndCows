@@ -74,6 +74,7 @@
     <string name="SETTING_MENU">Settings</string>
     <string name="ABOUT_MENU">About</string>
     <string name="RECORDS_MENU">Records</string>
+    <string name="USER_NOT_EXIST">Information not exist </string>
 
 
     <string-array name="countries_array">
@@ -320,7 +321,4 @@
         <item>Zambia</item>
         <item>Zimbabwe</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
