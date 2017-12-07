@@ -23,6 +23,8 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 
 import java.util.ArrayList;
 
+import kiolk.com.github.pen.Pen;
+
 public class RegistrationPageActivity extends AppCompatActivity {
 
     private EditText mUserName;
@@ -179,7 +181,7 @@ public class RegistrationPageActivity extends AppCompatActivity {
     };
 
     public void submitImage(View view){
-
+        Pen.getInstance().getImageFromUrl(mImageUrl.getText().toString()).inputTo(mUserImage);
     }
 
 }
