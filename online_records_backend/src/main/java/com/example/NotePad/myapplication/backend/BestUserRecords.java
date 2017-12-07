@@ -12,13 +12,17 @@ public class BestUserRecords {
 
     private String mTime;
 
-//    public BestUserRecords (Long pDate, String pNikName, String pCodes, String pMoves, String pTime) {
-//        mDate = pDate;
-//        mNikName = pNikName;
-//        mCodes = pCodes;
-//        mMoves = pMoves;
-//        mTime = pTime;
-//    }
+    private int mNumberGames;
+
+    private long mDuringGameTime;
+
+    public long getDuringGameTime() {
+        return mDuringGameTime;
+    }
+
+    public void setDuringGameTime(long mDuringGameTime) {
+        this.mDuringGameTime = mDuringGameTime;
+    }
 
     public Long getDate() {
         return mDate;
@@ -58,5 +62,13 @@ public class BestUserRecords {
 
     public void setTime(String pTime) {
         mTime = pTime;
+    }
+
+    public int getmNumberGames() {
+        return mNumberGames;
+    }
+
+    public void setmNumberGames(int mNumberGames) {
+        this.mNumberGames = mNumberGames;
     }
 }

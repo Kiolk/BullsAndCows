@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEFAULT_PASSWORD_OF_USER = "1111";
     public static final String ENGLISH_LANGUAGE_COD = "en";
     public static final String ONLINE_CARD_RECORDS = "Records";
+    public static final String START_TIME_KEY = "StartTime";
 
     ArrayList<String> mMoves = new ArrayList<>();
     ArrayList<String> mNumbers = new ArrayList<>();
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
     WinFragment mWinFragment;
     FragmentTransaction mTransaction;
     String mLanguageLocale;
-
+    private long mStartGameTime;
 
 
     @Override
@@ -165,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putStringArrayList(NUMBER_OF_COWS_ARRAY_LIST, mCows);
         outState.putInt(COUNT_OF_MOVES, cntMoves);
         outState.putLong(TIMER_OF_MOVES, mTimerCount);
+        outState.putLong(START_TIME_KEY, mStartGameTime);
         outState.putInt(NUMBER_OF_CODED_DIGITS, DIG);
         outState.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
     }
@@ -186,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         mBulls = savedInstanceState.getStringArrayList(NUMBER_OF_BULLS_ARRAY_LIST);
         mCows = savedInstanceState.getStringArrayList(NUMBER_OF_COWS_ARRAY_LIST);
         mTimerCount = savedInstanceState.getLong(TIMER_OF_MOVES, 0);
+        mStartGameTime = savedInstanceState.getLong(START_TIME_KEY, System.currentTimeMillis());
 
         if (start ){
              if(mBulls.size() != 0 && !(mBulls.get(mBulls.size() - 1).equals("" + DIG))) {
@@ -414,6 +417,8 @@ public class MainActivity extends AppCompatActivity {
             String numberOfMoves = "" + (cntMoves - 1);
             String numberOfCodedDigits = "" + DIG;
             RecordsToNet note = new RecordsToNet();
+            long mDurationGameTime = System.currentTimeMillis() - mStartGameTime;
+
 
             note.setDate(BACK_EPOCH_TIME_NOTATION - System.currentTimeMillis());
             note.setTime(mTimer.getText().toString());
@@ -524,10 +529,10 @@ public class MainActivity extends AppCompatActivity {
             start = false;
             mTimerTimer.cancel();
         }
-
     }
 
     public void startTimer() {
+        mStartGameTime = System.currentTimeMillis();
         mTimer.setText("");
         mTimerTimer = new Timer();
         mTimerTimer.scheduleAtFixedRate(new TimerTask() {
@@ -547,7 +552,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }, 1000, 1000);
-
     }
 
     public void restartTimer() {

@@ -13,9 +13,16 @@
 
         <TextView
             android:id="@+id/nik_info_fragment_text_view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/USER_NOT_EXIST" />
+
+        <ImageView
+            android:id="@+id/country_flag_fragment_image_view"
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/COUNTRY_FLAG"/>
 
     </LinearLayout>
 

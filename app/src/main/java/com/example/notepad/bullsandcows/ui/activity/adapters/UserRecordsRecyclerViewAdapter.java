@@ -13,9 +13,7 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.utils.Converters;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
-import java.awt.font.TextAttribute;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRecordsRecyclerViewAdapter.UserRecordsViewHolder> {
 
