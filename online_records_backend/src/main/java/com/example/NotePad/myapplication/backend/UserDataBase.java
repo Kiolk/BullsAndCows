@@ -38,6 +38,8 @@ public class UserDataBase {
 
     private ArrayList<BestUserRecords> mBestUserRecords;
 
+    private ArrayList<BestUserRecords> mLastFiveUserRecords;
+
     public ArrayList<BestUserRecords> getBestUserRecords() {
         return mBestUserRecords;
     }
@@ -140,5 +142,13 @@ public class UserDataBase {
 
     public void setmLastUserVisit(long mLastUserVisit) {
         this.mLastUserVisit = mLastUserVisit;
+    }
+
+    public ArrayList<BestUserRecords> getLastFiveUserRecords() {
+        return mLastFiveUserRecords;
+    }
+
+    public void setLastFiveUserRecords(ArrayList<BestUserRecords> pLastFiveUserRecords) {
+        mLastFiveUserRecords = pLastFiveUserRecords;
     }
 }
