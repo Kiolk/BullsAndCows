@@ -76,7 +76,8 @@
     <string name="RECORDS_MENU">Records</string>
     <string name="USER_NOT_EXIST">Information not exist </string>
     <string name="COUNTRY_FLAG">Country flag</string>
-
+    <string name="LAST_FIVE_RECORD">Last five records</string>
+    <string name="BEST_USER_RECORDS">Best user records</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

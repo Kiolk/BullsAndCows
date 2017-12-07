@@ -36,10 +36,33 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:padding="10dp"
+        android:text="@string/BEST_USER_RECORDS"/>
+
     <include layout="@layout/titles_for_records" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/best_user_records_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:padding="10dp"
+        android:text="@string/LAST_FIVE_RECORD"/>
+
+    <include layout="@layout/titles_for_records" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/last_five_user_records_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

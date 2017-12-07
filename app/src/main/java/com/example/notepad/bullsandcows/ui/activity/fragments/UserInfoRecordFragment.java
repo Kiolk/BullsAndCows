@@ -32,7 +32,9 @@ public class UserInfoRecordFragment extends Fragment {
     private TextView mPlayedGames;
     private ImageView mCountryFlag;
     private UserRecordsRecyclerViewAdapter mAdapter;
+    private UserRecordsRecyclerViewAdapter mLastRecordAdapter;
     private RecyclerView mRecordRecyclerView;
+    private RecyclerView mLastRecordsRecyclerView;
 
     @Nullable
     @Override
@@ -43,12 +45,13 @@ public class UserInfoRecordFragment extends Fragment {
         mCountryFlag = view.findViewById(R.id.country_flag_fragment_image_view);
         mLastVisit = view.findViewById(R.id.last_visit_fragment_image_view);
         mPlayedGames = view.findViewById(R.id.number_played_game_fragment_text_view);
+        mLastRecordsRecyclerView = view.findViewById(R.id.last_five_user_records_recycler_view);
 
         return view;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP) //TODO may be not this method not work on early version
-    public void showInfoAboutUser(Context pContext, UserDataBase pUserInfo){
+    public void showInfoAboutUser(Context pContext, UserDataBase pUserInfo) {
         ArrayList<BestUserRecords> listRecords = (ArrayList<BestUserRecords>) pUserInfo.getBestUserRecords();
         Log.d("MyLogs", listRecords.toString());
         mUserName.setText(pUserInfo.getUserName());
@@ -56,14 +59,28 @@ public class UserInfoRecordFragment extends Fragment {
         String res = Constants.EMPTY_STRING + pUserInfo.getMNumberPlayedGames();
         mPlayedGames.setText(res);
         String country = "R.drawable." + "ic_" + "belarus";
-        int flag = R.drawable.ic_belarus;
-        mCountryFlag.setImageDrawable(getResources().getDrawable(flag,null));
-        mAdapter = new UserRecordsRecyclerViewAdapter( listRecords);
+
+        try {
+            int flag = pUserInfo.getMCountryFlag();    //R.drawable.ic_belarus;
+            mCountryFlag.setImageDrawable(getResources().getDrawable(flag, null));
+        } catch (Exception pE) {
+            pE.getStackTrace();
+        }
+
+        mAdapter = new UserRecordsRecyclerViewAdapter(listRecords);
 
         mRecordRecyclerView.setHasFixedSize(true);
         mRecordRecyclerView.setLayoutManager(new LinearLayoutManager(pContext));
         mRecordRecyclerView.setAdapter(mAdapter);
 
         mAdapter.notifyDataSetChanged();
+
+        mLastRecordAdapter = new UserRecordsRecyclerViewAdapter((ArrayList<BestUserRecords>) pUserInfo.getLastFiveUserRecords());
+
+        mLastRecordsRecyclerView.setHasFixedSize(true);
+        mLastRecordsRecyclerView.setLayoutManager(new LinearLayoutManager(pContext));
+        mLastRecordsRecyclerView.setAdapter(mLastRecordAdapter);
+
+        mLastRecordAdapter.notifyDataSetChanged();
     }
 }

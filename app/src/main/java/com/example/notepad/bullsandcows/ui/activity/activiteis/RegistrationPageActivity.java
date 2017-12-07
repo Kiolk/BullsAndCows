@@ -9,13 +9,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.models.ItemCountryData;
+import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
+import com.example.notepad.bullsandcows.utils.CountryUtils;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
+
+import java.util.ArrayList;
 
 public class RegistrationPageActivity extends AppCompatActivity {
 
@@ -23,9 +29,13 @@ public class RegistrationPageActivity extends AppCompatActivity {
     private EditText mPassword;
     private EditText mPassword2;
     private EditText mEmail;
+    private EditText mImageUrl;
+    private Button mSetImageButton;
+    private ImageView mUserImage;
     private Button mRegisterButton;
     private UserDataBase mUser;
     private Spinner mSpinner;
+    private Spinner mSpinnerEx;
     private boolean mNikFree;
 
     @Override
@@ -111,6 +121,11 @@ public class RegistrationPageActivity extends AppCompatActivity {
 
             }
         });
+
+        mSpinnerEx = findViewById(R.id.example_country_registration_spinner);
+        CountrySpinnerAdapter spinnerAdapter = new CountrySpinnerAdapter(RegistrationPageActivity.this,
+                R.layout.item_country_spinner_layout, 2, CountryUtils.getCountryList());
+        mSpinnerEx.setAdapter(spinnerAdapter);
     }
 
     private void initView() {
@@ -118,7 +133,10 @@ public class RegistrationPageActivity extends AppCompatActivity {
         mPassword = findViewById(R.id.password_registration_edit_text);
         mPassword2 = findViewById(R.id.password2_registration_edit_text);
         mEmail = findViewById(R.id.email_registration_edit_text);
+        mImageUrl = findViewById(R.id.image_url_edit_tet);
+        mUserImage = findViewById(R.id.user_image_registration_image_view);
         mRegisterButton = findViewById(R.id.registration_button);
+        mSetImageButton = findViewById(R.id.set_image_registration_button);
         mRegisterButton.setEnabled(false);
     }
 
@@ -135,6 +153,10 @@ public class RegistrationPageActivity extends AppCompatActivity {
         mUser.setCountry(mSpinner.getSelectedItem().toString());
         Log.d(Constants.TAG, "User country: " + mUser.getCountry());
         mUser.setEmail(mEmail.getText().toString());
+        mUser.setCountry(CountryUtils.getCountry(mSpinnerEx.getSelectedItemPosition()));
+        mUser.setMCountryFlag(CountryUtils.getCountryResources(mUser.getCountry()));
+        mUser.setMPhotoUrl(mImageUrl.getText().toString());
+        int i = 0;
     }
 
     View.OnClickListener clickBtn = new View.OnClickListener() {
@@ -155,4 +177,9 @@ public class RegistrationPageActivity extends AppCompatActivity {
             finish();
         }
     };
+
+    public void submitImage(View view){
+
+    }
+
 }

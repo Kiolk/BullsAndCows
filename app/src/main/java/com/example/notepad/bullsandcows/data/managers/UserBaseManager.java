@@ -22,10 +22,12 @@ public class UserBaseManager implements UserInfoCallback {
 
     private static final String FREE_USER_NAME_ON_BACKEND = "Free user name";
     private static final String USER_BACKEND_URL = "https://myjson-182914.appspot.com/_ah/api/";
-    public static final String SPLITTER_FOR_TIMER = ":";
-    public static final int MINUTE_TIME = 0;
-    public static final int SECOND_TIME = 1;
-    public static final int ADD_ONE_NEW_GAME = 1;
+    private static final String SPLITTER_FOR_TIMER = ":";
+    private static final int MINUTE_TIME = 0;
+    private static final int SECOND_TIME = 1;
+    private static final int ADD_ONE_NEW_GAME = 1;
+    private static final int MAX_USER_LAST_RECORD = 5;
+    private static final int MAX_BEST_RECORDS_NOTES = 10;
 
     private UserDataBase mUserModel;
     private UserDataBase mUserModelFromBackend;
@@ -149,9 +151,9 @@ public class UserBaseManager implements UserInfoCallback {
                     }
 
                     userInfo.setBestUserRecords(listRecords);
+                    userInfo.setLastFiveUserRecords(updateLastRecords(userInfo.getLastFiveUserRecords(), pRecord));
                     userInfo.setMNumberPlayedGames(userInfo.getMNumberPlayedGames() + ADD_ONE_NEW_GAME);
-                    userInfo = myApiService.update(userInfo.getUserName(), userInfo).execute();
-                    userInfo.clear();
+                    myApiService.update(userInfo.getUserName(), userInfo).execute();
                 } catch (IOException pE) {
                     pE.getStackTrace();
                 }
@@ -159,6 +161,32 @@ public class UserBaseManager implements UserInfoCallback {
         });
         thread.start();
     }
+
+    private List<BestUserRecords> updateLastRecords(List<BestUserRecords> lastFiveUserRecords, BestUserRecords pRecord) {
+        List<BestUserRecords> lastFive = lastFiveUserRecords;
+
+        if (lastFive == null) {
+            lastFive = new ArrayList<>();
+        } else {
+            lastFive.add(pRecord);
+        }
+
+        while (lastFive.size() > MAX_USER_LAST_RECORD) {
+            lastFive.remove(0);
+        }
+
+        Comparator<BestUserRecords> comparator = new Comparator<BestUserRecords>() {
+            @Override
+            public int compare(BestUserRecords o1, BestUserRecords o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        };
+        //TODO implement revers sort
+        Collections.sort(lastFive, comparator);
+
+        return lastFive;
+    }
+
 
     private List<BestUserRecords> insertPossibleBestRecord(List<BestUserRecords> listRecords, BestUserRecords pRecord) {
         boolean isCodPresent = false;
@@ -184,11 +212,13 @@ public class UserBaseManager implements UserInfoCallback {
                     listRecords.add(pRecord);
                 }
 
+                listRecords = sortListRecords(listRecords);
                 listRecords.get(i).setMNumberGames(playedGames);
+                break;
             }
         }
 
-        if (!isCodPresent && listRecords.size() <= 10) {
+        if (!isCodPresent && listRecords.size() <= MAX_BEST_RECORDS_NOTES) {
             pRecord.setMNumberGames(ADD_ONE_NEW_GAME);
             listRecords.add(pRecord);
         }
@@ -197,18 +227,19 @@ public class UserBaseManager implements UserInfoCallback {
     }
 
     private List<BestUserRecords> sortListRecords(List<BestUserRecords> listRecords) {
-        Comparator<BestUserRecords> listComparator = new Comparator<BestUserRecords>() {
 
+        Comparator<BestUserRecords> listComparator = new Comparator<BestUserRecords>() {
             @Override
             public int compare(BestUserRecords pRecord1, BestUserRecords pRecord2) {
                 return pRecord1.getCodes().compareTo(pRecord2.getCodes());
             }
         };
         Collections.sort(listRecords, listComparator);
+
         return listRecords;
     }
 
-    private void updateLastUserVisit(){
+    private void updateLastUserVisit() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
