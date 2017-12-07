@@ -14,4 +14,13 @@ public class Converters {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
         return dateFormat.format(date);
     }
+
+    public static String convertDirectTimeToString(Long pLong) {
+        Date date = new Date((pLong) + (3600000 * 3));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
+        DateFormat dateFormat = simpleDateFormat;
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
+        return dateFormat.format(date);
+    }
 }

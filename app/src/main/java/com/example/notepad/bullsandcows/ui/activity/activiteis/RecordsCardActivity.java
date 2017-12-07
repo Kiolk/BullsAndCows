@@ -105,7 +105,7 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
             @Override
             public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
                 UserDataBase user = super.getFullUserInfoCallback(pUserData);
-                mUserInfoFragment.showInfoAboutUser(RecordsCardActivity.this,user.getBestUserRecords());
+                mUserInfoFragment.showInfoAboutUser(RecordsCardActivity.this,user);
 
                 return pUserData;
             }

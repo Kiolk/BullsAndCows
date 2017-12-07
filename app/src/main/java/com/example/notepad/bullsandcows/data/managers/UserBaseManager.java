@@ -25,6 +25,7 @@ public class UserBaseManager implements UserInfoCallback {
     public static final String SPLITTER_FOR_TIMER = ":";
     public static final int MINUTE_TIME = 0;
     public static final int SECOND_TIME = 1;
+    public static final int ADD_ONE_NEW_GAME = 1;
 
     private UserDataBase mUserModel;
     private UserDataBase mUserModelFromBackend;
@@ -57,6 +58,7 @@ public class UserBaseManager implements UserInfoCallback {
                 } else if (mUserModelFromBackend.getUserName().equals(mUserModel.getUserName()) &&
                         mUserModelFromBackend.getPassword().equals(mUserModel.getPassword())) {
                     nikPasswordCorrectCallback();
+                    updateLastUserVisit();
                 } else {
                     nikCorrectPasswordWrongCallback();
                     getFullUserInfoCallback(mUserModelFromBackend);
@@ -147,7 +149,7 @@ public class UserBaseManager implements UserInfoCallback {
                     }
 
                     userInfo.setBestUserRecords(listRecords);
-
+                    userInfo.setMNumberPlayedGames(userInfo.getMNumberPlayedGames() + ADD_ONE_NEW_GAME);
                     userInfo = myApiService.update(userInfo.getUserName(), userInfo).execute();
                     userInfo.clear();
                 } catch (IOException pE) {
@@ -164,6 +166,8 @@ public class UserBaseManager implements UserInfoCallback {
         for (int i = 0; i < listRecords.size(); ++i) {
             if (listRecords.get(i).getCodes().equals(pRecord.getCodes())) {
                 isCodPresent = true;
+                int playedGames = listRecords.get(i).getMNumberGames() + ADD_ONE_NEW_GAME;
+
                 if (listRecords.get(i).getMoves().equals(pRecord.getMoves())) {
                     String[] time1 = listRecords.get(i).getTime().split(SPLITTER_FOR_TIMER);
                     String[] time2 = pRecord.getTime().split(SPLITTER_FOR_TIMER);
@@ -179,10 +183,13 @@ public class UserBaseManager implements UserInfoCallback {
                     listRecords.remove(i);
                     listRecords.add(pRecord);
                 }
+
+                listRecords.get(i).setMNumberGames(playedGames);
             }
         }
 
         if (!isCodPresent && listRecords.size() <= 10) {
+            pRecord.setMNumberGames(ADD_ONE_NEW_GAME);
             listRecords.add(pRecord);
         }
 
@@ -201,19 +208,44 @@ public class UserBaseManager implements UserInfoCallback {
         return listRecords;
     }
 
+    private void updateLastUserVisit(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                if (myApiService == null) {
+                    UserDataBaseApi.Builder builder = new UserDataBaseApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                            .setRootUrl(USER_BACKEND_URL);
+                    myApiService = builder.build();
+                }
+
+                try {
+
+                    String userName = mUserModelFromBackend.getUserName();
+                    mUserModelFromBackend.setMLastUserVisit(System.currentTimeMillis());
+
+                    UserDataBase userInfo = myApiService.update(userName, mUserModelFromBackend).execute();
+                    userInfo.clear();
+
+                } catch (IOException pE) {
+                    pE.getStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
+
     @Override
     public void nikFreeCallback() {
-
     }
 
     @Override
     public void nikPasswordCorrectCallback() {
-
     }
 
     @Override
     public void nikCorrectPasswordWrongCallback() {
-
     }
 
     @Override
