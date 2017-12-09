@@ -1,12 +1,16 @@
 package com.example.notepad.bullsandcows;
 
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.ui.activity.activiteis.AboutActivity;
 import com.example.notepad.bullsandcows.ui.activity.activiteis.RecordsCardActivity;
@@ -43,6 +48,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import kiolk.com.github.pen.Pen;
 
 import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
 
@@ -103,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView mJoinToOnlineImage;
     FrameLayout mFrameLayout;
     Toolbar mToolBar;
+    android.support.v7.app.ActionBar mActionBar;
+
 
     public static int DIG = 4;
     String mCodedNumber = "";
@@ -129,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+        setImageLoaderConfiguration();
         if (savedInstanceState != null) {
             mLanguageLocale = savedInstanceState.getString(Constants.CODE_OF_LANGUAGE, ENGLISH_LANGUAGE_COD);
             LanguageLocale.setLocale(mLanguageLocale, MainActivity.this);
@@ -141,8 +151,11 @@ public class MainActivity extends AppCompatActivity {
 //            startWelcomePage();
 //        }
         Intent intent = getIntent();
-        mNikOfUser.setText(intent.getStringExtra(Constants.NIK_NAME_OF_USER));
-        passwordOfUser = intent.getStringExtra(Constants.PASSWORD_OF_USER);
+//        mNikOfUser.setText(intent.getStringExtra(Constants.NIK_NAME_OF_USER));
+//        passwordOfUser = intent.getStringExtra(Constants.PASSWORD_OF_USER);
+        mNikOfUser.setText(UserLoginHolder.getInstance().getUserName());
+        passwordOfUser = UserLoginHolder.getInstance().getPassword();
+
         mIsJoinToOnline = intent.getBooleanExtra(Constants.JOIN_TO_ONLINE, false);
         mKeepPassword = intent.getBooleanExtra(Constants.KEEP_PASSWORD, false);
         if (mIsJoinToOnline) {
@@ -150,6 +163,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             mJoinToOnlineImage.setBackground(getResources().getDrawable(R.drawable.myrect_red));
         }
+    }
+
+    private void setImageLoaderConfiguration() {
+        Pen.getInstance().setLoaderSettings()
+                .setSavingStrategy(Pen.SAVE_FULL_IMAGE_STRATEGY)
+                .setTypeOfCache(Pen.INNER_FILE_CACHE)
+                .setSizeInnerFileCache(10L);
     }
 
     @Override
@@ -229,6 +249,18 @@ public class MainActivity extends AppCompatActivity {
         mJoinToOnlineImage = (ImageView) findViewById(R.id.connection_to_online_image_view);
         mToolBar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolBar);
+
+//        mOptionMenu.setImageBitmap(UserLoginHolder.getInstance().getmUserBitmap());
+//        mActionBar = getSupportActionBar();
+//
+//        Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserImageUrl()).inputTo(mOptionMenu);
+//
+//        Bitmap bmp = mOptionMenu.getDrawingCache();
+//        BitmapDrawable icon = new BitmapDrawable(getResources(), bmp);
+//        mActionBar.setLogo(R.drawable.ic_cow_good);
+//        mToolBar.setTitle(UserLoginHolder.getInstance().getUserName());
+
+
         View.OnClickListener clickButton = new View.OnClickListener() {
 
             @Override

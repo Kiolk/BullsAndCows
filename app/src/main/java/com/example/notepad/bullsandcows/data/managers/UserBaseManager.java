@@ -59,7 +59,7 @@ public class UserBaseManager implements UserInfoCallback {
                     nikFreeCallback();
                 } else if (mUserModelFromBackend.getUserName().equals(mUserModel.getUserName()) &&
                         mUserModelFromBackend.getPassword().equals(mUserModel.getPassword())) {
-                    nikPasswordCorrectCallback();
+                    nikPasswordCorrectCallback(mUserModelFromBackend);
                     updateLastUserVisit();
                 } else {
                     nikCorrectPasswordWrongCallback();
@@ -167,9 +167,11 @@ public class UserBaseManager implements UserInfoCallback {
 
         if (lastFive == null) {
             lastFive = new ArrayList<>();
-        } else {
-            lastFive.add(pRecord);
         }
+            lastFive.add(pRecord);
+
+
+
 
         while (lastFive.size() > MAX_USER_LAST_RECORD) {
             lastFive.remove(0);
@@ -272,7 +274,8 @@ public class UserBaseManager implements UserInfoCallback {
     }
 
     @Override
-    public void nikPasswordCorrectCallback() {
+    public UserDataBase nikPasswordCorrectCallback(UserDataBase pUserInfo) {
+        return pUserInfo;
     }
 
     @Override

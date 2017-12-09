@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/rules_item_menu"
         android:icon="@drawable/bullgood"
-        android:title="@string/RULES_MENU" />
+        android:title="@string/RULES_MENU"
+        app:showAsAction="ifRoom"/>
     <item
+
         android:id="@+id/settings_item_menu"
         android:icon="@drawable/cowgood"
         android:title="@string/SETTING_MENU" />

@@ -78,6 +78,7 @@
     <string name="COUNTRY_FLAG">Country flag</string>
     <string name="LAST_FIVE_RECORD">Last five records</string>
     <string name="BEST_USER_RECORDS">Best user records</string>
+    <string name="YOUR_PROFILE">Your profile</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

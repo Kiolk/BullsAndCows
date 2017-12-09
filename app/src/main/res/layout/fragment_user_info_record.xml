@@ -34,7 +34,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
+        <ImageView
+            android:id="@+id/user_image_info_fragment_image_view"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:contentDescription="@string/USER_NOT_EXIST"/>
+
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/your_profile_page_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/YOUR_PROFILE"
+        android:textColor="@color/RED_BUTTON"/>
 
     <TextView
         android:layout_width="match_parent"

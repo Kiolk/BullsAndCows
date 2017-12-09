@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.ui.activity.adapters.UserRecordsRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.Converters;
@@ -25,12 +26,16 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 import java.util.ArrayList;
 import java.util.List;
 
+import kiolk.com.github.pen.Pen;
+
 public class UserInfoRecordFragment extends Fragment {
 
     private TextView mUserName;
     private TextView mLastVisit;
     private TextView mPlayedGames;
+    private TextView mYourProfile;
     private ImageView mCountryFlag;
+    private ImageView mUseImage;
     private UserRecordsRecyclerViewAdapter mAdapter;
     private UserRecordsRecyclerViewAdapter mLastRecordAdapter;
     private RecyclerView mRecordRecyclerView;
@@ -46,6 +51,8 @@ public class UserInfoRecordFragment extends Fragment {
         mLastVisit = view.findViewById(R.id.last_visit_fragment_image_view);
         mPlayedGames = view.findViewById(R.id.number_played_game_fragment_text_view);
         mLastRecordsRecyclerView = view.findViewById(R.id.last_five_user_records_recycler_view);
+        mUseImage = view.findViewById(R.id.user_image_info_fragment_image_view);
+        mYourProfile = view.findViewById(R.id.your_profile_page_text_view);
 
         return view;
     }
@@ -60,10 +67,20 @@ public class UserInfoRecordFragment extends Fragment {
         mPlayedGames.setText(res);
         String country = "R.drawable." + "ic_" + "belarus";
 
+        if(pUserInfo.getUserName().equals(UserLoginHolder.getInstance().getUserName())){
+            mYourProfile.setVisibility(View.VISIBLE);
+        }
+
         try {
             int flag = pUserInfo.getMCountryFlag();    //R.drawable.ic_belarus;
             mCountryFlag.setImageDrawable(getResources().getDrawable(flag, null));
         } catch (Exception pE) {
+            pE.getStackTrace();
+        }
+
+        try{
+            Pen.getInstance().getImageFromUrl(pUserInfo.getMPhotoUrl()).inputTo(mUseImage);
+        }catch (Exception pE){
             pE.getStackTrace();
         }
 

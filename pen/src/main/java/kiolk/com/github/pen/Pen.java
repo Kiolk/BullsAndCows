@@ -268,4 +268,11 @@ public class Pen {
 
         return mBitmapLruCache.get(key);
     }
+
+    //TODO implement possibility download bitmap directly
+    public Bitmap getBitmapDirect(Context pContext, String pUrl){
+        String name = MD5Util.getHashString(pUrl);
+        Bitmap bmp = DiskCache.getInstance().loadBitmapFromDiskCache(pContext, name);
+        return bmp;
+    }
 }

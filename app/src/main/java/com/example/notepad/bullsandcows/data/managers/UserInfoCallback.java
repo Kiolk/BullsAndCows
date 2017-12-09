@@ -6,7 +6,7 @@ public interface UserInfoCallback {
 
     void nikFreeCallback();
 
-    void nikPasswordCorrectCallback();
+    UserDataBase nikPasswordCorrectCallback(UserDataBase pUserInfo);
 
     void nikCorrectPasswordWrongCallback();
 

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.NotePad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.BuildConfig;
+import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.MainActivity;
@@ -28,6 +29,9 @@ import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
+import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
+
+import kiolk.com.github.pen.Pen;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -146,11 +150,16 @@ public class WelcomeActivity extends AppCompatActivity {
                             UserBaseManager userManager = new UserBaseManager() {
 
                                 @Override
-                                public void nikPasswordCorrectCallback() {
-                                    super.nikPasswordCorrectCallback();
+                                public UserDataBase nikPasswordCorrectCallback(UserDataBase pUserInfo) {
+                                    UserDataBase userInfo = super.nikPasswordCorrectCallback(pUserInfo);
+                                    UserLoginHolder.getInstance().setPassword(userInfo.getPassword());
+                                    UserLoginHolder.getInstance().setUserName(userInfo.getUserName());
+                                    UserLoginHolder.getInstance().setUserImageUrl(userInfo.getMPhotoUrl());
+                                    UserLoginHolder.getInstance().setmUserBitmap(Pen.getInstance().getBitmapDirect(WelcomeActivity.this, userInfo.getMPhotoUrl()));
                                     Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
                                     mIsJoinToOnline = true;
                                     startMainActivity();
+                                    return userInfo;
                                 }
 
                                 @Override

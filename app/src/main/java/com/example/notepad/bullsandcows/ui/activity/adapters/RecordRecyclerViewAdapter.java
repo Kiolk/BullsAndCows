@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -91,6 +92,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         TextView mNikNameTextView;
         TextView mMovesTextView;
         TextView mTimeTextView;
+//        ImageView mUserImage;
         RelativeLayout mRelativeLayout;
         UserNikClickListener.ClickUserNik mUserNikListener;
 
@@ -105,6 +107,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             mMovesTextView = itemView.findViewById(R.id.moves_card_text_view);
             mTimeTextView = itemView.findViewById(R.id.time_card_view);
             mNikNameTextView.setOnClickListener(this);
+//            mUserImage = itemView.findViewById(R.id.picture_of_user_image_view);
         }
 
 
