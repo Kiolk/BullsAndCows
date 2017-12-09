@@ -22,9 +22,11 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BACKEND_APP_VERSION_URL", "\"http://bullsandcows-183521.appspot.com/hello\""
+            buildConfigField "String", "BACKEND_USER_INFO", "\"https://myjson-182914.appspot.com/_ah/api/\""
         }
         release {
             buildConfigField "String", "BACKEND_APP_VERSION_URL", "\"http://bullsandcowsrealese.appspot.com/hello\""
+            buildConfigField "String", "BACKEND_USER_INFO", "\"https://onlinerecordbulsandcows.appspot.com/_ah/api/\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

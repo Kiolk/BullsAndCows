@@ -24,6 +24,13 @@
             android:scaleType="centerInside"
             android:contentDescription="@string/COUNTRY_FLAG"/>
 
+        <ImageView
+            android:id="@+id/online_status_fragment_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ONLINE_STATUS"
+            android:src="@drawable/offline" />
+
         <TextView
             android:id="@+id/last_visit_fragment_image_view"
             android:layout_width="wrap_content"

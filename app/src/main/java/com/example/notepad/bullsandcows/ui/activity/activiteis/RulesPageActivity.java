@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows;
+package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class Rulespage extends AppCompatActivity {
+import com.example.notepad.bullsandcows.R;
+
+public class RulesPageActivity extends AppCompatActivity {
     int cnt = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

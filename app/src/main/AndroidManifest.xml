@@ -15,7 +15,7 @@
         android:roundIcon="@drawable/bullgood"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashStart">
+        <activity android:name=".ui.activity.activiteis.SplashStartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,26 +23,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.activiteis.MainActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Rulespage"
-            android:parentActivityName=".MainActivity" />
+            android:name=".ui.activity.activiteis.RulesPageActivity"
+            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity
-            android:name=".Setting"
-            android:parentActivityName=".MainActivity" />
+            android:name=".ui.activity.activiteis.SettingActivity"
+            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity
             android:name=".ui.activity.activiteis.AboutActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity
             android:name=".Records"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity
             android:name=".ui.activity.activiteis.WelcomeActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity
             android:name=".OnlineRecords"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
 
         <service android:name=".services.WinSoundService" />
         <service android:name=".services.RefreshOnlineRecordService" />
@@ -50,7 +50,7 @@
         <activity android:name=".ui.activity.activiteis.RegistrationPageActivity" />
         <activity
             android:name=".ChoiceLanguageActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity android:name=".ui.activity.activiteis.RecordsCardActivity" />
     </application>
 

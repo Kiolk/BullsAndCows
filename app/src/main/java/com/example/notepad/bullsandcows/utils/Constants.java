@@ -2,6 +2,10 @@ package com.example.notepad.bullsandcows.utils;
 
 public class Constants {
 
+    public interface IntentKeys{
+        public static final String USER_NAME_INTENT_KEY = "UserName";
+    }
+
     public final static String DISCONNECT_SERVER = "Not possible connect to server";
     public final static String TAG = "MyLogs";
     public final static String FOLDER_DESTINATION_IN_SD = "Download";

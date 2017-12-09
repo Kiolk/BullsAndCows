@@ -16,5 +16,4 @@ public class AnimationOfView {
         anim.setDuration(2000);
         anim.start();
     }
-
 }

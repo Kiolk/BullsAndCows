@@ -6,6 +6,7 @@ import android.os.Message;
 import android.util.Log;
 
 
+import com.example.notepad.bullsandcows.BuildConfig;
 import com.example.notepad.myapplication.backend.userDataBaseApi.UserDataBaseApi;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
@@ -21,7 +22,7 @@ import java.util.List;
 public class UserBaseManager implements UserInfoCallback {
 
     private static final String FREE_USER_NAME_ON_BACKEND = "Free user name";
-    private static final String USER_BACKEND_URL = "https://myjson-182914.appspot.com/_ah/api/";
+    private static final String USER_BACKEND_URL = BuildConfig.BACKEND_USER_INFO;
     private static final String SPLITTER_FOR_TIMER = ":";
     private static final int MINUTE_TIME = 0;
     private static final int SECOND_TIME = 1;
@@ -60,7 +61,7 @@ public class UserBaseManager implements UserInfoCallback {
                 } else if (mUserModelFromBackend.getUserName().equals(mUserModel.getUserName()) &&
                         mUserModelFromBackend.getPassword().equals(mUserModel.getPassword())) {
                     nikPasswordCorrectCallback(mUserModelFromBackend);
-                    updateLastUserVisit();
+                    updateLastUserVisit(mUserModelFromBackend, true);
                 } else {
                     nikCorrectPasswordWrongCallback();
                     getFullUserInfoCallback(mUserModelFromBackend);
@@ -241,7 +242,7 @@ public class UserBaseManager implements UserInfoCallback {
         return listRecords;
     }
 
-    private void updateLastUserVisit() {
+    public void updateLastUserVisit(final UserDataBase pUserInfo, final boolean pIsOnline) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -254,10 +255,12 @@ public class UserBaseManager implements UserInfoCallback {
 
                 try {
 
-                    String userName = mUserModelFromBackend.getUserName();
-                    mUserModelFromBackend.setMLastUserVisit(System.currentTimeMillis());
+                    String userName = pUserInfo.getUserName();
+                    UserDataBase userInfo = myApiService.get(userName).execute();
+                    userInfo.setMLastUserVisit(System.currentTimeMillis());
+                    userInfo.setIsOnline(pIsOnline);
 
-                    UserDataBase userInfo = myApiService.update(userName, mUserModelFromBackend).execute();
+                    userInfo = myApiService.patch(userName, userInfo).execute();
                     userInfo.clear();
 
                 } catch (IOException pE) {
@@ -267,7 +270,6 @@ public class UserBaseManager implements UserInfoCallback {
         });
         thread.start();
     }
-
 
     @Override
     public void nikFreeCallback() {

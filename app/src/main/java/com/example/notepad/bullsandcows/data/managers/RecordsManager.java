@@ -16,14 +16,14 @@ import java.io.IOException;
 
 public class RecordsManager implements RecordsCallbacks {
 
-    public static final String URL_RECORDS_BACKEND = "https://onlinerecordbulsandcows.appspot.com/_ah/api/";
+    private static final String URL_RECORDS_BACKEND = "https://onlinerecordbulsandcows.appspot.com/_ah/api/";
     private RecordsToNetApi myApiService;
     private Thread mListRecordThread;
     private Handler mListHandler;
     private String mCursor;
 
 
-    public RecordsManager(){
+     protected RecordsManager() {
 
         initHandler();
         mListRecordThread = new Thread(mListRecordRunnable);
@@ -31,7 +31,7 @@ public class RecordsManager implements RecordsCallbacks {
 
     @SuppressLint("HandlerLeak")
     private void initHandler() {
-        mListHandler = new Handler(){
+        mListHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -57,7 +57,7 @@ public class RecordsManager implements RecordsCallbacks {
             ResponseRecordModel responseRecord = new ResponseRecordModel();
 
             try {
-               // String cursor = "CjoSNGoZZ35vbmxpbmVyZWNvcmRidWxzYW5kY293c3IXCxIMUmVjb3Jkc1RvTmV0GIGk8JX5KwwYACAA";
+                // String cursor = "CjoSNGoZZ35vbmxpbmVyZWNvcmRidWxzYW5kY293c3IXCxIMUmVjb3Jkc1RvTmV0GIGk8JX5KwwYACAA";
                 String json = myApiService.list().setCursor(mCursor).execute().toString();
                 responseRecord.setmJsonFromBackend(json);
                 msg.obj = responseRecord;
@@ -71,7 +71,7 @@ public class RecordsManager implements RecordsCallbacks {
         }
     };
 
-    public void getRecordSBackend(RequestRecordModel pRequest){
+    public void getRecordSBackend(RequestRecordModel pRequest) {
         mCursor = pRequest.getCursor();
         mListRecordThread.start();
     }

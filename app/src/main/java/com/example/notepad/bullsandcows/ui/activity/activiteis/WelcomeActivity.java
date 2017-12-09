@@ -23,15 +23,12 @@ import com.example.notepad.bullsandcows.BuildConfig;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
-import com.example.notepad.bullsandcows.MainActivity;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
-
-import kiolk.com.github.pen.Pen;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -60,6 +57,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        UserLoginHolder.getInstance().setUserOnline();
         initView();
         checkAppActualVersion();
         loadDataFromPreferences();
@@ -68,7 +66,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private void checkAppActualVersion() {
         if (CheckConnection.checkConnection(WelcomeActivity.this)) {
 //            new CheckingVersionOfApp().execute(BuildConfig.VERSION_NAME);
-            AppInfoManager appManager = new AppInfoManager(BuildConfig.VERSION_NAME){
+            AppInfoManager appManager = new AppInfoManager(BuildConfig.VERSION_NAME) {
                 @Override
                 public VersionOfApp getInfoAppCallback(VersionOfApp versionOfApp) {
                     mVersionOfApp = super.getInfoAppCallback(versionOfApp);
@@ -123,7 +121,7 @@ public class WelcomeActivity extends AppCompatActivity {
                             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                             notificationManager.notify(1, mBuilder.build());
 
-                            new LoadNewVersionOfApp(WelcomeActivity.this, mVisitCheckVersion, mVersionOfApp.getUrlNewVersionOfApp(),mVersionOfApp.getNameOfApp());
+                            new LoadNewVersionOfApp(WelcomeActivity.this, mVisitCheckVersion, mVersionOfApp.getUrlNewVersionOfApp(), mVersionOfApp.getNameOfApp());
                             //TODO not very clear representation that new version of application download on phone
                             mCurrentVersionAppWelcome = true;
 //                            checkVersionOfApp();
@@ -152,12 +150,16 @@ public class WelcomeActivity extends AppCompatActivity {
                                 @Override
                                 public UserDataBase nikPasswordCorrectCallback(UserDataBase pUserInfo) {
                                     UserDataBase userInfo = super.nikPasswordCorrectCallback(pUserInfo);
+                                    UserLoginHolder.getInstance().setUserInfo(pUserInfo);
                                     UserLoginHolder.getInstance().setPassword(userInfo.getPassword());
                                     UserLoginHolder.getInstance().setUserName(userInfo.getUserName());
-                                    UserLoginHolder.getInstance().setUserImageUrl(userInfo.getMPhotoUrl());
-                                    UserLoginHolder.getInstance().setmUserBitmap(Pen.getInstance().getBitmapDirect(WelcomeActivity.this, userInfo.getMPhotoUrl()));
+//                                    UserLoginHolder.getInstance().setUserImageUrl(userInfo.getMPhotoUrl());
+//                                    UserLoginHolder.getInstance().setmUserBitmap(Pen.getInstance().getBitmapDirect(WelcomeActivity.this, userInfo.getMPhotoUrl()));
                                     Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
                                     mIsJoinToOnline = true;
+//                                    Intent intent = new Intent(WelcomeActivity.this, CheckOnlineService.class);
+//                                    intent.putExtra(Constants.IntentKeys.USER_NAME_INTENT_KEY, pUserInfo.getUserName());
+//                                    startService(intent);
                                     startMainActivity();
                                     return userInfo;
                                 }
@@ -196,6 +198,9 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(UserLoginHolder.getInstance().getUserInfo() != null) {
+            UserLoginHolder.getInstance().setOffline();
+        }
         saveDataInPreferences();
     }
 
@@ -228,7 +233,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }*/
 
-    public void checkAppVersion(int pVersionApp){
+    public void checkAppVersion(int pVersionApp) {
         if (pVersionApp == BuildConfig.VERSION_CODE) {
             mInfoVersionTextView.setText("Your app in actual version");
 //            new TypeWriter(WelcomeActivity.this).animateText(mInfoVersionTextView.getText());
@@ -369,6 +374,7 @@ public class WelcomeActivity extends AppCompatActivity {
         intent.putExtra(Constants.KEEP_PASSWORD, mCheckBox.isChecked());
         intent.putExtra(Constants.JOIN_TO_ONLINE, mIsJoinToOnline);
 
+        UserLoginHolder.getInstance().keepUserOnline();
         startActivity(intent);
         finish();
     }
@@ -395,5 +401,11 @@ public class WelcomeActivity extends AppCompatActivity {
             mLogin.setText(getResources().getString(R.string.GUEST));
             mPassword.setText(DEFAULT_PASSWORD_FOR_GUEST);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        UserLoginHolder.getInstance().keepUserOnline();
     }
 }

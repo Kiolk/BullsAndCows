@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows;
+package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -8,9 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.notepad.bullsandcows.ChoiceLanguageActivity;
+import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.utils.Constants;
 
-public class Setting extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity {
 
     public static int numberOfDigits = 4;
     Button modButton;
@@ -22,6 +25,7 @@ public class Setting extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserLoginHolder.getInstance().setUserOnline();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_setting);
         modButton = (Button) findViewById(R.id.modeButton);
@@ -57,7 +61,7 @@ public class Setting extends AppCompatActivity {
                         }
                         break;
                     case R.id.choice_language_button:
-                        Intent intent2 = new Intent(Setting.this, ChoiceLanguageActivity.class);
+                        Intent intent2 = new Intent(SettingActivity.this, ChoiceLanguageActivity.class);
                         startActivity(intent2);
                         break;
                     default:
@@ -95,7 +99,19 @@ public class Setting extends AppCompatActivity {
         intent3.putExtra(Constants.MODE_STATE, mode);
 //        intent3.putExtra("nikOfUser", mNikEditText.getText().toString());
         setResult(RESULT_OK, intent3);
+        UserLoginHolder.getInstance().setOffline();
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UserLoginHolder.getInstance().setOffline();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        UserLoginHolder.getInstance().setOffline();
+    }
 }

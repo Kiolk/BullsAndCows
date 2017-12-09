@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.RequestRecordModel;
@@ -44,6 +45,7 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_records_card);
+        UserLoginHolder.getInstance().setUserOnline();
         mRecordsProgressBar = findViewById(R.id.records_load_progress_bar);
         mInfoFrameLayout = findViewById(R.id.user_info_record_frame_layout);
         mInfoFrameLayout.setOnClickListener(this);
@@ -192,5 +194,17 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         closeInfoUserFragment();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        UserLoginHolder.getInstance().keepUserOnline();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        UserLoginHolder.getInstance().setOffline();
     }
 }

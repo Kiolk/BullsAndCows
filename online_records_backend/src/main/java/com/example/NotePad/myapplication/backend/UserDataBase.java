@@ -36,7 +36,7 @@ public class UserDataBase {
 
     private long mLastUserVisit;
 
-    private boolean mIsOnline;
+    private boolean mIsOnline = false;
 
     private ArrayList<UserFriends> mUserFriends;
 
@@ -174,7 +174,7 @@ public class UserDataBase {
         this.mUserMessages = mUserMessages;
     }
 
-    public boolean isOnline() {
+    public boolean getIsOnline() {
         return mIsOnline;
     }
 

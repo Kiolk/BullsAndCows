@@ -1,19 +1,14 @@
-package com.example.notepad.bullsandcows;
+package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -27,13 +22,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.notepad.bullsandcows.ChoiceLanguageActivity;
+import com.example.notepad.bullsandcows.CustomAdapter;
+import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.RecordAsyncTaskPost;
+import com.example.notepad.bullsandcows.WriteReadFile;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
-import com.example.notepad.bullsandcows.ui.activity.activiteis.AboutActivity;
-import com.example.notepad.bullsandcows.ui.activity.activiteis.RecordsCardActivity;
-import com.example.notepad.bullsandcows.ui.activity.activiteis.WelcomeActivity;
-import com.example.notepad.bullsandcows.ui.activity.fragments.WinFragment;
 import com.example.notepad.bullsandcows.services.WinSoundService;
+import com.example.notepad.bullsandcows.ui.activity.fragments.WinFragment;
 import com.example.notepad.bullsandcows.utils.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
@@ -73,91 +70,65 @@ public class MainActivity extends AppCompatActivity {
     public static final String NUMBER_OF_CODED_DIGITS = "numberOfCodedDigits";
     public static final int REQUEST_CODE_CHOICE_LANGUAGE = 5;
     public static final int SETTING_REQUEST_CODE = 1;
-    public static final String RULES = "Rules";
-    public static final String SETTING = "Setting";
-    public static final String ABOUT_APP = "AboutActivity app";
-    public static final String RECORDS = "Records";
-    public static final String ONLINE_RECORDS = "Online records";
     public static final String DEFAULT_NIK_OF_USER = "Guest";
     public static final String DEFAULT_PASSWORD_OF_USER = "1111";
     public static final String ENGLISH_LANGUAGE_COD = "en";
-    public static final String ONLINE_CARD_RECORDS = "Records";
     public static final String START_TIME_KEY = "StartTime";
 
-    ArrayList<String> mMoves = new ArrayList<>();
-    ArrayList<String> mNumbers = new ArrayList<>();
-    ArrayList<String> mCows = new ArrayList<>();
-    ArrayList<String> mBulls = new ArrayList<>();
+    private ArrayList<String> mMoves = new ArrayList<>();
+    private ArrayList<String> mNumbers = new ArrayList<>();
+    private ArrayList<String> mCows = new ArrayList<>();
+    private ArrayList<String> mBulls = new ArrayList<>();
 
-    TextView mInputNumberView;
-    TextView number1;
-    TextView number2;
-    TextView number3;
-    TextView number4;
-    TextView number5;
-    TextView number6;
-    TextView number7;
-    TextView number8;
-    TextView number9;
-    TextView number0;
-    TextView enterButton;
-    TextView startButton;
-    TextView del;
-    TextView mTimer;
-    TextView mNikOfUser;
-    TextView mCodOfLanguage;
-    ImageView mOptionMenu;
-    ImageView mJoinToOnlineImage;
-    FrameLayout mFrameLayout;
-    Toolbar mToolBar;
-    android.support.v7.app.ActionBar mActionBar;
-
+    private TextView mInputNumberView;
+    private TextView startButton;
+    private TextView mTimer;
+    private TextView mNikOfUser;
+    private ImageView mJoinToOnlineImage;
+    private FrameLayout mFrameLayout;
 
     public static int DIG = 4;
-    String mCodedNumber = "";
-    int cntMoves = 1;
-    boolean start = false;
-    boolean mode;
-    SharedPreferences mSaveNikName;
-    int checkRestart = DIG;
+    private String mCodedNumber = "";
+    private int cntMoves = 1;
+    private boolean start = false;
+    private boolean mode;
+    private SharedPreferences mSaveNikName;
+    private int checkRestart = DIG;
     private long mTimerCount = 0;
-    Timer mTimerTimer = null;
-    WriteReadFile mWriteReadFile = new WriteReadFile();
-    Boolean mFirstEnteredToApp = true;
-    Boolean mIsJoinToOnline;
-    String passwordOfUser;
-    Boolean mKeepPassword;
-    WinFragment mWinFragment;
-    FragmentTransaction mTransaction;
-    String mLanguageLocale;
+    private Timer mTimerTimer = null;
+    private WriteReadFile mWriteReadFile = new WriteReadFile();
+    private String passwordOfUser;
+    private Boolean mKeepPassword;
+    private WinFragment mWinFragment;
+    private FragmentTransaction mTransaction;
+    private String mLanguageLocale;
     private long mStartGameTime;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+        UserLoginHolder.getInstance().setUserOnline();
         setImageLoaderConfiguration();
+        initToolBar();
+
         if (savedInstanceState != null) {
             mLanguageLocale = savedInstanceState.getString(Constants.CODE_OF_LANGUAGE, ENGLISH_LANGUAGE_COD);
             LanguageLocale.setLocale(mLanguageLocale, MainActivity.this);
         }
+
         initializationOfView();
         loadNikName();
-//        new LanguageLocale().setLocale(mLanguageLocale, MainActivity.this);
-//        if(mFirstEnteredToApp) {
-//            mFirstEnteredToApp = false;
-//            startWelcomePage();
-//        }
         Intent intent = getIntent();
 //        mNikOfUser.setText(intent.getStringExtra(Constants.NIK_NAME_OF_USER));
 //        passwordOfUser = intent.getStringExtra(Constants.PASSWORD_OF_USER);
         mNikOfUser.setText(UserLoginHolder.getInstance().getUserName());
         passwordOfUser = UserLoginHolder.getInstance().getPassword();
 
-        mIsJoinToOnline = intent.getBooleanExtra(Constants.JOIN_TO_ONLINE, false);
+        Boolean mIsJoinToOnline = intent.getBooleanExtra(Constants.JOIN_TO_ONLINE, false);
         mKeepPassword = intent.getBooleanExtra(Constants.KEEP_PASSWORD, false);
+
         if (mIsJoinToOnline) {
             mJoinToOnlineImage.setBackground(getResources().getDrawable(R.drawable.myrect_green));
         } else {
@@ -179,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(CODED_NUMBER, mCodedNumber);
         outState.putString(USER_NAME, mNikOfUser.getText().toString());
         outState.putBoolean(START_STATE, start);
+        Boolean mFirstEnteredToApp = true;
         outState.putBoolean(FIRST_ENTERED_TO_APP, mFirstEnteredToApp);
         outState.putStringArrayList(MOVES_ARRAY_LIST, mMoves);
         outState.putStringArrayList(INPUTTED_NUMBER_ARRAY_LIST, mNumbers);
@@ -210,12 +182,12 @@ public class MainActivity extends AppCompatActivity {
         mTimerCount = savedInstanceState.getLong(TIMER_OF_MOVES, 0);
         mStartGameTime = savedInstanceState.getLong(START_TIME_KEY, System.currentTimeMillis());
 
-        if (start ){
-             if(mBulls.size() != 0 && !(mBulls.get(mBulls.size() - 1).equals("" + DIG))) {
-                 startTimer();
-             }else if (mBulls.size() == 0){
-                 startTimer();
-             }
+        if (start) {
+            if (mBulls.size() != 0 && !(mBulls.get(mBulls.size() - 1).equals("" + DIG))) {
+                startTimer();
+            } else if (mBulls.size() == 0) {
+                startTimer();
+            }
             startButton.setText(getResources().getString(R.string.SHOW_NUMBER));
         }
 
@@ -224,42 +196,29 @@ public class MainActivity extends AppCompatActivity {
 
     public void initializationOfView() {
 
-        mInputNumberView = (TextView) findViewById(R.id.editText);
+        mInputNumberView = findViewById(R.id.editText);
         mInputNumberView.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.BLACKGROTESKC));
-        number1 = (TextView) findViewById(R.id.buttom1);
-        number2 = (TextView) findViewById(R.id.buttom2);
-        number3 = (TextView) findViewById(R.id.buttom3);
-        number4 = (TextView) findViewById(R.id.buttom4);
-        number5 = (TextView) findViewById(R.id.buttom5);
-        number6 = (TextView) findViewById(R.id.buttom6);
-        number7 = (TextView) findViewById(R.id.buttom7);
-        number8 = (TextView) findViewById(R.id.buttom8);
-        number9 = (TextView) findViewById(R.id.buttom9);
-        number0 = (TextView) findViewById(R.id.buttom0);
-        enterButton = (TextView) findViewById(R.id.enter);
-        startButton = (TextView) findViewById(R.id.start);
-        del = (TextView) findViewById(R.id.buttomDel);
-        mTimer = (TextView) findViewById(R.id.timer_text_view);
+        TextView number1 = findViewById(R.id.buttom1);
+        TextView number2 = findViewById(R.id.buttom2);
+        TextView number3 = findViewById(R.id.buttom3);
+        TextView number4 = findViewById(R.id.buttom4);
+        TextView number5 = findViewById(R.id.buttom5);
+        TextView number6 = findViewById(R.id.buttom6);
+        TextView number7 = findViewById(R.id.buttom7);
+        TextView number8 = findViewById(R.id.buttom8);
+        TextView number9 = findViewById(R.id.buttom9);
+        TextView number0 = findViewById(R.id.buttom0);
+        TextView enterButton = findViewById(R.id.enter);
+        startButton = findViewById(R.id.start);
+        TextView del = findViewById(R.id.buttomDel);
+        mTimer = findViewById(R.id.timer_text_view);
         mTimer.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.DIGITAL_FONT));
-        mNikOfUser = (TextView) findViewById(R.id.user_name_text_view);
-        mCodOfLanguage = (TextView) findViewById(R.id.language_cod_text_view);
+        mNikOfUser = findViewById(R.id.user_name_text_view);
+        TextView mCodOfLanguage = findViewById(R.id.language_cod_text_view);
         mWinFragment = new WinFragment();
-        mFrameLayout = (FrameLayout) findViewById(R.id.win_container);
-        mOptionMenu = (ImageView) findViewById(R.id.option_menu_image_view);
-        mJoinToOnlineImage = (ImageView) findViewById(R.id.connection_to_online_image_view);
-        mToolBar = findViewById(R.id.main_toolbar);
-        setSupportActionBar(mToolBar);
-
-//        mOptionMenu.setImageBitmap(UserLoginHolder.getInstance().getmUserBitmap());
-//        mActionBar = getSupportActionBar();
-//
-//        Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserImageUrl()).inputTo(mOptionMenu);
-//
-//        Bitmap bmp = mOptionMenu.getDrawingCache();
-//        BitmapDrawable icon = new BitmapDrawable(getResources(), bmp);
-//        mActionBar.setLogo(R.drawable.ic_cow_good);
-//        mToolBar.setTitle(UserLoginHolder.getInstance().getUserName());
-
+        mFrameLayout = findViewById(R.id.win_container);
+        ImageView mOptionMenu = findViewById(R.id.option_menu_image_view);
+        mJoinToOnlineImage = findViewById(R.id.connection_to_online_image_view);
 
         View.OnClickListener clickButton = new View.OnClickListener() {
 
@@ -371,38 +330,48 @@ public class MainActivity extends AppCompatActivity {
         mCodOfLanguage.setOnClickListener(clickButton);
     }
 
+    private void initToolBar() {
+        Toolbar mToolBar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(mToolBar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(UserLoginHolder.getInstance().getUserName());
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        UserLoginHolder.getInstance().setOffline();
         saveNikName();
         if (mTimerTimer != null) {
             mTimerTimer.cancel();
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        UserLoginHolder.getInstance().setOffline();
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
-//        menu.add(0, 1, 0, RULES);
-//        menu.add(0, 2, 1, SETTING);
-//        menu.add(0, 3, 2, ABOUT_APP);
-//        menu.add(0, 4, 3, RECORDS);
-//        menu.add(0, 5, 4, ONLINE_RECORDS);
-//        menu.add(0, 6, 5, ONLINE_CARD_RECORDS);
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
-//        return super.onCreateOptionsMenu(menu);
+
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
+        UserLoginHolder.getInstance().keepUserOnline();
         switch (item.getItemId()) {
             case R.id.rules_item_menu:
-                Intent intent = new Intent(this, Rulespage.class);
+                Intent intent = new Intent(this, RulesPageActivity.class);
                 startActivity(intent);
                 break;
             case R.id.settings_item_menu:
-                Intent intent2 = new Intent(this, Setting.class);
+                Intent intent2 = new Intent(this, SettingActivity.class);
                 intent2.putExtra(Constants.MODE_STATE, mode);
-//                intent2.putExtra("nikOfUser", mNikOfUser.getText());
                 intent2.putExtra(Constants.CODED_DIGITS, DIG);
                 startActivityForResult(intent2, SETTING_REQUEST_CODE);
                 break;
@@ -410,14 +379,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent3 = new Intent(this, AboutActivity.class);
                 startActivity(intent3);
                 break;
-//            case 4:
-//                Intent intent4 = new Intent(this, Records.class);
-//                startActivity(intent4);
-//                break;
-//            case 5:
-//                Intent intent5 = new Intent(this, OnlineRecords.class);
-//                startActivity(intent5);
-//                break;
+            case R.id.login_page_item_menu:
+                Intent intentLogin = new Intent(MainActivity.this, WelcomeActivity.class);
+                startActivity(intentLogin);
+                finish();
+                break;
             case R.id.record_item_menu:
                 Intent intent6 = new Intent(this, RecordsCardActivity.class);
                 startActivity(intent6);
@@ -451,7 +417,6 @@ public class MainActivity extends AppCompatActivity {
             RecordsToNet note = new RecordsToNet();
             long mDurationGameTime = System.currentTimeMillis() - mStartGameTime;
 
-
             note.setDate(BACK_EPOCH_TIME_NOTATION - System.currentTimeMillis());
             note.setTime(mTimer.getText().toString());
             note.setNikName(mNikOfUser.getText().toString());
@@ -472,8 +437,7 @@ public class MainActivity extends AppCompatActivity {
             mWriteReadFile.writeInFile(numberOfMoves, mNikOfUser.getText().toString(), mTimer.getText().toString(), numberOfCodedDigits, this);
             mWriteReadFile.readFile(this);
             showWinFragment();
-            setWinText();
-            submitStart(); //add this now
+            submitStart();
         }
     }
 
@@ -486,20 +450,20 @@ public class MainActivity extends AppCompatActivity {
 //                    mNikOfUser.setText(data.getStringExtra("nikOfUser"));
                     createListViewWithMoves();
                     if (mode) {
-                        LinearLayout layoutMain = (LinearLayout) findViewById(R.id.mainLyaout);
+                        LinearLayout layoutMain = findViewById(R.id.mainLyaout);
                         layoutMain.setBackgroundColor(Color.BLACK);
                         mInputNumberView.setTextColor(Color.WHITE);
 
                     } else {
 
-                        LinearLayout lyaoutmain = (LinearLayout) findViewById(R.id.mainLyaout);
-                        lyaoutmain.setBackgroundColor(Color.WHITE);
+                        LinearLayout layoutMain = findViewById(R.id.mainLyaout);
+                        layoutMain.setBackgroundColor(Color.WHITE);
                         mInputNumberView.setTextColor(Color.BLACK);
                     }
                     DIG = Integer.parseInt(buf);
                     if (checkRestart != DIG && start) {
                         checkRestart = DIG;
-                        TextView start7 = (TextView) findViewById(R.id.start);
+                        TextView start7 = findViewById(R.id.start);
                         start7.setText(getResources().getString(R.string.START_GAME));
                         mInputNumberView.setText(mCodedNumber); // change this
 
@@ -509,25 +473,9 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.WE_BACK_WITHOUT_CHANGE), Toast.LENGTH_LONG).show();
                 }
-//            case 2:
-//                if (resultCode == RESULT_OK) {
-//                    mNikOfUser.setText(data.getStringExtra("nikOfUser"));
-//                    mCurrentVersionOfApp = data.getBooleanExtra("version", mCurrentVersionOfApp);
-//                    mKeepPassword = data.getBooleanExtra("keepPassword", false);
-//                    passwordOfUser = data.getStringExtra("password");
-//                    if (!mCurrentVersionOfApp) {
-//                        Toast.makeText(this, "Update your app", Toast.LENGTH_LONG).show();
-//                        finish();
-//                    }
-//                } else {
-//                    Toast.makeText(this, "You not logged", Toast.LENGTH_LONG).show();
-//                }
-//                break;
             case REQUEST_CODE_CHOICE_LANGUAGE:
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     mLanguageLocale = data.getStringExtra(Constants.CODE_OF_LANGUAGE);
-//                LanguageLocale.setLocale(mLanguageLocale, this);
-//                mCodOfLanguage.setText(getResources().getString(R.string.LANGUAGE_COD));
                 }
                 break;
             default:
@@ -553,7 +501,7 @@ public class MainActivity extends AppCompatActivity {
             createListViewWithMoves();
             mInputNumberView.setText("");
         } else {
-            TextView start2 = (TextView) findViewById(R.id.start);
+            TextView start2 = findViewById(R.id.start);
             start2.setText(getResources().getString(R.string.START_GAME));
             mInputNumberView.setText(mCodedNumber); //change this
 //            cleanListView();
@@ -564,6 +512,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startTimer() {
+        mTimer.post(new Runnable() {
+
+            @Override
+            public void run() {
+                new AnimationOfView().enteredView(mTimer);
+            }
+        });
         mStartGameTime = System.currentTimeMillis();
         mTimer.setText("");
         mTimerTimer = new Timer();
@@ -599,7 +554,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createListViewWithMoves() {
-        ListView listOfMoves = (ListView) findViewById(R.id.list_of_moves_list_view);
+        ListView listOfMoves = findViewById(R.id.list_of_moves_list_view);
         CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), mMoves, mNumbers, mBulls, mCows, mode);
         listOfMoves.setAdapter(customAdapter);
     }
@@ -612,14 +567,14 @@ public class MainActivity extends AppCompatActivity {
             editor.putString(SAVED_PASSWORD, passwordOfUser);
             editor.putBoolean(SAVED_KEEP_PASSWORD, mKeepPassword);
             editor.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
-            editor.commit();
+            editor.apply();
         } else {
             SharedPreferences.Editor editor = mSaveNikName.edit();
             editor.putString(SAVED_TEXT, "");
             editor.putString(SAVED_PASSWORD, "");
             editor.putBoolean(SAVED_KEEP_PASSWORD, false);
             editor.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
-            editor.commit();
+            editor.apply();
         }
     }
 
@@ -636,24 +591,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    public void startWelcomePage() {
-//        if (new CheckConnection().checkConnection(this)) {
-//            Intent welcomeIntent = new Intent(this, WelcomeActivity.class);
-//            welcomeIntent.putExtra("nikOfUser", mNikOfUser.getText());
-//            welcomeIntent.putExtra("version", mCurrentVersionOfApp);
-//            welcomeIntent.putExtra("password", passwordOfUser);
-//            welcomeIntent.putExtra("keepPassword", mKeepPassword);
-//            startActivityForResult(welcomeIntent, 2);
-//        } else {
-//            Toast.makeText(this, Constants.DISCONNECT_SERVER, Toast.LENGTH_LONG).show();
-//            mNikOfUser.setText("Guest");
-//            mKeepPassword = true;
-//            passwordOfUser = "1111";
-//            mCurrentVersionOfApp = true;
-//        }
-//
-//    }
-
     public void showWinFragment() {
         mFrameLayout.setVisibility(View.VISIBLE);
         new AnimationOfView().enteredView(mFrameLayout);
@@ -664,8 +601,10 @@ public class MainActivity extends AppCompatActivity {
         fM.executePendingTransactions();
         startService(new Intent(this, WinSoundService.class));
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(500);
-
+        if (v != null) {
+            v.vibrate(500);
+        }
+        mWinFragment.setWinMessage(UserLoginHolder.getInstance().getUserName(), DIG, cntMoves - 1, mTimer.getText().toString());
     }
 
     public void closeWinFragment(View view) {
@@ -675,24 +614,4 @@ public class MainActivity extends AppCompatActivity {
         mTransaction.commit();
         stopService(new Intent(this, WinSoundService.class));
     }
-
-    public void setWinText() {
-        Fragment winFragment = getFragmentManager().findFragmentById(R.id.win_container);
-        ((TextView) winFragment.getView().findViewById(R.id.win_text_view)).setText(getResources().getString(R.string.CONGRATULATIONS) + mNikOfUser.getText().toString() + getResources().getString(R.string.YOU_WIN));
-        ((TextView) winFragment.getView().findViewById(R.id.win_result_text_view)).setText(getResources().getString(R.string.YOUR_RESULT) + DIG + getResources().getString(R.string.NUMBER_OF_DIGITS) + (cntMoves - 1) + getResources().getString(R.string.WIN_TIME) + mTimer.getText());
-    }
-
-//    private class joinForOnline extends UserCheckExist {
-//
-//        @Override
-//        protected void onPostExecute(Boolean pBoolean) {
-//            super.onPostExecute(pBoolean);
-//            if (pBoolean) {
-//
-//            } else {
-//
-//            }
-//        }
-//    }
-
 }

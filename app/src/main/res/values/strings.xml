@@ -79,6 +79,8 @@
     <string name="LAST_FIVE_RECORD">Last five records</string>
     <string name="BEST_USER_RECORDS">Best user records</string>
     <string name="YOUR_PROFILE">Your profile</string>
+    <string name="ONLINE_STATUS">Online Status</string>
+    <string name="LOGIN_ITEM">Login in</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

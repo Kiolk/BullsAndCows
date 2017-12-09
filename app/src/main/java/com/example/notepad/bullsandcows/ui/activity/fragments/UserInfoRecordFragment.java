@@ -3,12 +3,15 @@ package com.example.notepad.bullsandcows.ui.activity.fragments;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +39,7 @@ public class UserInfoRecordFragment extends Fragment {
     private TextView mYourProfile;
     private ImageView mCountryFlag;
     private ImageView mUseImage;
+    private ImageView mOnlineStatus;
     private UserRecordsRecyclerViewAdapter mAdapter;
     private UserRecordsRecyclerViewAdapter mLastRecordAdapter;
     private RecyclerView mRecordRecyclerView;
@@ -53,6 +57,7 @@ public class UserInfoRecordFragment extends Fragment {
         mLastRecordsRecyclerView = view.findViewById(R.id.last_five_user_records_recycler_view);
         mUseImage = view.findViewById(R.id.user_image_info_fragment_image_view);
         mYourProfile = view.findViewById(R.id.your_profile_page_text_view);
+        mOnlineStatus = view.findViewById(R.id.online_status_fragment_image_view);
 
         return view;
     }
@@ -66,6 +71,10 @@ public class UserInfoRecordFragment extends Fragment {
         String res = Constants.EMPTY_STRING + pUserInfo.getMNumberPlayedGames();
         mPlayedGames.setText(res);
         String country = "R.drawable." + "ic_" + "belarus";
+
+        if(pUserInfo.getIsOnline()){
+            mOnlineStatus.setImageDrawable(pContext.getResources().getDrawable(R.drawable.online));
+        }
 
         if(pUserInfo.getUserName().equals(UserLoginHolder.getInstance().getUserName())){
             mYourProfile.setVisibility(View.VISIBLE);

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-class CustomAdapter extends BaseAdapter{
+public class CustomAdapter extends BaseAdapter{
 
     Context mContext;
     ArrayList<String> mMoves = new ArrayList<>();

@@ -2,6 +2,9 @@ package com.example.notepad.bullsandcows.data.holders;
 
 import android.graphics.Bitmap;
 
+import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
+
 public class UserLoginHolder {
 
     private static UserLoginHolder mUser;
@@ -14,7 +17,12 @@ public class UserLoginHolder {
 
     private Bitmap mUserBitmap;
 
+    private UserDataBase mUserInfo;
+
+    private boolean mKeepOnline;
+
     private UserLoginHolder (){
+        mKeepOnline = false;
     }
 
     public static UserLoginHolder getInstance() {
@@ -56,5 +64,37 @@ public class UserLoginHolder {
 
     public void setmUserBitmap(Bitmap mUserBitmap) {
         this.mUserBitmap = mUserBitmap;
+    }
+
+    public UserDataBase getUserInfo() {
+        return mUserInfo;
+    }
+
+    public void setUserInfo(UserDataBase mUserInfo) {
+        this.mUserInfo = mUserInfo;
+    }
+
+    public void setOffline(){
+        if(!mKeepOnline) {
+            UserDataBase userInfo = UserLoginHolder.getInstance().getUserInfo();
+            userInfo.setMLastUserVisit(System.currentTimeMillis());
+            userInfo.setIsOnline(false);
+            new UserBaseManager().updateLastUserVisit(userInfo, false);
+        }
+        mKeepOnline = false;
+    }
+
+    public void keepUserOnline(){
+        mKeepOnline = true;
+    }
+
+    public void setUserOnline() {
+        try {
+            if (mUserInfo != null) {
+                new UserBaseManager().updateLastUserVisit(mUserInfo, true);
+            }
+        }catch (Exception pE){
+            pE.getStackTrace();
+        }
     }
 }

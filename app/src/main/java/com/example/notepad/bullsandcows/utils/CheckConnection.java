@@ -9,11 +9,9 @@ import com.example.notepad.bullsandcows.R;
 
 public class CheckConnection  {
 
-//    @Override
     public static boolean checkConnection(Context pContext) {
         ConnectivityManager check = (ConnectivityManager) pContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean result = check.getActiveNetworkInfo() != null && check.getActiveNetworkInfo().isConnectedOrConnecting();
-        return result;
+        return check != null && check.getActiveNetworkInfo() != null && check.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
     public static void showToastAboutDisconnection(Context pContext){
