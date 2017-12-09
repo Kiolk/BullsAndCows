@@ -36,6 +36,12 @@ public class UserDataBase {
 
     private long mLastUserVisit;
 
+    private boolean mIsOnline;
+
+    private ArrayList<UserFriends> mUserFriends;
+
+    private ArrayList<UserMessages> mUserMessages;
+
     private ArrayList<BestUserRecords> mBestUserRecords;
 
     private ArrayList<BestUserRecords> mLastFiveUserRecords;
@@ -150,5 +156,29 @@ public class UserDataBase {
 
     public void setLastFiveUserRecords(ArrayList<BestUserRecords> pLastFiveUserRecords) {
         mLastFiveUserRecords = pLastFiveUserRecords;
+    }
+
+    public ArrayList<UserFriends> getUserFriends() {
+        return mUserFriends;
+    }
+
+    public void setUserFriends(ArrayList<UserFriends> mUserFriends) {
+        this.mUserFriends = mUserFriends;
+    }
+
+    public ArrayList<UserMessages> getUserMessages() {
+        return mUserMessages;
+    }
+
+    public void setUserMessages(ArrayList<UserMessages> mUserMessages) {
+        this.mUserMessages = mUserMessages;
+    }
+
+    public boolean isOnline() {
+        return mIsOnline;
+    }
+
+    public void setIsOnline(boolean mIsOnline) {
+        this.mIsOnline = mIsOnline;
     }
 }
