@@ -17,10 +17,10 @@ import javax.servlet.http.*;
 public class MyServlet extends HttpServlet {
 
     public static final String NAME_OF_APP = "Bulls_And_Cows";
-    public static final String VERSION_OF_APP = "1";
+    public static final String VERSION_OF_APP = "3";
     public static final String POWERED = "Yauheni Slizh";
     public static final String FEATURES = "Adds backend";
-    public static final String URL_NEW_VERSION_OF_APP = "https://github.com/Kiolk/HelloWorld/blob/master/app-GooglePlay-release.apk?raw=true";
+    public static final String URL_NEW_VERSION_OF_APP = "https://github.com/Kiolk/HelloWorld/blob/master/app-Amazon-release.apk?raw=true";
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)

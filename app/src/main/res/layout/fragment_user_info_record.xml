@@ -2,53 +2,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/LIGHT_GREY"
     tools:context="com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        style="@style/upper_bar"
+        android:gravity="start">
+
 
         <TextView
             android:id="@+id/nik_info_fragment_text_view"
+            android:layout_toEndOf="@+id/user_image_info_fragment_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/USER_NOT_EXIST" />
+            android:layout_margin="4dp"
+            android:textSize="24sp"
+            android:maxLength="20"
+            android:text="@string/USER_NOT_EXIST"/>
 
         <ImageView
             android:id="@+id/country_flag_fragment_image_view"
+            android:layout_margin="4dp"
+            android:layout_toEndOf="@+id/nik_info_fragment_text_view"
             android:layout_width="40dp"
             android:layout_height="30dp"
             android:scaleType="centerInside"
             android:contentDescription="@string/COUNTRY_FLAG"/>
 
+        <TextView
+            android:id="@+id/last_visit_fragment_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/lable_played_games_text_view"
+            android:layout_margin="4dp"
+            android:layout_alignBottom="@+id/user_image_info_fragment_image_view"
+            />
+
+        <TextView
+            android:id="@+id/lable_played_games_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_toEndOf="@+id/user_image_info_fragment_image_view"
+            android:layout_alignBottom="@+id/user_image_info_fragment_image_view"
+            android:text="@string/LAST_USER_VISIT"
+            android:labelFor="@id/last_visit_fragment_image_view"/>
+
+        <TextView
+            android:id="@+id/number_played_game_fragment_text_view"
+            android:layout_toEndOf="@+id/lable_number_played_games_text_view"
+            android:layout_margin="4dp"
+            android:layout_below="@+id/nik_info_fragment_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/lable_number_played_games_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_toEndOf="@+id/user_image_info_fragment_image_view"
+            android:layout_below="@+id/nik_info_fragment_text_view"
+            android:text="@string/TOTAL_PLAYED_GAMES"
+            />
+
+        <ImageView
+            android:id="@+id/user_image_info_fragment_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="@string/USER_NOT_EXIST"
+            android:layout_margin="4dp"/>
+
         <ImageView
             android:id="@+id/online_status_fragment_image_view"
+            android:layout_alignEnd="@+id/user_image_info_fragment_image_view"
+            android:layout_alignBottom="@+id/user_image_info_fragment_image_view"
+            android:layout_margin="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/ONLINE_STATUS"
             android:src="@drawable/offline" />
-
-        <TextView
-            android:id="@+id/last_visit_fragment_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/number_played_game_fragment_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ImageView
-            android:id="@+id/user_image_info_fragment_image_view"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:contentDescription="@string/USER_NOT_EXIST"/>
-
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/your_profile_page_text_view"
@@ -62,7 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="36sp"
-        android:padding="10dp"
+        android:padding="4dp"
         android:text="@string/BEST_USER_RECORDS"/>
 
     <include layout="@layout/titles_for_records" />
@@ -78,10 +116,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="36sp"
-        android:padding="10dp"
+        android:padding="4dp"
         android:text="@string/LAST_FIVE_RECORD"/>
 
-    <include layout="@layout/titles_for_records" />
+    <include layout="@layout/titles_for_last_five_records" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/last_five_user_records_recycler_view"

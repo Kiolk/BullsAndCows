@@ -2,105 +2,74 @@ package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.notepad.bullsandcows.ChoiceLanguageActivity;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.utils.Constants;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static int numberOfDigits = 4;
-    Button modButton;
-    private Button mChoiceLanguage;
-    static boolean mode;
-//    EditText mNikEditText;
-    //comm
+    public static final int MAX_CODED_NUMBER = 10;
+
+    private int mNumberOfDigits;
+
+    private SeekBar mCodsNumberSeekBar;
+    private TextView mCodedNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserLoginHolder.getInstance().setUserOnline();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_setting);
-        modButton = (Button) findViewById(R.id.modeButton);
-//        mNikEditText = (EditText) findViewById(R.id.set_nik_edit_text);
-        mChoiceLanguage = (Button) findViewById(R.id.choice_language_button);
 
+        UserLoginHolder.getInstance().setUserOnline();
+
+        getInfoFromIntent();
+        initSeekBar();
+        initView();
+    }
+
+    private void getInfoFromIntent() {
         Intent intent = getIntent();
-        numberOfDigits = intent.getIntExtra(Constants.CODED_DIGITS, 4);
-        mode = intent.getBooleanExtra("modeState", mode);
-        if (!mode) {
-            modButton.setText("Night mode");
-        } else {
-            modButton.setText("Daily mode");
-        }
-//        mNikEditText.setText(intent.getStringExtra("nikOfUser"));
-        TextView text = (TextView) findViewById(R.id.text);
-        text.setText("" + numberOfDigits);
+        mNumberOfDigits = intent.getIntExtra(Constants.CODED_DIGITS, 4);
+    }
 
+    private void initView() {
+        mCodedNumber = findViewById(R.id.text);
+        mCodedNumber.setText(String.valueOf(mCodsNumberSeekBar.getProgress()));
+        Button applyButton = findViewById(R.id.apply_all_changes_button);
+        applyButton.setOnClickListener(this);
+    }
 
+    private void initSeekBar() {
+        mCodsNumberSeekBar = findViewById(R.id.coded_number_seek_bar);
+        mCodsNumberSeekBar.setMax(MAX_CODED_NUMBER);
+        mCodsNumberSeekBar.setProgress(mNumberOfDigits);
 
-        View.OnClickListener clickButton = new View.OnClickListener() {
+        SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                mCodedNumber.setText(String.valueOf(progress));
+            }
 
             @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.modeButton:
-                        if (!mode) {
-                            modButton.setText("Daily mode");
-                            mode = true;
-                        } else {
-                            modButton.setText("Night mode");
-                            mode = false;
-                        }
-                        break;
-                    case R.id.choice_language_button:
-                        Intent intent2 = new Intent(SettingActivity.this, ChoiceLanguageActivity.class);
-                        startActivity(intent2);
-                        break;
-                    default:
-                        break;
-                }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         };
-        modButton.setOnClickListener(clickButton);
-        mChoiceLanguage.setOnClickListener(clickButton);
-    }
 
-
-
-    public void submitMinus(View view) {
-        if (numberOfDigits > 1) {
-            numberOfDigits -= 1;
-            TextView text = (TextView) findViewById(R.id.text);
-            text.setText("" + numberOfDigits);
-        }
-    }
-
-    public void submitPlus(View view) {
-        if (numberOfDigits < 10) {
-            numberOfDigits += 1;
-            TextView text = (TextView) findViewById(R.id.text);
-            text.setText("" + numberOfDigits);
-        }
-    }
-
-    public void submitApply(View view) {
-        TextView text = (TextView) findViewById(R.id.text);
-        String number = text.getText().toString();
-        Intent intent3 = new Intent();
-        intent3.putExtra(Constants.CODED_DIGITS, number);
-        intent3.putExtra(Constants.MODE_STATE, mode);
-//        intent3.putExtra("nikOfUser", mNikEditText.getText().toString());
-        setResult(RESULT_OK, intent3);
-        UserLoginHolder.getInstance().setOffline();
-        finish();
+        mCodsNumberSeekBar.setOnSeekBarChangeListener(listener);
     }
 
     @Override
@@ -113,5 +82,23 @@ public class SettingActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         UserLoginHolder.getInstance().setOffline();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.apply_all_changes_button:
+                String number = mCodedNumber.getText().toString();
+
+                Intent intent3 = new Intent();
+                intent3.putExtra(Constants.CODED_DIGITS, number);
+                setResult(RESULT_OK, intent3);
+
+                UserLoginHolder.getInstance().setOffline();
+                finish();
+                break;
+            default:
+                break;
+        }
     }
 }

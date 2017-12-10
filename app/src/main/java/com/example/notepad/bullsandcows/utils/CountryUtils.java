@@ -24,8 +24,16 @@ public class CountryUtils {
         while(!pCountry.equals(listOfCountry.get(i).getCountry())){
             ++i;
         }
-
         return listOfCountry.get(i).getResource();
+    }
+
+    public static int getCountryId(String pCountry){
+        ArrayList<ItemCountryData> listOfCountry = getCountryList();
+        int i = 0;
+        while(!pCountry.equals(listOfCountry.get(i).getCountry())){
+            ++i;
+        }
+        return i;
     }
 
     public static String getCountry (int pIndex){
