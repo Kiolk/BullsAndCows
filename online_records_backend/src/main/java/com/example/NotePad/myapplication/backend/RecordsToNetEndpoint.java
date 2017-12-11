@@ -40,7 +40,7 @@ public class RecordsToNetEndpoint {
 
     private static final Logger logger = Logger.getLogger(RecordsToNetEndpoint.class.getName());
 
-    private static final int DEFAULT_LIST_LIMIT = 50;
+    private static final int DEFAULT_LIST_LIMIT = 20;
 
     static {
         // Typically you would register this inside an OfyServive wrapper. See: https://code.google.com/p/objectify-appengine/wiki/BestPractices
@@ -81,7 +81,7 @@ public class RecordsToNetEndpoint {
         //
         // If your client provides the ID then you should probably use PUT instead.
         ofy().save().entity(recordsToNet).now();
-        logger.info("Created RecordsToNet." + recordsToNet.getDate());
+        logger.info("Created RecordsToNet.");
 
         return ofy().load().entity(recordsToNet).now();
     }

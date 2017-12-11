@@ -18,6 +18,8 @@ public class RecordsToNet {
 
     String mTime;
 
+    String mUserUrlPhoto;
+
 //    public RecordsToNet(Long pDate, String pNikName, String pCodes, String pMoves, String pTime) {
 //        mDate = pDate;
 //        mNikName = pNikName;
@@ -64,5 +66,13 @@ public class RecordsToNet {
 
     public void setTime(String pTime) {
         mTime = pTime;
+    }
+
+    public String getUserUrlPhoto() {
+        return mUserUrlPhoto;
+    }
+
+    public void setUserUrlPhoto(String pUserUrlPhoto) {
+        mUserUrlPhoto = pUserUrlPhoto;
     }
 }
