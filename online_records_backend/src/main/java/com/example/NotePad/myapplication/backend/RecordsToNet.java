@@ -18,14 +18,6 @@ public class RecordsToNet {
 
     String mTime;
 
-//    public RecordsToNet(Long pDate, String pNikName, String pCodes, String pMoves, String pTime) {
-//        mDate = pDate;
-//        mNikName = pNikName;
-//        mCodes = pCodes;
-//        mMoves = pMoves;
-//        mTime = pTime;
-//    }
-
     public Long getDate() {
         return mDate;
     }
