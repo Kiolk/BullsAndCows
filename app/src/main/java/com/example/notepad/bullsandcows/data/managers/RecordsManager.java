@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Message;
 
+import com.example.notepad.bullsandcows.BuildConfig;
 import com.example.notepad.bullsandcows.data.factories.RecordJsonFactory;
 import com.example.notepad.bullsandcows.data.models.RequestRecordModel;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
@@ -16,7 +17,7 @@ import java.io.IOException;
 
 public class RecordsManager implements RecordsCallbacks {
 
-    private static final String URL_RECORDS_BACKEND = "https://onlinerecordbulsandcows.appspot.com/_ah/api/";
+    private static final String URL_RECORDS_BACKEND = BuildConfig.BACKEND_USER_INFO;
     private RecordsToNetApi myApiService;
     private Thread mListRecordThread;
     private Handler mListHandler;

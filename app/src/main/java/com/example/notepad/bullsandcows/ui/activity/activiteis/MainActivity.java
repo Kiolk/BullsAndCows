@@ -440,6 +440,7 @@ public class MainActivity extends AppCompatActivity {
             note.setNikName(mNikOfUser.getText().toString());
             note.setMoves(numberOfMoves);
             note.setCodes(numberOfCodedDigits);
+            note.setMUserPhotoUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
             BestUserRecords recordForCheck = new BestUserRecords();
             recordForCheck.setCodes(note.getCodes());
             recordForCheck.setDate(note.getDate());

@@ -8,23 +8,17 @@ import com.googlecode.objectify.annotation.Index;
 public class RecordsToNet {
 
     @Id
-    Long mDate;
+    private Long mDate;
     @Index
-    String mNikName;
+    private String mNikName;
     @Index
-    String mCodes;
+    private String mCodes;
 
-    String mMoves;
+    private String mMoves;
 
-    String mTime;
+    private String mTime;
 
-//    public RecordsToNet(Long pDate, String pNikName, String pCodes, String pMoves, String pTime) {
-//        mDate = pDate;
-//        mNikName = pNikName;
-//        mCodes = pCodes;
-//        mMoves = pMoves;
-//        mTime = pTime;
-//    }
+    private String mUserPhotoUrl;
 
     public Long getDate() {
         return mDate;
@@ -64,5 +58,13 @@ public class RecordsToNet {
 
     public void setTime(String pTime) {
         mTime = pTime;
+    }
+
+    public String getmUserPhotoUrl() {
+        return mUserPhotoUrl;
+    }
+
+    public void setmUserPhotoUrl(String mUserPhotoUrl) {
+        this.mUserPhotoUrl = mUserPhotoUrl;
     }
 }
