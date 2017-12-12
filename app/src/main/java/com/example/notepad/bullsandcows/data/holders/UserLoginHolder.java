@@ -21,7 +21,7 @@ public class UserLoginHolder {
 
     private boolean mKeepOnline;
 
-    private UserLoginHolder (){
+    private UserLoginHolder() {
         mKeepOnline = false;
     }
 
@@ -74,8 +74,8 @@ public class UserLoginHolder {
         this.mUserInfo = mUserInfo;
     }
 
-    public void setOffline(){
-        if(!mKeepOnline) {
+    public void setOffline() {
+        if (!mKeepOnline) {
             UserDataBase userInfo = UserLoginHolder.getInstance().getUserInfo();
             userInfo.setMLastUserVisit(System.currentTimeMillis());
             userInfo.setIsOnline(false);
@@ -84,7 +84,7 @@ public class UserLoginHolder {
         mKeepOnline = false;
     }
 
-    public void keepUserOnline(){
+    public void keepUserOnline() {
         mKeepOnline = true;
     }
 
@@ -93,7 +93,7 @@ public class UserLoginHolder {
             if (mUserInfo != null) {
                 new UserBaseManager().updateLastUserVisit(mUserInfo, true);
             }
-        }catch (Exception pE){
+        } catch (Exception pE) {
             pE.getStackTrace();
         }
     }

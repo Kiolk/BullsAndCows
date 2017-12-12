@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -22,7 +23,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.ChoiceLanguageActivity;
 import com.example.notepad.bullsandcows.CustomAdapter;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.RecordAsyncTaskPost;
@@ -30,7 +30,9 @@ import com.example.notepad.bullsandcows.WriteReadFile;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.services.WinSoundService;
+import com.example.notepad.bullsandcows.ui.activity.fragments.EditProfileFragment;
 import com.example.notepad.bullsandcows.ui.activity.fragments.WinFragment;
+import com.example.notepad.bullsandcows.ui.activity.listeners.CloseEditProfileListener;
 import com.example.notepad.bullsandcows.utils.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
@@ -84,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView startButton;
     private TextView mTimer;
     private TextView mNikOfUser;
-    private ImageView mJoinToOnlineImage;
     private FrameLayout mFrameLayout;
+    private FrameLayout mEditInfoFrameLayout;
 
     public static int DIG = 4;
     private String mCodedNumber = "";
@@ -100,40 +102,43 @@ public class MainActivity extends AppCompatActivity {
     private String passwordOfUser;
     private Boolean mKeepPassword;
     private WinFragment mWinFragment;
+    private EditProfileFragment mEditProfileFragment;
     private FragmentTransaction mTransaction;
     private String mLanguageLocale;
     private long mStartGameTime;
+    private FragmentManager mFragmentManager;
+    private CloseEditProfileListener mCloseEditListener;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
+
         UserLoginHolder.getInstance().setUserOnline();
         setImageLoaderConfiguration();
+
         initToolBar();
-
-        if (savedInstanceState != null) {
-            mLanguageLocale = savedInstanceState.getString(Constants.CODE_OF_LANGUAGE, ENGLISH_LANGUAGE_COD);
-            LanguageLocale.setLocale(mLanguageLocale, MainActivity.this);
-        }
-
         initializationOfView();
         loadNikName();
-        Intent intent = getIntent();
-//        mNikOfUser.setText(intent.getStringExtra(Constants.NIK_NAME_OF_USER));
-//        passwordOfUser = intent.getStringExtra(Constants.PASSWORD_OF_USER);
-        mNikOfUser.setText(UserLoginHolder.getInstance().getUserName());
-        passwordOfUser = UserLoginHolder.getInstance().getPassword();
+        initEditProfileFragment();
+    }
 
-        Boolean mIsJoinToOnline = intent.getBooleanExtra(Constants.JOIN_TO_ONLINE, false);
-        mKeepPassword = intent.getBooleanExtra(Constants.KEEP_PASSWORD, false);
-
-        if (mIsJoinToOnline) {
-            mJoinToOnlineImage.setBackground(getResources().getDrawable(R.drawable.myrect_green));
-        } else {
-            mJoinToOnlineImage.setBackground(getResources().getDrawable(R.drawable.myrect_red));
-        }
+    private void initEditProfileFragment() {
+        mEditProfileFragment = new EditProfileFragment();
+        mCloseEditListener = new CloseEditProfileListener() {
+            @Override
+            public void closeFragment() {
+                mTransaction = getFragmentManager().beginTransaction();
+                mTransaction.remove(mEditProfileFragment);
+                mTransaction.commit();
+                mFragmentManager.executePendingTransactions();
+                mEditInfoFrameLayout.setVisibility(View.GONE);
+            }
+        };
+        mEditProfileFragment.setCloseListener(mCloseEditListener);
+        mFragmentManager = getFragmentManager();
     }
 
     private void setImageLoaderConfiguration() {
@@ -214,11 +219,13 @@ public class MainActivity extends AppCompatActivity {
         mTimer = findViewById(R.id.timer_text_view);
         mTimer.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.DIGITAL_FONT));
         mNikOfUser = findViewById(R.id.user_name_text_view);
+        mNikOfUser.setText(UserLoginHolder.getInstance().getUserName());
         TextView mCodOfLanguage = findViewById(R.id.language_cod_text_view);
         mWinFragment = new WinFragment();
         mFrameLayout = findViewById(R.id.win_container);
         ImageView mOptionMenu = findViewById(R.id.option_menu_image_view);
-        mJoinToOnlineImage = findViewById(R.id.connection_to_online_image_view);
+        mEditInfoFrameLayout = findViewById(R.id.for_fragments_in_main_frame_layout);
+        passwordOfUser = UserLoginHolder.getInstance().getPassword();
 
         View.OnClickListener clickButton = new View.OnClickListener() {
 
@@ -296,15 +303,15 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.start:
                         submitStart();
                         break;
-                    case R.id.connection_to_online_image_view:
-                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-                        startActivity(intent);
-                        finish();
-                        break;
-                    case R.id.language_cod_text_view:
-                        Intent intentLanguage = new Intent(MainActivity.this, ChoiceLanguageActivity.class);
-                        startActivity(intentLanguage);
-                        break;
+//                    case R.id.connection_to_online_image_view:
+//                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                        break;
+//                    case R.id.language_cod_text_view:
+//                        Intent intentLanguage = new Intent(MainActivity.this, ChoiceLanguageActivity.class);
+//                        startActivity(intentLanguage);
+//                        break;
                     default:
                         break;
 
@@ -326,7 +333,6 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(clickButton);
         mOptionMenu.setOnClickListener(clickButton);
         del.setOnClickListener(clickButton);
-        mJoinToOnlineImage.setOnClickListener(clickButton);
         mCodOfLanguage.setOnClickListener(clickButton);
     }
 
@@ -351,8 +357,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        UserLoginHolder.getInstance().setOffline();
+        if(!mEditProfileFragment.isVisible()) {
+            UserLoginHolder.getInstance().setOffline();
+            super.onBackPressed();
+        }else{
+            mCloseEditListener.closeFragment();
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -387,6 +397,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.record_item_menu:
                 Intent intent6 = new Intent(this, RecordsCardActivity.class);
                 startActivity(intent6);
+                break;
+            case R.id.edit_profile_menu:
+                mEditInfoFrameLayout.setVisibility(View.VISIBLE);
+                mTransaction = getFragmentManager().beginTransaction();
+                mTransaction.add(R.id.for_fragments_in_main_frame_layout, mEditProfileFragment);
+                mTransaction.commit();
+                mFragmentManager.executePendingTransactions();
+                mEditProfileFragment.editUserProfile();
                 break;
             default:
                 break;
@@ -597,8 +615,7 @@ public class MainActivity extends AppCompatActivity {
         mTransaction = getFragmentManager().beginTransaction();
         mTransaction.add(R.id.win_container, mWinFragment);
         mTransaction.commit();
-        FragmentManager fM = getFragmentManager();
-        fM.executePendingTransactions();
+        mFragmentManager.executePendingTransactions();
         startService(new Intent(this, WinSoundService.class));
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (v != null) {

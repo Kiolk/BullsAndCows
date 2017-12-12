@@ -81,6 +81,22 @@
     <string name="YOUR_PROFILE">Your profile</string>
     <string name="ONLINE_STATUS">Online Status</string>
     <string name="LOGIN_ITEM">Login in</string>
+    <string name="CODED_NUMBER">Coded number</string>
+    <string name="APPLY_CHANGES">Applay changes</string>
+    <string name="EDIT_PROFILE">Edit profile</string>
+    <string name="SUBMIT_PHOTO">Submit photo</string>
+    <string name="USER_PHOTO">User photo</string>
+    <string name="IMAGE_URL">Image url</string>
+    <string name="SAVE_CHANGES">Save changes</string>
+    <string name="EMAIL">Email</string>
+    <string name="SEX">Sex</string>
+    <string name="AGE">Age</string>
+    <string name="ABOUT_ITSELF">About itself</string>
+    <string name="SUCCESS_UPDATE">Success update</string>
+    <string name="WRONG_UPDATE">Wrong update</string>
+    <string name="LAST_USER_VISIT">Last visit: "</string>
+    <string name="TOTAL_PLAYED_GAMES">Total played games "</string>
+    <string name="NUMBER_GAME_BY_COD">Played games</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

@@ -22,7 +22,7 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BACKEND_APP_VERSION_URL", "\"http://bullsandcows-183521.appspot.com/hello\""
-            buildConfigField "String", "BACKEND_USER_INFO", "\"https://myjson-182914.appspot.com/_ah/api/\""
+            buildConfigField "String", "BACKEND_USER_INFO", "\"https://onlinerecordbulsandcows.appspot.com/_ah/api/\""
         }
         release {
             buildConfigField "String", "BACKEND_APP_VERSION_URL", "\"http://bullsandcowsrealese.appspot.com/hello\""
@@ -38,15 +38,15 @@ android {
     productFlavors {
         GooglePlay {
             flavorDimension "store"
-            versionName "1.0"
-            versionCode 2
+            versionName "2.0 for Goggle"
+            versionCode 3
             buildConfigField "String", "HOME_SITE", "\"http://site1.com\""
             buildConfigField "int", "BUILD_TIME", "${System.currentTimeSeconds()}"
         }
         Amazon {
             flavorDimension "store"
             versionName "2.0 for Amazon"
-            versionCode 2
+            versionCode 3
             buildConfigField "String", "HOME_SITE", "\"http://site2.com\""
             buildConfigField "int", "BUILD_TIME", "${System.currentTimeSeconds()}"
         }

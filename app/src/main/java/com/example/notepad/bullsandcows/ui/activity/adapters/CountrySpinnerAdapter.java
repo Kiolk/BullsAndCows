@@ -53,4 +53,6 @@ public class CountrySpinnerAdapter extends ArrayAdapter<ItemCountryData> {
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         return getView(position, convertView, parent);
     }
+
+
 }

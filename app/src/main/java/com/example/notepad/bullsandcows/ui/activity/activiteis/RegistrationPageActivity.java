@@ -13,15 +13,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.models.ItemCountryData;
+import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
-
-import java.util.ArrayList;
 
 import kiolk.com.github.pen.Pen;
 
@@ -183,5 +180,4 @@ public class RegistrationPageActivity extends AppCompatActivity {
     public void submitImage(View view){
         Pen.getInstance().getImageFromUrl(mImageUrl.getText().toString()).inputTo(mUserImage);
     }
-
 }

@@ -1,6 +1,5 @@
 package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
@@ -103,11 +101,11 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void getUserInformation(String pUserName) {
-        UserBaseManager userManager = new UserBaseManager(){
+        UserBaseManager userManager = new UserBaseManager() {
             @Override
             public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
                 UserDataBase user = super.getFullUserInfoCallback(pUserData);
-                mUserInfoFragment.showInfoAboutUser(RecordsCardActivity.this,user);
+                mUserInfoFragment.showInfoAboutUser(RecordsCardActivity.this, user);
 
                 return pUserData;
             }

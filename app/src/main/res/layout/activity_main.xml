@@ -1,68 +1,84 @@
-<LinearLayout android:id="@+id/mainLyaout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:tools="http://schemas.android.com/tools">
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <include layout="@layout/toolbar_main"/>
-</LinearLayout>
-
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/mainLyaout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0"
-        android:orientation="horizontal">
-        <include layout="@layout/upper_bar"/>
-    </LinearLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/numbers_relative_layout"
-        style="@style/ShadowOfBlock"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="4">
-
-        <TextView
-            android:id="@+id/timer_text_view"
-            style="@style/upper_bar"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:gravity="center"
-            android:background="@color/MING_COLOR"
-            android:textColor="@color/colorAccent"
-            android:textSize="20sp"
-            tools:text="00:23" />
-
-        <include layout="@layout/result_bar"/>
-
-    </RelativeLayout>
-
-    <LinearLayout
-        style="@style/ShadowOfBlock"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-
-        <include layout="@layout/input_number_bar"/>
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        style="@style/ShadowOfBlock"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/buttons_bar"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/toolbar_main" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0"
+            android:orientation="horizontal">
+
+            <include layout="@layout/upper_bar" />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/numbers_relative_layout"
+            style="@style/ShadowOfBlock"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4">
+
+            <TextView
+                android:id="@+id/timer_text_view"
+                style="@style/upper_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/MING_COLOR"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp"
+                tools:text="00:23" />
+
+            <include layout="@layout/result_bar" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            style="@style/ShadowOfBlock"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+
+            <include layout="@layout/input_number_bar" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/ShadowOfBlock"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <include layout="@layout/buttons_bar" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/for_fragments_in_main_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+</RelativeLayout>
+

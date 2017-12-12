@@ -44,6 +44,7 @@ public class UserBaseManager implements UserInfoCallback {
         mUserInfoThread = new Thread(mRunnableThread);
         mUserModel = new UserDataBase();
         mUserModelFromBackend = null;
+
     }
 
     @SuppressLint("HandlerLeak")
@@ -271,6 +272,27 @@ public class UserBaseManager implements UserInfoCallback {
         thread.start();
     }
 
+    public void patchNewUserInformation(final UserDataBase pUserNewInfo){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    UserDataBaseApi.Builder builder = new UserDataBaseApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                            .setRootUrl(USER_BACKEND_URL);
+                    myApiService = builder.build();
+
+                    myApiService.patch(pUserNewInfo.getUserName(), pUserNewInfo).execute();
+                    patchNewUserInfoCallback(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    patchNewUserInfoCallback(false);
+                }
+            }
+        });
+        thread.start();
+    }
+
     @Override
     public void nikFreeCallback() {
     }
@@ -287,5 +309,10 @@ public class UserBaseManager implements UserInfoCallback {
     @Override
     public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
         return pUserData;
+    }
+
+    @Override
+    public boolean patchNewUserInfoCallback(Boolean isSuccessFull) {
+        return isSuccessFull;
     }
 }

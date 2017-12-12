@@ -12,4 +12,6 @@ public interface UserInfoCallback {
 
     UserDataBase getFullUserInfoCallback(UserDataBase pUserData);
 
+    boolean patchNewUserInfoCallback(Boolean isSuccessFull);
+
 }

@@ -47,7 +47,6 @@
             android:layout_height="wrap_content"
             android:text = "@string/RECORDS_MENU"
             android:onClick="submitImage"/>
-
     </LinearLayout>
 
     <LinearLayout

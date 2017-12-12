@@ -3,15 +3,12 @@ package com.example.notepad.bullsandcows.ui.activity.fragments;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +20,11 @@ import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.ui.activity.adapters.UserRecordsRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.Converters;
+import com.example.notepad.bullsandcows.utils.CountryUtils;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import kiolk.com.github.pen.Pen;
 
@@ -49,7 +46,8 @@ public class UserInfoRecordFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_info_record, null);
-        mUserName = (TextView) view.findViewById(R.id.nik_info_fragment_text_view);
+
+        mUserName = view.findViewById(R.id.nik_info_fragment_text_view);
         mRecordRecyclerView = view.findViewById(R.id.best_user_records_recycler_view);
         mCountryFlag = view.findViewById(R.id.country_flag_fragment_image_view);
         mLastVisit = view.findViewById(R.id.last_visit_fragment_image_view);
@@ -70,7 +68,6 @@ public class UserInfoRecordFragment extends Fragment {
         mLastVisit.setText(Converters.convertDirectTimeToString(pUserInfo.getMLastUserVisit()));
         String res = Constants.EMPTY_STRING + pUserInfo.getMNumberPlayedGames();
         mPlayedGames.setText(res);
-        String country = "R.drawable." + "ic_" + "belarus";
 
         if(pUserInfo.getIsOnline()){
             mOnlineStatus.setImageDrawable(pContext.getResources().getDrawable(R.drawable.online));
@@ -81,7 +78,7 @@ public class UserInfoRecordFragment extends Fragment {
         }
 
         try {
-            int flag = pUserInfo.getMCountryFlag();    //R.drawable.ic_belarus;
+            int flag = CountryUtils.getCountryResources(pUserInfo.getCountry());    //R.drawable.ic_belarus;
             mCountryFlag.setImageDrawable(getResources().getDrawable(flag, null));
         } catch (Exception pE) {
             pE.getStackTrace();
