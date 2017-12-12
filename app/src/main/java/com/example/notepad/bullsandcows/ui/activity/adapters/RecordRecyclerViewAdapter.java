@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
 import com.example.notepad.bullsandcows.utils.Converters;
@@ -21,6 +22,8 @@ import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.util.ArrayList;
+
+import kiolk.com.github.pen.Pen;
 
 public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder> implements UserInfoRecordListener{
 
@@ -60,6 +63,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         holder.mNikNameTextView.setText(model.getNikName());
         holder.mMovesTextView.setText(model.getMoves());
         holder.mTimeTextView.setText(model.getTime());
+        Pen.getInstance().getImageFromUrl(model.getUserUrlPhoto()).inputTo(holder.mUserImage);
         holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
             @Override
             public void clickItemNik(View pView, int pPosition) {
@@ -92,7 +96,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         TextView mNikNameTextView;
         TextView mMovesTextView;
         TextView mTimeTextView;
-//        ImageView mUserImage;
+        ImageView mUserImage;
         RelativeLayout mRelativeLayout;
         UserNikClickListener.ClickUserNik mUserNikListener;
 
@@ -107,7 +111,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             mMovesTextView = itemView.findViewById(R.id.moves_card_text_view);
             mTimeTextView = itemView.findViewById(R.id.time_card_view);
             mNikNameTextView.setOnClickListener(this);
-//            mUserImage = itemView.findViewById(R.id.picture_of_user_image_view);
+            mUserImage = itemView.findViewById(R.id.picture_of_user_image_view);
         }
 
 

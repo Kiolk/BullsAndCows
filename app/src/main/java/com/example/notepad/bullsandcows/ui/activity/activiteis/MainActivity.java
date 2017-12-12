@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
         initToolBar();
         initializationOfView();
-        loadNikName();
+//        loadNikName();
         initEditProfileFragment();
     }
 
@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         UserLoginHolder.getInstance().setOffline();
-        saveNikName();
+//        saveNikName();
         if (mTimerTimer != null) {
             mTimerTimer.cancel();
         }
@@ -440,6 +440,7 @@ public class MainActivity extends AppCompatActivity {
             note.setNikName(mNikOfUser.getText().toString());
             note.setMoves(numberOfMoves);
             note.setCodes(numberOfCodedDigits);
+            note.setUserUrlPhoto(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
             BestUserRecords recordForCheck = new BestUserRecords();
             recordForCheck.setCodes(note.getCodes());
             recordForCheck.setDate(note.getDate());
@@ -577,37 +578,37 @@ public class MainActivity extends AppCompatActivity {
         listOfMoves.setAdapter(customAdapter);
     }
 
-    public void saveNikName() {
-        if (mKeepPassword) {
-            mSaveNikName = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = mSaveNikName.edit();
-            editor.putString(SAVED_TEXT, mNikOfUser.getText().toString());
-            editor.putString(SAVED_PASSWORD, passwordOfUser);
-            editor.putBoolean(SAVED_KEEP_PASSWORD, mKeepPassword);
-            editor.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
-            editor.apply();
-        } else {
-            SharedPreferences.Editor editor = mSaveNikName.edit();
-            editor.putString(SAVED_TEXT, "");
-            editor.putString(SAVED_PASSWORD, "");
-            editor.putBoolean(SAVED_KEEP_PASSWORD, false);
-            editor.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
-            editor.apply();
-        }
-    }
-
-    public void loadNikName() {
-        mSaveNikName = getPreferences(MODE_PRIVATE);
-        if (mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false)) {
-            String savedText = mSaveNikName.getString(SAVED_TEXT, DEFAULT_NIK_OF_USER);
-            mNikOfUser.setText(savedText);
-            passwordOfUser = mSaveNikName.getString(SAVED_PASSWORD, DEFAULT_PASSWORD_OF_USER);
-            mKeepPassword = mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false);
-            mLanguageLocale = mSaveNikName.getString(Constants.CODE_OF_LANGUAGE, ENGLISH_LANGUAGE_COD);
-            LanguageLocale.setLocale(mLanguageLocale, MainActivity.this);
-            initializationOfView();
-        }
-    }
+//    public void saveNikName() {
+//        if (mKeepPassword) {
+//            mSaveNikName = getPreferences(MODE_PRIVATE);
+//            SharedPreferences.Editor editor = mSaveNikName.edit();
+//            editor.putString(SAVED_TEXT, mNikOfUser.getText().toString());
+//            editor.putString(SAVED_PASSWORD, passwordOfUser);
+//            editor.putBoolean(SAVED_KEEP_PASSWORD, mKeepPassword);
+//            editor.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
+//            editor.apply();
+//        } else {
+//            SharedPreferences.Editor editor = mSaveNikName.edit();
+//            editor.putString(SAVED_TEXT, "");
+//            editor.putString(SAVED_PASSWORD, "");
+//            editor.putBoolean(SAVED_KEEP_PASSWORD, false);
+//            editor.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
+//            editor.apply();
+//        }
+//    }
+//
+//    public void loadNikName() {
+//        mSaveNikName = getPreferences(MODE_PRIVATE);
+//        if (mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false)) {
+//            String savedText = mSaveNikName.getString(SAVED_TEXT, DEFAULT_NIK_OF_USER);
+//            mNikOfUser.setText(savedText);
+//            passwordOfUser = mSaveNikName.getString(SAVED_PASSWORD, DEFAULT_PASSWORD_OF_USER);
+//            mKeepPassword = mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false);
+//            mLanguageLocale = mSaveNikName.getString(Constants.CODE_OF_LANGUAGE, ENGLISH_LANGUAGE_COD);
+//            LanguageLocale.setLocale(mLanguageLocale, MainActivity.this);
+//            initializationOfView();
+//        }
+//    }
 
     public void showWinFragment() {
         mFrameLayout.setVisibility(View.VISIBLE);

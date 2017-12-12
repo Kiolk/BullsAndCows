@@ -31,6 +31,7 @@ public class RecordJsonFactory {
                 recordModel.setNikName(record.getString("nikName"));
                 recordModel.setMoves(record.getString("moves"));
                 recordModel.setTime(record.getString("time"));
+                recordModel.setUserUrlPhoto(record.getString("userUrlPhoto"));
                 listRecords.add(i, recordModel);
             }
             return listRecords;
@@ -61,6 +62,7 @@ public class RecordJsonFactory {
                 recordModel.setNikName(record.getString("nikName"));
                 recordModel.setMoves(record.getString("moves"));
                 recordModel.setTime(record.getString("time"));
+                recordModel.setUserUrlPhoto(record.getString("userUrlPhoto"));
                 listRecords.add(i, recordModel);
             }
             pResponse.setmRecordsArray(listRecords);
