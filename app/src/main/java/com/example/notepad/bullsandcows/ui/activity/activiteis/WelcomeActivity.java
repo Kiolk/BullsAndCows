@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.NotePad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.BuildConfig;
+import com.example.notepad.bullsandcows.data.databases.DBConnector;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
@@ -72,6 +73,8 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         initView();
         checkAppActualVersion();
         loadDataFromPreferences();
+
+        DBConnector.initInstance(WelcomeActivity.this);
     }
 
     protected void checkAppActualVersion() {
