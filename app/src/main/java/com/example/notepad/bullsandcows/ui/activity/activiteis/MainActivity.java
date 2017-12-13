@@ -2,15 +2,18 @@ package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +30,8 @@ import com.example.notepad.bullsandcows.CustomAdapter;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.WriteReadFile;
+import com.example.notepad.bullsandcows.data.databases.DBOperations;
+import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.services.WinSoundService;
@@ -395,7 +400,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.record_item_menu:
-                Intent intent6 = new Intent(this, RecordsCardActivity.class);
+                Intent intent6 = new Intent(this, RecordsCardActivityFromBD.class);
                 startActivity(intent6);
                 break;
             case R.id.edit_profile_menu:
@@ -441,6 +446,29 @@ public class MainActivity extends AppCompatActivity {
             note.setMoves(numberOfMoves);
             note.setCodes(numberOfCodedDigits);
             note.setUserUrlPhoto(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
+
+            ContentValues cv = new ContentValues();
+
+            cv.put(UserRecordsDB.ID, note.getDate());
+            cv.put(UserRecordsDB.NIK_NAME, note.getNikName());
+            cv.put(UserRecordsDB.MOVES, cntMoves - 1);
+            cv.put(UserRecordsDB.CODES, DIG);
+            cv.put(UserRecordsDB.TIME, note.getTime());
+            cv.put(UserRecordsDB.USER_PHOTO_URL, note.getUserUrlPhoto());
+
+            new DBOperations().insert(UserRecordsDB.TABLE, cv);
+            Cursor cursor = new DBOperations().query();
+            Log.d("MyLogs", String.valueOf(cursor.getCount()));
+            int movesIndex = cursor.getColumnIndex(UserRecordsDB.MOVES);
+            int timeIndex = cursor.getColumnIndex(UserRecordsDB.TIME);
+            int nikIndex = cursor.getColumnIndex(UserRecordsDB.NIK_NAME);
+            while (cursor.moveToNext()){
+                Log.d("MyLogs", cursor.getString(movesIndex) +
+                        cursor.getString(nikIndex) + cursor.getString(timeIndex));
+            }
+
+            cursor.close();
+
             BestUserRecords recordForCheck = new BestUserRecords();
             recordForCheck.setCodes(note.getCodes());
             recordForCheck.setDate(note.getDate());

@@ -52,6 +52,7 @@
             android:name=".ChoiceLanguageActivity"
             android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity android:name=".ui.activity.activiteis.RecordsCardActivity" />
+        <activity android:name=".ui.activity.activiteis.RecordsCardActivityFromBD" />
     </application>
 
 </manifest>

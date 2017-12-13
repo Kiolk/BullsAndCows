@@ -1,6 +1,7 @@
 package com.example.notepad.bullsandcows.ui.activity.adapters;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
@@ -14,12 +15,15 @@ import android.widget.Toast;
 
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.databases.DBOperations;
+import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
 import com.example.notepad.bullsandcows.utils.Converters;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
+import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import java.util.ArrayList;
 
@@ -29,10 +33,12 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     private ArrayList<RecordsToNet> modelArrayList;
     private Context mContext;
+    private Cursor mCursor;
 
     protected RecordRecyclerViewAdapter(Context mContext, ArrayList<RecordsToNet> modelArrayList) {
         this.modelArrayList = modelArrayList;
         this.mContext = mContext;
+        mCursor = new DBOperations().query();
     }
 
     @Override
@@ -45,30 +51,41 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     @Override
     public void onBindViewHolder(final RecordsViewHolder holder, final int position) {
-        final RecordsToNet model = modelArrayList.get(position);
+//        final RecordsToNet model = modelArrayList.get(position);
         if (position % 2 == 0) {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_DARK));
         } else {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_LIGHT));
         }
-        if (Integer.parseInt(model.getMoves()) <= 5 && Integer.parseInt(model.getCodes()) == 4) {
-            holder.mRelativeLayout.setPadding(10, 10, 10, 10);
-            holder.mRelativeLayout.setBackgroundColor(Color.RED);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.mRelativeLayout.setElevation(24);
-            }
-        }
-        holder.mCodTextView.setText(model.getCodes());
-        holder.mDateTextView.setText(Converters.convertTimeToString(model.getDate()));
-        holder.mNikNameTextView.setText(model.getNikName());
-        holder.mMovesTextView.setText(model.getMoves());
-        holder.mTimeTextView.setText(model.getTime());
-        Pen.getInstance().getImageFromUrl(model.getUserUrlPhoto()).inputTo(holder.mUserImage);
+//        if (Integer.parseInt(model.getMoves()) <= 5 && Integer.parseInt(model.getCodes()) == 4) {
+//            holder.mRelativeLayout.setPadding(10, 10, 10, 10);
+//            holder.mRelativeLayout.setBackgroundColor(Color.RED);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                holder.mRelativeLayout.setElevation(24);
+//            }
+//        }
+//        holder.mCodTextView.setText(model.getCodes());
+        mCursor.moveToPosition(position);
+        holder.mCodTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.CODES)));
+        long date = mCursor.getLong(mCursor.getColumnIndex(UserRecordsDB.ID));
+        String dateString = Converters.convertTimeToString(date);
+//        holder.mDateTextView.setText(Converters.convertTimeToString(model.getDate()));
+        holder.mDateTextView.setText(dateString);
+//        holder.mNikNameTextView.setText(model.getNikName());
+        final String nikName = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.NIK_NAME));
+        holder.mNikNameTextView.setText(nikName);
+//        holder.mMovesTextView.setText(model.getMoves());
+        holder.mMovesTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.MOVES)));
+//        holder.mTimeTextView.setText(model.getTime());
+        holder.mTimeTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.TIME)));
+        String url = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL));
+//        Pen.getInstance().getImageFromUrl(model.getUserUrlPhoto()).inputTo(holder.mUserImage);
+        Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
         holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
             @Override
             public void clickItemNik(View pView, int pPosition) {
 //                Toast.makeText(mContext, "NikName of user: " + model.getNikName() + ". Position: " + pPosition, Toast.LENGTH_LONG).show();
-                showInfoFragment(model.getNikName());
+                showInfoFragment(nikName);
             }
         });
     }
@@ -76,7 +93,8 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     @Override
     public int getItemCount() {
-        return (null != modelArrayList ? modelArrayList.size() : 0);
+//        return (null != modelArrayList ? modelArrayList.size() : 0);
+        return mCursor.getCount();
     }
 
     @Override
