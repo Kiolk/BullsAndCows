@@ -8,14 +8,20 @@ public class VersionOfApp {
     private String mPowered;
     private String mFeatures;
     private String mUrlNewVersionOfApp;
+    private String [] mNewVersionFeatures;
+    private String mUserRecordBackend;
 
-    public VersionOfApp(String pNameOfApp, String pVersionOfApp, Long pDateOfRelease, String pPowered, String pFeatures, String pUrlNewVersionOfApp) {
+    public VersionOfApp(String pNameOfApp, String pVersionOfApp, Long pDateOfRelease,
+                        String pPowered, String pFeatures, String pUrlNewVersionOfApp,
+                        String pUserRecordBackend, String [] pNewVersionFeatures) {
         mNameOfApp = pNameOfApp;
         mVersionOfApp = pVersionOfApp;
         mDateOfRelease = pDateOfRelease;
         mPowered = pPowered;
         mFeatures = pFeatures;
         mUrlNewVersionOfApp = pUrlNewVersionOfApp;
+        mNewVersionFeatures = pNewVersionFeatures;
+        mUserRecordBackend = pUserRecordBackend;
     }
 
     public VersionOfApp(){
@@ -68,5 +74,21 @@ public class VersionOfApp {
 
     public void setFeatures(String pFeatures) {
         mFeatures = pFeatures;
+    }
+
+    public String[] getmNewVersionFeatures() {
+        return mNewVersionFeatures;
+    }
+
+    public void setmNewVersionFeatures(String[] mNewVersionFeatures) {
+        this.mNewVersionFeatures = mNewVersionFeatures;
+    }
+
+    public String getmUserRecordBackend() {
+        return mUserRecordBackend;
+    }
+
+    public void setmUserRecordBackend(String mUserRecordBackend) {
+        this.mUserRecordBackend = mUserRecordBackend;
     }
 }

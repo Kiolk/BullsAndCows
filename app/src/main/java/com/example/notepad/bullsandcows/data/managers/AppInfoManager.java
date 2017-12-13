@@ -23,7 +23,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AppInfoManager implements AppInfoCallbacks{
+public class AppInfoManager implements AppInfoCallbacks {
 
     VersionOfApp mAppInfo;
     Thread mInfoAppThread;
@@ -38,7 +38,7 @@ public class AppInfoManager implements AppInfoCallbacks{
 
     }
 
-    public AppInfoManager(){
+    public AppInfoManager() {
         mInfoAppThread = new Thread(mRunnable);
         initHandler();
     }
@@ -52,14 +52,14 @@ public class AppInfoManager implements AppInfoCallbacks{
                 super.handleMessage(msg);
                 ResponseAppInfoModel responseAppModel = (ResponseAppInfoModel) msg.obj;
 
-                if(responseAppModel.getmJsonResponse() != null){
-                    responseAppModel =  new AppInfoJsonFactory().readAppInfoFromJson(responseAppModel);
+                if (responseAppModel.getmJsonResponse() != null) {
+                    responseAppModel = new AppInfoJsonFactory().readAppInfoFromJson(responseAppModel);
                     Log.d("MyLogs", "Json:" + responseAppModel.getmJsonResponse()
                             + " Name of app:" + responseAppModel.getmResponseInfoApp().getNameOfApp()
                             + " Version of App: " + responseAppModel.getmResponseInfoApp().getVersionOfApp());
                     getInfoAppCallback(responseAppModel.getmResponseInfoApp());
 
-                }else {
+                } else {
 
                 }
             }
@@ -103,13 +103,13 @@ public class AppInfoManager implements AppInfoCallbacks{
                 }
                 reader.close();
 
-                if (respondCod == HttpURLConnection.HTTP_OK)   {
+                if (respondCod == HttpURLConnection.HTTP_OK) {
                     responseAppModel.setmJsonResponse(response.toString());
                 }
             } catch (IOException pE) {
                 pE.printStackTrace();
                 responseAppModel.setmException(pE);
-            }finally {
+            } finally {
                 Message msg = new Message();
                 msg.obj = responseAppModel;
                 mInfoHandler.sendMessage(msg);
@@ -122,7 +122,7 @@ public class AppInfoManager implements AppInfoCallbacks{
     }
 
 
-    public String buildPostDataString(Map<String, String> params) throws UnsupportedEncodingException {
+    private String buildPostDataString(Map<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
         for (Map.Entry<String, String> entry : params.entrySet()) {

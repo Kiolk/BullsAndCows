@@ -10,7 +10,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.NotePad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
+import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.utils.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 

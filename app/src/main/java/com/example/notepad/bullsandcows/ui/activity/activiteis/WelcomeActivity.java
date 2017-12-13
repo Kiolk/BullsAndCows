@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.NotePad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.BuildConfig;
+import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
@@ -63,13 +64,14 @@ public class WelcomeActivity extends AppCompatActivity {
         loadDataFromPreferences();
     }
 
-    private void checkAppActualVersion() {
+    protected void checkAppActualVersion() {
         if (CheckConnection.checkConnection(WelcomeActivity.this)) {
 //            new CheckingVersionOfApp().execute(BuildConfig.VERSION_NAME);
             AppInfoManager appManager = new AppInfoManager(BuildConfig.VERSION_NAME) {
                 @Override
                 public VersionOfApp getInfoAppCallback(VersionOfApp versionOfApp) {
                     mVersionOfApp = super.getInfoAppCallback(versionOfApp);
+                    AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
                     String newVersion = mVersionOfApp.getVersionOfApp();
 
                     checkAppVersion(Integer.parseInt(newVersion));
