@@ -1,10 +1,13 @@
 package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,13 +29,14 @@ import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.ui.activity.fragments.UpdateAppFragment;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragment.UpdateAppListener {
 
     public static final String IS_CHECKED_KEEP_PASSWORD = "isCheckedKeepPassword";
     public static final String DEFAULT_PASSWORD_FOR_GUEST = "1111";
@@ -51,12 +56,17 @@ public class WelcomeActivity extends AppCompatActivity {
     String mUrlNewVersionOfApp = "";
     String mNameNewApp = "";
     Boolean mIsJoinToOnline;
+    private UpdateAppFragment mUpdateFragment;
+    private FragmentTransaction mFragmentTransaction;
+    private FragmentManager mFragmentManager;
+    private FrameLayout mUpdateFrame;
 
     SharedPreferences mWelcomePreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_welcome);
         UserLoginHolder.getInstance().setUserOnline();
         initView();
@@ -72,6 +82,10 @@ public class WelcomeActivity extends AppCompatActivity {
                 public VersionOfApp getInfoAppCallback(VersionOfApp versionOfApp) {
                     mVersionOfApp = super.getInfoAppCallback(versionOfApp);
                     AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
+                    String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
+                    if(!version.equals(String.valueOf(BuildConfig.VERSION_CODE))){
+                        showUpdateAppFragment();
+                    }
                     String newVersion = mVersionOfApp.getVersionOfApp();
 
                     checkAppVersion(Integer.parseInt(newVersion));
@@ -97,6 +111,9 @@ public class WelcomeActivity extends AppCompatActivity {
         mVisitCheckVersion.setOnClickListener(mClickButton);
         mRegistrationButton.setOnClickListener(mClickButton);
         mLoginButton.setOnClickListener(mClickButton);
+
+        mUpdateFragment = new UpdateAppFragment();
+        mUpdateFrame = findViewById(R.id.for_update_fragment_frame_layout);
     }
 
     View.OnClickListener mClickButton = new View.OnClickListener() {
@@ -409,5 +426,27 @@ public class WelcomeActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         UserLoginHolder.getInstance().keepUserOnline();
+    }
+
+    public void showUpdateAppFragment(){
+        mUpdateFrame.setVisibility(View.VISIBLE);
+        mFragmentTransaction = getFragmentManager().beginTransaction();
+        mFragmentTransaction.add(R.id.for_update_fragment_frame_layout, mUpdateFragment);
+        mFragmentTransaction.commitAllowingStateLoss();
+        mFragmentManager = getFragmentManager();
+        mFragmentManager.executePendingTransactions();
+    }
+
+    private void closeUpdateAppFragment(){
+        mUpdateFrame.setVisibility(View.GONE);
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.remove(mUpdateFragment);
+        mFragmentTransaction.commit();
+        mFragmentManager.executePendingTransactions();
+    }
+
+    @Override
+    public void closeUpdateFragment() {
+        closeUpdateAppFragment();
     }
 }
