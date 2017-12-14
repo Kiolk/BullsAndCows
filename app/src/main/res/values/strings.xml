@@ -101,6 +101,8 @@
     <string name="UPDATE_RESULT_TO_ONLINE">Update result to online</string>
 <string name="ONLINE_RECORDS_WITH_PAGINATION">Records with pagination</string>
     <string name="NEW_VERSION_TITLE">Avaliable new version:</string>
+    <string name="APP_IS_OLD_VERTION">Your app is old version</string>
+    <string name="PRESS_FOR_UPGRADE">Press for upgrade yor app for version</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

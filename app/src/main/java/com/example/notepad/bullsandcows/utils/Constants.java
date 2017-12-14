@@ -20,6 +20,6 @@ public class Constants {
     public static final String REGISTRATION_PASSWORD = "password";
     public static final String EMPTY_STRING = "";
     public static final long BACK_EPOCH_TIME_NOTATION = 3008586288000L;
-
-
+    public static final long INNER_FILE_CACHE_SIZE_MB = 10L;
+    public static final String URL_SITE_OF_PROJECT = "https://github.com/Kiolk/BullsAndCows";
 }

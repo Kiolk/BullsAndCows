@@ -5,10 +5,8 @@ import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,15 +51,10 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import kiolk.com.github.pen.Pen;
-
 import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final String SAVED_TEXT = "saved-text";
-    public static final String SAVED_PASSWORD = "Saved_password";
-    public static final String SAVED_KEEP_PASSWORD = "Saved_keep_password";
     public static final String INPUT_NUMBER = "InputNumber";
     public static final String DEFAULT_VLUE_FOR_STRING = "Error";
     public static final String CODED_NUMBER = "codedNumber";
@@ -74,14 +66,12 @@ public class MainActivity extends AppCompatActivity {
     public static final String NUMBER_OF_COWS_ARRAY_LIST = "numberOfCowsArrayList";
     public static final String COUNT_OF_MOVES = "countOfMoves";
     public static final String TIMER_OF_MOVES = "timerOfMoves";
-    public static final String FIRST_ENTERED_TO_APP = "firstEnteredToApp";
     public static final String NUMBER_OF_CODED_DIGITS = "numberOfCodedDigits";
     public static final int REQUEST_CODE_CHOICE_LANGUAGE = 5;
     public static final int SETTING_REQUEST_CODE = 1;
-    public static final String DEFAULT_NIK_OF_USER = "Guest";
-    public static final String DEFAULT_PASSWORD_OF_USER = "1111";
-    public static final String ENGLISH_LANGUAGE_COD = "en";
     public static final String START_TIME_KEY = "StartTime";
+    public static final int VIBRATION_MILLISECONDS = 500;
+    public static final String TIMESTAMP_MM_SS = "mm:ss";
 
     private ArrayList<String> mMoves = new ArrayList<>();
     private ArrayList<String> mNumbers = new ArrayList<>();
@@ -100,13 +90,12 @@ public class MainActivity extends AppCompatActivity {
     private int cntMoves = 1;
     private boolean start = false;
     private boolean mode;
-    private SharedPreferences mSaveNikName;
     private int checkRestart = DIG;
     private long mTimerCount = 0;
     private Timer mTimerTimer = null;
     private WriteReadFile mWriteReadFile = new WriteReadFile();
-    private String passwordOfUser;
-    private Boolean mKeepPassword;
+    //    private String passwordOfUser;
+//    private Boolean mKeepPassword;
     private WinFragment mWinFragment;
     private EditProfileFragment mEditProfileFragment;
     private FragmentTransaction mTransaction;
@@ -123,11 +112,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         UserLoginHolder.getInstance().setUserOnline();
-        setImageLoaderConfiguration();
 
         initToolBar();
         initializationOfView();
-//        loadNikName();
         initEditProfileFragment();
     }
 
@@ -147,13 +134,6 @@ public class MainActivity extends AppCompatActivity {
         mFragmentManager = getFragmentManager();
     }
 
-    private void setImageLoaderConfiguration() {
-        Pen.getInstance().setLoaderSettings()
-                .setSavingStrategy(Pen.SAVE_FULL_IMAGE_STRATEGY)
-                .setTypeOfCache(Pen.INNER_FILE_CACHE)
-                .setSizeInnerFileCache(10L);
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -161,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(CODED_NUMBER, mCodedNumber);
         outState.putString(USER_NAME, mNikOfUser.getText().toString());
         outState.putBoolean(START_STATE, start);
-        Boolean mFirstEnteredToApp = true;
-        outState.putBoolean(FIRST_ENTERED_TO_APP, mFirstEnteredToApp);
         outState.putStringArrayList(MOVES_ARRAY_LIST, mMoves);
         outState.putStringArrayList(INPUTTED_NUMBER_ARRAY_LIST, mNumbers);
         outState.putStringArrayList(NUMBER_OF_BULLS_ARRAY_LIST, mBulls);
@@ -206,9 +184,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initializationOfView() {
-
-        mInputNumberView = findViewById(R.id.editText);
-        mInputNumberView.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.BLACKGROTESKC));
         TextView number1 = findViewById(R.id.buttom1);
         TextView number2 = findViewById(R.id.buttom2);
         TextView number3 = findViewById(R.id.buttom3);
@@ -220,6 +195,9 @@ public class MainActivity extends AppCompatActivity {
         TextView number9 = findViewById(R.id.buttom9);
         TextView number0 = findViewById(R.id.buttom0);
         TextView enterButton = findViewById(R.id.enter);
+
+        mInputNumberView = findViewById(R.id.editText);
+        mInputNumberView.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.BLACKGROTESKC));
         startButton = findViewById(R.id.start);
         TextView del = findViewById(R.id.buttomDel);
         mTimer = findViewById(R.id.timer_text_view);
@@ -231,115 +209,22 @@ public class MainActivity extends AppCompatActivity {
         mFrameLayout = findViewById(R.id.win_container);
         ImageView mOptionMenu = findViewById(R.id.option_menu_image_view);
         mEditInfoFrameLayout = findViewById(R.id.for_fragments_in_main_frame_layout);
-        passwordOfUser = UserLoginHolder.getInstance().getPassword();
 
-        View.OnClickListener clickButton = new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                String buf;
-                buf = mInputNumberView.getText().toString();
-                switch (view.getId()) {
-                    case R.id.option_menu_image_view:
-                        openOptionsMenu();
-                        break;
-                    case R.id.buttom1:
-                        buf += 1;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom2:
-                        buf += 2;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom3:
-                        buf += 3;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom4:
-                        buf += 4;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom5:
-                        buf += 5;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom6:
-                        buf += 6;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom7:
-                        buf += 7;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom8:
-                        buf += 8;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom9:
-                        buf += 9;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttom0:
-                        buf += 0;
-                        mInputNumberView.setText(buf);
-                        break;
-                    case R.id.buttomDel:
-                        if (buf.length() > 0) {
-                            buf = buf.substring(0, buf.length() - 1);
-                            mInputNumberView.setText(buf);
-                        }
-                        break;
-                    case R.id.enter:
-                        if (start) {
-                            if (new RandomNumberGenerator().checkNumberForCorrectInput(mInputNumberView.getText().toString(), DIG)) {
-                                getNumber();
-                                checkNumberForWin();
-                                mInputNumberView.setText("");
-                            } else {
-                                Context context = getApplicationContext();
-                                String message = getResources().getString(R.string.ENTER_NUMBER) + DIG + getResources().getString(R.string.TOAST_MESSAGE_WITH_RULE);
-                                int duration = Toast.LENGTH_LONG;
-                                Toast toast = Toast.makeText(context, message, duration);
-                                toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                                toast.show();
-                            }
-                            createListViewWithMoves();
-                        }
-                        break;
-                    case R.id.start:
-                        submitStart();
-                        break;
-//                    case R.id.connection_to_online_image_view:
-//                        Intent intent = new Intent(MainActivity.this, WelcomeActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                        break;
-//                    case R.id.language_cod_text_view:
-//                        Intent intentLanguage = new Intent(MainActivity.this, ChoiceLanguageActivity.class);
-//                        startActivity(intentLanguage);
-//                        break;
-                    default:
-                        break;
-
-                }
-            }
-        };
-
-        number1.setOnClickListener(clickButton);
-        number2.setOnClickListener(clickButton);
-        number3.setOnClickListener(clickButton);
-        number4.setOnClickListener(clickButton);
-        number5.setOnClickListener(clickButton);
-        number6.setOnClickListener(clickButton);
-        number7.setOnClickListener(clickButton);
-        number8.setOnClickListener(clickButton);
-        number9.setOnClickListener(clickButton);
-        number0.setOnClickListener(clickButton);
-        enterButton.setOnClickListener(clickButton);
-        startButton.setOnClickListener(clickButton);
-        mOptionMenu.setOnClickListener(clickButton);
-        del.setOnClickListener(clickButton);
-        mCodOfLanguage.setOnClickListener(clickButton);
+        number1.setOnClickListener(this);
+        number2.setOnClickListener(this);
+        number3.setOnClickListener(this);
+        number4.setOnClickListener(this);
+        number5.setOnClickListener(this);
+        number6.setOnClickListener(this);
+        number7.setOnClickListener(this);
+        number8.setOnClickListener(this);
+        number9.setOnClickListener(this);
+        number0.setOnClickListener(this);
+        enterButton.setOnClickListener(this);
+        startButton.setOnClickListener(this);
+        mOptionMenu.setOnClickListener(this);
+        del.setOnClickListener(this);
+        mCodOfLanguage.setOnClickListener(this);
     }
 
     private void initToolBar() {
@@ -380,41 +265,38 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         UserLoginHolder.getInstance().keepUserOnline();
+        Intent intent;
+
         switch (item.getItemId()) {
             case R.id.rules_item_menu:
-                Intent intent = new Intent(this, RulesPageActivity.class);
+                intent = new Intent(this, RulesPageActivity.class);
                 startActivity(intent);
                 break;
             case R.id.settings_item_menu:
-                Intent intent2 = new Intent(this, SettingActivity.class);
-                intent2.putExtra(Constants.MODE_STATE, mode);
-                intent2.putExtra(Constants.CODED_DIGITS, DIG);
-                startActivityForResult(intent2, SETTING_REQUEST_CODE);
+                intent = new Intent(this, SettingActivity.class);
+                intent.putExtra(Constants.MODE_STATE, mode);
+                intent.putExtra(Constants.CODED_DIGITS, DIG);
+                startActivityForResult(intent, SETTING_REQUEST_CODE);
                 break;
             case R.id.about_item_menu:
-                Intent intent3 = new Intent(this, AboutActivity.class);
-                startActivity(intent3);
+                intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
                 break;
             case R.id.login_page_item_menu:
-                Intent intentLogin = new Intent(MainActivity.this, WelcomeActivity.class);
-                startActivity(intentLogin);
+                intent = new Intent(MainActivity.this, WelcomeActivity.class);
+                startActivity(intent);
                 finish();
                 break;
             case R.id.record_item_menu:
-                Intent intent6 = new Intent(this, RecordsCardActivityFromBD.class);
-                startActivity(intent6);
+                intent = new Intent(this, RecordsCardActivityFromBD.class);
+                startActivity(intent);
                 break;
             case R.id.edit_profile_menu:
-                mEditInfoFrameLayout.setVisibility(View.VISIBLE);
-                mTransaction = getFragmentManager().beginTransaction();
-                mTransaction.add(R.id.for_fragments_in_main_frame_layout, mEditProfileFragment);
-                mTransaction.commit();
-                mFragmentManager.executePendingTransactions();
-                mEditProfileFragment.editUserProfile();
+                showEditProfileFragment();
                 break;
             case R.id.online_records_with_pagination_menu:
-                Intent intent7 = new Intent(this, RecordsCardActivity.class);
-                startActivity(intent7);
+                intent = new Intent(this, RecordsCardActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
@@ -423,15 +305,21 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static void main(String[] argc) {
+    private void showEditProfileFragment() {
+        mEditInfoFrameLayout.setVisibility(View.VISIBLE);
+        mTransaction = getFragmentManager().beginTransaction();
+        mTransaction.add(R.id.for_fragments_in_main_frame_layout, mEditProfileFragment);
+        mTransaction.commit();
+        mFragmentManager.executePendingTransactions();
+        mEditProfileFragment.editUserProfile();
     }
 
     public void getNumber() {
         String inputNumber = mInputNumberView.getText().toString();
         mNumbers.add(inputNumber);
-        mMoves.add("" + cntMoves);
-        mBulls.add("" + new RandomNumberGenerator().checkNumberOfBulls(mCodedNumber, inputNumber));
-        mCows.add("" + new RandomNumberGenerator().checkNumberOfCows(mCodedNumber, inputNumber));
+        mMoves.add(String.valueOf(cntMoves));
+        mBulls.add(String.valueOf(new RandomNumberGenerator().checkNumberOfBulls(mCodedNumber, inputNumber)));
+        mCows.add(String.valueOf(new RandomNumberGenerator().checkNumberOfCows(mCodedNumber, inputNumber)));
         ++cntMoves;
     }
 
@@ -440,10 +328,10 @@ public class MainActivity extends AppCompatActivity {
         if (numberOfBulls == DIG) {
             mInputNumberView.setText(R.string.WON_MESSAGE);
             mTimerTimer.cancel();
-            String numberOfMoves = "" + (cntMoves - 1);
-            String numberOfCodedDigits = "" + DIG;
+
+            String numberOfMoves = String.valueOf(cntMoves - 1);
+            String numberOfCodedDigits = String.valueOf(DIG);
             RecordsToNet note = new RecordsToNet();
-            long mDurationGameTime = System.currentTimeMillis() - mStartGameTime;
 
             note.setDate(BACK_EPOCH_TIME_NOTATION - System.currentTimeMillis());
             note.setTime(mTimer.getText().toString());
@@ -507,19 +395,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     String buf = data.getStringExtra(Constants.CODED_DIGITS);
                     mode = data.getBooleanExtra(Constants.MODE_STATE, mode);
-//                    mNikOfUser.setText(data.getStringExtra("nikOfUser"));
                     createListViewWithMoves();
-                    if (mode) {
-                        LinearLayout layoutMain = findViewById(R.id.mainLyaout);
-                        layoutMain.setBackgroundColor(Color.BLACK);
-                        mInputNumberView.setTextColor(Color.WHITE);
-
-                    } else {
-
-                        LinearLayout layoutMain = findViewById(R.id.mainLyaout);
-                        layoutMain.setBackgroundColor(Color.WHITE);
-                        mInputNumberView.setTextColor(Color.BLACK);
-                    }
                     DIG = Integer.parseInt(buf);
                     if (checkRestart != DIG && start) {
                         checkRestart = DIG;
@@ -559,13 +435,12 @@ public class MainActivity extends AppCompatActivity {
 
             cleanListView();
             createListViewWithMoves();
-            mInputNumberView.setText("");
+            mInputNumberView.setText(Constants.EMPTY_STRING);
         } else {
             TextView start2 = findViewById(R.id.start);
             start2.setText(getResources().getString(R.string.START_GAME));
-            mInputNumberView.setText(mCodedNumber); //change this
-//            cleanListView();
-            mCodedNumber = "";
+            mInputNumberView.setText(mCodedNumber);
+            mCodedNumber = Constants.EMPTY_STRING;
             start = false;
             mTimerTimer.cancel();
         }
@@ -580,8 +455,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mStartGameTime = System.currentTimeMillis();
-        mTimer.setText("");
+        mTimer.setText(Constants.EMPTY_STRING);
         mTimerTimer = new Timer();
+
         mTimerTimer.scheduleAtFixedRate(new TimerTask() {
 
             @Override
@@ -591,9 +467,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Date pDate = new Date(mTimerCount * 1000);
-                        DateFormat format = new SimpleDateFormat("mm:ss");
+                        DateFormat format = new SimpleDateFormat(TIMESTAMP_MM_SS);
                         String formatedTime = format.format(pDate);
-                        mTimer.setText("" + formatedTime);
+                        mTimer.setText(String.valueOf(formatedTime));
                         ++mTimerCount;
                     }
                 });
@@ -619,58 +495,112 @@ public class MainActivity extends AppCompatActivity {
         listOfMoves.setAdapter(customAdapter);
     }
 
-//    public void saveNikName() {
-//        if (mKeepPassword) {
-//            mSaveNikName = getPreferences(MODE_PRIVATE);
-//            SharedPreferences.Editor editor = mSaveNikName.edit();
-//            editor.putString(SAVED_TEXT, mNikOfUser.getText().toString());
-//            editor.putString(SAVED_PASSWORD, passwordOfUser);
-//            editor.putBoolean(SAVED_KEEP_PASSWORD, mKeepPassword);
-//            editor.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
-//            editor.apply();
-//        } else {
-//            SharedPreferences.Editor editor = mSaveNikName.edit();
-//            editor.putString(SAVED_TEXT, "");
-//            editor.putString(SAVED_PASSWORD, "");
-//            editor.putBoolean(SAVED_KEEP_PASSWORD, false);
-//            editor.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
-//            editor.apply();
-//        }
-//    }
-//
-//    public void loadNikName() {
-//        mSaveNikName = getPreferences(MODE_PRIVATE);
-//        if (mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false)) {
-//            String savedText = mSaveNikName.getString(SAVED_TEXT, DEFAULT_NIK_OF_USER);
-//            mNikOfUser.setText(savedText);
-//            passwordOfUser = mSaveNikName.getString(SAVED_PASSWORD, DEFAULT_PASSWORD_OF_USER);
-//            mKeepPassword = mSaveNikName.getBoolean(SAVED_KEEP_PASSWORD, false);
-//            mLanguageLocale = mSaveNikName.getString(Constants.CODE_OF_LANGUAGE, ENGLISH_LANGUAGE_COD);
-//            LanguageLocale.setLocale(mLanguageLocale, MainActivity.this);
-//            initializationOfView();
-//        }
-//    }
-
     public void showWinFragment() {
         mFrameLayout.setVisibility(View.VISIBLE);
         new AnimationOfView().enteredView(mFrameLayout);
+
         mTransaction = getFragmentManager().beginTransaction();
         mTransaction.add(R.id.win_container, mWinFragment);
         mTransaction.commit();
         mFragmentManager.executePendingTransactions();
+
         startService(new Intent(this, WinSoundService.class));
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         if (v != null) {
-            v.vibrate(500);
+            v.vibrate(VIBRATION_MILLISECONDS);
         }
+
         mWinFragment.setWinMessage(UserLoginHolder.getInstance().getUserName(), DIG, cntMoves - 1, mTimer.getText().toString());
     }
 
     public void closeWinFragment(View view) {
         mFrameLayout.setVisibility(View.INVISIBLE);
+
         mTransaction = getFragmentManager().beginTransaction();
         mTransaction.remove(mWinFragment);
         mTransaction.commit();
+
         stopService(new Intent(this, WinSoundService.class));
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        String buf;
+        buf = mInputNumberView.getText().toString();
+        switch (v.getId()) {
+            case R.id.option_menu_image_view:
+                openOptionsMenu();
+                break;
+            case R.id.buttom1:
+                buf += 1;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom2:
+                buf += 2;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom3:
+                buf += 3;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom4:
+                buf += 4;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom5:
+                buf += 5;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom6:
+                buf += 6;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom7:
+                buf += 7;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom8:
+                buf += 8;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom9:
+                buf += 9;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttom0:
+                buf += 0;
+                mInputNumberView.setText(buf);
+                break;
+            case R.id.buttomDel:
+                if (buf.length() > 0) {
+                    buf = buf.substring(0, buf.length() - 1);
+                    mInputNumberView.setText(buf);
+                }
+                break;
+            case R.id.enter:
+                if (start) {
+                    if (new RandomNumberGenerator().checkNumberForCorrectInput(mInputNumberView.getText().toString(), DIG)) {
+                        getNumber();
+                        checkNumberForWin();
+                        mInputNumberView.setText("");
+                    } else {
+                        Context context = getApplicationContext();
+                        String message = getResources().getString(R.string.ENTER_NUMBER) + DIG + getResources().getString(R.string.TOAST_MESSAGE_WITH_RULE);
+                        int duration = Toast.LENGTH_LONG;
+                        Toast toast = Toast.makeText(context, message, duration);
+                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+                        toast.show();
+                    }
+                    createListViewWithMoves();
+                }
+                break;
+            case R.id.start:
+                submitStart();
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -24,12 +24,11 @@ import android.widget.Toast;
 
 import com.example.NotePad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.BuildConfig;
-import com.example.notepad.bullsandcows.data.databases.DBConnector;
+import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
-import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UpdateAppFragment;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
@@ -54,8 +53,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     Button mRegistrationButton;
     CheckBox mCheckBox;
     String mNewVersion = "";
-    String mUrlNewVersionOfApp = "";
-    String mNameNewApp = "";
     Boolean mIsJoinToOnline;
     private UpdateAppFragment mUpdateFragment;
     private FragmentTransaction mFragmentTransaction;
@@ -73,8 +70,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         initView();
         checkAppActualVersion();
         loadDataFromPreferences();
-
-        DBConnector.initInstance(WelcomeActivity.this);
     }
 
     protected void checkAppActualVersion() {
@@ -86,7 +81,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                     mVersionOfApp = super.getInfoAppCallback(versionOfApp);
                     AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
                     String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
-                    if(!version.equals(String.valueOf(BuildConfig.VERSION_CODE))){
+                    if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
                         showUpdateAppFragment();
                     }
                     String newVersion = mVersionOfApp.getVersionOfApp();
@@ -127,7 +122,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                 case R.id.check_version_app_button:
                     if (CheckConnection.checkConnection(WelcomeActivity.this)) {
                         if (mCurrentVersionAppWelcome) {
-                            Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Kiolk/BullsAndCows"));
+                            Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_SITE_OF_PROJECT));
                             startActivity(intent1);
                         } else {
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(WelcomeActivity.this).
@@ -220,7 +215,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(UserLoginHolder.getInstance().getUserInfo() != null) {
+        if (UserLoginHolder.getInstance().getUserInfo() != null) {
             UserLoginHolder.getInstance().setOffline();
         }
         saveDataInPreferences();
@@ -241,20 +236,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         }
     }
 
-   /* public void checkVersionOfApp() {
-        if (mCurrentVersionAppWelcome) {
-            mInfoVersionTextView.setText("Your app in actual version");
-//            new TypeWriter(WelcomeActivity.this).animateText(mInfoVersionTextView.getText());
-            mVisitCheckVersion.setText(R.string.VISIT_SITE);
-            mVisitCheckVersion.setEnabled(true);
-            mVisitCheckVersion.setTextColor(Color.WHITE);
-        } else {
-            mInfoVersionTextView.setText("Your app is old version");
-            mVisitCheckVersion.setText("Press for upgrade yor app for version " + mNewVersion);
-            mVisitCheckVersion.setTextColor(Color.RED);
-        }
-    }*/
-
     public void checkAppVersion(int pVersionApp) {
         if (pVersionApp == BuildConfig.VERSION_CODE) {
             mInfoVersionTextView.setText("Your app in actual version");
@@ -264,129 +245,12 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
             mVisitCheckVersion.setTextColor(Color.WHITE);
             mCurrentVersionAppWelcome = true;
         } else {
-            mInfoVersionTextView.setText("Your app is old version");
-            mVisitCheckVersion.setText("Press for upgrade yor app for version " + mNewVersion);
+            mInfoVersionTextView.setText(R.string.APP_IS_OLD_VERTION);
+            mVisitCheckVersion.setText(getString(R.string.PRESS_FOR_UPGRADE));
             mVisitCheckVersion.setTextColor(Color.RED);
             mCurrentVersionAppWelcome = false;
         }
     }
-
-
- /*   class CheckingVersionOfApp extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String pS) {
-            super.onPostExecute(pS);
-            try {
-                JSONObject object = new JSONObject(pS);
-                String appActualVersion = object.getString("mVersionOfApp");
-                mNewVersion = appActualVersion;
-                mUrlNewVersionOfApp = object.getString("mUrlNewVersionOfApp");
-                mNameNewApp = object.getString("mNameOfApp");
-                String versionOfAnnOnPhone = "" + BuildConfig.VERSION_CODE;
-                if (!(appActualVersion.equalsIgnoreCase(versionOfAnnOnPhone))) {
-
-                    mCurrentVersionAppWelcome = false;
-                }
-                checkVersionOfApp();
-            } catch (JSONException pE) {
-                pE.printStackTrace();
-            }
-
-//            Toast.makeText(WelcomeActivity.class, pS, Toast.LENGTH_LONG).show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-// mContext = pPairs[0].first;
-            String name = params[0];
-            try {
-
-                URL url = new URL(BuildConfig.BACKEND_APP_VERSION_URL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                httpURLConnection.setRequestMethod("POST");
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.setDoOutput(true);
-
-                Map<String, String> nameValuePair = new HashMap<>();
-                nameValuePair.put("name", name);
-                String postParams = buildPostDataString(nameValuePair);
-
-                OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-                bufferedWriter.write(postParams);
-                bufferedWriter.flush();
-                bufferedWriter.close();
-                outputStream.close();
-                httpURLConnection.connect();
-
-// Read response
-                int respondCod = httpURLConnection.getResponseCode();
-                StringBuilder response = new StringBuilder();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-                if (respondCod == HttpURLConnection.HTTP_OK) {
-                    return response.toString();
-                }
-                return "Error" + respondCod + httpURLConnection.getResponseMessage();
-
-            } catch (IOException pE) {
-                pE.printStackTrace();
-            }
-            return null;
-        }
-
-        public String buildPostDataString(Map<String, String> params) throws UnsupportedEncodingException {
-            StringBuilder result = new StringBuilder();
-            boolean first = true;
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                if (first) {
-                    first = false;
-                } else {
-                    result.append("&");
-                }
-                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-                result.append("=");
-                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-            }
-            return result.toString();
-        }
-    }
-
-    private class CheckUserLoginAndPassword extends UserCheckExist {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Boolean doInBackground(String... pStrings) {
-            return super.doInBackground(pStrings);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean pBoolean) {
-            super.onPostExecute(pBoolean);
-            if (pBoolean == true) {
-                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-                mIsJoinToOnline = true;
-                startMainActivity();
-            } else {
-                Toast.makeText(WelcomeActivity.this, "Login or password is wrong", Toast.LENGTH_LONG).show();
-            }
-        }
-    }*/
 
     private void startMainActivity() {
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
@@ -431,7 +295,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         UserLoginHolder.getInstance().keepUserOnline();
     }
 
-    public void showUpdateAppFragment(){
+    public void showUpdateAppFragment() {
         mUpdateFrame.setVisibility(View.VISIBLE);
         mFragmentTransaction = getFragmentManager().beginTransaction();
         mFragmentTransaction.add(R.id.for_update_fragment_frame_layout, mUpdateFragment);
@@ -440,7 +304,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         mFragmentManager.executePendingTransactions();
     }
 
-    private void closeUpdateAppFragment(){
+    private void closeUpdateAppFragment() {
         mUpdateFrame.setVisibility(View.GONE);
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.remove(mUpdateFragment);
