@@ -14,7 +14,8 @@ import java.io.IOException;
 
 public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, String> {
 
- private static RecordsToNetApi myApiService = null;
+    public static final String USER_RECORD_BACKEND = BuildConfig.BACKEND_USER_INFO;
+    private static RecordsToNetApi myApiService = null;
 
     @Override
     protected void onPreExecute() {
@@ -30,7 +31,7 @@ public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, String> {
     protected String doInBackground(RecordsToNet... pRecordsToNets) {
         if(myApiService == null){
             RecordsToNetApi.Builder builder = new RecordsToNetApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                    .setRootUrl("https://onlinerecordbulsandcows.appspot.com/_ah/api/");
+                    .setRootUrl(USER_RECORD_BACKEND);
 
             myApiService = builder.build();
         }

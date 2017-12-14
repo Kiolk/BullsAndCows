@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'MyKey'
+            keyPassword '788yau9191'
+            storePassword '788yau9191'
+            storeFile file('/home/yauhen/Downloads/android-studio/bin/Key/myandroid.jks')
+        }
+    }
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
@@ -14,9 +22,11 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "BACKEND_APP_VERSION_URL", "\"http://bullsandcows-183521.appspot.com/hello\""
+            buildConfigField "String", "BACKEND_USER_INFO", "\"https://myjson-182914.appspot.com/_ah/api/\""
         }
         release {
             buildConfigField "String", "BACKEND_APP_VERSION_URL", "\"http://bullsandcowsrealese.appspot.com/hello\""
+            buildConfigField "String", "BACKEND_USER_INFO", "\"https://onlinerecordbulsandcows.appspot.com/_ah/api/\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -24,13 +34,11 @@ android {
     aaptOptions {
         cruncherEnabled = false
     }
-
     flavorDimensions "store"
-
     productFlavors {
         GooglePlay {
             flavorDimension "store"
-            versionName "1.0"
+            versionName "2.0 for Goggle"
             versionCode 2
             buildConfigField "String", "HOME_SITE", "\"http://site1.com\""
             buildConfigField "int", "BUILD_TIME", "${System.currentTimeSeconds()}"
@@ -46,7 +54,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:support-v4:26.1.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -58,9 +67,14 @@ dependencies {
     }
     compile project(path: ':online_records_backend', configuration: 'android-endpoints')
     compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.code.findbugs:jsr305:2.0.1'
     testCompile 'junit:junit:4.12'
     testCompile 'org.robolectric:robolectric:3.4.2'
     testCompile 'org.mockito:mockito-core:2.10.0'
+    compile project(':vershion_app_backend')
+    compile project(':pen')
 }

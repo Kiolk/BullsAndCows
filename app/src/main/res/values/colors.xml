@@ -15,7 +15,11 @@
     <color name="OTHER_BUTTON">#FFC857</color>
     <color name="RED_BUTTON">#ED474F</color>
     <color name="TEXT_SHADOW">#7F000000</color>
+    <color name="ITEM_YELLOW_LIGHT">#fff9c4</color>
+    <color name="ITEM_YELLOW_DARK">#ffee58</color>
+    <color name="LIGHT_BLUE">#e1f5fe</color>
     <drawable name="BACKGROUND_COLOR_BUTTON">#467082</drawable>
     <drawable name="PRESS_BUTTON">#303F9F</drawable>
     <drawable name="SELECT_BUTTON">#ED474F</drawable>
+
 </resources>

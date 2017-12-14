@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:showIn="@layout/activity_online_records">
+
+
+    <TextView
+        android:id="@+id/upper_title_coded_number_online_text_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:layout_weight="1"
+        android:background="@color/title_color"
+        android:gravity="center"
+        android:text="@string/coded_number"
+        android:textColor="@color/color_for_text" />
+
+    <TextView
+        android:id="@+id/upper_title_date_of_won_online_text_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:layout_weight="3"
+        android:background="@color/title_color"
+        android:gravity="center"
+        android:text="@string/date_title"
+        android:textColor="@color/color_for_text" />
+
+    <TextView
+        android:id="@+id/upper_title_nik_name_online_text_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:layout_weight="2"
+        android:background="@color/title_color"
+        android:gravity="center"
+        android:text="@string/NUMBER_GAME_BY_COD"
+        android:textColor="@color/color_for_text" />
+
+    <TextView
+        android:id="@+id/upper_title_moves_for_won_online_text_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:layout_weight="1"
+        android:background="@color/title_color"
+        android:gravity="center"
+        android:text="@string/moves_title"
+        android:textColor="@color/color_for_text" />
+
+    <TextView
+        android:id="@+id/upper_title_need_time_for_won_online_text_view"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_margin="2dp"
+        android:layout_weight="1"
+        android:background="@color/title_color"
+        android:gravity="center"
+        android:text="@string/time_title"
+        android:textColor="@color/color_for_text" />
+</LinearLayout>

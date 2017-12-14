@@ -67,7 +67,6 @@ public class UserDataBaseEndpoint {
         return userDataBase;
     }
 
-
     /**
      * Inserts a new {@code UserDataBase}.
      */

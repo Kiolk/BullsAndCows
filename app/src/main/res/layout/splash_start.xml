@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
     android:orientation="vertical"
@@ -12,15 +13,17 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/start_splash_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/start_splash_2_text_view"
-            android:textSize="50sp"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white"
+            android:textSize="50sp"/>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/image_splash_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
@@ -28,10 +31,13 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/bull_image_view"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:layout_margin="20dp"
-            android:src="@drawable/bullgood"/>
+            android:cropToPadding="true"
+            android:src="@drawable/ic_bull_big_size"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -61,6 +67,7 @@
         android:gravity="center">
 
         <TextView
+            android:id="@+id/name_of_game_text_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"

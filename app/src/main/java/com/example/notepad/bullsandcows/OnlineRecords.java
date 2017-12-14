@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ import com.example.notepad.bullsandcows.services.RefreshOnlineRecordService;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
-import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
@@ -126,7 +123,15 @@ public class OnlineRecords extends AppCompatActivity {
             }
 
             try {
-                return myApiService.list().execute().toString();
+//                ContentValues cv = new ContentValues();
+//                cv.put("cursor", "one");
+//                cv.put("limit", 10);
+//                String jso = myApiService.list().execute().toString();
+                String cursor = "CjoSNGoZZ35vbmxpbmVyZWNvcmRidWxzYW5kY293c3IXCxIMUmVjb3Jkc1RvTmV0GIGk8JX5KwwYACAA";
+                String json = myApiService.list().setCursor(cursor).execute().toString();
+                String cursor2 = "";
+//                String json2 = myApiService.list().setCursor(cursor).execute().toString();
+                return json;
             } catch (IOException pE) {
                 pE.printStackTrace();
             }

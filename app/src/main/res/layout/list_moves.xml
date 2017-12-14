@@ -2,16 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:orientation="horizontal"
-    android:layout_margin="8dp"
-    android:elevation="4dp"
-    android:background="@drawable/myrect">
+    android:padding="4dp">
+
 
     <TextView
         android:id="@+id/cnt_move_list_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
+        android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="40sp"/>
 
@@ -52,6 +51,5 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:src="@drawable/cowgood"/>
-
+        android:src="@drawable/ic_cow_good"/>
 </LinearLayout>

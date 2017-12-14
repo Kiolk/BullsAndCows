@@ -8,7 +8,7 @@ public class CheckExternalStorage {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             return true;
         }
+
         return false;
     }
-
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/country_flag_spinner_image_view"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_margin="4dp"
+        android:scaleType="centerInside"
+        tool:background="@drawable/ic_belarus"/>
+
+    <TextView
+        android:id="@+id/country_spinner_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textSize="32sp"
+        tool:text="Belarus"/>
+
+</LinearLayout>
