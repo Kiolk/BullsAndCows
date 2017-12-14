@@ -98,6 +98,7 @@
     <string name="TOTAL_PLAYED_GAMES">Total played games "</string>
     <string name="NUMBER_GAME_BY_COD">Played games</string>
     <string name="UPDATE_YOUR_APP">Press, for download new version</string>
+    <string name="NEW_VERSION_TITLE">Avaliable new version:</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

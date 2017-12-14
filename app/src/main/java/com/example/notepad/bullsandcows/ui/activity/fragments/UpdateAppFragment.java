@@ -20,6 +20,7 @@ public class UpdateAppFragment extends Fragment implements View.OnClickListener 
 
     private Button mUpdateButton;
     private TextView mNewFeatures;
+    private TextView mTitleNewVersion;
 
     public interface UpdateAppListener {
         void closeUpdateFragment();
@@ -43,6 +44,9 @@ public class UpdateAppFragment extends Fragment implements View.OnClickListener 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_update_application, container, false);
 
+        mTitleNewVersion = view.findViewById(R.id.title_new_features_text_view);
+        String title = getString(R.string.NEW_VERSION_TITLE) + " "+ AppInfoHolder.getInstance().getVersionApp().getNameOfApp();
+        mTitleNewVersion.setText(title);
         mNewFeatures = view.findViewById(R.id.new_features_app_text_view);
         mNewFeatures.setText(listNewFeaturesGenerator());
         mUpdateButton = view.findViewById(R.id.update_app_fragment_button);
