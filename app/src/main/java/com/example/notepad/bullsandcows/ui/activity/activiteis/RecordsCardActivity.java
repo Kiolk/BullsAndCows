@@ -18,6 +18,7 @@ import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.RequestRecordModel;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
+import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewWithPaginationAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class RecordsCardActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ArrayList<RecordsToNet> recordModelArrayList;
-    private RecordRecyclerViewAdapter adapter;
+    private RecordRecyclerViewWithPaginationAdapter adapter;
     private RecordsManager mRecordsManager;
     private String mCursor;
     private boolean isLoading;
@@ -53,7 +54,7 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
 
         initRecordManager();
 
-        if (CheckConnection.checkConnection(this)) {
+        if (CheckConnection.checkConnection(RecordsCardActivity.this)) {
             showProgressBar();
             mRecordsManager.getRecordSBackend(new RequestRecordModel(mCursor));
         }
@@ -80,7 +81,7 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
 
     private void firstTimeShowRecycler() {
         RecyclerView mRecordRecyclerView = findViewById(R.id.records_recycler_view);
-        adapter = new RecordRecyclerViewAdapter(this, recordModelArrayList) {
+        adapter = new RecordRecyclerViewWithPaginationAdapter(this, recordModelArrayList) {
 
             @Override
             public String showInfoFragment(String pUserName) {
@@ -134,7 +135,7 @@ public class RecordsCardActivity extends AppCompatActivity implements View.OnCli
             }
         };
 
-        if (CheckConnection.checkConnection(this)) {
+        if (CheckConnection.checkConnection(RecordsCardActivity.this)) {
             showProgressBar();
             manager.getRecordSBackend(new RequestRecordModel(mCursor));
         }

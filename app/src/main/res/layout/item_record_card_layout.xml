@@ -15,6 +15,17 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:id="@+id/online_update_record_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:padding="4dp"
+            android:visibility="invisible"
+            android:contentDescription="@string/UPDATE_RESULT_TO_ONLINE"
+            android:src="@android:drawable/ic_menu_upload"/>
+
+        <ImageView
             android:id="@+id/picture_of_user_image_view"
             android:layout_width="100dp"
             android:layout_height="100dp"

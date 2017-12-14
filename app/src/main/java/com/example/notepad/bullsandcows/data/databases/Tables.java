@@ -16,5 +16,6 @@ public class Tables {
                     UserRecordsDB.NIK_NAME + " TEXT, " +
                     UserRecordsDB.MOVES + " INTEGER, " +
                     UserRecordsDB.TIME + " TEXT, " +
-                    UserRecordsDB.USER_PHOTO_URL + " TEXT)";
+                    UserRecordsDB.USER_PHOTO_URL + " TEXT, " +
+                    UserRecordsDB.IS_UPDATE_ONLINE + " TEXT)";
 }

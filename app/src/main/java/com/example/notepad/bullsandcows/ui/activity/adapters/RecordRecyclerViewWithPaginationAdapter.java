@@ -1,7 +1,8 @@
 package com.example.notepad.bullsandcows.ui.activity.adapters;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.databases.DBOperations;
-import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
 import com.example.notepad.bullsandcows.utils.Converters;
@@ -24,16 +23,14 @@ import java.util.ArrayList;
 
 import kiolk.com.github.pen.Pen;
 
-public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder> implements UserInfoRecordListener{
+public class RecordRecyclerViewWithPaginationAdapter extends RecyclerView.Adapter<RecordRecyclerViewWithPaginationAdapter.RecordsViewHolder> implements UserInfoRecordListener {
 
     private ArrayList<RecordsToNet> modelArrayList;
     private Context mContext;
-    private Cursor mCursor;
 
-    protected RecordRecyclerViewAdapter(Context pContext, Cursor pCursor) {
-//        this.modelArrayList = pModelArrayList;
-        this.mContext = pContext;
-        mCursor = pCursor;
+    protected RecordRecyclerViewWithPaginationAdapter(Context mContext, ArrayList<RecordsToNet> modelArrayList) {
+        this.modelArrayList = modelArrayList;
+        this.mContext = mContext;
     }
 
     @Override
@@ -45,52 +42,31 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     @Override
     public void onBindViewHolder(final RecordsViewHolder holder, final int position) {
-//        final RecordsToNet model = modelArrayList.get(position);
+        final RecordsToNet model = modelArrayList.get(position);
         if (position % 2 == 0) {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_DARK));
         } else {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_LIGHT));
         }
-//        if (Integer.parseInt(model.getMoves()) <= 5 && Integer.parseInt(model.getCodes()) == 4) {
-//            holder.mRelativeLayout.setPadding(10, 10, 10, 10);
-//            holder.mRelativeLayout.setBackgroundColor(Color.RED);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                holder.mRelativeLayout.setElevation(24);
-//            }
-//        }
-//        holder.mCodTextView.setText(model.getCodes());
-
-        mCursor.moveToPosition(position);
-        int indexUpdateOnline = mCursor.getColumnIndex(UserRecordsDB.IS_UPDATE_ONLINE);
-
-        if(mCursor.getString(indexUpdateOnline)!= null
-                && mCursor.getString(indexUpdateOnline)
-                .equals(UserRecordsDB.NOT_UPDATE_ONLINE_HACK)){
-            holder.mToUpdateResult.setVisibility(View.VISIBLE);
-        }else{
-            holder.mToUpdateResult.setVisibility(View.INVISIBLE);
+        if (Integer.parseInt(model.getMoves()) <= 5 && Integer.parseInt(model.getCodes()) == 4) {
+            holder.mRelativeLayout.setPadding(10, 10, 10, 10);
+            holder.mRelativeLayout.setBackgroundColor(Color.RED);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                holder.mRelativeLayout.setElevation(24);
+            }
         }
+        holder.mCodTextView.setText(model.getCodes());
 
-        holder.mCodTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.CODES)));
-        long date = mCursor.getLong(mCursor.getColumnIndex(UserRecordsDB.ID));
-        String dateString = Converters.convertTimeToString(date);
-//        holder.mDateTextView.setText(Converters.convertTimeToString(model.getDate()));
-        holder.mDateTextView.setText(dateString);
-//        holder.mNikNameTextView.setText(model.getNikName());
-        final String nikName = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.NIK_NAME));
-        holder.mNikNameTextView.setText(nikName);
-//        holder.mMovesTextView.setText(model.getMoves());
-        holder.mMovesTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.MOVES)));
-//        holder.mTimeTextView.setText(model.getTime());
-        holder.mTimeTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.TIME)));
-        String url = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL));
-//        Pen.getInstance().getImageFromUrl(model.getUserUrlPhoto()).inputTo(holder.mUserImage);
-        Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
+        holder.mDateTextView.setText(Converters.convertTimeToString(model.getDate()));
+        holder.mNikNameTextView.setText(model.getNikName());
+        holder.mMovesTextView.setText(model.getMoves());
+        holder.mTimeTextView.setText(model.getTime());
+        Pen.getInstance().getImageFromUrl(model.getUserUrlPhoto()).inputTo(holder.mUserImage);
         holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
             @Override
             public void clickItemNik(View pView, int pPosition) {
-//                Toast.makeText(mContext, "NikName of user: " + model.getNikName() + ". Position: " + pPosition, Toast.LENGTH_LONG).show();
-                showInfoFragment(nikName);
+                Toast.makeText(mContext, "NikName of user: " + model.getNikName() + ". Position: " + pPosition, Toast.LENGTH_LONG).show();
+                showInfoFragment(model.getNikName());
             }
         });
     }
@@ -98,8 +74,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     @Override
     public int getItemCount() {
-//        return (null != modelArrayList ? modelArrayList.size() : 0);
-        return mCursor.getCount();
+        return (null != modelArrayList ? modelArrayList.size() : 0);
     }
 
     @Override
@@ -140,7 +115,6 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         }
 
 
-
         @Override
         public void onClick(View v) {
             if (mUserNikListener != null) {
@@ -149,7 +123,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             }
         }
 
-        void setClickNikListener(UserNikClickListener.ClickUserNik pUserNikListener){
+        void setClickNikListener(UserNikClickListener.ClickUserNik pUserNikListener) {
             mUserNikListener = pUserNikListener;
         }
     }

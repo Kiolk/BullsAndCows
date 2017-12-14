@@ -3,6 +3,7 @@ package com.example.notepad.bullsandcows.ui.activity.activiteis;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.widget.ProgressBar;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.DBOperations;
+import com.example.notepad.bullsandcows.data.databases.dblisteners.CursorListener;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
@@ -34,7 +36,7 @@ public class RecordsCardActivityFromBD extends AppCompatActivity implements View
     private ArrayList<RecordsToNet> recordModelArrayList;
     private RecordRecyclerViewAdapter adapter;
     private RecordsManager mRecordsManager;
-    private String mCursor;
+    private String mCursorString;
     private boolean isLoading;
     private ProgressBar mRecordsProgressBar;
     private UserInfoRecordFragment mUserInfoFragment;
@@ -42,6 +44,8 @@ public class RecordsCardActivityFromBD extends AppCompatActivity implements View
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private ContentValues[] mArrayContentValues;
+    private CursorListener mCursorListener;
+    private Cursor mCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,16 +56,25 @@ public class RecordsCardActivityFromBD extends AppCompatActivity implements View
         mInfoFrameLayout = findViewById(R.id.user_info_record_frame_layout);
         mInfoFrameLayout.setOnClickListener(this);
 
-        mCursor = null;
+        mCursorString = null;
         mUserInfoFragment = new UserInfoRecordFragment();
+
+        mCursorListener = new CursorListener() {
+            @Override
+            public Cursor getCursorListener(Cursor pCursor) {
+                mCursor = pCursor;
+                firstTimeShowRecycler(mCursor);
+                return pCursor;
+            }
+        };
 
         initRecordManager();
 
-        if (CheckConnection.checkConnection(this)) {
+        if (CheckConnection.checkConnection(RecordsCardActivityFromBD.this)) {
             showProgressBar();
-            mRecordsManager.getRecordSBackend(new RequestRecordModel(mCursor));
+            mRecordsManager.getRecordSBackend(new RequestRecordModel(mCursorString));
         } else {
-            firstTimeShowRecycler();
+            new DBOperations().query(mCursorListener);
         }
     }
 
@@ -92,18 +105,23 @@ public class RecordsCardActivityFromBD extends AppCompatActivity implements View
                 }
 
                 closeProgressBar();
-                firstTimeShowRecycler();
 
-                mCursor = response.getmCursor();
+                new DBOperations().query(mCursorListener);
+
+                mCursorString = response.getmCursor();
 
                 return response;
             }
         };
     }
 
-    private void firstTimeShowRecycler() {
+    private void firstTimeShowRecycler(Cursor pCursor) {
         RecyclerView mRecordRecyclerView = findViewById(R.id.records_recycler_view);
-        adapter = new RecordRecyclerViewAdapter(this, recordModelArrayList) {
+//        Cursor cursor = new DBOperations().query();
+
+//        Cursor cursor = new DBOperations().query();
+
+        adapter = new RecordRecyclerViewAdapter(this,  pCursor) {
 
             @Override
             public String showInfoFragment(String pUserName) {
@@ -150,7 +168,7 @@ public class RecordsCardActivityFromBD extends AppCompatActivity implements View
                 closeProgressBar();
 
                 if (response.getmRecordsArray() != null) {
-                    mCursor = response.getmCursor();
+                    mCursorString = response.getmCursor();
                     isLoading = false;
 
                     recordModelArrayList.addAll(response.getmRecordsArray());
@@ -163,7 +181,7 @@ public class RecordsCardActivityFromBD extends AppCompatActivity implements View
 
         if (CheckConnection.checkConnection(this)) {
             showProgressBar();
-            manager.getRecordSBackend(new RequestRecordModel(mCursor));
+            manager.getRecordSBackend(new RequestRecordModel(mCursorString));
         }
     }
 
@@ -185,7 +203,7 @@ public class RecordsCardActivityFromBD extends AppCompatActivity implements View
             if (!isLoading && totalNumberItems <= visibleItems + firstVisible) {
                 isLoading = true;
 
-                Log.d("MyLogs", "Stay near last position " + mCursor);
+                Log.d("MyLogs", "Stay near last position " + mCursorString);
                 showProgressBar();
                 updateAdapter();
             }
@@ -230,6 +248,10 @@ public class RecordsCardActivityFromBD extends AppCompatActivity implements View
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mCursor.close();
+        if(mCursor.isClosed()){
+            Log.d("MyLogs", "Cursor closed");
+        }
         UserLoginHolder.getInstance().setOffline();
     }
 }

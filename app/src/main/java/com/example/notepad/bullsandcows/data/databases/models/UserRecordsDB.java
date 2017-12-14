@@ -15,4 +15,10 @@ public class UserRecordsDB {
     public static final String MOVES = "moves";
 
     public static final String USER_PHOTO_URL = "url";
+
+    public static final String IS_UPDATE_ONLINE = "updateRecords";
+
+    public static final String UPDATE_ONLINE_HACK = "1";
+
+    public static final String NOT_UPDATE_ONLINE_HACK = "0";
 }

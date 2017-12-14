@@ -39,6 +39,7 @@ import com.example.notepad.bullsandcows.ui.activity.fragments.EditProfileFragmen
 import com.example.notepad.bullsandcows.ui.activity.fragments.WinFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.CloseEditProfileListener;
 import com.example.notepad.bullsandcows.utils.AnimationOfView;
+import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.LanguageLocale;
@@ -362,10 +363,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!mEditProfileFragment.isVisible()) {
+        if (!mEditProfileFragment.isVisible()) {
             UserLoginHolder.getInstance().setOffline();
             super.onBackPressed();
-        }else{
+        } else {
             mCloseEditListener.closeFragment();
         }
     }
@@ -410,6 +411,10 @@ public class MainActivity extends AppCompatActivity {
                 mTransaction.commit();
                 mFragmentManager.executePendingTransactions();
                 mEditProfileFragment.editUserProfile();
+                break;
+            case R.id.online_records_with_pagination_menu:
+                Intent intent7 = new Intent(this, RecordsCardActivity.class);
+                startActivity(intent7);
                 break;
             default:
                 break;
@@ -456,17 +461,24 @@ public class MainActivity extends AppCompatActivity {
             cv.put(UserRecordsDB.TIME, note.getTime());
             cv.put(UserRecordsDB.USER_PHOTO_URL, note.getUserUrlPhoto());
 
-            new DBOperations().insert(UserRecordsDB.TABLE, cv);
+            if (CheckConnection.checkConnection(this)) {
+                cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
+            } else {
+                cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.NOT_UPDATE_ONLINE_HACK);
+            }
+
+            new DBOperations().insert(UserRecordsDB.TABLE, null, cv);
             Cursor cursor = new DBOperations().query();
             Log.d("MyLogs", String.valueOf(cursor.getCount()));
             int movesIndex = cursor.getColumnIndex(UserRecordsDB.MOVES);
             int timeIndex = cursor.getColumnIndex(UserRecordsDB.TIME);
             int nikIndex = cursor.getColumnIndex(UserRecordsDB.NIK_NAME);
-            while (cursor.moveToNext()){
+            int updateIndex = cursor.getColumnIndex(UserRecordsDB.IS_UPDATE_ONLINE);
+            while (cursor.moveToNext()) {
                 Log.d("MyLogs", cursor.getString(movesIndex) +
-                        cursor.getString(nikIndex) + cursor.getString(timeIndex));
+                        cursor.getString(nikIndex) + cursor.getString(timeIndex) +
+                        " is online: " + cursor.getString(updateIndex));
             }
-
             cursor.close();
 
             BestUserRecords recordForCheck = new BestUserRecords();
@@ -475,6 +487,7 @@ public class MainActivity extends AppCompatActivity {
             recordForCheck.setMoves(note.getMoves());
             recordForCheck.setNikName(note.getNikName());
             recordForCheck.setTime(note.getTime());
+
 
             UserBaseManager userManager = new UserBaseManager();
             userManager.checkNewBestRecord(recordForCheck);
