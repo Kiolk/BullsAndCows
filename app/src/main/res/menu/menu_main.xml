@@ -29,4 +29,6 @@
         app:showAsAction="ifRoom" />
     <item android:id="@+id/edit_profile_menu"
         android:title="@string/EDIT_PROFILE"/>
+    <item android:id="@+id/online_records_with_pagination_menu"
+        android:title="@string/ONLINE_RECORDS_WITH_PAGINATION"/>
 </menu>
