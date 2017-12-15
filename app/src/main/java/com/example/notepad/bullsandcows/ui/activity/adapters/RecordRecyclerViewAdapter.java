@@ -83,9 +83,13 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         holder.mMovesTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.MOVES)));
 //        holder.mTimeTextView.setText(model.getTime());
         holder.mTimeTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.TIME)));
+
         String url = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL));
 //        Pen.getInstance().getImageFromUrl(model.getUserUrlPhoto()).inputTo(holder.mUserImage);
-        Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
+
+        if(url != null) {
+            Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
+        }
         holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
             @Override
             public void clickItemNik(View pView, int pPosition) {

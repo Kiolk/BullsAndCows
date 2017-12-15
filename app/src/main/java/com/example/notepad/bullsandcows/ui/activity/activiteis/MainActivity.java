@@ -195,10 +195,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView number9 = findViewById(R.id.buttom9);
         TextView number0 = findViewById(R.id.buttom0);
         TextView enterButton = findViewById(R.id.enter);
+        startButton = findViewById(R.id.start);
 
         mInputNumberView = findViewById(R.id.editText);
         mInputNumberView.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.BLACKGROTESKC));
-        startButton = findViewById(R.id.start);
+
         TextView del = findViewById(R.id.buttomDel);
         mTimer = findViewById(R.id.timer_text_view);
         mTimer.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.DIGITAL_FONT));
@@ -338,7 +339,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             note.setNikName(mNikOfUser.getText().toString());
             note.setMoves(numberOfMoves);
             note.setCodes(numberOfCodedDigits);
-            note.setUserUrlPhoto(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
+
+            if(UserLoginHolder.getInstance().getUserInfo() != null) {
+                note.setUserUrlPhoto(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
+            }
 
             ContentValues cv = new ContentValues();
 
@@ -347,7 +351,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             cv.put(UserRecordsDB.MOVES, cntMoves - 1);
             cv.put(UserRecordsDB.CODES, DIG);
             cv.put(UserRecordsDB.TIME, note.getTime());
-            cv.put(UserRecordsDB.USER_PHOTO_URL, note.getUserUrlPhoto());
+
+            if(UserLoginHolder.getInstance().getUserInfo() != null) {
+                cv.put(UserRecordsDB.USER_PHOTO_URL, note.getUserUrlPhoto());
+            }
 
             if (CheckConnection.checkConnection(this)) {
                 cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
@@ -377,10 +384,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             recordForCheck.setTime(note.getTime());
 
 
-            UserBaseManager userManager = new UserBaseManager();
-            userManager.checkNewBestRecord(recordForCheck);
 
-            new RecordAsyncTaskPost().execute(note);
+
+            if (UserLoginHolder.getInstance().isLogged()) {
+
+                UserBaseManager userManager = new UserBaseManager();
+                userManager.checkNewBestRecord(recordForCheck);
+                new RecordAsyncTaskPost().execute(note);
+            }
 
             mWriteReadFile.writeInFile(numberOfMoves, mNikOfUser.getText().toString(), mTimer.getText().toString(), numberOfCodedDigits, this);
             mWriteReadFile.readFile(this);

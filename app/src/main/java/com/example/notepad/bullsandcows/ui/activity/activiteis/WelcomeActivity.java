@@ -170,10 +170,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                                     UserLoginHolder.getInstance().setUserInfo(pUserInfo);
                                     UserLoginHolder.getInstance().setPassword(userInfo.getPassword());
                                     UserLoginHolder.getInstance().setUserName(userInfo.getUserName());
-//                                    UserLoginHolder.getInstance().setUserImageUrl(userInfo.getMPhotoUrl());
-//                                    UserLoginHolder.getInstance().setmUserBitmap(Pen.getInstance().getBitmapDirect(WelcomeActivity.this, userInfo.getMPhotoUrl()));
+                                    UserLoginHolder.getInstance().setLogged(true);
+
                                     Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-                                    mIsJoinToOnline = true;
+//                                    mIsJoinToOnline = true;
 //                                    Intent intent = new Intent(WelcomeActivity.this, CheckOnlineService.class);
 //                                    intent.putExtra(Constants.IntentKeys.USER_NAME_INTENT_KEY, pUserInfo.getUserName());
 //                                    startService(intent);
@@ -196,7 +196,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                             userManager.checkInfoAboutUser(name, password);
 
                         } else {
-                            mIsJoinToOnline = false;
+//                            mIsJoinToOnline = false;
+                            UserLoginHolder.getInstance().setLogged(false);
+                            UserLoginHolder.getInstance().setUserName(mLogin.getText().toString());
+                            UserLoginHolder.getInstance().setPassword(mPassword.getText().toString());
 
                             startMainActivity();
 
@@ -255,10 +258,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     private void startMainActivity() {
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
 
-        intent.putExtra(Constants.NIK_NAME_OF_USER, mLogin.getText().toString());
-        intent.putExtra(Constants.PASSWORD_OF_USER, mPassword.getText().toString());
-        intent.putExtra(Constants.KEEP_PASSWORD, mCheckBox.isChecked());
-        intent.putExtra(Constants.JOIN_TO_ONLINE, mIsJoinToOnline);
+//        intent.putExtra(Constants.NIK_NAME_OF_USER, mLogin.getText().toString());
+//        intent.putExtra(Constants.PASSWORD_OF_USER, mPassword.getText().toString());
+//        intent.putExtra(Constants.KEEP_PASSWORD, mCheckBox.isChecked());
+//        intent.putExtra(Constants.JOIN_TO_ONLINE, mIsJoinToOnline);
 
         UserLoginHolder.getInstance().keepUserOnline();
         startActivity(intent);
