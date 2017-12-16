@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showEditProfileFragment();
                 break;
             case R.id.online_records_with_pagination_menu:
-                intent = new Intent(this, RecordsCardActivity.class);
+                intent = new Intent(this, RecordsCardActivityFromCursorLoader.class);
                 startActivity(intent);
                 break;
             default:

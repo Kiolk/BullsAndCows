@@ -53,15 +53,19 @@ public class DBOperations {
         thread.start();
     }
 
-    public Cursor query(){
+    public Cursor query() {
         SQLiteDatabase database = mHelper.getReadableDatabase();
+
 
         return database.query(UserRecordsDB.TABLE, null, null,
                 null, null, null, UserRecordsDB.ID + Tables.ASC, null);
+//        return database.query(UserRecordsDB.TABLE, null, UserRecordsDB.NIK_NAME + " = ?",
+//                new String[]{"Gor"}, null, null, UserRecordsDB.ID + Tables.ASC, null);
     }
 
-    public void query(final CursorListener pListener){
-        @SuppressLint("HandlerLeak") final Handler queryHandler = new Handler() {;
+    public void query(final CursorListener pListener) {
+        @SuppressLint("HandlerLeak") final Handler queryHandler = new Handler() {
+            ;
 
             @Override
             public void handleMessage(Message msg) {
@@ -80,18 +84,18 @@ public class DBOperations {
                         + Thread.currentThread().getName()
                         + " for add get Cursor");
 
-                Cursor cursor =  database.query(UserRecordsDB.TABLE, null, null,
+                Cursor cursor = database.query(UserRecordsDB.TABLE, null, null,
                         null, null, null, UserRecordsDB.ID + Tables.ASC, null);
-            Message msg = new Message();
-            msg.obj = cursor;
-            queryHandler.sendMessage(msg);
+                Message msg = new Message();
+                msg.obj = cursor;
+                queryHandler.sendMessage(msg);
             }
         });
 
         queryThread.start();
     }
 
-    public int bulkInsert(String pTableName, ContentValues [] pArrayValues){
+    public int bulkInsert(String pTableName, ContentValues[] pArrayValues) {
         SQLiteDatabase database = mHelper.getReadableDatabase();
 
         int successAdd = 0;
