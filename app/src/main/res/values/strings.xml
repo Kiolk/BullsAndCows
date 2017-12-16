@@ -103,6 +103,27 @@
     <string name="NEW_VERSION_TITLE">Avaliable new version:</string>
     <string name="APP_IS_OLD_VERTION">Your app is old version</string>
     <string name="PRESS_FOR_UPGRADE">Press for upgrade yor app for version</string>
+    <string name="SORT_ITEM">Sort records</string>
+
+    <string-array name="coded_list_array">
+        <item>Eny</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="last_result_time_array">
+        <item>Eny</item>
+        <item>Last day</item>
+        <item>Last week</item>
+    </string-array>
 
     <string-array name="countries_array">
         <item>Not selected</item>

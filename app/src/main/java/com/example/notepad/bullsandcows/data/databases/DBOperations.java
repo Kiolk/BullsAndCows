@@ -11,9 +11,7 @@ import android.util.Log;
 
 import com.example.notepad.bullsandcows.data.databases.dblisteners.CursorListener;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
-
-
-import java.util.logging.LogRecord;
+import com.example.notepad.bullsandcows.utils.Converters;
 
 public class DBOperations {
 
@@ -24,43 +22,68 @@ public class DBOperations {
     }
 
     public void insert(final String pTableName, final String pColumnHack, final ContentValues pValues) {
-        final Thread thread = new Thread(new Runnable() {
 
-            @Override
-            public void run() {
-                Log.d("MyLogs", "Start thread: "
-                        + Thread.currentThread().getName()
-                        + " for add new record to DB");
+        SQLiteDatabase database = mHelper.getReadableDatabase();
+        database.beginTransaction();
 
-                SQLiteDatabase database = mHelper.getReadableDatabase();
-
-                database.beginTransaction();
-
-                try {
-                    database.insert(pTableName, pColumnHack, pValues);
-                    database.setTransactionSuccessful();
-                    Log.d("MyLogs", "Add one new record in UserRecordsDB");
-                } catch (Exception pE) {
-                    pE.getStackTrace();
-                    Log.d("MyLogs", this.getClass().getSimpleName() + pE.getLocalizedMessage());
-                } finally {
-                    database.endTransaction();
-                }
-
-            }
-        });
-
-        thread.start();
+        try {
+            database.insert(pTableName, pColumnHack, pValues);
+            database.setTransactionSuccessful();
+            Log.d("MyLogs", "Add one new record in UserRecordsDB");
+        } catch (Exception pE) {
+            pE.getStackTrace();
+            Log.d("MyLogs", this.getClass().getSimpleName() + pE.getLocalizedMessage());
+        } finally {
+            database.endTransaction();
+            database.close();
+        }
     }
 
     public Cursor query() {
         SQLiteDatabase database = mHelper.getReadableDatabase();
 
-
         return database.query(UserRecordsDB.TABLE, null, null,
                 null, null, null, UserRecordsDB.ID + Tables.ASC, null);
-//        return database.query(UserRecordsDB.TABLE, null, UserRecordsDB.NIK_NAME + " = ?",
-//                new String[]{"Gor"}, null, null, UserRecordsDB.ID + Tables.ASC, null);
+    }
+
+    public Cursor queryForSortRecords(String[] pArrayString) {
+        SQLiteDatabase database = mHelper.getReadableDatabase();
+
+        StringBuilder builderSelection = new StringBuilder();
+        builderSelection.append(UserRecordsDB.NIK_NAME);
+
+        if (!pArrayString[0].equals("")) {
+            builderSelection.append(" = ?");
+        } else {
+            builderSelection.append(" is not ?");
+        }
+
+        builderSelection.append(" and ");
+        builderSelection.append(UserRecordsDB.CODES);
+
+        if (!pArrayString[1].equals("Eny")) {
+            builderSelection.append(" = ?");
+        } else {
+            builderSelection.append(" is not ?");
+        }
+
+        builderSelection.append(" and ");
+        builderSelection.append(UserRecordsDB.ID);
+
+        if (pArrayString[2].equals("Last day")) {
+            builderSelection.append(" < ? ");
+            pArrayString[2] = String.valueOf(Converters.getActualDay(System.currentTimeMillis()));
+        } else if (pArrayString[2].equals("Last week")) {
+            builderSelection.append(" < ? ");
+            pArrayString[2] = String.valueOf(Converters.getActualWeek(System.currentTimeMillis()));
+        } else if (pArrayString[2].equals("Eny")) {
+            builderSelection.append(" is not ? ");
+        } else {
+            builderSelection.append(" is not ? ");
+        }
+
+        return database.query(UserRecordsDB.TABLE, null, builderSelection.toString(),
+                pArrayString, null, null, UserRecordsDB.ID + Tables.ASC, null);
     }
 
     public void query(final CursorListener pListener) {
@@ -115,9 +138,4 @@ public class DBOperations {
 
         return successAdd;
     }
-//
-//    @Override
-//    public Cursor getCursorListener(Cursor pCursor) {
-//        return null;
-//    }
 }

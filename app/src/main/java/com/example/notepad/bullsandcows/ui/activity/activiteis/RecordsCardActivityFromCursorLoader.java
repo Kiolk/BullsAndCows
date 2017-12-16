@@ -13,7 +13,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.Loaders.CursorDBLoader;
@@ -27,15 +31,23 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 
 import java.util.Timer;
 import java.util.TimerTask;
+
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
 public class RecordsCardActivityFromCursorLoader extends AppCompatActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+
+    public static final String USER_NAME_BUNDLE_KEY = "userName";
+    public static final String CODED_BUNDL_KEY = "coded";
+    public static final String LAST_RESULT_BUNDLE_KEY = "lastResult";
 
     private UserInfoRecordFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
     private FragmentTransaction mFragmentTransaction;
     private TimerTask mTimerTask;
     private Timer mTimer;
+    private EditText mSortByName;
+    private Spinner mCodedSpinner;
+    private Spinner mLastTimeSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +57,35 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
 
         UserLoginHolder.getInstance().setUserOnline();
 
+        initView();
+        initSpinners();
         initFragments();
         initTimer();
 
         getLoaderManager().initLoader(0, null, this);
         getLoaderManager().getLoader(0).forceLoad();
+    }
+
+    private void initView() {
+        Button mSortButton = findViewById(R.id.sort_record_button);
+        mSortByName = findViewById(R.id.sort_by_name_record_edit_text);
+        mSortButton.setOnClickListener(this);
+    }
+
+    private void initSpinners() {
+        mCodedSpinner = findViewById(R.id.coded_number_sort_spinner);
+        ArrayAdapter<String> codedAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, getResources()
+                .getStringArray(R.array.coded_list_array));
+        codedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mCodedSpinner.setAdapter(codedAdapter);
+
+        mLastTimeSpinner = findViewById(R.id.last_time_sort_spinner);
+        ArrayAdapter<String> lastTimeAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.last_result_time_array));
+        lastTimeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mLastTimeSpinner.setAdapter(lastTimeAdapter);
     }
 
     private void initFragments() {
@@ -71,7 +107,7 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
         mTimer = new Timer();
 
         if (CheckConnection.checkConnection(RecordsCardActivityFromCursorLoader.this)) {
-            mTimer.scheduleAtFixedRate(mTimerTask, 1000, 15000);
+            mTimer.scheduleAtFixedRate(mTimerTask, 1000, 35000);
         }
     }
 
@@ -89,7 +125,6 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
                 return userName;
             }
         };
-
 
         mRecordRecyclerView.setHasFixedSize(false);
         mRecordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -127,7 +162,20 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
 
     @Override
     public void onClick(View v) {
-        closeInfoUserFragment();
+        switch (v.getId()) {
+            case R.id.user_info_record_frame_layout:
+                closeInfoUserFragment();
+                break;
+            case R.id.sort_record_button:
+                Bundle args = new Bundle();
+                args.putString(USER_NAME_BUNDLE_KEY, mSortByName.getText().toString());
+                args.putString(CODED_BUNDL_KEY, mCodedSpinner.getSelectedItem().toString());
+                args.putString(LAST_RESULT_BUNDLE_KEY, mLastTimeSpinner.getSelectedItem().toString());
+                getLoaderManager().restartLoader(0, args, this);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -146,13 +194,21 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        if (args != null) {
+            String userName = args.getString(USER_NAME_BUNDLE_KEY, "is not Null");
+            String coded = args.getString(CODED_BUNDL_KEY);
+            String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
+            String[] request = new String []{userName, coded, lastTimeSort};
+            return new CursorDBLoader(RecordsCardActivityFromCursorLoader.this, request);
+        }
         return new CursorDBLoader(RecordsCardActivityFromCursorLoader.this);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-            firstTimeShowRecycler(data);
+        firstTimeShowRecycler(data);
     }
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {

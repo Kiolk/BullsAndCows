@@ -14,11 +14,48 @@
         android:indeterminate="true"
         android:visibility="gone" />
 
+    <LinearLayout
+        android:id="@+id/sort_record_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/records_load_progress_bar">
+
+        <Spinner
+            android:id="@+id/coded_number_sort_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+        </Spinner>
+
+        <Spinner
+            android:id="@+id/last_time_sort_spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+        </Spinner>
+
+        <EditText
+            android:id="@+id/sort_by_name_record_edit_text"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/sort_record_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/records_recycler_view"
+        android:layout_below="@+id/sort_record_tool_bar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/records_load_progress_bar">
+        android:layout_height="match_parent"        >
+
+
 
     </android.support.v7.widget.RecyclerView>
 

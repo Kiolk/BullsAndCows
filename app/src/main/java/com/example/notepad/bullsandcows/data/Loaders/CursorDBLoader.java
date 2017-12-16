@@ -10,14 +10,28 @@ public class CursorDBLoader extends CursorLoader {
 
     private DBOperations mDBOperations;
 
+    private String[] mRequest;
+
     public CursorDBLoader(Context pContext) {
         super(pContext);
         mDBOperations = new DBOperations();
     }
 
+    public CursorDBLoader(Context pContext, String[] pRequest) {
+        super(pContext);
+        mDBOperations = new DBOperations();
+        mRequest = pRequest;
+
+    }
+
+
     @Override
     public Cursor loadInBackground() {
-        return mDBOperations.query();
+        if (mRequest != null) {
+            return mDBOperations.queryForSortRecords(mRequest);
+        } else {
+            return mDBOperations.query();
+        }
     }
 
     @Override
