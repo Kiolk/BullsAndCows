@@ -46,6 +46,7 @@
 
         <service android:name=".services.WinSoundService" />
         <service android:name=".services.RefreshOnlineRecordService" />
+        <service android:name=".services.UpdateAppService" />
 
         <activity android:name=".ui.activity.activiteis.RegistrationPageActivity" />
         <activity

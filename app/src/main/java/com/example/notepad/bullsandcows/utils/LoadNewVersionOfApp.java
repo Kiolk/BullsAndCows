@@ -38,38 +38,38 @@ public class LoadNewVersionOfApp {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mButton.setEnabled(false);
-            mButton.setText(R.string.START_DOWNLOAD_NEW_VERSION);
+//            mButton.setEnabled(false);
+//            mButton.setText(R.string.START_DOWNLOAD_NEW_VERSION);
         }
 
         @Override
         protected void onPostExecute(Void pVoid) {
             try{
                 if(outputFile != null){
-                    mButton.setText(R.string.FINISH_DOWNLOAD_NEW_VERSION);
-                    mButton.setText(R.string.VISIT_SITE);
+//                    mButton.setText(R.string.FINISH_DOWNLOAD_NEW_VERSION);
+//                    mButton.setText(R.string.VISIT_SITE);
                     Log.d(Constants.TAG, "Finish download new version");
                 }else{
-                    mButton.setText(R.string.FAILED_DOWNLOAD_NEW_VERSION);
+//                    mButton.setText(R.string.FAILED_DOWNLOAD_NEW_VERSION);
                     Log.d(Constants.TAG, "Failed download new version");
                     new Handler().postDelayed(new Runnable() {
 
                         @Override
                         public void run() {
-                            mButton.setEnabled(true);
-                            mButton.setText(R.string.TRY_AGAIN);
+//                            mButton.setEnabled(true);
+//                            mButton.setText(R.string.TRY_AGAIN);
                         }
                     }, 3000);
                 }
 
             }catch (Exception pE){
-                mButton.setText(R.string.FAILED_DOWNLOAD_NEW_VERSION);
+//                mButton.setText(R.string.FAILED_DOWNLOAD_NEW_VERSION);
                 new Handler().postDelayed(new Runnable() {
 
                     @Override
                     public void run() {
-                        mButton.setEnabled(true);
-                        mButton.setText(R.string.TRY_AGAIN);
+//                        mButton.setEnabled(true);
+//                        mButton.setText(R.string.TRY_AGAIN);
                     }
                 }, 3000);
                 Log.d(Constants.TAG, "Failed download. Error: " + pE.getLocalizedMessage());

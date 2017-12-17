@@ -125,6 +125,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                             Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_SITE_OF_PROJECT));
                             startActivity(intent1);
                         } else {
+
+//                            Intent uploadAppIntent = new Intent(WelcomeActivity.this, UpdateAppService.class);
+//                            getActivity().startService(uploadAppIntent);
+
                             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(WelcomeActivity.this).
                                     setSmallIcon(R.drawable.bullgood).
                                     setContentTitle("Start download new version").
@@ -248,7 +252,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
             mVisitCheckVersion.setTextColor(Color.WHITE);
             mCurrentVersionAppWelcome = true;
         } else {
-            mInfoVersionTextView.setText(R.string.APP_IS_OLD_VERTION);
+            mInfoVersionTextView.setText(R.string.APP_IS_OLD_VERSION);
             mVisitCheckVersion.setText(getString(R.string.PRESS_FOR_UPGRADE));
             mVisitCheckVersion.setTextColor(Color.RED);
             mCurrentVersionAppWelcome = false;
@@ -296,6 +300,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     public void onBackPressed() {
         super.onBackPressed();
         UserLoginHolder.getInstance().keepUserOnline();
+
     }
 
     public void showUpdateAppFragment() {
@@ -318,5 +323,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     @Override
     public void closeUpdateFragment() {
         closeUpdateAppFragment();
+        finish();
     }
 }

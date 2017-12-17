@@ -33,7 +33,7 @@
     <string name="START_DOWNLOAD_NEW_VERSION">Start load new version</string>
     <string name="FINISH_DOWNLOAD_NEW_VERSION">Finish download version</string>
     <string name="FAILED_DOWNLOAD_NEW_VERSION">Failed download</string>
-    <string name="TRY_AGAIN">Try download again</string>
+    <string name="TRY_AGAIN">Try download later</string>
     <string name="VISIT_SITE">Visit site of project</string>
     <string name="BUTTON_1">1</string>
     <string name="BUTTON_2">2</string>
@@ -100,9 +100,10 @@
     <string name="UPDATE_YOUR_APP">Press, for download new version</string>
     <string name="UPDATE_RESULT_TO_ONLINE">Update result to online</string>
 <string name="ONLINE_RECORDS_WITH_PAGINATION">Records with pagination</string>
-    <string name="NEW_VERSION_TITLE">Avaliable new version:</string>
-    <string name="APP_IS_OLD_VERTION">Your app is old version</string>
+    <string name="NEW_VERSION_TITLE">Available new version: "</string>
+    <string name="APP_IS_OLD_VERSION">Your app is old version</string>
     <string name="PRESS_FOR_UPGRADE">Press for upgrade yor app for version</string>
+    <string name="SUCCESS_UPLOAD">Success upload</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>
