@@ -58,6 +58,9 @@ public class WaiterNewRecordsService extends IntentService {
             @Override
             public ResponseRecordModel getResponseBackendCallback(ResponseRecordModel pResponse) {
                 ResponseRecordModel response = super.getResponseBackendCallback(pResponse);
+                if(response.getmRecordsArray() == null){
+                    return null;
+                }
                 Log.d(TAG, ", cursor :" + response.getmCursor());
                 ArrayList<RecordsToNet> recordModelArrayList = response.getmRecordsArray();
 

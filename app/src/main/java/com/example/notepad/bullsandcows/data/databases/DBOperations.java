@@ -21,13 +21,30 @@ public class DBOperations {
         mHelper = DBConnector.getInstance();
     }
 
-    public void insert(final String pTableName, final String pColumnHack, final ContentValues pValues) {
+    public void insert(final String pTableName, final ContentValues pValues) {
 
         SQLiteDatabase database = mHelper.getReadableDatabase();
         database.beginTransaction();
 
         try {
-            database.insert(pTableName, pColumnHack, pValues);
+            database.insert(pTableName, null, pValues);
+            database.setTransactionSuccessful();
+            Log.d("MyLogs", "Add one new record in UserRecordsDB");
+        } catch (Exception pE) {
+            pE.getStackTrace();
+            Log.d("MyLogs", this.getClass().getSimpleName() + pE.getLocalizedMessage());
+        } finally {
+            database.endTransaction();
+            database.close();
+        }
+    }
+
+    public void update (final String pTableName, final ContentValues pValues){
+        SQLiteDatabase database = mHelper.getReadableDatabase();
+        database.beginTransaction();
+
+        try {
+            database.update(pTableName,  pValues, UserRecordsDB.ID + " = " + pValues.getAsString(UserRecordsDB.ID), null);
             database.setTransactionSuccessful();
             Log.d("MyLogs", "Add one new record in UserRecordsDB");
         } catch (Exception pE) {

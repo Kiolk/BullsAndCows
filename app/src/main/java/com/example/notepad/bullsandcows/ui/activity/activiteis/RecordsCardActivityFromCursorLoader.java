@@ -3,6 +3,7 @@ package com.example.notepad.bullsandcows.ui.activity.activiteis;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.ActivityInfo;
@@ -18,15 +19,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.Loaders.CursorDBLoader;
+import com.example.notepad.bullsandcows.data.databases.DBOperations;
+import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
+import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.ModelConverterUtil;
+import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import java.util.Timer;
@@ -34,7 +42,10 @@ import java.util.TimerTask;
 
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
-public class RecordsCardActivityFromCursorLoader extends AppCompatActivity implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class RecordsCardActivityFromCursorLoader extends AppCompatActivity
+        implements View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor>,
+        PostRecordSuccessListener {
 
     public static final String USER_NAME_BUNDLE_KEY = "userName";
     public static final String CODED_BUNDL_KEY = "coded";
@@ -48,6 +59,7 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
     private EditText mSortByName;
     private Spinner mCodedSpinner;
     private Spinner mLastTimeSpinner;
+    private RecordRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +126,7 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
     private void firstTimeShowRecycler(Cursor pCursor) {
         RecyclerView mRecordRecyclerView = findViewById(R.id.records_recycler_view);
 
-        RecordRecyclerViewAdapter adapter = new RecordRecyclerViewAdapter(this, pCursor) {
+        mAdapter = new RecordRecyclerViewAdapter(this, pCursor) {
 
             @Override
             public String showInfoFragment(String pUserName) {
@@ -124,11 +136,20 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
                 getUserInformation(userName);
                 return userName;
             }
+
+            @Override
+            public RecordsToNet updateLateRecordCallback(RecordsToNet pRecord) {
+                RecordsToNet record = super.updateLateRecordCallback(pRecord);
+                Toast.makeText(RecordsCardActivityFromCursorLoader.this,
+                        record.getTime(), Toast.LENGTH_LONG).show();
+                new RecordAsyncTaskPost(RecordsCardActivityFromCursorLoader.this).execute(pRecord);
+                return record;
+            }
         };
 
         mRecordRecyclerView.setHasFixedSize(false);
         mRecordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecordRecyclerView.setAdapter(adapter);
+        mRecordRecyclerView.setAdapter(mAdapter);
     }
 
     private void getUserInformation(String pUserName) {
@@ -198,7 +219,7 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
             String userName = args.getString(USER_NAME_BUNDLE_KEY, "is not Null");
             String coded = args.getString(CODED_BUNDL_KEY);
             String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
-            String[] request = new String []{userName, coded, lastTimeSort};
+            String[] request = new String[]{userName, coded, lastTimeSort};
             return new CursorDBLoader(RecordsCardActivityFromCursorLoader.this, request);
         }
         return new CursorDBLoader(RecordsCardActivityFromCursorLoader.this);
@@ -212,5 +233,22 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity imple
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    @Override
+    public RecordsToNet setResult(RecordsToNet pRecord) {
+        Log.d(TAG, "Start callback setResult for update i bd");
+        if(pRecord != null) {
+            ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
+
+            cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
+
+            new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
+            new DBOperations().update(UserRecordsDB.TABLE,  cv);
+
+            getLoaderManager().getLoader(0).forceLoad();
+        }
+
+        return null;
     }
 }

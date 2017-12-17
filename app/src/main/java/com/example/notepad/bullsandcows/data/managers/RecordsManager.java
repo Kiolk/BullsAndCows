@@ -25,7 +25,6 @@ public class RecordsManager implements RecordsCallbacks {
 
 
      protected RecordsManager() {
-
         initHandler();
         mListRecordThread = new Thread(mListRecordRunnable);
     }

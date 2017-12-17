@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.NOT_UPDATE_ONLINE_HACK);
             }
 
-            new DBOperations().insert(UserRecordsDB.TABLE, null, cv);
+            new DBOperations().insert(UserRecordsDB.TABLE,  cv);
             Cursor cursor = new DBOperations().query();
             Log.d("MyLogs", String.valueOf(cursor.getCount()));
             int movesIndex = cursor.getColumnIndex(UserRecordsDB.MOVES);
