@@ -12,30 +12,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UpdateLaterCallback;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
-import com.example.notepad.bullsandcows.utils.Converters;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
+import com.example.notepad.bullsandcows.utils.converters.Converters;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
-
-import java.util.ArrayList;
 
 import kiolk.com.github.pen.Pen;
 
 public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder>
         implements UserInfoRecordListener, UpdateLaterCallback {
 
-    private ArrayList<RecordsToNet> modelArrayList;
     private Context mContext;
     private Cursor mCursor;
     private RecordsToNet mRecord;
 
     protected RecordRecyclerViewAdapter(Context pContext, Cursor pCursor) {
-//        this.modelArrayList = pModelArrayList;
         this.mContext = pContext;
         mCursor = pCursor;
     }
@@ -49,23 +44,14 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     @Override
     public void onBindViewHolder(final RecordsViewHolder holder, final int position) {
-//        final RecordsToNet model = modelArrayList.get(position);
+
         if (position % 2 == 0) {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_DARK));
         } else {
             holder.mRelativeLayout.setBackgroundColor(mContext.getResources().getColor(R.color.ITEM_YELLOW_LIGHT));
         }
-//        if (Integer.parseInt(model.getMoves()) <= 5 && Integer.parseInt(model.getCodes()) == 4) {
-//            holder.mRelativeLayout.setPadding(10, 10, 10, 10);
-//            holder.mRelativeLayout.setBackgroundColor(Color.RED);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                holder.mRelativeLayout.setElevation(24);
-//            }
-//        }
-//        holder.mCodTextView.setText(model.getCodes());
 
         mCursor.moveToPosition(position);
-
 
         int indexUpdateOnline = mCursor.getColumnIndex(UserRecordsDB.IS_UPDATE_ONLINE);
 
@@ -85,18 +71,13 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         holder.mCodTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.CODES)));
         long date = mCursor.getLong(mCursor.getColumnIndex(UserRecordsDB.ID));
         String dateString = Converters.convertTimeToString(date);
-//        holder.mDateTextView.setText(Converters.convertTimeToString(model.getDate()));
         holder.mDateTextView.setText(dateString);
-//        holder.mNikNameTextView.setText(model.getNikName());
         final String nikName = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.NIK_NAME));
         holder.mNikNameTextView.setText(nikName);
-//        holder.mMovesTextView.setText(model.getMoves());
         holder.mMovesTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.MOVES)));
-//        holder.mTimeTextView.setText(model.getTime());
         holder.mTimeTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.TIME)));
 
         String url = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL));
-//        Pen.getInstance().getImageFromUrl(model.getUserUrlPhoto()).inputTo(holder.mUserImage);
 
         if (url != null) {
             Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
@@ -106,7 +87,6 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
             @Override
             public void clickItemNik(View pView, int pPosition) {
-//                Toast.makeText(mContext, "NikName of user: " + model.getNikName() + ". Position: " + pPosition, Toast.LENGTH_LONG).show();
                 showInfoFragment(nikName);
             }
         });
@@ -123,10 +103,8 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         mRecord = pRecord;
     }
 
-
     @Override
     public int getItemCount() {
-//        return (null != modelArrayList ? modelArrayList.size() : 0);
         return mCursor.getCount();
     }
 
@@ -142,22 +120,22 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
     @Override
     public RecordsToNet updateLateRecordCallback(RecordsToNet pRecord) {
-       return pRecord;
+        return pRecord;
     }
 
     public class RecordsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView mCodTextView;
-        TextView mDateTextView;
-        TextView mNikNameTextView;
-        TextView mMovesTextView;
-        TextView mTimeTextView;
-        ImageView mUserImage;
-        ImageView mToUpdateResult;
-        RelativeLayout mRelativeLayout;
-        RecordsToNet mRecordInfo;
-        UserNikClickListener.ClickUserNik mUserNikListener;
-        UpdateLaterCallback mLaterUpdateCallback;
+        private TextView mCodTextView;
+        private TextView mDateTextView;
+        private TextView mNikNameTextView;
+        private TextView mMovesTextView;
+        private TextView mTimeTextView;
+        private ImageView mUserImage;
+        private ImageView mToUpdateResult;
+        private RelativeLayout mRelativeLayout;
+        private RecordsToNet mRecordInfo;
+        private UserNikClickListener.ClickUserNik mUserNikListener;
+        private UpdateLaterCallback mLaterUpdateCallback;
 
         RecordsViewHolder(View itemView) {
             super(itemView);
@@ -200,7 +178,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             mLaterUpdateCallback = pLaterUpdateCallback;
         }
 
-        void setRecordInfo(RecordsToNet pRecord){
+        void setRecordInfo(RecordsToNet pRecord) {
             mRecordInfo = pRecord;
         }
     }

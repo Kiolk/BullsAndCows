@@ -1,7 +1,8 @@
-package com.example.notepad.bullsandcows;
+package com.example.notepad.bullsandcows.data.managers;
 
 import android.os.AsyncTask;
 
+import com.example.notepad.bullsandcows.BuildConfig;
 import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
@@ -17,12 +18,12 @@ public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, RecordsTo
 
     private PostRecordSuccessListener mSuccessListener;
 
-    public RecordAsyncTaskPost(){
+    public RecordAsyncTaskPost() {
         mSuccessListener = null;
     }
 
-    public RecordAsyncTaskPost(PostRecordSuccessListener pListener){
-       mSuccessListener = pListener;
+    public RecordAsyncTaskPost(PostRecordSuccessListener pListener) {
+        mSuccessListener = pListener;
     }
 
     @Override
@@ -32,10 +33,10 @@ public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, RecordsTo
 
     @Override
     protected void onPostExecute(RecordsToNet pRecord) {
-        if(mSuccessListener != null){
-            if(pRecord != null){
+        if (mSuccessListener != null) {
+            if (pRecord != null) {
                 mSuccessListener.setResult(pRecord);
-            }else {
+            } else {
                 mSuccessListener.setResult(null);
             }
         }
@@ -45,7 +46,7 @@ public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, RecordsTo
 
     @Override
     protected RecordsToNet doInBackground(RecordsToNet... pRecordsToNets) {
-        if(myApiService == null){
+        if (myApiService == null) {
             RecordsToNetApi.Builder builder = new RecordsToNetApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl(USER_RECORD_BACKEND);
 
@@ -54,10 +55,10 @@ public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, RecordsTo
         RecordsToNet recordsToNet = pRecordsToNets[0];
 
 
-        try{
-            String cod = myApiService.insert(recordsToNet).execute().toString();
-            return recordsToNet;//(recordsToNet).execute().toString();
-        }catch (IOException pE){
+        try {
+            myApiService.insert(recordsToNet).execute();
+            return recordsToNet;
+        } catch (IOException pE) {
             pE.printStackTrace();
         }
 

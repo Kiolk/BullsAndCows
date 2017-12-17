@@ -1,4 +1,6 @@
-package com.example.notepad.bullsandcows.utils;
+package com.example.notepad.bullsandcows.utils.converters;
+
+import com.example.notepad.bullsandcows.utils.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

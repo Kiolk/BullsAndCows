@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows.utils;
+package com.example.notepad.bullsandcows.utils.converters;
 
 import android.content.ContentValues;
 
@@ -17,8 +17,9 @@ public class ModelConverterUtil {
         cv.put(UserRecordsDB.MOVES, Integer.parseInt(pRecord.getMoves()));
         cv.put(UserRecordsDB.CODES, Integer.parseInt(pRecord.getCodes()));
         cv.put(UserRecordsDB.TIME, pRecord.getTime());
-        cv.put(UserRecordsDB.USER_PHOTO_URL, pRecord.getUserUrlPhoto());
-
+        if(pRecord.getUserUrlPhoto() != null) {
+            cv.put(UserRecordsDB.USER_PHOTO_URL, pRecord.getUserUrlPhoto());
+        }
         return cv;
     }
 

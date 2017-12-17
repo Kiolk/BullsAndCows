@@ -22,7 +22,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.RecordAsyncTaskPost;
+import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.Loaders.CursorDBLoader;
 import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
@@ -33,7 +33,7 @@ import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewA
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
-import com.example.notepad.bullsandcows.utils.ModelConverterUtil;
+import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
@@ -42,7 +42,7 @@ import java.util.TimerTask;
 
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
-public class RecordsCardActivityFromCursorLoader extends AppCompatActivity
+public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivity
         implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>,
         PostRecordSuccessListener {
@@ -111,14 +111,14 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity
             @Override
             public void run() {
                 Log.d(TAG, "TimerTask run");
-                Intent intent = new Intent(RecordsCardActivityFromCursorLoader.this, WaiterNewRecordsService.class);
+                Intent intent = new Intent(RecordsCardActivityFromCursorLoaderActivity.this, WaiterNewRecordsService.class);
                 startService(intent);
             }
         };
 
         mTimer = new Timer();
 
-        if (CheckConnection.checkConnection(RecordsCardActivityFromCursorLoader.this)) {
+        if (CheckConnection.checkConnection(RecordsCardActivityFromCursorLoaderActivity.this)) {
             mTimer.scheduleAtFixedRate(mTimerTask, 1000, 35000);
         }
     }
@@ -140,9 +140,9 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity
             @Override
             public RecordsToNet updateLateRecordCallback(RecordsToNet pRecord) {
                 RecordsToNet record = super.updateLateRecordCallback(pRecord);
-                Toast.makeText(RecordsCardActivityFromCursorLoader.this,
+                Toast.makeText(RecordsCardActivityFromCursorLoaderActivity.this,
                         record.getTime(), Toast.LENGTH_LONG).show();
-                new RecordAsyncTaskPost(RecordsCardActivityFromCursorLoader.this).execute(pRecord);
+                new RecordAsyncTaskPost(RecordsCardActivityFromCursorLoaderActivity.this).execute(pRecord);
                 return record;
             }
         };
@@ -157,7 +157,7 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity
             @Override
             public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
                 UserDataBase user = super.getFullUserInfoCallback(pUserData);
-                mUserInfoFragment.showInfoAboutUser(RecordsCardActivityFromCursorLoader.this, user);
+                mUserInfoFragment.showInfoAboutUser(RecordsCardActivityFromCursorLoaderActivity.this, user);
 
                 return pUserData;
             }
@@ -220,9 +220,9 @@ public class RecordsCardActivityFromCursorLoader extends AppCompatActivity
             String coded = args.getString(CODED_BUNDL_KEY);
             String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
             String[] request = new String[]{userName, coded, lastTimeSort};
-            return new CursorDBLoader(RecordsCardActivityFromCursorLoader.this, request);
+            return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this, request);
         }
-        return new CursorDBLoader(RecordsCardActivityFromCursorLoader.this);
+        return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this);
     }
 
     @Override

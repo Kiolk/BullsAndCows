@@ -19,7 +19,7 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.ui.activity.adapters.UserRecordsRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
-import com.example.notepad.bullsandcows.utils.Converters;
+import com.example.notepad.bullsandcows.utils.converters.Converters;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;

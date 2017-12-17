@@ -11,7 +11,7 @@ import android.util.Log;
 
 import com.example.notepad.bullsandcows.data.databases.dblisteners.CursorListener;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
-import com.example.notepad.bullsandcows.utils.Converters;
+import com.example.notepad.bullsandcows.utils.converters.Converters;
 
 public class DBOperations {
 

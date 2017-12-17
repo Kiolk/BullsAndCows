@@ -1,6 +1,6 @@
 package com.example.notepad.bullsandcows;
 
-import com.example.notepad.bullsandcows.utils.RandomNumberGenerator;
+import com.example.notepad.bullsandcows.utils.logic.RandomNumberGenerator;
 
 import org.junit.Before;
 import org.junit.Test;

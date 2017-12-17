@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+@Deprecated
 public class LoadNewVersionOfApp {
 
     private Context mContext;

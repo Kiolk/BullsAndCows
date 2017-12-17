@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.DBConnector;
-import com.example.notepad.bullsandcows.utils.AnimationOfView;
+import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 

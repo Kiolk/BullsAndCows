@@ -1,19 +1,18 @@
-package com.example.notepad.bullsandcows.utils;
+package com.example.notepad.bullsandcows.utils.logic;
+
+import com.example.notepad.bullsandcows.utils.Constants;
 
 import java.util.Random;
 
-/*
-This class generate random number for game. Checking input number.
-*/
+public class RandomNumberGenerator  {
 
-public class RandomNumberGenerator implements IRandomNumberGenerator{
-
-    public static final int NUMBER_TO_9 = 10;
+    private static final int NUMBER_TO_9 = 10;
 
     public String generateRandomNumber(int pNumberOfDigits) {
         int[] randomNumber = new int[10];
-        String result = "";
-        for (int i = 0, j = 0; i < pNumberOfDigits; ++i) {
+        StringBuilder result = new StringBuilder(Constants.EMPTY_STRING);
+
+        for (int i = 0, j; i < pNumberOfDigits; ++i) {
             Random r = new Random();
             int k = r.nextInt(NUMBER_TO_9);
             if (i == 0) {
@@ -28,24 +27,26 @@ public class RandomNumberGenerator implements IRandomNumberGenerator{
                     }
                 }
             }
-
         }
+
         for (int i = 0; i < pNumberOfDigits; ++i) {
-            result = result + randomNumber[i];
+            result.append(randomNumber[i]);
         }
 
-        return result;
+        return result.toString();
     }
 
     public int checkNumberOfBulls(String pCodedNumber, String pEnteredNumber) {
         int numberOfBulls = 0;
         char[] codedNumberArray = pCodedNumber.toCharArray();
         char[] enteredNumberArray = pEnteredNumber.toCharArray();
+
         for (int i = 0; i < pCodedNumber.length(); ++i) {
             if (codedNumberArray[i] == enteredNumberArray[i]) {
                 ++numberOfBulls;
             }
         }
+
         return numberOfBulls;
     }
 
@@ -54,6 +55,7 @@ public class RandomNumberGenerator implements IRandomNumberGenerator{
         char[] codedNumberArray = pCodedNumber.toCharArray();
         char[] enteredNumberArray = pEnteredNumber.toCharArray();
         int lengthOfNumber = codedNumberArray.length;
+
         for (int i = 0; i < lengthOfNumber; ++i) {
             for (int j = 0; j < lengthOfNumber; ++j) {
                 if (codedNumberArray[i] == enteredNumberArray[j] && i != j) {
@@ -61,21 +63,27 @@ public class RandomNumberGenerator implements IRandomNumberGenerator{
                 }
             }
         }
+
         return numberOfCows;
     }
 
     public boolean checkNumberForCorrectInput(String pEnteredNumber, int pNumberOfDigits) {
+
         if (pEnteredNumber.length() == pNumberOfDigits) {
+
             for (int i = 0; i < pNumberOfDigits; ++i) {
                 if (pEnteredNumber.charAt(i) < '0' || pEnteredNumber.charAt(i) > '9') {
                     return false;
                 }
             }
+
             int numberForChecking = Integer.parseInt(pEnteredNumber);
             int k = 1;
+
             for (int i = 0; i < pNumberOfDigits - 1; ++i) {
                 k = k * 10;
             }
+
             if (numberForChecking >= k) {
                 int[] numberArray;
                 numberArray = new int[pNumberOfDigits];
@@ -93,14 +101,18 @@ public class RandomNumberGenerator implements IRandomNumberGenerator{
                         }
                     }
                 }
+
                 return true;
+
             } else if (pEnteredNumber.charAt(0) == '0' && numberForChecking >= k / 10) {
                 int[] numberArray;
                 numberArray = new int[pNumberOfDigits];
+
                 for (int i = pNumberOfDigits - 1; i >= 1; --i) {
                     numberArray[i] = numberForChecking % 10;
                     numberForChecking = numberForChecking / 10;
                 }
+
                 for (int i = 0, cnt = 0; i < pNumberOfDigits; ++i) {
                     for (int j = 0; j < pNumberOfDigits; ++j) {
                         if (numberArray[i] == numberArray[j]) {
@@ -115,6 +127,7 @@ public class RandomNumberGenerator implements IRandomNumberGenerator{
                 return true;
             }
         }
+
         return false;
     }
 }

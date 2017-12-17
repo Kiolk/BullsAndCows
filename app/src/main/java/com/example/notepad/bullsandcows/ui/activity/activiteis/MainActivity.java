@@ -6,12 +6,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,24 +21,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.bullsandcows.CustomAdapter;
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.RecordAsyncTaskPost;
-import com.example.notepad.bullsandcows.WriteReadFile;
 import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
+import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.services.WinSoundService;
+import com.example.notepad.bullsandcows.ui.activity.adapters.MovesListCustomAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.EditProfileFragment;
 import com.example.notepad.bullsandcows.ui.activity.fragments.WinFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.CloseEditProfileListener;
-import com.example.notepad.bullsandcows.utils.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
-import com.example.notepad.bullsandcows.utils.LanguageLocale;
-import com.example.notepad.bullsandcows.utils.RandomNumberGenerator;
+import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
+import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
+import com.example.notepad.bullsandcows.utils.logic.RandomNumberGenerator;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
@@ -67,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String COUNT_OF_MOVES = "countOfMoves";
     public static final String TIMER_OF_MOVES = "timerOfMoves";
     public static final String NUMBER_OF_CODED_DIGITS = "numberOfCodedDigits";
-    public static final int REQUEST_CODE_CHOICE_LANGUAGE = 5;
     public static final int SETTING_REQUEST_CODE = 1;
     public static final String START_TIME_KEY = "StartTime";
     public static final int VIBRATION_MILLISECONDS = 500;
@@ -93,13 +89,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int checkRestart = DIG;
     private long mTimerCount = 0;
     private Timer mTimerTimer = null;
-    private WriteReadFile mWriteReadFile = new WriteReadFile();
-    //    private String passwordOfUser;
-//    private Boolean mKeepPassword;
     private WinFragment mWinFragment;
     private EditProfileFragment mEditProfileFragment;
     private FragmentTransaction mTransaction;
-    private String mLanguageLocale;
     private long mStartGameTime;
     private FragmentManager mFragmentManager;
     private CloseEditProfileListener mCloseEditListener;
@@ -149,13 +141,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         outState.putLong(TIMER_OF_MOVES, mTimerCount);
         outState.putLong(START_TIME_KEY, mStartGameTime);
         outState.putInt(NUMBER_OF_CODED_DIGITS, DIG);
-        outState.putString(Constants.CODE_OF_LANGUAGE, mLanguageLocale);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        mLanguageLocale = savedInstanceState.getString(Constants.CODE_OF_LANGUAGE, "en");
-        LanguageLocale.setLocale(mLanguageLocale, MainActivity.this);
         super.onRestoreInstanceState(savedInstanceState);
         mInputNumberView.setText(savedInstanceState.getString(INPUT_NUMBER, DEFAULT_VLUE_FOR_STRING));
         mCodedNumber = savedInstanceState.getString(CODED_NUMBER, DEFAULT_VLUE_FOR_STRING);
@@ -289,15 +278,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
                 break;
             case R.id.record_item_menu:
-                intent = new Intent(this, RecordsCardActivityFromBD.class);
+                intent = new Intent(this, RecordsCardActivityFromCursorLoaderActivity.class);
                 startActivity(intent);
                 break;
             case R.id.edit_profile_menu:
                 showEditProfileFragment();
-                break;
-            case R.id.online_records_with_pagination_menu:
-                intent = new Intent(this, RecordsCardActivityFromCursorLoader.class);
-                startActivity(intent);
                 break;
             default:
                 break;
@@ -326,35 +311,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void checkNumberForWin() {
         int numberOfBulls = new RandomNumberGenerator().checkNumberOfBulls(mCodedNumber, mInputNumberView.getText().toString());
+
         if (numberOfBulls == DIG) {
             mInputNumberView.setText(R.string.WON_MESSAGE);
             mTimerTimer.cancel();
 
-            String numberOfMoves = String.valueOf(cntMoves - 1);
-            String numberOfCodedDigits = String.valueOf(DIG);
             RecordsToNet note = new RecordsToNet();
 
             note.setDate(BACK_EPOCH_TIME_NOTATION - System.currentTimeMillis());
             note.setTime(mTimer.getText().toString());
             note.setNikName(mNikOfUser.getText().toString());
-            note.setMoves(numberOfMoves);
-            note.setCodes(numberOfCodedDigits);
+            note.setMoves(String.valueOf(cntMoves - 1));
+            note.setCodes(String.valueOf(DIG));
 
-            if(UserLoginHolder.getInstance().getUserInfo() != null) {
+            if (UserLoginHolder.getInstance().getUserInfo() != null) {
                 note.setUserUrlPhoto(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
             }
 
-            ContentValues cv = new ContentValues();
+            ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(note);
 
-            cv.put(UserRecordsDB.ID, note.getDate());
-            cv.put(UserRecordsDB.NIK_NAME, note.getNikName());
-            cv.put(UserRecordsDB.MOVES, cntMoves - 1);
-            cv.put(UserRecordsDB.CODES, DIG);
-            cv.put(UserRecordsDB.TIME, note.getTime());
-
-            if(UserLoginHolder.getInstance().getUserInfo() != null) {
-                cv.put(UserRecordsDB.USER_PHOTO_URL, note.getUserUrlPhoto());
-            }
+//            cv.put(UserRecordsDB.ID, note.getDate());
+//            cv.put(UserRecordsDB.NIK_NAME, note.getNikName());
+//            cv.put(UserRecordsDB.MOVES, cntMoves - 1);
+//            cv.put(UserRecordsDB.CODES, DIG);
+//            cv.put(UserRecordsDB.TIME, note.getTime());
+//
+//            if (UserLoginHolder.getInstance().getUserInfo() != null) {
+//                cv.put(UserRecordsDB.USER_PHOTO_URL, note.getUserUrlPhoto());
+//            }
 
             if (CheckConnection.checkConnection(this)) {
                 cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
@@ -362,39 +346,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.NOT_UPDATE_ONLINE_HACK);
             }
 
-            new DBOperations().insert(UserRecordsDB.TABLE,  cv);
-            Cursor cursor = new DBOperations().query();
-            Log.d("MyLogs", String.valueOf(cursor.getCount()));
-            int movesIndex = cursor.getColumnIndex(UserRecordsDB.MOVES);
-            int timeIndex = cursor.getColumnIndex(UserRecordsDB.TIME);
-            int nikIndex = cursor.getColumnIndex(UserRecordsDB.NIK_NAME);
-            int updateIndex = cursor.getColumnIndex(UserRecordsDB.IS_UPDATE_ONLINE);
-            while (cursor.moveToNext()) {
-                Log.d("MyLogs", cursor.getString(movesIndex) +
-                        cursor.getString(nikIndex) + cursor.getString(timeIndex) +
-                        " is online: " + cursor.getString(updateIndex));
-            }
-            cursor.close();
+            new DBOperations().insert(UserRecordsDB.TABLE, cv);
 
-            BestUserRecords recordForCheck = new BestUserRecords();
-            recordForCheck.setCodes(note.getCodes());
-            recordForCheck.setDate(note.getDate());
-            recordForCheck.setMoves(note.getMoves());
-            recordForCheck.setNikName(note.getNikName());
-            recordForCheck.setTime(note.getTime());
-
-
-
+            BestUserRecords recordForCheck = ModelConverterUtil.fromRecordToNetToBestUserRecords(note);
 
             if (UserLoginHolder.getInstance().isLogged()) {
 
-                UserBaseManager userManager = new UserBaseManager();
-                userManager.checkNewBestRecord(recordForCheck);
+                new UserBaseManager().checkNewBestRecord(recordForCheck);
                 new RecordAsyncTaskPost().execute(note);
             }
 
-            mWriteReadFile.writeInFile(numberOfMoves, mNikOfUser.getText().toString(), mTimer.getText().toString(), numberOfCodedDigits, this);
-            mWriteReadFile.readFile(this);
             showWinFragment();
             submitStart();
         }
@@ -420,11 +381,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     Toast.makeText(this, getResources().getString(R.string.WE_BACK_WITHOUT_CHANGE), Toast.LENGTH_LONG).show();
                 }
-            case REQUEST_CODE_CHOICE_LANGUAGE:
-                if (resultCode == RESULT_OK) {
-                    mLanguageLocale = data.getStringExtra(Constants.CODE_OF_LANGUAGE);
-                }
-                break;
             default:
                 break;
         }
@@ -502,8 +458,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void createListViewWithMoves() {
         ListView listOfMoves = findViewById(R.id.list_of_moves_list_view);
-        CustomAdapter customAdapter = new CustomAdapter(getApplicationContext(), mMoves, mNumbers, mBulls, mCows, mode);
-        listOfMoves.setAdapter(customAdapter);
+        MovesListCustomAdapter movesListCustomAdapter = new MovesListCustomAdapter(getApplicationContext(), mMoves, mNumbers, mBulls, mCows, mode);
+        listOfMoves.setAdapter(movesListCustomAdapter);
     }
 
     public void showWinFragment() {

@@ -68,7 +68,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                     AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
                     String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
                     if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
-                        showUpdateAppFragment();
+                        //showUpdateAppFragment();
                     }
 
                     return mVersionOfApp;

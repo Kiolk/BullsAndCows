@@ -15,14 +15,14 @@ import android.widget.Toast;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
-import com.example.notepad.bullsandcows.utils.Converters;
+import com.example.notepad.bullsandcows.utils.converters.Converters;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.util.ArrayList;
 
 import kiolk.com.github.pen.Pen;
-
+@Deprecated
 public class RecordRecyclerViewWithPaginationAdapter extends RecyclerView.Adapter<RecordRecyclerViewWithPaginationAdapter.RecordsViewHolder> implements UserInfoRecordListener {
 
     private ArrayList<RecordsToNet> modelArrayList;

@@ -2,7 +2,7 @@ package com.example.notepad.bullsandcows.utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
+@Deprecated
 public class ParsUserFactory {
 
 //    public UserDataBase parseForUserData (String pS){

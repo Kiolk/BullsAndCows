@@ -1,7 +1,7 @@
 package com.example.notepad.bullsandcows.data.factories;
 
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
-import com.example.notepad.bullsandcows.utils.Converters;
+import com.example.notepad.bullsandcows.utils.converters.Converters;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import org.json.JSONArray;

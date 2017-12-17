@@ -35,27 +35,17 @@
             android:name=".ui.activity.activiteis.AboutActivity"
             android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity
-            android:name=".Records"
-            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
-        <activity
             android:name=".ui.activity.activiteis.WelcomeActivity"
-            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
-        <activity
-            android:name=".OnlineRecords"
             android:parentActivityName=".ui.activity.activiteis.MainActivity" />
 
         <service android:name=".services.WinSoundService" />
-        <service android:name=".services.RefreshOnlineRecordService" />
         <service android:name=".services.WaiterNewRecordsService"/>
         <service android:name=".services.UpdateAppService" />
 
         <activity android:name=".ui.activity.activiteis.RegistrationPageActivity" />
-        <activity
-            android:name=".ChoiceLanguageActivity"
-            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
         <activity android:name=".ui.activity.activiteis.RecordsCardActivity" />
         <activity android:name=".ui.activity.activiteis.RecordsCardActivityFromBD" />
-        <activity android:name=".ui.activity.activiteis.RecordsCardActivityFromCursorLoader" />
+        <activity android:name=".ui.activity.activiteis.RecordsCardActivityFromCursorLoaderActivity" />
     </application>
 
 </manifest>

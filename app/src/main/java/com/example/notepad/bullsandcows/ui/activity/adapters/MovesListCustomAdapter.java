@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows;
+package com.example.notepad.bullsandcows.ui.activity.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.notepad.bullsandcows.R;
+
 import java.util.ArrayList;
 
-public class CustomAdapter extends BaseAdapter{
+public class MovesListCustomAdapter extends BaseAdapter{
 
     Context mContext;
     ArrayList<String> mMoves = new ArrayList<>();
@@ -20,7 +22,7 @@ public class CustomAdapter extends BaseAdapter{
     LayoutInflater mLayoutInflater;
     Boolean mColorMode;
 
-    public CustomAdapter (Context aplicationContext, ArrayList<String> mMoves, ArrayList<String> mNumbers, ArrayList<String> mBuls, ArrayList<String> mCows, Boolean pBoolean){
+    public MovesListCustomAdapter(Context aplicationContext, ArrayList<String> mMoves, ArrayList<String> mNumbers, ArrayList<String> mBuls, ArrayList<String> mCows, Boolean pBoolean){
         this.mContext = aplicationContext;
         this.mMoves = mMoves;
         this.mNumbers = mNumbers;

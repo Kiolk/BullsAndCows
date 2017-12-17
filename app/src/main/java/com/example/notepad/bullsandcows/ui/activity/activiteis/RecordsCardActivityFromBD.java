@@ -30,7 +30,7 @@ import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsTo
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import java.util.ArrayList;
-
+@Deprecated
 public class RecordsCardActivityFromBD extends AppCompatActivity implements View.OnClickListener {
 
     private ArrayList<RecordsToNet> recordModelArrayList;

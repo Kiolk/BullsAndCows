@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.utils.Constants;
-import com.example.notepad.bullsandcows.utils.Converters;
+import com.example.notepad.bullsandcows.utils.converters.Converters;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
 import java.util.ArrayList;
