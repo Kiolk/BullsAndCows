@@ -2,20 +2,28 @@ package com.example.notepad.bullsandcows;
 
 import android.os.AsyncTask;
 
+import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.myapplication.backend.recordsToNetApi.RecordsToNetApi;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
-import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
-import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-
 import java.io.IOException;
 
-public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, String> {
+public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, RecordsToNet> {
 
-    public static final String USER_RECORD_BACKEND = BuildConfig.BACKEND_USER_INFO;
+    private static final String USER_RECORD_BACKEND = BuildConfig.BACKEND_USER_INFO;
     private static RecordsToNetApi myApiService = null;
+
+    private PostRecordSuccessListener mSuccessListener;
+
+    public RecordAsyncTaskPost(){
+        mSuccessListener = null;
+    }
+
+    public RecordAsyncTaskPost(PostRecordSuccessListener pListener){
+       mSuccessListener = pListener;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -23,12 +31,20 @@ public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String pS) {
-        super.onPostExecute(pS);
+    protected void onPostExecute(RecordsToNet pRecord) {
+        if(mSuccessListener != null){
+            if(pRecord != null){
+                mSuccessListener.setResult(pRecord);
+            }else {
+                mSuccessListener.setResult(null);
+            }
+        }
+
+        super.onPostExecute(pRecord);
     }
 
     @Override
-    protected String doInBackground(RecordsToNet... pRecordsToNets) {
+    protected RecordsToNet doInBackground(RecordsToNet... pRecordsToNets) {
         if(myApiService == null){
             RecordsToNetApi.Builder builder = new RecordsToNetApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl(USER_RECORD_BACKEND);
@@ -40,7 +56,7 @@ public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, String> {
 
         try{
             String cod = myApiService.insert(recordsToNet).execute().toString();
-            return cod;//(recordsToNet).execute().toString();
+            return recordsToNet;//(recordsToNet).execute().toString();
         }catch (IOException pE){
             pE.printStackTrace();
         }

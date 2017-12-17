@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
+import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
+import com.example.notepad.bullsandcows.ui.activity.listeners.UpdateLaterCallback;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
 import com.example.notepad.bullsandcows.utils.Converters;
@@ -24,11 +26,13 @@ import java.util.ArrayList;
 
 import kiolk.com.github.pen.Pen;
 
-public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder> implements UserInfoRecordListener{
+public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder>
+        implements UserInfoRecordListener, UpdateLaterCallback {
 
     private ArrayList<RecordsToNet> modelArrayList;
     private Context mContext;
     private Cursor mCursor;
+    private RecordsToNet mRecord;
 
     protected RecordRecyclerViewAdapter(Context pContext, Cursor pCursor) {
 //        this.modelArrayList = pModelArrayList;
@@ -61,13 +65,20 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 //        holder.mCodTextView.setText(model.getCodes());
 
         mCursor.moveToPosition(position);
+
+
         int indexUpdateOnline = mCursor.getColumnIndex(UserRecordsDB.IS_UPDATE_ONLINE);
 
-        if(mCursor.getString(indexUpdateOnline)!= null
+        if (mCursor.getString(indexUpdateOnline) != null
                 && mCursor.getString(indexUpdateOnline)
-                .equals(UserRecordsDB.NOT_UPDATE_ONLINE_HACK)){
+                .equals(UserRecordsDB.NOT_UPDATE_ONLINE_HACK) &&
+                UserLoginHolder.getInstance().getUserName()
+                        .equals(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.NIK_NAME)))) {
+            holder.setLaterUpdateCallback(this);
             holder.mToUpdateResult.setVisibility(View.VISIBLE);
-        }else{
+            getRecordForUpdate();
+            holder.setRecordInfo(mRecord);
+        } else {
             holder.mToUpdateResult.setVisibility(View.INVISIBLE);
         }
 
@@ -87,8 +98,10 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         String url = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL));
 //        Pen.getInstance().getImageFromUrl(model.getUserUrlPhoto()).inputTo(holder.mUserImage);
 
-        if(url != null) {
+        if (url != null) {
             Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
+        } else {
+            holder.mUserImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.bullgood));
         }
         holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
             @Override
@@ -97,6 +110,17 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
                 showInfoFragment(nikName);
             }
         });
+    }
+
+    private void getRecordForUpdate() {
+        RecordsToNet pRecord = new RecordsToNet();
+        pRecord.setNikName(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.NIK_NAME)));
+        pRecord.setUserUrlPhoto(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL)));
+        pRecord.setMoves(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.MOVES)));
+        pRecord.setCodes(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.CODES)));
+        pRecord.setTime(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.TIME)));
+        pRecord.setDate(mCursor.getLong(mCursor.getColumnIndex(UserRecordsDB.ID)));
+        mRecord = pRecord;
     }
 
 
@@ -116,6 +140,11 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         return pUserName;
     }
 
+    @Override
+    public RecordsToNet updateLateRecordCallback(RecordsToNet pRecord) {
+       return pRecord;
+    }
+
     public class RecordsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mCodTextView;
@@ -126,8 +155,9 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         ImageView mUserImage;
         ImageView mToUpdateResult;
         RelativeLayout mRelativeLayout;
+        RecordsToNet mRecordInfo;
         UserNikClickListener.ClickUserNik mUserNikListener;
-
+        UpdateLaterCallback mLaterUpdateCallback;
 
         RecordsViewHolder(View itemView) {
             super(itemView);
@@ -141,20 +171,37 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             mNikNameTextView.setOnClickListener(this);
             mUserImage = itemView.findViewById(R.id.picture_of_user_image_view);
             mToUpdateResult = itemView.findViewById(R.id.online_update_record_image_view);
+            mToUpdateResult.setOnClickListener(this);
         }
-
 
 
         @Override
         public void onClick(View v) {
-            if (mUserNikListener != null) {
-                mUserNikListener.clickItemNik(v, getAdapterPosition());
-                Toast.makeText(mContext, "NikName of user: " + mNikNameTextView.getText() + ". Position: " + getAdapterPosition(), Toast.LENGTH_LONG).show();
+            switch (v.getId()) {
+                case R.id.user_name_card_text_view:
+                    if (mUserNikListener != null) {
+                        mUserNikListener.clickItemNik(v, getAdapterPosition());
+                        Toast.makeText(mContext, "NikName of user: " + mNikNameTextView.getText() + ". Position: " + getAdapterPosition(), Toast.LENGTH_LONG).show();
+                    }
+                    break;
+                case R.id.online_update_record_image_view:
+                    mLaterUpdateCallback.updateLateRecordCallback(mRecordInfo);
+                    break;
+                default:
+                    break;
             }
         }
 
-        void setClickNikListener(UserNikClickListener.ClickUserNik pUserNikListener){
+        void setClickNikListener(UserNikClickListener.ClickUserNik pUserNikListener) {
             mUserNikListener = pUserNikListener;
+        }
+
+        void setLaterUpdateCallback(UpdateLaterCallback pLaterUpdateCallback) {
+            mLaterUpdateCallback = pLaterUpdateCallback;
+        }
+
+        void setRecordInfo(RecordsToNet pRecord){
+            mRecordInfo = pRecord;
         }
     }
 }
