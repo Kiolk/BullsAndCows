@@ -2,17 +2,10 @@ package com.example.notepad.bullsandcows.ui.activity.activiteis;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -33,27 +26,18 @@ import com.example.notepad.bullsandcows.ui.activity.fragments.UpdateAppFragment;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
-import com.example.notepad.bullsandcows.utils.LoadNewVersionOfApp;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
-public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragment.UpdateAppListener {
+public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragment.UpdateAppListener , View.OnClickListener{
 
     public static final String IS_CHECKED_KEEP_PASSWORD = "isCheckedKeepPassword";
     public static final String DEFAULT_PASSWORD_FOR_GUEST = "1111";
     public static final int REGISTRATION_REQUEST_CODE = 3;
 
-    VersionOfApp mVersionOfApp;
-    TextView mInfoVersionTextView;
-    TextView mWelcomeInformationTextView;
-    EditText mLogin;
-    EditText mPassword;
-    Boolean mCurrentVersionAppWelcome;
-    Button mVisitCheckVersion;
-    Button mLoginButton;
-    Button mRegistrationButton;
-    CheckBox mCheckBox;
-    String mNewVersion = "";
-    Boolean mIsJoinToOnline;
+    private VersionOfApp mVersionOfApp;
+    private EditText mLogin;
+    private EditText mPassword;
+    private CheckBox mCheckBox;
     private UpdateAppFragment mUpdateFragment;
     private FragmentTransaction mFragmentTransaction;
     private FragmentManager mFragmentManager;
@@ -66,7 +50,9 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_welcome);
+
         UserLoginHolder.getInstance().setUserOnline();
+
         initView();
         checkAppActualVersion();
         loadDataFromPreferences();
@@ -74,8 +60,8 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
 
     protected void checkAppActualVersion() {
         if (CheckConnection.checkConnection(WelcomeActivity.this)) {
-//            new CheckingVersionOfApp().execute(BuildConfig.VERSION_NAME);
             AppInfoManager appManager = new AppInfoManager(BuildConfig.VERSION_NAME) {
+
                 @Override
                 public VersionOfApp getInfoAppCallback(VersionOfApp versionOfApp) {
                     mVersionOfApp = super.getInfoAppCallback(versionOfApp);
@@ -84,140 +70,30 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                     if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
                         showUpdateAppFragment();
                     }
-                    String newVersion = mVersionOfApp.getVersionOfApp();
-
-                    checkAppVersion(Integer.parseInt(newVersion));
 
                     return mVersionOfApp;
                 }
             };
+
             appManager.getCurrentAppInfo();
         }
     }
 
     private void initView() {
-        mInfoVersionTextView = findViewById(R.id.info_about_version_text_view);
-        mVisitCheckVersion = findViewById(R.id.check_version_app_button);
-        mLoginButton = findViewById(R.id.login_button);
-        mRegistrationButton = findViewById(R.id.registration_welcome_button);
+        Button loginButton = findViewById(R.id.login_button);
+        Button registrationButton = findViewById(R.id.registration_welcome_button);
         mLogin = findViewById(R.id.login_welcome_page_edit_text);
         mPassword = findViewById(R.id.password_welcome_page_edit_text);
         mCheckBox = findViewById(R.id.keep_password_check_box);
-        mWelcomeInformationTextView = findViewById(R.id.welcome_text_text_view);
-        mWelcomeInformationTextView.setTypeface(CustomFonts.getTypeFace(WelcomeActivity.this, CustomFonts.AASSUANBRK));
+        TextView welcomeInformationTextView = findViewById(R.id.welcome_text_text_view);
+        welcomeInformationTextView.setTypeface(CustomFonts.getTypeFace(WelcomeActivity.this, CustomFonts.AASSUANBRK));
 
-        mVisitCheckVersion.setOnClickListener(mClickButton);
-        mRegistrationButton.setOnClickListener(mClickButton);
-        mLoginButton.setOnClickListener(mClickButton);
+        registrationButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
 
         mUpdateFragment = new UpdateAppFragment();
         mUpdateFrame = findViewById(R.id.for_update_fragment_frame_layout);
     }
-
-    View.OnClickListener mClickButton = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View pView) {
-            switch (pView.getId()) {
-                case R.id.check_version_app_button:
-                    if (CheckConnection.checkConnection(WelcomeActivity.this)) {
-                        if (mCurrentVersionAppWelcome) {
-                            Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_SITE_OF_PROJECT));
-                            startActivity(intent1);
-                        } else {
-
-//                            Intent uploadAppIntent = new Intent(WelcomeActivity.this, UpdateAppService.class);
-//                            getActivity().startService(uploadAppIntent);
-
-                            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(WelcomeActivity.this).
-                                    setSmallIcon(R.drawable.bullgood).
-                                    setContentTitle("Start download new version").
-                                    setContentText("New version of Bulls and cows app");
-                            Intent resultIntent = new Intent(WelcomeActivity.this, MainActivity.class);
-                            TaskStackBuilder stackBuilder = TaskStackBuilder.create(WelcomeActivity.this);
-                            stackBuilder.addParentStack(MainActivity.class);
-                            stackBuilder.addNextIntent(resultIntent);
-                            PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-                            mBuilder.setContentIntent(resultPendingIntent);
-                            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                            notificationManager.notify(1, mBuilder.build());
-
-                            new LoadNewVersionOfApp(WelcomeActivity.this, mVisitCheckVersion, mVersionOfApp.getUrlNewVersionOfApp(), mVersionOfApp.getNameOfApp());
-                            //TODO not very clear representation that new version of application download on phone
-                            mCurrentVersionAppWelcome = true;
-//                            checkVersionOfApp();
-                        }
-                    } else {
-                        CheckConnection.showToastAboutDisconnection(WelcomeActivity.this);
-                    }
-                    break;
-                case R.id.registration_welcome_button:
-                    Intent intentRegistration = new Intent(WelcomeActivity.this, RegistrationPageActivity.class);
-
-                    intentRegistration.putExtra(Constants.REGISTRATION_NAME_OF_USER, Constants.EMPTY_STRING);
-                    intentRegistration.putExtra(Constants.REGISTRATION_PASSWORD, Constants.EMPTY_STRING);
-
-                    startActivityForResult(intentRegistration, REGISTRATION_REQUEST_CODE);
-                    break;
-                case R.id.login_button:
-                    String name = mLogin.getText().toString();
-                    String password = mPassword.getText().toString();
-
-                    if (name.length() > 0 && password.length() > 0) {
-                        if (CheckConnection.checkConnection(WelcomeActivity.this)) {
-
-                            UserBaseManager userManager = new UserBaseManager() {
-
-                                @Override
-                                public UserDataBase nikPasswordCorrectCallback(UserDataBase pUserInfo) {
-                                    UserDataBase userInfo = super.nikPasswordCorrectCallback(pUserInfo);
-                                    UserLoginHolder.getInstance().setUserInfo(pUserInfo);
-                                    UserLoginHolder.getInstance().setPassword(userInfo.getPassword());
-                                    UserLoginHolder.getInstance().setUserName(userInfo.getUserName());
-                                    UserLoginHolder.getInstance().setLogged(true);
-
-                                    Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-//                                    mIsJoinToOnline = true;
-//                                    Intent intent = new Intent(WelcomeActivity.this, CheckOnlineService.class);
-//                                    intent.putExtra(Constants.IntentKeys.USER_NAME_INTENT_KEY, pUserInfo.getUserName());
-//                                    startService(intent);
-                                    startMainActivity();
-                                    return userInfo;
-                                }
-
-                                @Override
-                                public void nikCorrectPasswordWrongCallback() {
-                                    super.nikCorrectPasswordWrongCallback();
-                                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void nikFreeCallback() {
-                                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
-                                }
-                            };
-
-                            userManager.checkInfoAboutUser(name, password);
-
-                        } else {
-//                            mIsJoinToOnline = false;
-                            UserLoginHolder.getInstance().setLogged(false);
-                            UserLoginHolder.getInstance().setUserName(mLogin.getText().toString());
-                            UserLoginHolder.getInstance().setPassword(mPassword.getText().toString());
-
-                            startMainActivity();
-
-                            Toast.makeText(WelcomeActivity.this, getString(R.string.CONTINUE_OFFLINE_GAME), Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onDestroy() {
@@ -237,36 +113,15 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                     mLogin.setText(data.getStringExtra(Constants.REGISTRATION_NAME_OF_USER));
                     mPassword.setText(data.getStringExtra(Constants.REGISTRATION_PASSWORD));
                 }
+
                 break;
             default:
                 break;
         }
     }
 
-    public void checkAppVersion(int pVersionApp) {
-        if (pVersionApp == BuildConfig.VERSION_CODE) {
-            mInfoVersionTextView.setText("Your app in actual version");
-//            new TypeWriter(WelcomeActivity.this).animateText(mInfoVersionTextView.getText());
-            mVisitCheckVersion.setText(R.string.VISIT_SITE);
-            mVisitCheckVersion.setEnabled(true);
-            mVisitCheckVersion.setTextColor(Color.WHITE);
-            mCurrentVersionAppWelcome = true;
-        } else {
-            mInfoVersionTextView.setText(R.string.APP_IS_OLD_VERSION);
-            mVisitCheckVersion.setText(getString(R.string.PRESS_FOR_UPGRADE));
-            mVisitCheckVersion.setTextColor(Color.RED);
-            mCurrentVersionAppWelcome = false;
-        }
-    }
-
     private void startMainActivity() {
         Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-
-//        intent.putExtra(Constants.NIK_NAME_OF_USER, mLogin.getText().toString());
-//        intent.putExtra(Constants.PASSWORD_OF_USER, mPassword.getText().toString());
-//        intent.putExtra(Constants.KEEP_PASSWORD, mCheckBox.isChecked());
-//        intent.putExtra(Constants.JOIN_TO_ONLINE, mIsJoinToOnline);
-
         UserLoginHolder.getInstance().keepUserOnline();
         startActivity(intent);
         finish();
@@ -300,7 +155,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     public void onBackPressed() {
         super.onBackPressed();
         UserLoginHolder.getInstance().keepUserOnline();
-
     }
 
     public void showUpdateAppFragment() {
@@ -324,5 +178,71 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     public void closeUpdateFragment() {
         closeUpdateAppFragment();
         finish();
+    }
+
+    @Override
+    public void onClick(View pView) {
+        switch (pView.getId()) {
+            case R.id.registration_welcome_button:
+                Intent intentRegistration = new Intent(WelcomeActivity.this, RegistrationPageActivity.class);
+
+                intentRegistration.putExtra(Constants.REGISTRATION_NAME_OF_USER, Constants.EMPTY_STRING);
+                intentRegistration.putExtra(Constants.REGISTRATION_PASSWORD, Constants.EMPTY_STRING);
+
+                startActivityForResult(intentRegistration, REGISTRATION_REQUEST_CODE);
+                break;
+            case R.id.login_button:
+                String name = mLogin.getText().toString();
+                String password = mPassword.getText().toString();
+
+                if (name.length() > 0 && password.length() > 0) {
+                    if (CheckConnection.checkConnection(WelcomeActivity.this)) {
+
+                        UserBaseManager userManager = new UserBaseManager() {
+
+                            @Override
+                            public UserDataBase nikPasswordCorrectCallback(UserDataBase pUserInfo) {
+                                UserDataBase userInfo = super.nikPasswordCorrectCallback(pUserInfo);
+                                UserLoginHolder.getInstance().setUserInfo(pUserInfo);
+                                UserLoginHolder.getInstance().setPassword(userInfo.getPassword());
+                                UserLoginHolder.getInstance().setUserName(userInfo.getUserName());
+                                UserLoginHolder.getInstance().setLogged(true);
+
+                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+
+                                startMainActivity();
+                                return userInfo;
+                            }
+
+                            @Override
+                            public void nikCorrectPasswordWrongCallback() {
+                                super.nikCorrectPasswordWrongCallback();
+                                Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void nikFreeCallback() {
+                                Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+                            }
+                        };
+
+                        userManager.checkInfoAboutUser(name, password);
+
+                    } else {
+                        UserLoginHolder.getInstance().setLogged(false);
+                        UserLoginHolder.getInstance().setUserName(mLogin.getText().toString());
+                        UserLoginHolder.getInstance().setPassword(mPassword.getText().toString());
+
+                        startMainActivity();
+
+                        Toast.makeText(WelcomeActivity.this, getString(R.string.CONTINUE_OFFLINE_GAME), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
