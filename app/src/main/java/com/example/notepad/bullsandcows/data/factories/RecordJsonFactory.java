@@ -62,7 +62,12 @@ public class RecordJsonFactory {
                 recordModel.setNikName(record.getString("nikName"));
                 recordModel.setMoves(record.getString("moves"));
                 recordModel.setTime(record.getString("time"));
-                recordModel.setUserUrlPhoto(record.getString("userUrlPhoto"));
+                try {
+                    recordModel.setUserUrlPhoto(record.getString("userUrlPhoto"));
+                }catch (Exception pE){
+                    pE.getStackTrace();
+                    recordModel.setUserUrlPhoto(null);
+                }
                 listRecords.add(i, recordModel);
             }
             pResponse.setmRecordsArray(listRecords);

@@ -330,16 +330,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(note);
 
-//            cv.put(UserRecordsDB.ID, note.getDate());
-//            cv.put(UserRecordsDB.NIK_NAME, note.getNikName());
-//            cv.put(UserRecordsDB.MOVES, cntMoves - 1);
-//            cv.put(UserRecordsDB.CODES, DIG);
-//            cv.put(UserRecordsDB.TIME, note.getTime());
-//
-//            if (UserLoginHolder.getInstance().getUserInfo() != null) {
-//                cv.put(UserRecordsDB.USER_PHOTO_URL, note.getUserUrlPhoto());
-//            }
-
             if (CheckConnection.checkConnection(this)) {
                 cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
             } else {

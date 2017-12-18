@@ -34,7 +34,7 @@
     <string name="START_DOWNLOAD_NEW_VERSION">Start load new version</string>
     <string name="FINISH_DOWNLOAD_NEW_VERSION">Finish download version</string>
     <string name="FAILED_DOWNLOAD_NEW_VERSION">Failed download</string>
-    <string name="TRY_AGAIN">Try download again</string>
+    <string name="TRY_AGAIN">Try download later</string>
     <string name="VISIT_SITE">Visit site of project</string>
     <string name="BUTTON_1">1</string>
     <string name="BUTTON_2">2</string>
@@ -98,8 +98,34 @@
     <string name="LAST_USER_VISIT">Last visit: "</string>
     <string name="TOTAL_PLAYED_GAMES">Total played games "</string>
     <string name="NUMBER_GAME_BY_COD">Played games</string>
+    <string name="UPDATE_YOUR_APP">Press, for download new version</string>
+    <string name="UPDATE_RESULT_TO_ONLINE">Update result to online</string>
+    <string name="ONLINE_RECORDS_WITH_PAGINATION">Records with pagination</string>
+    <string name="NEW_VERSION_TITLE">Available new version: "</string>
+    <string name="APP_IS_OLD_VERSION">Your app is old version</string>
+    <string name="PRESS_FOR_UPGRADE">Press for upgrade yor app for version</string>
+    <string name="SORT_ITEM">Sort records</string>
 
+    <string-array name="coded_list_array">
+        <item>Eny</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </string-array>
 
+    <string-array name="last_result_time_array">
+        <item>Eny</item>
+        <item>Last day</item>
+        <item>Last week</item>
+    </string-array>
+    <string name="SUCCESS_UPLOAD">Success upload</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

@@ -245,7 +245,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
 
             new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
             new DBOperations().update(UserRecordsDB.TABLE,  cv);
-
+            //TODO how correct listen new changes i BD
             getLoaderManager().getLoader(0).forceLoad();
         }
 

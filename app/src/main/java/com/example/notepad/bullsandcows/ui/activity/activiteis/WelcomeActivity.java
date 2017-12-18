@@ -68,7 +68,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                     AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
                     String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
                     if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
-                        //showUpdateAppFragment();
+                        showUpdateAppFragment();
                     }
 
                     return mVersionOfApp;
@@ -161,6 +161,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         mUpdateFrame.setVisibility(View.VISIBLE);
         mFragmentTransaction = getFragmentManager().beginTransaction();
         mFragmentTransaction.add(R.id.for_update_fragment_frame_layout, mUpdateFragment);
+        //TODO Why do need use commitAllowingStateLoss?
         mFragmentTransaction.commitAllowingStateLoss();
         mFragmentManager = getFragmentManager();
         mFragmentManager.executePendingTransactions();

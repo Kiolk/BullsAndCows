@@ -52,7 +52,7 @@ public class UpdateAppService extends Service implements UploadNewVersionAppCall
         }
 
         mBuilder.setStyle(inboxStyle);
-
+        //TODO How do implement start setup new version on press notification
         Intent resultIntent = new Intent(UpdateAppService.this, MainActivity.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(UpdateAppService.this);
         stackBuilder.addParentStack(MainActivity.class);
