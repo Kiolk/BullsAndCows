@@ -229,21 +229,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(UserLoginHolder.getInstance().getUserName());
 
-            GetBitmapCallback getBitmapCallback = new GetBitmapCallback() {
-                @Override
-                public Bitmap getBitmap(Bitmap pBitmapFromLoader) {
+            if (UserLoginHolder.getInstance().getUserInfo() != null) {
+                GetBitmapCallback getBitmapCallback = new GetBitmapCallback() {
+                    @Override
+                    public Bitmap getBitmap(Bitmap pBitmapFromLoader) {
 //                    mToolBar.setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
 ////                    mToolBar.setLogo(R.drawable.ic_cow_good);
-                    //TODO set userPhoto in toolBar. How Set additional views in tool bar?
-                    mToolBar.findViewById(R.id.user_photo_tool_bar_image_view).setBackground(new BitmapDrawable(getResources(), pBitmapFromLoader));
+                        //TODO set userPhoto in toolBar. How Set additional views in tool bar?
+                        mToolBar.findViewById(R.id.user_photo_tool_bar_image_view).setBackground(new BitmapDrawable(getResources(), pBitmapFromLoader));
 //                    mToolBar.findViewById(R.id.user_nik_tool_bar_text_view).des
 //     getSupportActionBar().setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
-                    return null;
-                }
-            };
+                        return null;
+                    }
+                };
 
-            Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl())
-                    .getBitmapDirect(getBitmapCallback);
+                Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl())
+                        .getBitmapDirect(getBitmapCallback);
+            }
         }
     }
 

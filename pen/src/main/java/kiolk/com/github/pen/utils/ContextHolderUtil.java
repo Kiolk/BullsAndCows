@@ -1,9 +1,10 @@
 package kiolk.com.github.pen.utils;
 
 import android.content.Context;
-
+@Deprecated
 public class ContextHolderUtil {
 
+    //TODO How do correct implement ContextHolder?
     private static ContextHolderUtil mContextHolder = null;
     private Context mContext;
 
@@ -18,11 +19,11 @@ public class ContextHolderUtil {
         return mContextHolder;
     }
 
-    public void setContext(Context pContest){
+    public void setContext(Context pContest) {
         mContextHolder.mContext = pContest;
     }
 
-    public Context getContext(){
-        return mContextHolder.mContext;
+    public Context getContext() {
+        return mContext;
     }
 }

@@ -8,31 +8,31 @@ public class ImageResult {
     private Bitmap mBitmap;
     private Exception mException;
 
-    public ImageResult(ImageRequest request) {
+    ImageResult(ImageRequest request) {
         this.mRequest = request;
     }
 
-    public ImageRequest getmRequest() {
+    ImageRequest getmRequest() {
         return mRequest;
     }
 
-    public void setmRequest(ImageRequest mRequest) {
+    public void setRequest(ImageRequest mRequest) {
         this.mRequest = mRequest;
     }
 
-    public Bitmap getmBitmap() {
+    Bitmap getmBitmap() {
         return mBitmap;
     }
 
-    public void setmBitmap(Bitmap mBitmap) {
+    void setmBitmap(Bitmap mBitmap) {
         this.mBitmap = mBitmap;
     }
 
-    public Exception getmException() {
+    Exception getmException() {
         return mException;
     }
 
-    public void setmException(Exception mException) {
+    void setmException(Exception mException) {
         this.mException = mException;
     }
 }

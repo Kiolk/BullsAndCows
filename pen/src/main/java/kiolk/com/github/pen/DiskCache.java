@@ -1,6 +1,5 @@
 package kiolk.com.github.pen;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -16,7 +15,8 @@ import java.util.Comparator;
 
 import kiolk.com.github.pen.utils.LogUtil;
 
-import static kiolk.com.github.pen.utils.ConstantsUtil.*;
+import static kiolk.com.github.pen.utils.ConstantsUtil.KILOBYTE_SIZE;
+import static kiolk.com.github.pen.utils.ConstantsUtil.STORAGE_FILE_FORMAT;
 
 class DiskCache {
 
@@ -27,7 +27,6 @@ class DiskCache {
     private long mAvailableCacheSize;
     final Object mLock;
     private File mCacheDir;
-    //    private Context mContext;
     private long mCurrentSizeCache;
 
     private DiskCache() {
@@ -45,20 +44,16 @@ class DiskCache {
         return mDiskCache;
     }
 
-    void setContext(Context pContext) {
-//        this.mContext = pContext;
-    }
-
     void setUserCacheSize(long userCacheSize) {
         this.mAvailableCacheSize = userCacheSize * KILOBYTE_SIZE * KILOBYTE_SIZE;
         LogUtil.msg("User size of cache = " + this.mAvailableCacheSize + " Mb");
     }
 
-    boolean saveBitmapInDiskCache(Bitmap pBitmap, String pName, Context pContext) {
+    boolean saveBitmapInDiskCache(Bitmap pBitmap, String pName) {
         FileOutputStream fileOutputStream = null;
 
         if (mCacheDir == null) {
-            getCacheDir(pContext);
+            getCacheDir();
         }
 
         File myPath = new File(mCacheDir, pName + STORAGE_FILE_FORMAT);
@@ -67,7 +62,7 @@ class DiskCache {
 
         try {
             fileOutputStream = new FileOutputStream(myPath);
-            pBitmap.compress(Bitmap.CompressFormat.PNG, QUALITY_OF_COMPRESSION_BMP, fileOutputStream);
+            pBitmap.compress(Bitmap.CompressFormat.PNG, Pen.QUALITY_OF_COMPRESSION_BMP, fileOutputStream);
             isSaved = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,15 +80,13 @@ class DiskCache {
         return isSaved;
     }
 
-    Bitmap loadBitmapFromDiskCache( String pName) {
+    Bitmap loadBitmapFromDiskCache(String pName) {
         File myPath = new File(mCacheDir, pName + STORAGE_FILE_FORMAT);
         myPath.setLastModified(System.currentTimeMillis());
         Bitmap bitmap = null;
 
         try {
             bitmap = BitmapFactory.decodeStream(new FileInputStream(myPath));
-
-//            return bitmap;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -125,8 +118,8 @@ class DiskCache {
 
                 @Override
                 public int compare(File o1, File o2) {
-                    String lastModificationFile1 = "" + o1.lastModified();
-                    String lastModificationFile2 = "" + o2.lastModified();
+                    String lastModificationFile1 = String.valueOf(o1.lastModified());
+                    String lastModificationFile2 = String.valueOf(o2.lastModified());
 
                     return lastModificationFile1.compareTo(lastModificationFile2);
                 }
@@ -151,18 +144,18 @@ class DiskCache {
         }
     }
 
-    private void getCacheDir(Context pContext) {
-        File cachePath = pContext.getCacheDir();
+    private void getCacheDir() {
+        File cachePath = Pen.CACHE_DIR;
         File imageFolder = new File(cachePath, IMAGE_CACHE_DESTINATION);
 
         if (!imageFolder.exists()) {
             boolean isDirCreated = imageFolder.mkdir();
 
-            if(isDirCreated) {
+            if (isDirCreated) {
                 mCacheDir = imageFolder;
                 LogUtil.msg("Folder ImageCache created");
-            }else{
-                mCacheDir =cachePath;
+            } else {
+                mCacheDir = cachePath;
                 LogUtil.msg("Continue write in direct cache directory;");
             }
 
