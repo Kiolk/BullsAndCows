@@ -85,7 +85,7 @@ class DiskCache {
         return isSaved;
     }
 
-    Bitmap loadBitmapFromDiskCache(Context pContext, String pName) {
+    Bitmap loadBitmapFromDiskCache( String pName) {
         File myPath = new File(mCacheDir, pName + STORAGE_FILE_FORMAT);
         myPath.setLastModified(System.currentTimeMillis());
         Bitmap bitmap = null;

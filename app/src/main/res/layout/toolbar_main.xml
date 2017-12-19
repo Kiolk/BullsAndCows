@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:id="@+id/main_toolbar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:elevation="4dp"
-    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+    android:layout_gravity="left">
+
+    <ImageView
+        android:id="@+id/user_photo_tool_bar_image_view"
+        android:contentDescription="@string/USER_PHOTO"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:id="@+id/user_nik_tool_bar_text_view"
+        android:maxLength="20"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:textSize="24sp"
+        tool:text="Maria"/>
 
 
 </android.support.v7.widget.Toolbar>

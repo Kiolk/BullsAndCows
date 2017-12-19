@@ -10,10 +10,16 @@ public class ImageRequest {
     private WeakReference<ImageView> mTarget;
     private int mWidth;
     private int mHeight;
+    private GetBitmapCallback mBitmapCallback;
 
     public ImageRequest(String mUrl, WeakReference<ImageView> mTarget) {
         this.mUrl = mUrl;
         this.mTarget = mTarget;
+    }
+
+    public ImageRequest(String mUrl, GetBitmapCallback mBitmapCallback) {
+        this.mUrl = mUrl;
+        this.mBitmapCallback = mBitmapCallback;
     }
 
     public String getmUrl() {
@@ -46,5 +52,13 @@ public class ImageRequest {
 
     public void setmHeight(int mHeight) {
         this.mHeight = mHeight;
+    }
+
+    public GetBitmapCallback getmBitmapCallback() {
+        return mBitmapCallback;
+    }
+
+    public void setmBitmapCallback(GetBitmapCallback mBitmapCallback) {
+        this.mBitmapCallback = mBitmapCallback;
     }
 }

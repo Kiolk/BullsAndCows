@@ -160,6 +160,16 @@ public class Pen {
 
             return mBuilder;
         }
+
+        public Builder setContext (Context pContext){
+            ContextHolderUtil.getInstance().setContext(pContext);
+            return mBuilder;
+        }
+
+        public void getBitmapDirect(GetBitmapCallback pCallBack){
+            ImageRequest request = new ImageRequest(mBuilder.mUrl, pCallBack);
+            new ImageLoadingAsyncTask().execute(request);
+        }
     }
 
     public Builder getImageFromUrl(String url) {
@@ -270,9 +280,11 @@ public class Pen {
     }
 
     //TODO implement possibility download bitmap directly
-    public Bitmap getBitmapDirect(Context pContext, String pUrl){
-        String name = MD5Util.getHashString(pUrl);
-        Bitmap bmp = DiskCache.getInstance().loadBitmapFromDiskCache(pContext, name);
-        return bmp;
-    }
+//    public Bitmap getBitmapDirect(GetBitmapCallback pCallBack){
+////        String name = MD5Util.getHashString(pUrl);
+//        ImageRequest request = new ImageRequest(mBuilder.mUrl, pCallBack);
+//        new ImageLoadingAsyncTask().execute(request);
+//
+//        return bmp;
+//    }
 }

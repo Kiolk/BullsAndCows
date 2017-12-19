@@ -6,6 +6,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -47,6 +49,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import kiolk.com.github.pen.GetBitmapCallback;
+import kiolk.com.github.pen.Pen;
 
 import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
 
@@ -218,11 +223,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initToolBar() {
-        Toolbar mToolBar = findViewById(R.id.main_toolbar);
+        final Toolbar mToolBar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolBar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(UserLoginHolder.getInstance().getUserName());
+
+            GetBitmapCallback getBitmapCallback = new GetBitmapCallback() {
+                @Override
+                public Bitmap getBitmap(Bitmap pBitmapFromLoader) {
+//                    mToolBar.setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
+////                    mToolBar.setLogo(R.drawable.ic_cow_good);
+                    //TODO set userPhoto in toolBar. How Set additional views in tool bar?
+                    mToolBar.findViewById(R.id.user_photo_tool_bar_image_view).setBackground(new BitmapDrawable(getResources(), pBitmapFromLoader));
+//                    mToolBar.findViewById(R.id.user_nik_tool_bar_text_view).des
+//     getSupportActionBar().setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
+                    return null;
+                }
+            };
+
+            Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl())
+                    .getBitmapDirect(getBitmapCallback);
         }
     }
 

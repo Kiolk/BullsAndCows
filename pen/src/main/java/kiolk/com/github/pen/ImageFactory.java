@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import kiolk.com.github.pen.utils.ContextHolderUtil;
 import kiolk.com.github.pen.utils.LogUtil;
 import kiolk.com.github.pen.utils.MD5Util;
 
@@ -36,8 +37,8 @@ class ImageFactory {
             case Pen.INNER_FILE_CACHE:
                 synchronized (DiskCache.getInstance().mLock) {
                     String name = getName(pResult);
-                    Context context = pResult.getmRequest().getmTarget().get().getContext();
-                    Bitmap bitmap = DiskCache.getInstance().loadBitmapFromDiskCache(context, name);
+//                    Context context = pResult.getmRequest().getmTarget().get().getContext();
+                    Bitmap bitmap = DiskCache.getInstance().loadBitmapFromDiskCache( name);
 
                     if (bitmap != null) {
                         pResult.setmBitmap(bitmap);
@@ -69,10 +70,11 @@ class ImageFactory {
 
                     String name = getName(pResult);
                     Bitmap bitmap = pResult.getmBitmap();
-                    Context context = pResult.getmRequest().getmTarget().get().getContext();
+//                    Context context = pResult.getmRequest().getmTarget().get().getContext();
 
-                    resultOfSave = DiskCache.getInstance().saveBitmapInDiskCache(bitmap, name, context);
-
+//                    resultOfSave = DiskCache.getInstance().saveBitmapInDiskCache(bitmap, name, context);
+                    resultOfSave = DiskCache.getInstance().saveBitmapInDiskCache(bitmap, name,
+                            ContextHolderUtil.getInstance().getContext());
                     if (resultOfSave) {
                         Log.d(LOG, "Save " + name + " to DiskCache");
                     }
