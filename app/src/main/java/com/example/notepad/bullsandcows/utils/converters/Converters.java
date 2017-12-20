@@ -9,20 +9,23 @@ import java.util.TimeZone;
 
 public class Converters {
 
-    public static long getCurrentDayOfRecord(long pLongDate) {
-        return (Constants.BACK_EPOCH_TIME_NOTATION - pLongDate);
-    }
     //todo find correct path conversion for time
     public static long getActualDay(long pActualTime) {
         pActualTime = Constants.BACK_EPOCH_TIME_NOTATION - pActualTime;
         long oneDay = 1000 * 60 * 60 * 24;
-        return (pActualTime - (pActualTime % oneDay)) + oneDay  - (3600000 * 3)*2 + 360000;
+        long shiftConstant = 51888000;
+        pActualTime = pActualTime - shiftConstant;
+        long days = pActualTime / oneDay;
+        return days * oneDay + shiftConstant + oneDay;
     }
 
     public static long getActualWeek(long pActualTime) {
         pActualTime = Constants.BACK_EPOCH_TIME_NOTATION - pActualTime;
         long oneWeek = 1000 * 60 * 60 * 24 * 7;
-        return (pActualTime - (pActualTime % oneWeek)) + oneWeek  - (3600000 * 3)*2 +360000;
+        long shiftConstant = 51888000;
+        pActualTime = pActualTime - shiftConstant;
+        long days = pActualTime / oneWeek;
+        return days * oneWeek + shiftConstant + oneWeek;
     }
 
     public static String convertTimeToString(Long pLong) {

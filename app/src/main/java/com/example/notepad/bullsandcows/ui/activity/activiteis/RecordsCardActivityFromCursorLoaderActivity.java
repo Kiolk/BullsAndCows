@@ -23,11 +23,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
-import com.example.notepad.bullsandcows.data.Loaders.CursorDBLoader;
 import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
+import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
@@ -52,6 +51,8 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     public static final String USER_NAME_BUNDLE_KEY = "userName";
     public static final String CODED_BUNDL_KEY = "coded";
     public static final String LAST_RESULT_BUNDLE_KEY = "lastResult";
+    public static final int DELAY_BEFOR_REFRESH_DATA = 10000;
+    public static final int PERIOD_BETWEEN_REFRESH = 35000;
 
     private UserInfoRecordFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
@@ -62,7 +63,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     private Spinner mCodedSpinner;
     private Spinner mLastTimeSpinner;
     private RecordRecyclerViewAdapter mAdapter;
-    private Intent mIntentNameService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         initView();
         initSpinners();
         initFragments();
-//        initTimer();
 
         getLoaderManager().initLoader(0, null, this);
         getLoaderManager().getLoader(0).forceLoad();
@@ -122,7 +121,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         mTimer = new Timer();
 
         if (CheckConnection.checkConnection(RecordsCardActivityFromCursorLoaderActivity.this)) {
-            mTimer.scheduleAtFixedRate(mTimerTask, 10000, 35000);
+            mTimer.scheduleAtFixedRate(mTimerTask, DELAY_BEFOR_REFRESH_DATA, PERIOD_BETWEEN_REFRESH);
         }
     }
 
@@ -212,16 +211,13 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     @Override
     protected void onStop() {
         super.onStop();
-//        mTimer.cancel();
-        stopService(mIntentNameService);
+        mTimer.cancel();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mIntentNameService = new Intent(RecordsCardActivityFromCursorLoaderActivity.this, WaiterNewRecordsService.class);
-        startService(mIntentNameService);
-//        initTimer();
+        initTimer();
     }
 
     @Override
@@ -235,15 +231,16 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (args != null) {
-            String userName = args.getString(USER_NAME_BUNDLE_KEY, "is not Null");
+            String userName = args.getString(USER_NAME_BUNDLE_KEY);
             String coded = args.getString(CODED_BUNDL_KEY);
             String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
             String[] request = new String[]{userName, coded, lastTimeSort};
 //            return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this, request);
+            return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
+                    null, null, request, null);
         }
-        CursorLoader loader = new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
+        return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
                 null, null, null, null);
-        return loader;
 //        return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this);
     }
 
@@ -260,13 +257,13 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     @Override
     public RecordsToNet setResult(RecordsToNet pRecord) {
         Log.d(TAG, "Start callback setResult for update i bd");
-        if(pRecord != null) {
+        if (pRecord != null) {
             ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
 
             cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
 
             new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
-            new DBOperations().update(UserRecordsDB.TABLE,  cv);
+            new DBOperations().update(UserRecordsDB.TABLE, cv);
             //TODO how correct listen new changes i BD
             getLoaderManager().getLoader(0).forceLoad();
         }

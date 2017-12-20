@@ -15,6 +15,7 @@ import android.util.Log;
 import com.example.notepad.bullsandcows.data.databases.DBConnector;
 import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
+import com.example.notepad.bullsandcows.utils.converters.Converters;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -70,6 +71,42 @@ public class RecordsContentProvider extends ContentProvider {
                 break;
             default:
                 throw new IllegalArgumentException("Not correct Uri");
+        }
+
+        if (selectionArgs != null) {
+            StringBuilder builderSelection = new StringBuilder();
+            builderSelection.append(UserRecordsDB.NIK_NAME);
+
+            if (!selectionArgs[0].equals("")) {
+                builderSelection.append(" = ?");
+            } else {
+                builderSelection.append(" is not ?");
+            }
+
+            builderSelection.append(" and ");
+            builderSelection.append(UserRecordsDB.CODES);
+
+            if (!selectionArgs[1].equals("Eny")) {
+                builderSelection.append(" = ?");
+            } else {
+                builderSelection.append(" is not ?");
+            }
+
+            builderSelection.append(" and ");
+            builderSelection.append(UserRecordsDB.ID);
+
+            if (selectionArgs[2].equals("Last day")) {
+                builderSelection.append(" < ? ");
+                selectionArgs[2] = String.valueOf(Converters.getActualDay(System.currentTimeMillis()));
+            } else if (selectionArgs[2].equals("Last week")) {
+                builderSelection.append(" < ? ");
+                selectionArgs[2] = String.valueOf(Converters.getActualWeek(System.currentTimeMillis()));
+            } else if (selectionArgs[2].equals("Eny")) {
+                builderSelection.append(" is not ? ");
+            } else {
+                builderSelection.append(" is not ? ");
+            }
+            selection = builderSelection.toString();
         }
 
         SQLiteDatabase db = DBConnector.getInstance().getReadableDatabase();
@@ -148,7 +185,7 @@ public class RecordsContentProvider extends ContentProvider {
             try {
                 long id = db.insert(UserRecordsDB.TABLE, null, contentValues);
                 Log.d(TAG, "bulkInsert: id" + id);
-                if(id != -1){
+                if (id != -1) {
                     isNew = true;
                 }
                 db.setTransactionSuccessful();
@@ -162,7 +199,7 @@ public class RecordsContentProvider extends ContentProvider {
             }
         }
         db.close();
-        if(isNew) {
+        if (isNew) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         Log.d(TAG, "Update notifyChange for cursors");

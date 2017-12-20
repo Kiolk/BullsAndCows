@@ -1,6 +1,5 @@
 package com.example.notepad.bullsandcows.services;
 
-import android.app.IntentService;
 import android.app.Service;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -8,14 +7,11 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.models.RequestRecordModel;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
-import com.example.notepad.bullsandcows.ui.activity.activiteis.RecordsCardActivityFromCursorLoaderActivity;
-import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.util.ArrayList;
@@ -41,21 +37,8 @@ public class WaiterNewRecordsService extends Service {
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: ");
 //        mRecordsManager.getRecordSBackend(mRequest);
+        mRecordsManager.getRecordSBackend(mRequest);
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    void initTimer() {
-        mTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Log.d(TAG, "TimerTask run");
-                //TODO java.lang.IllegalThreadStateException: Thread already started . How with this live?
-                mRecordsManager.getRecordSBackend(mRequest);
-            }
-        };
-
-        mTimer = new Timer();
-        mTimer.scheduleAtFixedRate(mTimerTask, 10000, 35000);
     }
 
     @Override
@@ -64,7 +47,6 @@ public class WaiterNewRecordsService extends Service {
         Log.d(TAG, "onCreate service start");
         initRecordManager();
         mRequest = new RequestRecordModel(mCursorString);
-        initTimer();
     }
 
 //    @Override
@@ -105,7 +87,7 @@ public class WaiterNewRecordsService extends Service {
                 int insert = getContentResolver().bulkInsert(RecordsContentProvider.CONTENT_URI, mArrayContentValues);
 //                int insert = new DBOperations().bulkInsert(UserRecordsDB.TABLE, mArrayContentValues);
                 Log.d(TAG, "Insert records: " + insert);
-//                stopSelf();
+                stopSelf();
                 return response;
             }
         };
