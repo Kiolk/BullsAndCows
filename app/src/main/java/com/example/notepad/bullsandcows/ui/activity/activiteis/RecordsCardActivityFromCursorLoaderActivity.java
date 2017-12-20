@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.ActivityInfo;
@@ -28,6 +29,7 @@ import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
@@ -60,6 +62,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     private Spinner mCodedSpinner;
     private Spinner mLastTimeSpinner;
     private RecordRecyclerViewAdapter mAdapter;
+    private Intent mIntentNameService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +75,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         initView();
         initSpinners();
         initFragments();
-        initTimer();
+//        initTimer();
 
         getLoaderManager().initLoader(0, null, this);
         getLoaderManager().getLoader(0).forceLoad();
@@ -119,7 +122,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         mTimer = new Timer();
 
         if (CheckConnection.checkConnection(RecordsCardActivityFromCursorLoaderActivity.this)) {
-            mTimer.scheduleAtFixedRate(mTimerTask, 1000, 35000);
+            mTimer.scheduleAtFixedRate(mTimerTask, 10000, 35000);
         }
     }
 
@@ -150,6 +153,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         mRecordRecyclerView.setHasFixedSize(false);
         mRecordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecordRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
 
     private void getUserInformation(String pUserName) {
@@ -206,11 +210,26 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+//        mTimer.cancel();
+        stopService(mIntentNameService);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mIntentNameService = new Intent(RecordsCardActivityFromCursorLoaderActivity.this, WaiterNewRecordsService.class);
+        startService(mIntentNameService);
+//        initTimer();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         UserLoginHolder.getInstance().setOffline();
-        mTimer.cancel();
-        mTimerTask.cancel();
+//        mTimer.cancel();
+//        mTimerTask.cancel();
     }
 
     @Override
@@ -220,9 +239,12 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
             String coded = args.getString(CODED_BUNDL_KEY);
             String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
             String[] request = new String[]{userName, coded, lastTimeSort};
-            return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this, request);
+//            return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this, request);
         }
-        return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this);
+        CursorLoader loader = new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
+                null, null, null, null);
+        return loader;
+//        return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this);
     }
 
     @Override

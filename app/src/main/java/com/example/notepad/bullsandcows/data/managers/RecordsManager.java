@@ -79,6 +79,7 @@ public class RecordsManager implements RecordsCallbacks {
 
     @Override
     public ResponseRecordModel getResponseBackendCallback(ResponseRecordModel pResponse) {
+//        mListRecordThread = null;
         return pResponse;
     }
 }
