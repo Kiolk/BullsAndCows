@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.notepad.bullsandcows.Records">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +21,7 @@
             android:layout_weight="1"
             android:background="@color/title_color"
             android:gravity="center"
-            android:text="@string/coded_number"
+            android:text="@string/CODED"
             android:textColor="@color/color_for_text"/>
 
         <TextView
@@ -33,7 +32,7 @@
             android:layout_weight="3"
             android:background="@color/title_color"
             android:gravity="center"
-            android:text="@string/date_title"
+            android:text="@string/DATE_TITLE"
             android:textColor="@color/color_for_text"/>
 
         <TextView
@@ -44,7 +43,7 @@
             android:layout_weight="2"
             android:background="@color/title_color"
             android:gravity="center"
-            android:text="@string/nik_name_title"
+            android:text="@string/NIK_NAME_TITLE"
             android:textColor="@color/color_for_text"/>
 
         <TextView
@@ -55,7 +54,7 @@
             android:layout_weight="1"
             android:background="@color/title_color"
             android:gravity="center"
-            android:text="@string/moves_title"
+            android:text="@string/MOVES_TITLE"
             android:textColor="@color/color_for_text"/>
 
         <TextView
@@ -66,7 +65,7 @@
             android:layout_weight="1"
             android:background="@color/title_color"
             android:gravity="center"
-            android:text="@string/time_title"
+            android:text="@string/TIME_TITLE"
             android:textColor="@color/color_for_text"/>
     </LinearLayout>
 
