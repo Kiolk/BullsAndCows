@@ -1,6 +1,5 @@
 package kiolk.com.github.pen;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -13,7 +12,8 @@ import java.net.URL;
 import kiolk.com.github.pen.utils.LogUtil;
 import kiolk.com.github.pen.utils.MD5Util;
 
-import static kiolk.com.github.pen.utils.ConstantsUtil.*;
+import static kiolk.com.github.pen.utils.ConstantsUtil.KILOBYTE_SIZE;
+import static kiolk.com.github.pen.utils.ConstantsUtil.LOG;
 
 class ImageFactory {
 
@@ -26,7 +26,6 @@ class ImageFactory {
 
                     if (Pen.getInstance().getBitmapFromLruCache(url) != null) {
                         pResult.setmBitmap(Pen.getInstance().getBitmapFromLruCache(url));
-                        Log.d(LOG, "Set bitmap from LruCache");
                         LogUtil.msg("Set bitmap from LruCache");
 
                         return pResult;
@@ -36,12 +35,10 @@ class ImageFactory {
             case Pen.INNER_FILE_CACHE:
                 synchronized (DiskCache.getInstance().mLock) {
                     String name = getName(pResult);
-                    Context context = pResult.getmRequest().getmTarget().get().getContext();
-                    Bitmap bitmap = DiskCache.getInstance().loadBitmapFromDiskCache(context, name);
+                    Bitmap bitmap = DiskCache.getInstance().loadBitmapFromDiskCache(name);
 
                     if (bitmap != null) {
                         pResult.setmBitmap(bitmap);
-                        Log.d(LOG, "Set bitmap from DiskCache");
                         LogUtil.msg("Set bitmap from DiskCache");
 
                         return pResult;
@@ -69,12 +66,9 @@ class ImageFactory {
 
                     String name = getName(pResult);
                     Bitmap bitmap = pResult.getmBitmap();
-                    Context context = pResult.getmRequest().getmTarget().get().getContext();
-
-                    resultOfSave = DiskCache.getInstance().saveBitmapInDiskCache(bitmap, name, context);
-
+                    resultOfSave = DiskCache.getInstance().saveBitmapInDiskCache(bitmap, name);
                     if (resultOfSave) {
-                        Log.d(LOG, "Save " + name + " to DiskCache");
+                        LogUtil.msg("Save " + name + " to DiskCache");
                     }
                 }
 
@@ -108,13 +102,11 @@ class ImageFactory {
                 options.inJustDecodeBounds = true;
 
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
-                Log.d(LOG, "Height: " + options.outHeight + ". Width: " + options.outWidth + ". bmp: " + options.inBitmap);
                 options.inJustDecodeBounds = false;
                 options.inSampleSize = ImageFactory.calculateInSimpleSize(options, reqHeight, reqWidth);
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
-                int size = bmp.getByteCount();
-                Log.d(LOG, "Size of file: " + size);
-                Log.d(LOG, "Height: " + options.outHeight + ". Width: " + options.outWidth + ". bmp: " + options.inBitmap);
+
+//                int size = bmp.getByteCount();
                 pResult.setmBitmap(bmp);
             } else {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
