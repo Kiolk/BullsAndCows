@@ -21,4 +21,7 @@ public class UserRecordsDB {
     public static final String UPDATE_ONLINE_HACK = "1";
 
     public static final String NOT_UPDATE_ONLINE_HACK = "0";
+
+    public static final String[] AVAILABLE_COLUMNS = {ID, NIK_NAME,
+            CODES, TIME, MOVES, USER_PHOTO_URL, IS_UPDATE_ONLINE};
 }

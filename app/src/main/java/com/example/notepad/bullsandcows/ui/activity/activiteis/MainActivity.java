@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -25,10 +26,12 @@ import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.DBOperations;
+import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WinSoundService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.MovesListCustomAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.EditProfileFragment;
@@ -50,17 +53,20 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import kiolk.com.github.pen.Pen;
+
 import kiolk.com.github.pen.GetBitmapCallback;
 import kiolk.com.github.pen.Pen;
 
 import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
+import static com.example.notepad.bullsandcows.utils.Constants.EMPTY_STRING;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String INPUT_NUMBER = "InputNumber";
     public static final String DEFAULT_VLUE_FOR_STRING = "Error";
     public static final String CODED_NUMBER = "codedNumber";
-    public static final String USER_NAME = "userName";
+//    public static final String USER_NAME = "userName";
     public static final String START_STATE = "startState";
     public static final String MOVES_ARRAY_LIST = "movesArrayList";
     public static final String INPUTTED_NUMBER_ARRAY_LIST = "inputtedNumberArrayList";
@@ -82,7 +88,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView mInputNumberView;
     private TextView startButton;
     private TextView mTimer;
-    private TextView mNikOfUser;
+    private TextView mNikUserBar;
+    private TextView mDayRating;
+    private TextView mCodedNumberTitle;
+
     private FrameLayout mFrameLayout;
     private FrameLayout mEditInfoFrameLayout;
 
@@ -113,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initToolBar();
         initializationOfView();
         initEditProfileFragment();
+        intiUserBar();
     }
 
     private void initEditProfileFragment() {
@@ -136,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onSaveInstanceState(outState);
         outState.putString(INPUT_NUMBER, mInputNumberView.getText().toString());
         outState.putString(CODED_NUMBER, mCodedNumber);
-        outState.putString(USER_NAME, mNikOfUser.getText().toString());
+//        outState.putString(USER_NAME, mNikOfUser.getText().toString());
         outState.putBoolean(START_STATE, start);
         outState.putStringArrayList(MOVES_ARRAY_LIST, mMoves);
         outState.putStringArrayList(INPUTTED_NUMBER_ARRAY_LIST, mNumbers);
@@ -153,11 +163,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onRestoreInstanceState(savedInstanceState);
         mInputNumberView.setText(savedInstanceState.getString(INPUT_NUMBER, DEFAULT_VLUE_FOR_STRING));
         mCodedNumber = savedInstanceState.getString(CODED_NUMBER, DEFAULT_VLUE_FOR_STRING);
-        mNikOfUser.setText(savedInstanceState.getString(USER_NAME, DEFAULT_VLUE_FOR_STRING));
+//        mNikOfUser.setText(savedInstanceState.getString(USER_NAME, DEFAULT_VLUE_FOR_STRING));
         start = savedInstanceState.getBoolean(START_STATE, false);
         DIG = savedInstanceState.getInt(NUMBER_OF_CODED_DIGITS, 4);
         cntMoves = savedInstanceState.getInt(COUNT_OF_MOVES, 1);
-
         mMoves = savedInstanceState.getStringArrayList(MOVES_ARRAY_LIST);
         mNumbers = savedInstanceState.getStringArrayList(INPUTTED_NUMBER_ARRAY_LIST);
         mBulls = savedInstanceState.getStringArrayList(NUMBER_OF_BULLS_ARRAY_LIST);
@@ -173,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             startButton.setText(getResources().getString(R.string.SHOW_NUMBER));
         }
-
         createListViewWithMoves();
     }
 
@@ -189,20 +197,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView number9 = findViewById(R.id.buttom9);
         TextView number0 = findViewById(R.id.buttom0);
         TextView enterButton = findViewById(R.id.enter);
+        TextView del = findViewById(R.id.buttomDel);
+//        TextView mCodOfLanguage = findViewById(R.id.language_cod_text_view);
+
         startButton = findViewById(R.id.start);
 
         mInputNumberView = findViewById(R.id.editText);
         mInputNumberView.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.BLACKGROTESKC));
 
-        TextView del = findViewById(R.id.buttomDel);
         mTimer = findViewById(R.id.timer_text_view);
         mTimer.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.DIGITAL_FONT));
-        mNikOfUser = findViewById(R.id.user_name_text_view);
-        mNikOfUser.setText(UserLoginHolder.getInstance().getUserName());
-        TextView mCodOfLanguage = findViewById(R.id.language_cod_text_view);
+
         mWinFragment = new WinFragment();
         mFrameLayout = findViewById(R.id.win_container);
-        ImageView mOptionMenu = findViewById(R.id.option_menu_image_view);
         mEditInfoFrameLayout = findViewById(R.id.for_fragments_in_main_frame_layout);
 
         number1.setOnClickListener(this);
@@ -217,9 +224,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         number0.setOnClickListener(this);
         enterButton.setOnClickListener(this);
         startButton.setOnClickListener(this);
-        mOptionMenu.setOnClickListener(this);
+//        mOptionMenu.setOnClickListener(this);
         del.setOnClickListener(this);
-        mCodOfLanguage.setOnClickListener(this);
+//        mCodOfLanguage.setOnClickListener(this);
     }
 
     private void initToolBar() {
@@ -249,11 +256,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void intiUserBar() {
+        ImageView mUserPhoto = findViewById(R.id.photo_user_bar_image_view);
+        mNikUserBar = findViewById(R.id.nik_user_bar_text_view);
+        mDayRating = findViewById(R.id.day_rating_user_bar_text_view);
+        mCodedNumberTitle = findViewById(R.id.coded_title_user_bar_text_vie);
+
+        if (UserLoginHolder.getInstance().getUserImageUrl() != null) {
+            Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserImageUrl()).inputTo(mUserPhoto);
+        }
+
+        mNikUserBar.setText(UserLoginHolder.getInstance().getUserName());
+        getUserDayRate();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         UserLoginHolder.getInstance().setOffline();
-//        saveNikName();
+
         if (mTimerTimer != null) {
             mTimerTimer.cancel();
         }
@@ -343,7 +364,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             note.setDate(BACK_EPOCH_TIME_NOTATION - System.currentTimeMillis());
             note.setTime(mTimer.getText().toString());
-            note.setNikName(mNikOfUser.getText().toString());
+            note.setNikName(mNikUserBar.getText().toString());
             note.setMoves(String.valueOf(cntMoves - 1));
             note.setCodes(String.valueOf(DIG));
 
@@ -371,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             showWinFragment();
             submitStart();
+            getUserDayRate();
         }
     }
 
@@ -382,13 +404,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mode = data.getBooleanExtra(Constants.MODE_STATE, mode);
                     createListViewWithMoves();
                     DIG = Integer.parseInt(buf);
+                    getUserDayRate();
                     if (checkRestart != DIG && start) {
                         checkRestart = DIG;
                         TextView start7 = findViewById(R.id.start);
                         start7.setText(getResources().getString(R.string.START_GAME));
                         mInputNumberView.setText(mCodedNumber); // change this
 
-                        mCodedNumber = "";
+                        mCodedNumber = EMPTY_STRING;
                         start = false;
                     }
                 } else {
@@ -510,9 +533,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String buf;
         buf = mInputNumberView.getText().toString();
         switch (v.getId()) {
-            case R.id.option_menu_image_view:
-                openOptionsMenu();
-                break;
             case R.id.buttom1:
                 buf += 1;
                 mInputNumberView.setText(buf);
@@ -581,6 +601,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
                 break;
+        }
+    }
+
+    private void getUserDayRate() {
+        String[] request = new String[]{EMPTY_STRING, String.valueOf(DIG), Tables.LAST_DAY};
+        String sortOrder = UserRecordsDB.MOVES + Tables.ASC + ", " + UserRecordsDB.TIME + Tables.ASC;
+        int position = 0;
+        boolean hasResult = false;
+
+        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_URI,
+                null, null, request, sortOrder);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                if (cursor.getString(cursor.getColumnIndex(UserRecordsDB.NIK_NAME))
+                        .equals(UserLoginHolder.getInstance().getUserName())) {
+                    ++position;
+                    hasResult = true;
+                    break;
+
+                }
+                ++position;
+            } while (!cursor.getString(cursor.getColumnIndex(UserRecordsDB.NIK_NAME))
+                    .equals(UserLoginHolder.getInstance().getUserName()) && !cursor.isLast() && cursor.moveToNext());
+        } else {
+            position = 0;
+        }
+
+        if (cursor != null && cursor.getCount() == position && !hasResult) {
+            position = 0;
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        String codedTitle = getString(R.string.CODED) + String.valueOf(DIG);
+        mCodedNumberTitle.setText(codedTitle);
+        if (position == 0) {
+            mDayRating.setText(R.string.DASH);
+        } else {
+            mDayRating.setText(String.valueOf(position));
         }
     }
 }

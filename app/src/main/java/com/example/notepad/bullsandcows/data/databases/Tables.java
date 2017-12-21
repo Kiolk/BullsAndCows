@@ -8,6 +8,10 @@ public class Tables {
 
     public static final String ASC = " ASC";
 
+    public static final String LAST_DAY = "Last day";
+
+    public static final String LAST_WEEK = "Last week";
+
     public static final String CRATE_USERS_RECORDS_TABLE =
             "CREATE TABLE IF NOT EXISTS " +
                     UserRecordsDB.TABLE + "(" +

@@ -46,6 +46,12 @@
         <activity android:name=".ui.activity.activiteis.RecordsCardActivity" />
         <activity android:name=".ui.activity.activiteis.RecordsCardActivityFromBD" />
         <activity android:name=".ui.activity.activiteis.RecordsCardActivityFromCursorLoaderActivity" />
+        <provider
+            android:authorities="com.example.notepad.bullsandcows.data.providers"
+            android:name=".data.providers.RecordsContentProvider">
+
+        </provider>
+
     </application>
 
 </manifest>
