@@ -109,8 +109,13 @@ public class RecordsContentProvider extends ContentProvider {
             selection = builderSelection.toString();
         }
 
+        if(sortOrder==null){
+            sortOrder = UserRecordsDB.ID + Tables.ASC;
+        }
+
         SQLiteDatabase db = DBConnector.getInstance().getReadableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, UserRecordsDB.ID + Tables.ASC);
+        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null,
+                null,  sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
         Log.d(TAG, "Cursor: " + cursor);
         return cursor;

@@ -207,6 +207,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                                 UserLoginHolder.getInstance().setUserInfo(pUserInfo);
                                 UserLoginHolder.getInstance().setPassword(userInfo.getPassword());
                                 UserLoginHolder.getInstance().setUserName(userInfo.getUserName());
+                                UserLoginHolder.getInstance().setUserImageUrl(userInfo.getMPhotoUrl());
                                 UserLoginHolder.getInstance().setLogged(true);
 
                                 Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();

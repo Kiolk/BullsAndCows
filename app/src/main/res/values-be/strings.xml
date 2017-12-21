@@ -126,6 +126,8 @@
         <item>Last week</item>
     </string-array>
     <string name="SUCCESS_UPLOAD">Success upload</string>
+    <string name="DASH">---</string>
+    <string name="CODED">Coded</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>
