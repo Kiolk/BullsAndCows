@@ -78,7 +78,7 @@ public class SplashStartActivity extends Activity {
     private void setImageLoaderConfiguration() {
         Pen.getInstance().setLoaderSettings()
                 .setContext(this)
-                .setDefaultDrawable(getResources().getDrawable(R.drawable.ic_image_will_exchange))
+                .setDefaultDrawable(getResources().getDrawable(R.drawable.ic_bull_big_size))
                 .setErrorDrawable(getResources().getDrawable(R.drawable.ic_image_no_load))
                 .setSavingStrategy(Pen.SAVE_FULL_IMAGE_STRATEGY)
                 .setTypeOfCache(Pen.INNER_FILE_CACHE)

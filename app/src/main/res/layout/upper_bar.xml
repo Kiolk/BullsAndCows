@@ -41,8 +41,10 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_toLeftOf="@+id/day_rating_user_bar_text_view"
         android:layout_weight="6"
-        android:hint="@string/SET_YOUR_NAME_HINT"/>
+        android:hint="@string/SET_YOUR_NAME_HINT">
 
 
         <TextView

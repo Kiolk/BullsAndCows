@@ -249,9 +249,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         return null;
                     }
                 };
-
-                Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl())
-                        .getBitmapDirect(getBitmapCallback);
+//
+//                Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl())
+//                        .getBitmapDirect(getBitmapCallback);
             }
         }
     }
@@ -262,8 +262,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDayRating = findViewById(R.id.day_rating_user_bar_text_view);
         mCodedNumberTitle = findViewById(R.id.coded_title_user_bar_text_vie);
 
-        if (UserLoginHolder.getInstance().getUserImageUrl() != null) {
-            Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserImageUrl()).inputTo(mUserPhoto);
+        if (UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl() != null) {
+            Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl()).inputTo(mUserPhoto);
         }
 
         mNikUserBar.setText(UserLoginHolder.getInstance().getUserName());
