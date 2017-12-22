@@ -20,6 +20,7 @@ import com.example.notepad.bullsandcows.BuildConfig;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
+import com.example.notepad.bullsandcows.data.httpclient.models.HttpRequest;
 import com.example.notepad.bullsandcows.data.managers.AppInfoCallbacks;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
@@ -62,13 +63,14 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     protected void checkAppActualVersion() {
         AppInfoManager appManager = new AppInfoManager();
 
-        appManager.getCurrentAppInfo(new AppInfoCallbacks() {
+        appManager.getCurrentAppInfo(new HttpRequest(BuildConfig.BACKEND_APP_VERSION_URL, "name"), new AppInfoCallbacks() {
 
             @Override
             public void getInfoAppCallback(VersionOfApp versionOfApp) {
                 mVersionOfApp = versionOfApp;
                 AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
                 String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
+
                 if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
                     showUpdateAppFragment();
                 }
