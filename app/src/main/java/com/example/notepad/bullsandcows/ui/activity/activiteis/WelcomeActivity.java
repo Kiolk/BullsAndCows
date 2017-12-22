@@ -20,6 +20,7 @@ import com.example.notepad.bullsandcows.BuildConfig;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
+import com.example.notepad.bullsandcows.data.managers.AppInfoCallbacks;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UpdateAppFragment;
@@ -59,25 +60,22 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     }
 
     protected void checkAppActualVersion() {
-        if (CheckConnection.checkConnection(WelcomeActivity.this)) {
-            AppInfoManager appManager = new AppInfoManager(BuildConfig.VERSION_NAME) {
+        AppInfoManager appManager = new AppInfoManager();
 
-                @Override
-                public VersionOfApp getInfoAppCallback(VersionOfApp versionOfApp) {
-                    mVersionOfApp = super.getInfoAppCallback(versionOfApp);
-                    AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
-                    String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
-                    if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
-                        showUpdateAppFragment();
-                    }
+        appManager.getCurrentAppInfo(new AppInfoCallbacks() {
 
-                    return mVersionOfApp;
+            @Override
+            public void getInfoAppCallback(VersionOfApp versionOfApp) {
+                mVersionOfApp = versionOfApp;
+                AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
+                String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
+                if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
+                    showUpdateAppFragment();
                 }
-            };
-
-            appManager.getCurrentAppInfo();
-        }
+            }
+        });
     }
+
 
     private void initView() {
         Button loginButton = findViewById(R.id.login_button);

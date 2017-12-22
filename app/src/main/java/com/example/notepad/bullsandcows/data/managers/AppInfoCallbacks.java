@@ -4,5 +4,5 @@ import com.example.NotePad.myapplication.backend.VersionOfApp;
 
 public interface AppInfoCallbacks {
 
-    VersionOfApp getInfoAppCallback(VersionOfApp versionOfApp);
+    void getInfoAppCallback(VersionOfApp versionOfApp);
 }

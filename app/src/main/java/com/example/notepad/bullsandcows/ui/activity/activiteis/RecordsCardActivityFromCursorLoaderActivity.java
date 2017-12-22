@@ -51,8 +51,8 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     public static final String USER_NAME_BUNDLE_KEY = "userName";
     public static final String CODED_BUNDL_KEY = "coded";
     public static final String LAST_RESULT_BUNDLE_KEY = "lastResult";
-    public static final int DELAY_BEFOR_REFRESH_DATA = 10000;
-    public static final int PERIOD_BETWEEN_REFRESH = 35000;
+    public static final int DELAY_BEFOR_REFRESH_DATA = 0;
+    public static final int PERIOD_BETWEEN_REFRESH = 10000;
 
     private UserInfoRecordFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
