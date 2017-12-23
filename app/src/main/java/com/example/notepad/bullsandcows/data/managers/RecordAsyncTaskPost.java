@@ -11,6 +11,7 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
 
+@Deprecated
 public class RecordAsyncTaskPost extends AsyncTask<RecordsToNet, Void, RecordsToNet> {
 
     private static final String USER_RECORD_BACKEND = BuildConfig.BACKEND_USER_INFO;

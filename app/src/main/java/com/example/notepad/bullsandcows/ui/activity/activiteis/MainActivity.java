@@ -29,6 +29,7 @@ import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
+import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
@@ -388,7 +389,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (UserLoginHolder.getInstance().isLogged()) {
 
                 new UserBaseManager().checkNewBestRecord(recordForCheck);
-                new RecordAsyncTaskPost().execute(note);
+//                new RecordAsyncTaskPost().execute(note);
+                RecordsManager recordsManager = new RecordsManager();
+                recordsManager.postRecordOnBackend(note, null);
             }
 
             showWinFragment();

@@ -127,12 +127,22 @@ public class RecordsContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        DBOperations dbOperations = new DBOperations();
+
+        int uriType = URI_MATCHER.match(uri);
+        switch (uriType) {
+            case RECORDS:
+                dbOperations.update(UserRecordsDB.TABLE, values);
+                break;
+            default:
+                throw new IllegalArgumentException("Not correct Uri");
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
         return 0;
     }
 
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
-        SQLiteDatabase db = DBConnector.getInstance().getReadableDatabase();
         Log.d(TAG, "bulkInsert in content provider start");
         DBOperations dbOperations = new DBOperations();
         boolean isNew = false;

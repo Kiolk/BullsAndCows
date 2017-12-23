@@ -1,91 +1,48 @@
 package com.example.notepad.bullsandcows.data.managers;
 
-import android.annotation.SuppressLint;
 import android.os.Handler;
-import android.os.Message;
 
 import com.example.notepad.bullsandcows.data.factories.RecordJsonFactory;
 import com.example.notepad.bullsandcows.data.httpclient.BackendEndpointClient;
-import com.example.notepad.bullsandcows.data.models.RequestRecordModel;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
+import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.bullsandcows.utils.converters.Converters;
+import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.io.IOException;
 
 import javax.annotation.Nullable;
 
 
-public class RecordsManager implements RecordsCallbacks {
+public class RecordsManager{
 
-    private Thread mListRecordThread;
-    private Handler mListHandler;
-    private String mCursor;
+    public void postRecordOnBackend(final RecordsToNet pRecord, @Nullable final PostRecordSuccessListener pCallback){
+        final Handler handler = new Handler();
 
-
-    public RecordsManager() {
-        initHandler();
-        mListRecordThread = new Thread(mListRecordRunnable);
-    }
-
-    @SuppressLint("HandlerLeak")
-    private void initHandler() {
-        mListHandler = new Handler() {
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                ResponseRecordModel response = (ResponseRecordModel) msg.obj;
-                response = new RecordJsonFactory().getRecordsFromBackend(response);
-                getResponseBackendCallback(response);
+            public void run() {
+               RecordsToNet setupRecord = null;
+                try {
+                   setupRecord = BackendEndpointClient.getRecordToNetApi().insert(pRecord).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                final RecordsToNet responseRecord = setupRecord;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(pCallback != null && responseRecord != null ){
+                            pCallback.successSetResultListener(pRecord);
+                        }else if (pCallback != null){
+                            pCallback.successSetResultListener(null);
+                        }
+                    }
+                });
             }
-        };
-    }
+        });
 
-    private Runnable mListRecordRunnable = new Runnable() {
-        @Override
-        public void run() {
-
-//            if (myApiService == null) {
-//                RecordsToNetApi.Builder builder = new RecordsToNetApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-//                        .setRootUrl(URL_RECORDS_BACKEND);
-//
-//                myApiService = builder.build();
-//            }
-
-            Message msg = new Message();
-            ResponseRecordModel responseRecord = new ResponseRecordModel();
-
-            try {
-                // String cursor = "CjoSNGoZZ35vbmxpbmVyZWNvcmRidWxzYW5kY293c3IXCxIMUmVjb3Jkc1RvTmV0GIGk8JX5KwwYACAA";
-//                String json = myApiService.list().setCursor(mCursor).execute().toString();
-                String json = BackendEndpointClient.getRecordToNetApi().list().setCursor(mCursor).execute().toString();
-                responseRecord.setmJsonFromBackend(json);
-                msg.obj = responseRecord;
-                mListHandler.sendMessage(msg);
-            } catch (IOException pE) {
-                pE.printStackTrace();
-                responseRecord.setmException(pE);
-                msg.obj = responseRecord;
-                mListHandler.sendMessage(msg);
-            }
-        }
-    };
-
-    public void getRecordSBackend(RequestRecordModel pRequest) {
-        mCursor = pRequest.getCursor();
-        mListRecordThread.start();
-    }
-
-
-    @Override
-    @Deprecated
-    public ResponseRecordModel getResponseBackendCallback(ResponseRecordModel pResponse) {
-//        mListRecordThread = null;
-        return pResponse;
-    }
-
-    @Override
-    public void getRecordsBackendCallback(ResponseRecordModel pResponse) {
-
+        thread.start();
     }
 
     public void getRecordsFromBackend(@Nullable final Long pAllRecordsOnDate, final RecordsCallbacks pCallback) {

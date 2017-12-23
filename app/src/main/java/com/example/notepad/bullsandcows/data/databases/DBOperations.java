@@ -41,7 +41,6 @@ public class DBOperations {
     public void update(final String pTableName, final ContentValues pValues) {
         SQLiteDatabase database = mHelper.getReadableDatabase();
         database.beginTransaction();
-
         try {
             database.update(pTableName, pValues, UserRecordsDB.ID + " = " + pValues.getAsString(UserRecordsDB.ID), null);
             database.setTransactionSuccessful();

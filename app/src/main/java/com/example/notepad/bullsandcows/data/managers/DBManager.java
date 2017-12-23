@@ -6,7 +6,7 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-
+@Deprecated
 public class DBManager implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static DBManager mDBManager;

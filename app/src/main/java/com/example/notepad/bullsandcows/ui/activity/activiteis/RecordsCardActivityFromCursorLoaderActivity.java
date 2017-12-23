@@ -3,6 +3,7 @@ package com.example.notepad.bullsandcows.ui.activity.activiteis;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
+import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
+import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
@@ -129,7 +131,9 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
                 RecordsToNet record = super.updateLateRecordCallback(pRecord);
                 Toast.makeText(RecordsCardActivityFromCursorLoaderActivity.this,
                         record.getTime(), Toast.LENGTH_LONG).show();
-                new RecordAsyncTaskPost(RecordsCardActivityFromCursorLoaderActivity.this).execute(pRecord);
+//                new RecordAsyncTaskPost(RecordsCardActivityFromCursorLoaderActivity.this).execute(pRecord);
+                RecordsManager recordsManager = new RecordsManager();
+                recordsManager.postRecordOnBackend(pRecord, RecordsCardActivityFromCursorLoaderActivity.this);
                 return record;
             }
         };
@@ -247,6 +251,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     @Override
+    @Deprecated
     public RecordsToNet setResult(RecordsToNet pRecord) {
         Log.d(TAG, "Start callback setResult for update i bd");
         if (pRecord != null) {
@@ -261,5 +266,22 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         }
 
         return null;
+    }
+
+    @Override
+    public void successSetResultListener(RecordsToNet pRecord) {
+        Log.d(TAG, "Start callback setResult for update i bd");
+        if (pRecord != null) {
+            ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
+
+            cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
+
+            new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
+//            new DBOperations().update(UserRecordsDB.TABLE, cv);
+//            getContentResolver().insert(RecordsContentProvider.CONTENT_URI,  cv);
+            getContentResolver().update(RecordsContentProvider.CONTENT_URI,  cv, null, null);
+            //TODO how correct listen new changes i BD
+//            getLoaderManager().getLoader(0).forceLoad();
+        }
     }
 }

@@ -305,7 +305,6 @@ public class UserBaseManager implements UserInfoCallback {
     @Override
     public void nikCorrectPasswordWrongCallback() {
     }
-
     @Override
     public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
         return pUserData;
