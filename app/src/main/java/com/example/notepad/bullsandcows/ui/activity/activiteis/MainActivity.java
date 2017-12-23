@@ -25,12 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WinSoundService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.MovesListCustomAdapter;
@@ -42,6 +42,7 @@ import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
+import com.example.notepad.bullsandcows.utils.converters.QueryConverterUtil;
 import com.example.notepad.bullsandcows.utils.logic.RandomNumberGenerator;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
@@ -50,10 +51,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import kiolk.com.github.pen.Pen;
 
 import kiolk.com.github.pen.GetBitmapCallback;
 import kiolk.com.github.pen.Pen;
@@ -380,7 +380,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.NOT_UPDATE_ONLINE_HACK);
             }
 
-            new DBOperations().insert(UserRecordsDB.TABLE, cv);
+//            new DBOperations().insert(UserRecordsDB.TABLE, cv);
+            getContentResolver().insert(RecordsContentProvider.CONTENT_URI, cv);
 
             BestUserRecords recordForCheck = ModelConverterUtil.fromRecordToNetToBestUserRecords(note);
 
@@ -605,13 +606,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getUserDayRate() {
-        String[] request = new String[]{EMPTY_STRING, String.valueOf(DIG), Tables.LAST_DAY};
+//        String[] request = new String[]{EMPTY_STRING, String.valueOf(DIG), Tables.LAST_DAY};
         String sortOrder = UserRecordsDB.MOVES + Tables.ASC + ", " + UserRecordsDB.TIME + Tables.ASC;
         int position = 0;
         boolean hasResult = false;
 
+        HashMap<String, String> selectionArgs = new HashMap<>();
+        selectionArgs.put(UserRecordsDB.NIK_NAME, EMPTY_STRING);
+        selectionArgs.put(UserRecordsDB.CODES, String.valueOf(DIG) );
+        selectionArgs.put(UserRecordsDB.ID, Tables.LAST_DAY);
+
+//        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_URI,
+//                null, null, request, sortOrder);
+        QuerySelectionArgsModel readySelection = QueryConverterUtil.convertSelectionArg(selectionArgs);
+
         Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_URI,
-                null, null, request, sortOrder);
+                null, readySelection.getSelection(), readySelection.getSelectionArgs(), sortOrder);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {

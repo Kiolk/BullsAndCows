@@ -28,14 +28,18 @@ import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
+import com.example.notepad.bullsandcows.utils.converters.QueryConverterUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
+
+import java.util.HashMap;
 
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
@@ -70,7 +74,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         initFragments();
 
         getLoaderManager().restartLoader(0, null, this);
-//        getLoaderManager().getLoader(0).forceLoad();
     }
 
     private void initView() {
@@ -177,6 +180,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
                 args.putString(USER_NAME_BUNDLE_KEY, mSortByName.getText().toString());
                 args.putString(CODED_BUNDL_KEY, mCodedSpinner.getSelectedItem().toString());
                 args.putString(LAST_RESULT_BUNDLE_KEY, mLastTimeSpinner.getSelectedItem().toString());
+
                 getLoaderManager().restartLoader(0, args, this);
                 break;
             default:
@@ -214,9 +218,19 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
             String coded = args.getString(CODED_BUNDL_KEY);
             String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
             String[] request = new String[]{userName, coded, lastTimeSort};
-//            return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this, request);
+
+            HashMap<String, String> selectionArgsMap = new HashMap<>();
+            selectionArgsMap.put(UserRecordsDB.NIK_NAME, args.getString(USER_NAME_BUNDLE_KEY));
+            selectionArgsMap.put(UserRecordsDB.CODES, args.getString(CODED_BUNDL_KEY));
+            selectionArgsMap.put(UserRecordsDB.ID, args.getString(LAST_RESULT_BUNDLE_KEY));
+
+            QuerySelectionArgsModel readySelection = QueryConverterUtil.convertSelectionArg(selectionArgsMap);
+
             return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
-                    null, null, request, null);
+                    null, readySelection.getSelection(), readySelection.getSelectionArgs(), null);
+
+//            return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
+//                    null, null, request, null);
         }
         return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
                 null, null, null, null);

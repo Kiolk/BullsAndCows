@@ -1,7 +1,6 @@
 package com.example.notepad.bullsandcows.data.providers;
 
 import android.content.ContentProvider;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -13,9 +12,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.notepad.bullsandcows.data.databases.DBConnector;
+import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
-import com.example.notepad.bullsandcows.utils.converters.Converters;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -27,9 +26,9 @@ public class RecordsContentProvider extends ContentProvider {
     private static final String AUTHORITY_PATH = "com.example.notepad.bullsandcows.data.providers";
     private static final String BASE_PATH = "records";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY_PATH + "/" + BASE_PATH);
-    public static final String BASE_DIRECT_CONTENT_PATH =
-            ContentResolver.CURSOR_DIR_BASE_TYPE + "/records";
-    public static final String ITEM_CONTENT_PATH = ContentResolver.CURSOR_ITEM_BASE_TYPE;
+//    public static final String BASE_DIRECT_CONTENT_PATH =
+//            ContentResolver.CURSOR_DIR_BASE_TYPE + "/records";
+//    public static final String ITEM_CONTENT_PATH = ContentResolver.CURSOR_ITEM_BASE_TYPE;
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -42,11 +41,8 @@ public class RecordsContentProvider extends ContentProvider {
         URI_MATCHER.addURI(AUTHORITY_PATH, BASE_PATH + "/#", SINGL_RECORD);
     }
 
-    private DBConnector dataBase;
-
     @Override
     public boolean onCreate() {
-        dataBase = DBConnector.getInstance();
         Log.d(TAG, "onCreate: ContentProvider");
         return false;
     }
@@ -59,66 +55,30 @@ public class RecordsContentProvider extends ContentProvider {
 
         checkColumnProjection(projection);
 
-        queryBuilder.setTables(UserRecordsDB.TABLE);
+        if (sortOrder == null) {
+            sortOrder = UserRecordsDB.ID + Tables.ASC;
+        }
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case RECORDS:
+                queryBuilder.setTables(UserRecordsDB.TABLE);
                 Log.d(TAG, "Records case");
-                break;
+                DBOperations dbOperations = new DBOperations();
+
+                Cursor cursor = dbOperations.query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+                cursor.setNotificationUri(getContext().getContentResolver(), uri);
+                return cursor;
             case SINGL_RECORD:
+                queryBuilder.setTables(UserRecordsDB.TABLE);
                 queryBuilder.appendWhere(UserRecordsDB.ID + " = " + uri.getLastPathSegment());
-                break;
+                SQLiteDatabase db = DBConnector.getInstance().getReadableDatabase();
+
+                return queryBuilder.query(db, projection, selection, selectionArgs, null,
+                        null, sortOrder);
             default:
                 throw new IllegalArgumentException("Not correct Uri");
         }
-
-        if (selectionArgs != null) {
-            StringBuilder builderSelection = new StringBuilder();
-            builderSelection.append(UserRecordsDB.NIK_NAME);
-
-            if (!selectionArgs[0].equals("")) {
-                builderSelection.append(" = ?");
-            } else {
-                builderSelection.append(" is not ?");
-            }
-
-            builderSelection.append(" and ");
-            builderSelection.append(UserRecordsDB.CODES);
-
-            if (!selectionArgs[1].equals("Eny")) {
-                builderSelection.append(" = ?");
-            } else {
-                builderSelection.append(" is not ?");
-            }
-
-            builderSelection.append(" and ");
-            builderSelection.append(UserRecordsDB.ID);
-
-            if (selectionArgs[2].equals("Last day")) {
-                builderSelection.append(" < ? ");
-                selectionArgs[2] = String.valueOf(Converters.getActualDay(System.currentTimeMillis()));
-            } else if (selectionArgs[2].equals("Last week")) {
-                builderSelection.append(" < ? ");
-                selectionArgs[2] = String.valueOf(Converters.getActualWeek(System.currentTimeMillis()));
-            } else if (selectionArgs[2].equals("Eny")) {
-                builderSelection.append(" is not ? ");
-            } else {
-                builderSelection.append(" is not ? ");
-            }
-            selection = builderSelection.toString();
-        }
-
-        if(sortOrder==null){
-            sortOrder = UserRecordsDB.ID + Tables.ASC;
-        }
-
-        SQLiteDatabase db = DBConnector.getInstance().getReadableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null,
-                null,  sortOrder);
-        cursor.setNotificationUri(getContext().getContentResolver(), CONTENT_URI);
-        Log.d(TAG, "Cursor: " + cursor);
-        return cursor;
     }
 
     private void checkColumnProjection(String[] projection) {
@@ -142,27 +102,19 @@ public class RecordsContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        Log.d(TAG, "insert: " + values.toString());
-        SQLiteDatabase db = dataBase.getReadableDatabase();
-        db.beginTransaction();
+        DBOperations dbOperations = new DBOperations();
+        long id;
+
         int uriType = URI_MATCHER.match(uri);
-        long id = 0;
-        try {
-            switch (uriType) {
-                case RECORDS:
-                    id = db.insert(UserRecordsDB.TABLE, null, values);
-                    Log.d(TAG, "insert: record with id " + id);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown Uri: " + uri);
-            }
-            db.setTransactionSuccessful();
-        } catch (Exception pE) {
-            pE.getStackTrace();
-        } finally {
-            db.endTransaction();
-            db.close();
+        switch (uriType) {
+            case RECORDS:
+                id = dbOperations.insert(UserRecordsDB.TABLE, values);
+                Log.d(TAG, "insert: record with id " + id);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
+
         getContext().getContentResolver().notifyChange(uri, null);
 
         return Uri.parse(BASE_PATH + "/" + id);
@@ -181,34 +133,27 @@ public class RecordsContentProvider extends ContentProvider {
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         SQLiteDatabase db = DBConnector.getInstance().getReadableDatabase();
-        Log.d(TAG, "bulkInsert: start");
+        Log.d(TAG, "bulkInsert in content provider start");
+        DBOperations dbOperations = new DBOperations();
         boolean isNew = false;
         int successAdd = 0;
-        for (ContentValues contentValues : values) {
-            db.beginTransaction();
 
-            try {
-                long id = db.insert(UserRecordsDB.TABLE, null, contentValues);
-                Log.d(TAG, "bulkInsert: id" + id);
-                if (id != -1) {
+        int uriType = URI_MATCHER.match(uri);
+        switch (uriType) {
+            case RECORDS:
+                successAdd = dbOperations.bulkInsert(UserRecordsDB.TABLE, values);
+                if (successAdd > 0) {
                     isNew = true;
                 }
-                db.setTransactionSuccessful();
-                ++successAdd;
-                Log.d(TAG, "bulkInsert: success update");
-            } catch (Exception pE) {
-                pE.getStackTrace();
-                Log.d(TAG, "bulkInsert: " + pE.getMessage());
-            } finally {
-                db.endTransaction();
-            }
+                break;
+            default:
+                throw new IllegalArgumentException("Not correct Uri");
         }
-        db.close();
+
         if (isNew) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
-        Log.d(TAG, "Update notifyChange for cursors");
-        Log.d(TAG, "bulkInsert, success add:" + successAdd);
+
         return successAdd;
     }
 }
