@@ -12,11 +12,14 @@ import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.DBConnector;
+import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 
 import kiolk.com.github.pen.Pen;
+
+import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 
 public class SplashStartActivity extends Activity {
 
@@ -34,6 +37,10 @@ public class SplashStartActivity extends Activity {
 
         initView();
         timeOut();
+
+        Intent intent = new Intent(SplashStartActivity.this, WaiterNewRecordsService.class);
+        intent.putExtra(RECORDS_FROM_BACKEND_ON_DAY, 1513724487000L);
+        startService(intent);
     }
 
     private void timeOut() {

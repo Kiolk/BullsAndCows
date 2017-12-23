@@ -3,7 +3,7 @@ package com.example.notepad.bullsandcows.utils;
 public class Constants {
 
     public interface IntentKeys {
-        public static final String USER_NAME_INTENT_KEY = "UserName";
+        String RECORDS_FROM_BACKEND_ON_DAY = "RecordsFromBackendOnDay";
     }
 
     public final static String TAG = "MyLogs";
@@ -17,7 +17,6 @@ public class Constants {
     public static final String EMPTY_STRING = "";
     public static final long BACK_EPOCH_TIME_NOTATION = 3008586288000L;
     public static final long INNER_FILE_CACHE_SIZE_MB = 10L;
-    public static final String URL_SITE_OF_PROJECT = "https://github.com/Kiolk/BullsAndCows";
     public static final int QUALITY_IMAGE_COMPRESSION = 70;
 
 }

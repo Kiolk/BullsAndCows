@@ -43,15 +43,22 @@ public class RecordJsonFactory {
 
     public ResponseRecordModel getRecordsFromBackend(ResponseRecordModel pResponse) {
 
-        ArrayList<RecordsToNet> listRecords = new ArrayList<>();
+        ArrayList<RecordsToNet> listRecords;
         RecordsToNet recordModel;
         String jsonString = pResponse.getmJsonFromBackend();
+
+        if (pResponse.getmRecordsArray() == null) {
+            listRecords = new ArrayList<>();
+        }else{
+            listRecords = pResponse.getmRecordsArray();
+        }
 
         try {
             JSONObject listOfRecords = new JSONObject(jsonString);
             JSONArray detailsOneRecord = listOfRecords.getJSONArray("items");
             String cursor = listOfRecords.getString("nextPageToken");
             int arrayIndex = detailsOneRecord.length();
+
             for (int i = 0; i < arrayIndex; ++i) {
                 recordModel = new RecordsToNet();
                 JSONObject record = detailsOneRecord.getJSONObject(i);
@@ -62,20 +69,25 @@ public class RecordJsonFactory {
                 recordModel.setNikName(record.getString("nikName"));
                 recordModel.setMoves(record.getString("moves"));
                 recordModel.setTime(record.getString("time"));
+
                 try {
                     recordModel.setUserUrlPhoto(record.getString("userUrlPhoto"));
-                }catch (Exception pE){
+                } catch (Exception pE) {
                     pE.getStackTrace();
                     recordModel.setUserUrlPhoto(null);
                 }
-                listRecords.add(i, recordModel);
+
+                listRecords.add(recordModel);
             }
+
             pResponse.setmRecordsArray(listRecords);
             pResponse.setmCursor(cursor);
+
             return pResponse;
         } catch (JSONException pE) {
             pE.printStackTrace();
             pResponse.setmException(pE);
+
             return pResponse;
         }
     }

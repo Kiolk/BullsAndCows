@@ -45,4 +45,8 @@ public class Converters {
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+3"));
         return dateFormat.format(date);
     }
+
+    public static long convertToBackendTime(long pEpochTime){
+        return Constants.BACK_EPOCH_TIME_NOTATION - pEpochTime;
+    }
 }

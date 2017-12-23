@@ -6,6 +6,8 @@ import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
+import java.util.ArrayList;
+
 public class ModelConverterUtil {
 
     public static ContentValues fromRecordToNetToCv(RecordsToNet pRecord) {
@@ -17,7 +19,7 @@ public class ModelConverterUtil {
         cv.put(UserRecordsDB.MOVES, Integer.parseInt(pRecord.getMoves()));
         cv.put(UserRecordsDB.CODES, Integer.parseInt(pRecord.getCodes()));
         cv.put(UserRecordsDB.TIME, pRecord.getTime());
-        if(pRecord.getUserUrlPhoto() != null) {
+        if (pRecord.getUserUrlPhoto() != null) {
             cv.put(UserRecordsDB.USER_PHOTO_URL, pRecord.getUserUrlPhoto());
         }
         return cv;
@@ -34,5 +36,18 @@ public class ModelConverterUtil {
         recordForCheck.setTime(pRecord.getTime());
 
         return recordForCheck;
+    }
+
+    public static ContentValues[] fromArrayRecordToNetToCv(ArrayList<RecordsToNet> pArrayRecords) {
+        ContentValues[] arrayContentValues = new ContentValues[pArrayRecords.size()];
+        int i = 0;
+
+        for (RecordsToNet note : pArrayRecords) {
+
+            arrayContentValues[i] = fromRecordToNetToCv(note);
+
+            ++i;
+        }
+        return arrayContentValues;
     }
 }

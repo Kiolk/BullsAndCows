@@ -33,14 +33,11 @@ import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
-import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
+import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
 public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivity
@@ -51,14 +48,10 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     public static final String USER_NAME_BUNDLE_KEY = "userName";
     public static final String CODED_BUNDL_KEY = "coded";
     public static final String LAST_RESULT_BUNDLE_KEY = "lastResult";
-    public static final int DELAY_BEFOR_REFRESH_DATA = 0;
-    public static final int PERIOD_BETWEEN_REFRESH = 10000;
 
     private UserInfoRecordFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
     private FragmentTransaction mFragmentTransaction;
-    private TimerTask mTimerTask;
-    private Timer mTimer;
     private EditText mSortByName;
     private Spinner mCodedSpinner;
     private Spinner mLastTimeSpinner;
@@ -76,8 +69,8 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         initSpinners();
         initFragments();
 
-        getLoaderManager().initLoader(0, null, this);
-        getLoaderManager().getLoader(0).forceLoad();
+        getLoaderManager().restartLoader(0, null, this);
+//        getLoaderManager().getLoader(0).forceLoad();
     }
 
     private void initView() {
@@ -108,21 +101,10 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         mUserInfoFragment = new UserInfoRecordFragment();
     }
 
-    void initTimer() {
-        mTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Log.d(TAG, "TimerTask run");
-                Intent intent = new Intent(RecordsCardActivityFromCursorLoaderActivity.this, WaiterNewRecordsService.class);
-                startService(intent);
-            }
-        };
-
-        mTimer = new Timer();
-
-        if (CheckConnection.checkConnection(RecordsCardActivityFromCursorLoaderActivity.this)) {
-            mTimer.scheduleAtFixedRate(mTimerTask, DELAY_BEFOR_REFRESH_DATA, PERIOD_BETWEEN_REFRESH);
-        }
+    void startWaiterRecordService() {
+        Intent intent = new Intent(RecordsCardActivityFromCursorLoaderActivity.this, WaiterNewRecordsService.class);
+        intent.putExtra(RECORDS_FROM_BACKEND_ON_DAY, 1513724487000L);
+        startService(intent);
     }
 
     private void firstTimeShowRecycler(Cursor pCursor) {
@@ -211,21 +193,18 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     @Override
     protected void onStop() {
         super.onStop();
-        mTimer.cancel();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        initTimer();
+        startWaiterRecordService();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         UserLoginHolder.getInstance().setOffline();
-//        mTimer.cancel();
-//        mTimerTask.cancel();
     }
 
     @Override
@@ -241,7 +220,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         }
         return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
                 null, null, null, null);
-//        return new CursorDBLoader(RecordsCardActivityFromCursorLoaderActivity.this);
     }
 
     @Override
