@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
@@ -22,14 +23,13 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 
 import kiolk.com.github.pen.Pen;
 
-public class RegistrationPageActivity extends AppCompatActivity {
+public class RegistrationPageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mUserName;
     private EditText mPassword;
     private EditText mPassword2;
     private EditText mEmail;
     private EditText mImageUrl;
-    private Button mSetImageButton;
     private ImageView mUserImage;
     private Button mRegisterButton;
     private UserDataBase mUser;
@@ -44,10 +44,6 @@ public class RegistrationPageActivity extends AppCompatActivity {
 
         initView();
         initCountrySpinner();
-        mUserName.setOnFocusChangeListener(nameFocusListener);
-        mPassword.setOnFocusChangeListener(passFocusListener);
-        mPassword2.setOnFocusChangeListener(pass2FocusListener);
-        mRegisterButton.setOnClickListener(clickBtn);
     }
 
     private View.OnFocusChangeListener nameFocusListener = new View.OnFocusChangeListener() {
@@ -55,23 +51,21 @@ public class RegistrationPageActivity extends AppCompatActivity {
         @Override
         public void onFocusChange(View pView, boolean pB) {
             if (!pB) {
-                UserBaseManager userInfo = new UserBaseManager() {
-
-                    @Override
-                    public void nikFreeCallback() {
-                        mUserName.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
-                        mNikFree = true;
-                    }
-
-                    @Override
-                    public void nikCorrectPasswordWrongCallback() {
-                        mUserName.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
-                    }
-                };
                 if (mUserName.length() != 0) {
-                    userInfo.checkInfoAboutUser(mUserName.getText().toString(), "1111");
-                }
+                    UserBaseManager userInfo = new UserBaseManager();
 
+                    userInfo.getUserInfo(mUserName.getText().toString(), new UserLoginCallback() {
+                        @Override
+                        public void getUserInfoCallback(UserDataBase pUserInfo) {
+                            if (pUserInfo == null || !pUserInfo.getUserName().equals(mUserName.getText().toString())) {
+                                mUserName.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
+                                mNikFree = true;
+                            } else {
+                                mUserName.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
+                            }
+                        }
+                    });
+                }
             }
         }
     };
@@ -135,8 +129,13 @@ public class RegistrationPageActivity extends AppCompatActivity {
         mImageUrl = findViewById(R.id.image_url_edit_tet);
         mUserImage = findViewById(R.id.user_image_registration_image_view);
         mRegisterButton = findViewById(R.id.registration_button);
-        mSetImageButton = findViewById(R.id.set_image_registration_button);
+        Button setImageButton = findViewById(R.id.set_image_registration_button);
         mRegisterButton.setEnabled(false);
+        mUserName.setOnFocusChangeListener(nameFocusListener);
+        mPassword.setOnFocusChangeListener(passFocusListener);
+        mPassword2.setOnFocusChangeListener(pass2FocusListener);
+        mRegisterButton.setOnClickListener(this);
+        setImageButton.setOnClickListener(this);
     }
 
     private void enableRegistrationButton() {
@@ -155,29 +154,29 @@ public class RegistrationPageActivity extends AppCompatActivity {
         mUser.setCountry(CountryUtils.getCountry(mSpinnerEx.getSelectedItemPosition()));
         mUser.setMCountryFlag(CountryUtils.getCountryResources(mUser.getCountry()));
         mUser.setMPhotoUrl(mImageUrl.getText().toString());
-        int i = 0;
     }
 
-    View.OnClickListener clickBtn = new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.set_image_registration_button:
+                Pen.getInstance().getImageFromUrl(mImageUrl.getText().toString()).inputTo(mUserImage);
+                break;
+            case R.id.registration_button:
+                setInfoAboutUser();
 
-        @Override
-        public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra(Constants.REGISTRATION_NAME_OF_USER, mUserName.getText().toString());
+                intent.putExtra(Constants.REGISTRATION_PASSWORD, mPassword.getText().toString());
+                setResult(RESULT_OK, intent);
 
-            setInfoAboutUser();
+                UserBaseManager userAdd = new UserBaseManager();
+                userAdd.createNewUser(mUser);
 
-            Intent intent = new Intent();
-            intent.putExtra(Constants.REGISTRATION_NAME_OF_USER, mUserName.getText().toString());
-            intent.putExtra(Constants.REGISTRATION_PASSWORD, mPassword.getText().toString());
-            setResult(RESULT_OK, intent);
-
-            UserBaseManager userAdd = new UserBaseManager();
-            userAdd.createNewUser(mUser);
-
-            finish();
+                finish();
+                break;
+            default:
+                break;
         }
-    };
-
-    public void submitImage(View view){
-        Pen.getInstance().getImageFromUrl(mImageUrl.getText().toString()).inputTo(mUserImage);
     }
 }

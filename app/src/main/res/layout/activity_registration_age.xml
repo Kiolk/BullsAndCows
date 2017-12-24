@@ -45,8 +45,7 @@
             android:id="@+id/set_image_registration_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "@string/RECORDS_MENU"
-            android:onClick="submitImage"/>
+            android:text = "@string/RECORDS_MENU"/>
     </LinearLayout>
 
     <LinearLayout

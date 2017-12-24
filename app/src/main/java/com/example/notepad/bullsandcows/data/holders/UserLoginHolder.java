@@ -108,4 +108,12 @@ public class UserLoginHolder {
     public void setLogged(boolean logged) {
         isLogged = logged;
     }
+
+    public void initHolder(UserDataBase pUserInfo){
+        mUserInfo = pUserInfo;
+        mUserName = pUserInfo.getUserName();
+        mPassword = pUserInfo.getPassword();
+        mUserImageUrl = pUserInfo.getMPhotoUrl();
+        isLogged  = true;
+    }
 }

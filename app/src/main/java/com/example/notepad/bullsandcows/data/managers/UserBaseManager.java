@@ -1,17 +1,10 @@
 package com.example.notepad.bullsandcows.data.managers;
 
-import android.annotation.SuppressLint;
 import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
-
-import com.example.notepad.bullsandcows.BuildConfig;
-import com.example.notepad.myapplication.backend.userDataBaseApi.UserDataBaseApi;
+import com.example.notepad.bullsandcows.data.httpclient.BackendEndpointClient;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,10 +12,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class UserBaseManager implements UserInfoCallback {
+public class UserBaseManager {
 
-    private static final String FREE_USER_NAME_ON_BACKEND = "Free user name";
-    private static final String USER_BACKEND_URL = BuildConfig.BACKEND_USER_INFO;
     private static final String SPLITTER_FOR_TIMER = ":";
     private static final int MINUTE_TIME = 0;
     private static final int SECOND_TIME = 1;
@@ -30,96 +21,39 @@ public class UserBaseManager implements UserInfoCallback {
     private static final int MAX_USER_LAST_RECORD = 5;
     private static final int MAX_BEST_RECORDS_NOTES = 10;
 
-    private UserDataBase mUserModel;
-    private UserDataBase mUserModelFromBackend;
-    private Handler mUserInfoHandler;
-    private Thread mUserInfoThread;
-    private Runnable mRunnableThread;
-    private UserDataBaseApi myApiService;
-
-    public UserBaseManager() {
-        initializationUserInfoHandler();
-        initRunnable();
-
-        mUserInfoThread = new Thread(mRunnableThread);
-        mUserModel = new UserDataBase();
-        mUserModelFromBackend = null;
-
-    }
-
-    @SuppressLint("HandlerLeak")
-    private void initializationUserInfoHandler() {
-        mUserInfoHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                mUserModelFromBackend = (UserDataBase) msg.obj;
-                Log.d("MyLogs", "get message");
-
-                if (mUserModelFromBackend.getUserName().equals(FREE_USER_NAME_ON_BACKEND)) {
-                    nikCorrectPasswordWrongCallback();
-                    nikFreeCallback();
-                } else if (mUserModelFromBackend.getUserName().equals(mUserModel.getUserName()) &&
-                        mUserModelFromBackend.getPassword().equals(mUserModel.getPassword())) {
-                    nikPasswordCorrectCallback(mUserModelFromBackend);
-                    updateLastUserVisit(mUserModelFromBackend, true);
-                } else {
-                    nikCorrectPasswordWrongCallback();
-                    getFullUserInfoCallback(mUserModelFromBackend);
-                }
-            }
-        };
-    }
-
-    public void checkInfoAboutUser(String pNikName, String pPassword) {
-        mUserModel.setUserName(pNikName);
-        mUserModel.setPassword(pPassword);
-        mUserInfoThread.start();
-    }
-
-    private void initRunnable() {
-        mRunnableThread = new Runnable() {
+    public void getUserInfo(final String pUserNik, final UserLoginCallback pCallback) {
+        final Handler handler = new Handler();
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                if (myApiService == null) {
-                    UserDataBaseApi.Builder builder = new UserDataBaseApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                            .setRootUrl(USER_BACKEND_URL);
-
-                    myApiService = builder.build();
-                }
-
+                UserDataBase userInfo = null;
                 try {
-                    UserDataBase userInfo = myApiService.get(mUserModel.getUserName()).execute();
-                    Message msg = new Message();
-
-                    msg.obj = userInfo;
-                    mUserInfoHandler.sendMessage(msg);
-                } catch (IOException pE) {
-                    Message msg = new Message();
-
-                    pE.printStackTrace();
-                    msg.obj = new UserDataBase().setUserName(FREE_USER_NAME_ON_BACKEND);
-                    mUserInfoHandler.sendMessage(msg);
+                    userInfo = BackendEndpointClient.getUserDataBaseApi().get(pUserNik).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+
+                final UserDataBase userGettingInfo = userInfo;
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (pCallback != null) {
+                            pCallback.getUserInfoCallback(userGettingInfo);
+                        }
+                    }
+                });
             }
-        };
+        });
+        thread.start();
     }
 
     public void createNewUser(final UserDataBase pNewUser) {
-
         Thread addUserThread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                if (myApiService == null) {
-                    UserDataBaseApi.Builder builder = new UserDataBaseApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                            .setRootUrl(USER_BACKEND_URL);
-
-                    myApiService = builder.build();
-                }
                 try {
-                    myApiService.insert(pNewUser).execute();
+                    BackendEndpointClient.getUserDataBaseApi().insert(pNewUser).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -132,17 +66,9 @@ public class UserBaseManager implements UserInfoCallback {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                if (myApiService == null) {
-                    UserDataBaseApi.Builder builder = new UserDataBaseApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                            .setRootUrl(USER_BACKEND_URL);
-                    myApiService = builder.build();
-                }
-
                 try {
-                    UserDataBase userInfo = myApiService.get(pRecord.getNikName()).execute();
+                    UserDataBase userInfo = BackendEndpointClient.getUserDataBaseApi().get(pRecord.getNikName()).execute();
                     List<BestUserRecords> listRecords = userInfo.getBestUserRecords();
-
 
                     if (listRecords != null) {
                         listRecords = insertPossibleBestRecord(listRecords, pRecord);
@@ -150,12 +76,13 @@ public class UserBaseManager implements UserInfoCallback {
                     } else {
                         listRecords = new ArrayList<>();
                         listRecords.add(pRecord);
+                        listRecords.get(listRecords.size() - 1).setMNumberGames(ADD_ONE_NEW_GAME);
                     }
 
                     userInfo.setBestUserRecords(listRecords);
                     userInfo.setLastFiveUserRecords(updateLastRecords(userInfo.getLastFiveUserRecords(), pRecord));
                     userInfo.setMNumberPlayedGames(userInfo.getMNumberPlayedGames() + ADD_ONE_NEW_GAME);
-                    myApiService.update(userInfo.getUserName(), userInfo).execute();
+                    BackendEndpointClient.getUserDataBaseApi().update(userInfo.getUserName(), userInfo).execute();
                 } catch (IOException pE) {
                     pE.getStackTrace();
                 }
@@ -170,10 +97,7 @@ public class UserBaseManager implements UserInfoCallback {
         if (lastFive == null) {
             lastFive = new ArrayList<>();
         }
-            lastFive.add(pRecord);
-
-
-
+        lastFive.add(pRecord);
 
         while (lastFive.size() > MAX_USER_LAST_RECORD) {
             lastFive.remove(0);
@@ -223,8 +147,8 @@ public class UserBaseManager implements UserInfoCallback {
         }
 
         if (!isCodPresent && listRecords.size() <= MAX_BEST_RECORDS_NOTES) {
-            pRecord.setMNumberGames(ADD_ONE_NEW_GAME);
             listRecords.add(pRecord);
+            listRecords.get(listRecords.size() - 1).setMNumberGames(ADD_ONE_NEW_GAME);
         }
 
         return listRecords;
@@ -247,22 +171,14 @@ public class UserBaseManager implements UserInfoCallback {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-
-                if (myApiService == null) {
-                    UserDataBaseApi.Builder builder = new UserDataBaseApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                            .setRootUrl(USER_BACKEND_URL);
-                    myApiService = builder.build();
-                }
-
                 try {
 
                     String userName = pUserInfo.getUserName();
-                    UserDataBase userInfo = myApiService.get(userName).execute();
+                    UserDataBase userInfo = BackendEndpointClient.getUserDataBaseApi().get(userName).execute();
                     userInfo.setMLastUserVisit(System.currentTimeMillis());
                     userInfo.setIsOnline(pIsOnline);
 
-                    userInfo = myApiService.patch(userName, userInfo).execute();
-                    userInfo.clear();
+                    BackendEndpointClient.getUserDataBaseApi().patch(userName, userInfo).execute();
 
                 } catch (IOException pE) {
                     pE.getStackTrace();
@@ -272,46 +188,17 @@ public class UserBaseManager implements UserInfoCallback {
         thread.start();
     }
 
-    public void patchNewUserInformation(final UserDataBase pUserNewInfo){
+    public void patchNewUserInformation(final UserDataBase pUserNewInfo) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-
-                    UserDataBaseApi.Builder builder = new UserDataBaseApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
-                            .setRootUrl(USER_BACKEND_URL);
-                    myApiService = builder.build();
-
-                    myApiService.patch(pUserNewInfo.getUserName(), pUserNewInfo).execute();
-                    patchNewUserInfoCallback(true);
+                    BackendEndpointClient.getUserDataBaseApi().patch(pUserNewInfo.getUserName(), pUserNewInfo).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
-                    patchNewUserInfoCallback(false);
                 }
             }
         });
         thread.start();
-    }
-
-    @Override
-    public void nikFreeCallback() {
-    }
-
-    @Override
-    public UserDataBase nikPasswordCorrectCallback(UserDataBase pUserInfo) {
-        return pUserInfo;
-    }
-
-    @Override
-    public void nikCorrectPasswordWrongCallback() {
-    }
-    @Override
-    public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
-        return pUserData;
-    }
-
-    @Override
-    public boolean patchNewUserInfoCallback(Boolean isSuccessFull) {
-        return isSuccessFull;
     }
 }

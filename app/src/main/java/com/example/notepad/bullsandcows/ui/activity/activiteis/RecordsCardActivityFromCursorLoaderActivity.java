@@ -3,7 +3,6 @@ package com.example.notepad.bullsandcows.ui.activity.activiteis;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
-import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -27,9 +26,9 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
-import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
@@ -61,7 +60,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     private EditText mSortByName;
     private Spinner mCodedSpinner;
     private Spinner mLastTimeSpinner;
-    private RecordRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +113,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     private void firstTimeShowRecycler(Cursor pCursor) {
         RecyclerView mRecordRecyclerView = findViewById(R.id.records_recycler_view);
 
-        mAdapter = new RecordRecyclerViewAdapter(this, pCursor) {
+        RecordRecyclerViewAdapter adapter = new RecordRecyclerViewAdapter(this, pCursor) {
 
             @Override
             public String showInfoFragment(String pUserName) {
@@ -131,7 +129,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
                 RecordsToNet record = super.updateLateRecordCallback(pRecord);
                 Toast.makeText(RecordsCardActivityFromCursorLoaderActivity.this,
                         record.getTime(), Toast.LENGTH_LONG).show();
-//                new RecordAsyncTaskPost(RecordsCardActivityFromCursorLoaderActivity.this).execute(pRecord);
                 RecordsManager recordsManager = new RecordsManager();
                 recordsManager.postRecordOnBackend(pRecord, RecordsCardActivityFromCursorLoaderActivity.this);
                 return record;
@@ -140,21 +137,18 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
 
         mRecordRecyclerView.setHasFixedSize(false);
         mRecordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecordRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        mRecordRecyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void getUserInformation(String pUserName) {
-        UserBaseManager userManager = new UserBaseManager() {
+        UserBaseManager userManager = new UserBaseManager();
+        userManager.getUserInfo(pUserName, new UserLoginCallback() {
             @Override
-            public UserDataBase getFullUserInfoCallback(UserDataBase pUserData) {
-                UserDataBase user = super.getFullUserInfoCallback(pUserData);
-                mUserInfoFragment.showInfoAboutUser(RecordsCardActivityFromCursorLoaderActivity.this, user);
-
-                return pUserData;
+            public void getUserInfoCallback(UserDataBase pUserInfo) {
+                mUserInfoFragment.showInfoAboutUser(RecordsCardActivityFromCursorLoaderActivity.this, pUserInfo);
             }
-        };
-        userManager.checkInfoAboutUser(pUserName, "1111");
+        });
     }
 
     private void showInfoUserFragment() {
@@ -218,10 +212,10 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (args != null) {
-            String userName = args.getString(USER_NAME_BUNDLE_KEY);
-            String coded = args.getString(CODED_BUNDL_KEY);
-            String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
-            String[] request = new String[]{userName, coded, lastTimeSort};
+//            String userName = args.getString(USER_NAME_BUNDLE_KEY);
+//            String coded = args.getString(CODED_BUNDL_KEY);
+//            String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
+//            String[] request = new String[]{userName, coded, lastTimeSort};
 
             HashMap<String, String> selectionArgsMap = new HashMap<>();
             selectionArgsMap.put(UserRecordsDB.NIK_NAME, args.getString(USER_NAME_BUNDLE_KEY));
@@ -232,9 +226,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
 
             return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
                     null, readySelection.getSelection(), readySelection.getSelectionArgs(), null);
-
-//            return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
-//                    null, null, request, null);
         }
         return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
                 null, null, null, null);
@@ -277,11 +268,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
             cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
 
             new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
-//            new DBOperations().update(UserRecordsDB.TABLE, cv);
-//            getContentResolver().insert(RecordsContentProvider.CONTENT_URI,  cv);
-            getContentResolver().update(RecordsContentProvider.CONTENT_URI,  cv, null, null);
-            //TODO how correct listen new changes i BD
-//            getLoaderManager().getLoader(0).forceLoad();
+            getContentResolver().update(RecordsContentProvider.CONTENT_URI, cv, null, null);
         }
     }
 }

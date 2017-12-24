@@ -24,13 +24,14 @@ import com.example.notepad.bullsandcows.data.httpclient.models.HttpRequest;
 import com.example.notepad.bullsandcows.data.managers.AppInfoCallbacks;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UpdateAppFragment;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
-public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragment.UpdateAppListener , View.OnClickListener{
+public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragment.UpdateAppListener, View.OnClickListener {
 
     public static final String IS_CHECKED_KEEP_PASSWORD = "isCheckedKeepPassword";
     public static final String DEFAULT_PASSWORD_FOR_GUEST = "1111";
@@ -194,41 +195,24 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                 break;
             case R.id.login_button:
                 String name = mLogin.getText().toString();
-                String password = mPassword.getText().toString();
+                final String password = mPassword.getText().toString();
 
                 if (name.length() > 0 && password.length() > 0) {
                     if (CheckConnection.checkConnection(WelcomeActivity.this)) {
 
-                        UserBaseManager userManager = new UserBaseManager() {
-
+                        UserBaseManager userManager = new UserBaseManager();
+                        userManager.getUserInfo(name, new UserLoginCallback() {
                             @Override
-                            public UserDataBase nikPasswordCorrectCallback(UserDataBase pUserInfo) {
-                                UserDataBase userInfo = super.nikPasswordCorrectCallback(pUserInfo);
-                                UserLoginHolder.getInstance().setUserInfo(pUserInfo);
-                                UserLoginHolder.getInstance().setPassword(userInfo.getPassword());
-                                UserLoginHolder.getInstance().setUserName(userInfo.getUserName());
-                                UserLoginHolder.getInstance().setUserImageUrl(userInfo.getMPhotoUrl());
-                                UserLoginHolder.getInstance().setLogged(true);
-
-                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-
-                                startMainActivity();
-                                return userInfo;
+                            public void getUserInfoCallback(UserDataBase pUserInfo) {
+                                if (pUserInfo != null && password.equals(pUserInfo.getPassword())) {
+                                    UserLoginHolder.getInstance().initHolder(pUserInfo);
+                                    Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+                                    startMainActivity();
+                                } else {
+                                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+                                }
                             }
-
-                            @Override
-                            public void nikCorrectPasswordWrongCallback() {
-                                super.nikCorrectPasswordWrongCallback();
-                                Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
-                            }
-
-                            @Override
-                            public void nikFreeCallback() {
-                                Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
-                            }
-                        };
-
-                        userManager.checkInfoAboutUser(name, password);
+                        });
 
                     } else {
                         UserLoginHolder.getInstance().setLogged(false);

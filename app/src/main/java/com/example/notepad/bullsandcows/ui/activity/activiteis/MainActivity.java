@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +26,6 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
-import com.example.notepad.bullsandcows.data.managers.RecordAsyncTaskPost;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
@@ -53,10 +50,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import kiolk.com.github.pen.GetBitmapCallback;
 import kiolk.com.github.pen.Pen;
 
 import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String INPUT_NUMBER = "InputNumber";
     public static final String DEFAULT_VLUE_FOR_STRING = "Error";
     public static final String CODED_NUMBER = "codedNumber";
-//    public static final String USER_NAME = "userName";
+    //    public static final String USER_NAME = "userName";
     public static final String START_STATE = "startState";
     public static final String MOVES_ARRAY_LIST = "movesArrayList";
     public static final String INPUTTED_NUMBER_ARRAY_LIST = "inputtedNumberArrayList";
@@ -236,24 +233,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(UserLoginHolder.getInstance().getUserName());
-
-            if (UserLoginHolder.getInstance().getUserInfo() != null) {
-                GetBitmapCallback getBitmapCallback = new GetBitmapCallback() {
-                    @Override
-                    public Bitmap getBitmap(Bitmap pBitmapFromLoader) {
-//                    mToolBar.setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
-////                    mToolBar.setLogo(R.drawable.ic_cow_good);
-                        //TODO set userPhoto in toolBar. How Set additional views in tool bar?
-                        mToolBar.findViewById(R.id.user_photo_tool_bar_image_view).setBackground(new BitmapDrawable(getResources(), pBitmapFromLoader));
-//                    mToolBar.findViewById(R.id.user_nik_tool_bar_text_view).des
-//     getSupportActionBar().setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
-                        return null;
-                    }
-                };
 //
-//                Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl())
-//                        .getBitmapDirect(getBitmapCallback);
-            }
+//            if (UserLoginHolder.getInstance().getUserInfo() != null) {
+//                GetBitmapCallback getBitmapCallback = new GetBitmapCallback() {
+//                    @Override
+//                    public Bitmap getBitmap(Bitmap pBitmapFromLoader) {
+////                    mToolBar.setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
+//////                    mToolBar.setLogo(R.drawable.ic_cow_good);
+//                        //TODO set userPhoto in toolBar. How Set additional views in tool bar?
+//                        mToolBar.findViewById(R.id.user_photo_tool_bar_image_view).setBackground(new BitmapDrawable(getResources(), pBitmapFromLoader));
+////                    mToolBar.findViewById(R.id.user_nik_tool_bar_text_view).des
+////     getSupportActionBar().setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
+//                        return null;
+//                    }
+//                };
+////
+////                Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl())
+////                        .getBitmapDirect(getBitmapCallback);
+//            }
         }
     }
 
@@ -474,7 +471,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void run() {
                         Date pDate = new Date(mTimerCount * 1000);
-                        DateFormat format = new SimpleDateFormat(TIMESTAMP_MM_SS);
+//                        Locale locale = new Locale(Locale.ENGLISH);
+                        DateFormat format = new SimpleDateFormat(TIMESTAMP_MM_SS, Locale.ENGLISH);
+//                        DateFormat format = getData //new SimpleDateFormat(TIMESTAMP_MM_SS);
                         String formatedTime = format.format(pDate);
                         mTimer.setText(String.valueOf(formatedTime));
                         ++mTimerCount;
@@ -616,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         HashMap<String, String> selectionArgs = new HashMap<>();
         selectionArgs.put(UserRecordsDB.NIK_NAME, EMPTY_STRING);
-        selectionArgs.put(UserRecordsDB.CODES, String.valueOf(DIG) );
+        selectionArgs.put(UserRecordsDB.CODES, String.valueOf(DIG));
         selectionArgs.put(UserRecordsDB.ID, Tables.LAST_DAY);
 
 //        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_URI,
