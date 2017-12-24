@@ -29,10 +29,6 @@ public class WaiterNewRecordsService extends Service {
 
         RecordsManager recordsManager = new RecordsManager();
         recordsManager.getRecordsFromBackend(onDay, new RecordsCallbacks() {
-            @Override
-            public ResponseRecordModel getResponseBackendCallback(ResponseRecordModel pResponse) {
-                return null;
-            }
 
             @Override
             public void getRecordsBackendCallback(ResponseRecordModel pResponse) {

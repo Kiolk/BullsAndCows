@@ -33,6 +33,7 @@ import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WinSoundService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.MovesListCustomAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.EditProfileFragment;
+import com.example.notepad.bullsandcows.ui.activity.fragments.UsersRatingFragment;
 import com.example.notepad.bullsandcows.ui.activity.fragments.WinFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.CloseEditProfileListener;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private long mTimerCount = 0;
     private Timer mTimerTimer = null;
     private WinFragment mWinFragment;
+    private UsersRatingFragment mRatingFragment;
     private EditProfileFragment mEditProfileFragment;
     private FragmentTransaction mTransaction;
     private long mStartGameTime;
@@ -207,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mTimer.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.DIGITAL_FONT));
 
         mWinFragment = new WinFragment();
+        mRatingFragment = new UsersRatingFragment();
         mFrameLayout = findViewById(R.id.win_container);
         mEditInfoFrameLayout = findViewById(R.id.for_fragments_in_main_frame_layout);
 
@@ -230,6 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initToolBar() {
         final Toolbar mToolBar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolBar);
+//        mToolBar.setliste
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(UserLoginHolder.getInstance().getUserName());
@@ -258,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageView mUserPhoto = findViewById(R.id.photo_user_bar_image_view);
         mNikUserBar = findViewById(R.id.nik_user_bar_text_view);
         mDayRating = findViewById(R.id.day_rating_user_bar_text_view);
+        mDayRating.setOnClickListener(this);
         mCodedNumberTitle = findViewById(R.id.coded_title_user_bar_text_vie);
 
         if (UserLoginHolder.getInstance().getUserImageUrl() != null) {
@@ -530,6 +535,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stopService(new Intent(this, WinSoundService.class));
     }
 
+    private void showRatingFragment(){
+        mFrameLayout.setVisibility(View.VISIBLE);
+        mTransaction = getFragmentManager().beginTransaction();
+        mTransaction.add(R.id.win_container, mRatingFragment);
+        mTransaction.commit();
+        mFragmentManager.executePendingTransactions();
+        mRatingFragment.showRating(DIG);
+    }
+
+    private void closeRatingFragment() {
+        mFrameLayout.setVisibility(View.INVISIBLE);
+        mTransaction = getFragmentManager().beginTransaction();
+        mTransaction.remove(mRatingFragment);
+        mTransaction.commit();
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -601,6 +622,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.start:
                 submitStart();
+                closeWinFragment(null);
+                break;
+            case R.id.day_rating_user_bar_text_view:
+                if(mRatingFragment.isVisible()){
+                    closeRatingFragment();
+                }else {
+                    showRatingFragment();
+                }
                 break;
             default:
                 break;

@@ -23,7 +23,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
@@ -241,23 +240,23 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     public void onLoaderReset(Loader<Cursor> loader) {
     }
 
-    @Override
-    @Deprecated
-    public RecordsToNet setResult(RecordsToNet pRecord) {
-        Log.d(TAG, "Start callback setResult for update i bd");
-        if (pRecord != null) {
-            ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
-
-            cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
-
-            new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
-            new DBOperations().update(UserRecordsDB.TABLE, cv);
-            //TODO how correct listen new changes i BD
-            getLoaderManager().getLoader(0).forceLoad();
-        }
-
-        return null;
-    }
+//    @Override
+////    @Deprecated
+//    public RecordsToNet setResult(RecordsToNet pRecord) {
+//        Log.d(TAG, "Start callback setResult for update i bd");
+//        if (pRecord != null) {
+//            ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
+//
+//            cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
+//
+//            new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
+//            new DBOperations().update(UserRecordsDB.TABLE, cv);
+//            //TODO how correct listen new changes i BD
+//            getLoaderManager().getLoader(0).forceLoad();
+//        }
+//
+//        return null;
+//    }
 
     @Override
     public void successSetResultListener(RecordsToNet pRecord) {

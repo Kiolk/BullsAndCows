@@ -1,9 +1,18 @@
 package com.example.notepad.bullsandcows.utils;
 
+import com.example.notepad.bullsandcows.data.databases.Tables;
+import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
+
 public class Constants {
 
     public interface IntentKeys {
         String RECORDS_FROM_BACKEND_ON_DAY = "RecordsFromBackendOnDay";
+    }
+
+    public interface ContentProvidersConstant{
+       String SORT_ITEM_BY_TIME = UserRecordsDB.TIME + Tables.ASC;
+       String SORT_ITEM_BY_MOVES = UserRecordsDB.MOVES + Tables.ASC;
+       String SORT_ITEM_BY_MOVES_TIME = SORT_ITEM_BY_MOVES + " , " + SORT_ITEM_BY_TIME;
     }
 
     public final static String TAG = "MyLogs";
