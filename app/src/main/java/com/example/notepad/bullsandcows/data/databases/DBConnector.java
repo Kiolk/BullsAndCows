@@ -32,10 +32,12 @@ public class DBConnector extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(Tables.CRATE_USERS_RECORDS_TABLE);
-        Log.d("MyLogs", "Table " + APP_DB_NAME + "Created;");
+        db.execSQL(Tables.CRATE_USER_INFO_TABLE);
+        Log.d("MyLogs", "Tables " + APP_DB_NAME + "Created;");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d("MyLogs", "Tables " + APP_DB_NAME + "Upgrade;");
     }
 }

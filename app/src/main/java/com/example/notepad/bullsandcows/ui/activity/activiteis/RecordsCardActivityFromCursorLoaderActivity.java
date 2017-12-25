@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.databases.models.UserInfoDB;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
@@ -32,6 +33,7 @@ import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
+import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordCursorLoaderFragment;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
@@ -53,7 +55,8 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     public static final String CODED_BUNDL_KEY = "coded";
     public static final String LAST_RESULT_BUNDLE_KEY = "lastResult";
 
-    private UserInfoRecordFragment mUserInfoFragment;
+//    private UserInfoRecordFragment mUserInfoFragment;
+    private UserInfoRecordCursorLoaderFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
     private FragmentTransaction mFragmentTransaction;
     private EditText mSortByName;
@@ -100,7 +103,8 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     private void initFragments() {
         mInfoFrameLayout = findViewById(R.id.user_info_record_frame_layout);
         mInfoFrameLayout.setOnClickListener(this);
-        mUserInfoFragment = new UserInfoRecordFragment();
+//        mUserInfoFragment = new UserInfoRecordFragment();
+        mUserInfoFragment = new UserInfoRecordCursorLoaderFragment();
     }
 
     void startWaiterRecordService() {
@@ -141,13 +145,24 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     private void getUserInformation(String pUserName) {
-        UserBaseManager userManager = new UserBaseManager();
-        userManager.getUserInfo(pUserName, new UserLoginCallback() {
-            @Override
-            public void getUserInfoCallback(UserDataBase pUserInfo) {
-                mUserInfoFragment.showInfoAboutUser(RecordsCardActivityFromCursorLoaderActivity.this, pUserInfo);
-            }
-        });
+
+//        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_USERS_URI, null, UserInfoDB.ID + " = " + pUserName,
+//                null, null);
+//        if(cursor.getCount() != 0){
+//
+//        }else {
+        Log.d(TAG, "getUserInformation: " + pUserName);
+        mUserInfoFragment.showUserInfo(pUserName);
+
+         /*   UserBaseManager userManager = new UserBaseManager();
+            userManager.getUserInfo(pUserName, new UserLoginCallback() {
+                @Override
+                public void getUserInfoCallback(UserDataBase pUserInfo) {
+                    mUserInfoFragment.showInfoAboutUser(RecordsCardActivityFromCursorLoaderActivity.this, pUserInfo);
+
+                }
+            });*/
+//        }
     }
 
     private void showInfoUserFragment() {

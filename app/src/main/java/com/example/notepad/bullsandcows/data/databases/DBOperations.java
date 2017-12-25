@@ -27,7 +27,7 @@ public class DBOperations {
         try {
             id = database.insert(pTableName, null, pValues);
             database.setTransactionSuccessful();
-            Log.d("MyLogs", "Add one new record in UserRecordsDB");
+            Log.d("MyLogs", "Add one new record in " + pTableName + pValues.toString());
         } catch (Exception pE) {
             pE.getStackTrace();
             Log.d("MyLogs", this.getClass().getSimpleName() + pE.getLocalizedMessage());
@@ -38,11 +38,12 @@ public class DBOperations {
         return id;
     }
 
-    public void update(final String pTableName, final ContentValues pValues) {
+    public int update(final String pTableName, final ContentValues pValues) {
         SQLiteDatabase database = mHelper.getReadableDatabase();
         database.beginTransaction();
+        int result = 0;
         try {
-            database.update(pTableName, pValues, UserRecordsDB.ID + " = " + pValues.getAsString(UserRecordsDB.ID), null);
+            result = database.update(pTableName, pValues, UserRecordsDB.ID + " = ?", new String[]{pValues.getAsString(UserRecordsDB.ID)});
             database.setTransactionSuccessful();
             Log.d("MyLogs", "Add one new record in UserRecordsDB");
         } catch (Exception pE) {
@@ -52,6 +53,7 @@ public class DBOperations {
             database.endTransaction();
             database.close();
         }
+        return result;
     }
 
     public Cursor query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy,

@@ -1,5 +1,6 @@
 package com.example.notepad.bullsandcows.data.databases;
 
+import com.example.notepad.bullsandcows.data.databases.models.UserInfoDB;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 
 public class Tables {
@@ -22,4 +23,23 @@ public class Tables {
                     UserRecordsDB.TIME + " TEXT, " +
                     UserRecordsDB.USER_PHOTO_URL + " TEXT, " +
                     UserRecordsDB.IS_UPDATE_ONLINE + " TEXT)";
+
+    public static final String CRATE_USER_INFO_TABLE = "CREATE TABLE IF NOT EXISTS " +
+            UserInfoDB.TABLE + "(" +
+            UserInfoDB.ID + " TEXT PRIMARY KEY, " +
+            UserInfoDB.COUNTRY_FLAG + " INTEGER, " +
+            UserInfoDB.COUNTRY + " TEXT, " +
+            UserInfoDB.AGE + " INTEGER, " +
+            UserInfoDB.EMAIL + " TEXT, " +
+            UserInfoDB.DESCRIPTION + " BLOB, " +
+            UserInfoDB.AVATAR_URL + " TEXT, " +
+            UserInfoDB.SEX + " TEXT, " +
+            UserInfoDB.NUMBER_OF_PLAYED_GAMES + " INTEGER, " +
+            UserInfoDB.REGISTRATION_TIME + " BIGINT, " +
+            UserInfoDB.LAST_VISIT + " BIGINT, " +
+            UserInfoDB.USER_FRIENDS + " BLOB, " +
+            UserInfoDB.USER_MESSAGES + " BLOB, " +
+            UserInfoDB.USERS_BEST_RECORDS + " BLOB, " +
+            UserInfoDB.USER_LAST_RECORDS + " BLOB, " +
+            UserInfoDB.IS_ONLINE + " INT)";
 }

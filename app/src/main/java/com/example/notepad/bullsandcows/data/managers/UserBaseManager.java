@@ -1,8 +1,15 @@
 package com.example.notepad.bullsandcows.data.managers;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 
+import com.example.notepad.bullsandcows.data.databases.models.UserInfoDB;
 import com.example.notepad.bullsandcows.data.httpclient.BackendEndpointClient;
+import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
+import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
@@ -11,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
 public class UserBaseManager {
 
@@ -21,7 +30,7 @@ public class UserBaseManager {
     private static final int MAX_USER_LAST_RECORD = 5;
     private static final int MAX_BEST_RECORDS_NOTES = 10;
 
-    public void getUserInfo(final String pUserNik, final UserLoginCallback pCallback) {
+    public void getUserInfo(final Context pContext, final String pUserNik, final UserLoginCallback pCallback) {
         final Handler handler = new Handler();
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -31,6 +40,17 @@ public class UserBaseManager {
                     userInfo = BackendEndpointClient.getUserDataBaseApi().get(pUserNik).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+
+                if(userInfo != null && pContext != null) {
+                    Uri result = pContext.getContentResolver().insert(RecordsContentProvider.CONTENT_USERS_URI, ModelConverterUtil.fromUserDataBaseToCv(userInfo));
+
+                    if(Integer.parseInt(result.getLastPathSegment())  <= 0) {
+                        pContext.getContentResolver().update(RecordsContentProvider.CONTENT_USERS_URI, ModelConverterUtil.fromUserDataBaseToCv(userInfo), UserInfoDB.ID + " = ?", new String[]{pUserNik});
+                        Log.d(TAG, "update user data: ");
+                    }else {
+                        Log.d(TAG, "insert new user data");
+                    }
                 }
 
                 final UserDataBase userGettingInfo = userInfo;
@@ -201,4 +221,7 @@ public class UserBaseManager {
         });
         thread.start();
     }
+//
+//    public Cursor
+
 }

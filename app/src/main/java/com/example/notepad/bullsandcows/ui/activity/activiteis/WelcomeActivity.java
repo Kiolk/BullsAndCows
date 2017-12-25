@@ -201,7 +201,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                     if (CheckConnection.checkConnection(WelcomeActivity.this)) {
 
                         UserBaseManager userManager = new UserBaseManager();
-                        userManager.getUserInfo(name, new UserLoginCallback() {
+                        userManager.getUserInfo(null, name, new UserLoginCallback() {
                             @Override
                             public void getUserInfoCallback(UserDataBase pUserInfo) {
                                 if (pUserInfo != null && password.equals(pUserInfo.getPassword())) {

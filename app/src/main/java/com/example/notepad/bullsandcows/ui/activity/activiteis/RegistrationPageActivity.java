@@ -54,7 +54,7 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
                 if (mUserName.length() != 0) {
                     UserBaseManager userInfo = new UserBaseManager();
 
-                    userInfo.getUserInfo(mUserName.getText().toString(), new UserLoginCallback() {
+                    userInfo.getUserInfo(null, mUserName.getText().toString(), new UserLoginCallback() {
                         @Override
                         public void getUserInfoCallback(UserDataBase pUserInfo) {
                             if (pUserInfo == null || !pUserInfo.getUserName().equals(mUserName.getText().toString())) {
