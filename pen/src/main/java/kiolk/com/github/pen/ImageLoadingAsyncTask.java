@@ -25,12 +25,14 @@ public class ImageLoadingAsyncTask extends AsyncTask<ImageRequest, Void, ImageRe
         super.onPostExecute(pImageResult);
 
 
-        if (pImageResult.getmBitmap() != null && pImageResult.getmRequest().getmBitmapCallback() == null) {
+        if (pImageResult.getmBitmap() != null
+                && pImageResult.getmRequest().getmBitmapCallback() == null
+                && pImageResult.getmRequest().getmTarget() != null) {
             ImageView imageView = pImageResult.getmRequest().getmTarget().get();
             String tag = MD5Util.getHashString(pImageResult.getmRequest().getmUrl());
-            LogUtil.msg("Compare between " + tag + " and " + imageView.getTag());
+//            LogUtil.msg("Compare between " + tag + " and " + imageView.getTag());
 
-            if (imageView.getTag().equals(tag)) {
+            if (imageView != null && imageView.getTag().equals(tag)) {
                 imageView.setImageBitmap(pImageResult.getmBitmap());
                 LogUtil.msg("set bmp from cache" + pImageResult.getmRequest().getmUrl() + MD5Util.getHashString(pImageResult.getmRequest().getmUrl()));
             }

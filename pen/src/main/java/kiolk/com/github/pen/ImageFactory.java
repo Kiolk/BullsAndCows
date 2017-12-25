@@ -55,7 +55,9 @@ class ImageFactory {
             case Pen.MEMORY_CACHE:
 
                 synchronized (Pen.getInstance().mLock) {
-                    Pen.getInstance().addBitmapForLruCache(pResult.getmRequest().getmUrl(), pResult.getmBitmap());
+                    if(pResult.getmException() == null) { //Checking  for no correct saving bmp
+                        Pen.getInstance().addBitmapForLruCache(pResult.getmRequest().getmUrl(), pResult.getmBitmap());
+                    }
                 }
 
                 break;
@@ -106,7 +108,7 @@ class ImageFactory {
                 options.inSampleSize = ImageFactory.calculateInSimpleSize(options, reqHeight, reqWidth);
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
 
-//                int size = bmp.getByteCount();
+                int size = bmp.getByteCount();
                 pResult.setmBitmap(bmp);
             } else {
                 Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);

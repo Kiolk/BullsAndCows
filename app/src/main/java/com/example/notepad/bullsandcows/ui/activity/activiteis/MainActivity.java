@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -237,8 +238,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(UserLoginHolder.getInstance().getUserName());
-//
-//            if (UserLoginHolder.getInstance().getUserInfo() != null) {
+//            CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.main_collapsing_layout);
+//            collapsingToolbarLayout.setTitle(UserLoginHolder.getInstance().getUserName());
+//            ImageView appBarImage = findViewById(R.id.image_collapsing_layout);
+//            if (UserLoginHolder.getInstance().getUserInfo()!= null) {
+//                Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl()).inputTo(appBarImage);
+//            }
 //                GetBitmapCallback getBitmapCallback = new GetBitmapCallback() {
 //                    @Override
 //                    public Bitmap getBitmap(Bitmap pBitmapFromLoader) {
@@ -256,6 +261,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 ////                        .getBitmapDirect(getBitmapCallback);
 //            }
         }
+//        setSupportActionBar(mToolBar);
     }
 
     private void intiUserBar() {

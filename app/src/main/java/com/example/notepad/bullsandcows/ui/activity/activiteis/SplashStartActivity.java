@@ -87,7 +87,7 @@ public class SplashStartActivity extends Activity {
                 .setContext(this)
                 .setDefaultDrawable(getResources().getDrawable(R.drawable.ic_bull_big_size))
                 .setErrorDrawable(getResources().getDrawable(R.drawable.ic_image_no_load))
-                .setSavingStrategy(Pen.SAVE_FULL_IMAGE_STRATEGY)
+                .setSavingStrategy(Pen.SAVE_SCALING_IMAGE_STRATEGY)
                 .setTypeOfCache(Pen.INNER_FILE_CACHE)
                 .setSizeInnerFileCache(Constants.INNER_FILE_CACHE_SIZE_MB)
                 .setQualityImageCompression(Constants.QUALITY_IMAGE_COMPRESSION)
