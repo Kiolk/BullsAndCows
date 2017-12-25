@@ -10,7 +10,7 @@ android {
         }
     }
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.example.notepad.bullsandcows"
         minSdkVersion 18
@@ -39,14 +39,14 @@ android {
     flavorDimensions "store"
     productFlavors {
         GooglePlay {
-            flavorDimension "store"
+            dimension "store"
             versionName "2.0 for Goggle"
             versionCode 4
             buildConfigField "String", "HOME_SITE", "\"http://site1.com\""
             buildConfigField "int", "BUILD_TIME", "${System.currentTimeSeconds()}"
         }
         Amazon {
-            flavorDimension "store"
+            dimension "store"
             versionName "2.0 for Amazon"
             versionCode 4
             buildConfigField "String", "HOME_SITE", "\"http://site2.com\""
@@ -68,7 +68,7 @@ dependencies {
         exclude module: 'httpclient'
     }
     compile project(path: ':online_records_backend', configuration: 'android-endpoints')
-    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:recyclerview-v7:26.1.0'
     compile 'com.android.support:cardview-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'

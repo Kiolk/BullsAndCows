@@ -11,13 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.databases.DBConnector;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
-import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
-import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
-
-import kiolk.com.github.pen.Pen;
+import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 
@@ -31,9 +27,6 @@ public class SplashStartActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_start);
-
-        setImageLoaderConfiguration();
-        DBConnector.initInstance(SplashStartActivity.this);
 
         initView();
         timeOut();
@@ -80,17 +73,5 @@ public class SplashStartActivity extends Activity {
                 new AnimationOfView().enteredView(layout);
             }
         });
-    }
-
-    private void setImageLoaderConfiguration() {
-        Pen.getInstance().setLoaderSettings()
-                .setContext(this)
-                .setDefaultDrawable(getResources().getDrawable(R.drawable.ic_bull_big_size))
-                .setErrorDrawable(getResources().getDrawable(R.drawable.ic_image_no_load))
-                .setSavingStrategy(Pen.SAVE_SCALING_IMAGE_STRATEGY)
-                .setTypeOfCache(Pen.INNER_FILE_CACHE)
-                .setSizeInnerFileCache(Constants.INNER_FILE_CACHE_SIZE_MB)
-                .setQualityImageCompression(Constants.QUALITY_IMAGE_COMPRESSION)
-                .setUp();
     }
 }
