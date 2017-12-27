@@ -33,6 +33,7 @@ public class DBConnector extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(Tables.CRATE_USERS_RECORDS_TABLE);
         db.execSQL(Tables.CRATE_USER_INFO_TABLE);
+        db.execSQL(Tables.CRATE_CURRENT_USER_TABLE);
         Log.d("MyLogs", "Tables " + APP_DB_NAME + "Created;");
     }
 

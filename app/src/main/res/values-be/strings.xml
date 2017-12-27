@@ -128,6 +128,7 @@
     <string name="DAY_RAITING">Day raiting</string>
     <string name="DASH">---</string>
     <string name="CODED">Coded: "</string>
+    <string name="PROFILE_SUCCES_UPDATE">Profile success update</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

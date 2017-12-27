@@ -208,15 +208,28 @@ public class UserBaseManager {
         thread.start();
     }
 
-    public void patchNewUserInformation(final UserDataBase pUserNewInfo) {
+    public void patchNewUserInformation(final UserDataBase pUserNewInfo, final  UserLoginCallback pCallback) {
+        final Handler handler = new Handler();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                final  UserDataBase userGettingInfo;
+                UserDataBase tmp;
                 try {
-                    BackendEndpointClient.getUserDataBaseApi().patch(pUserNewInfo.getUserName(), pUserNewInfo).execute();
+                 tmp = BackendEndpointClient.getUserDataBaseApi().patch(pUserNewInfo.getUserName(), pUserNewInfo).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
+                    tmp = null;
                 }
+                userGettingInfo = tmp;
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (pCallback != null) {
+                            pCallback.getUserInfoCallback(userGettingInfo);
+                        }
+                    }
+                });
             }
         });
         thread.start();

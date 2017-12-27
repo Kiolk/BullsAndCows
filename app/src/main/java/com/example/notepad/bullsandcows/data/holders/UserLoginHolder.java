@@ -1,11 +1,22 @@
 package com.example.notepad.bullsandcows.data.holders;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 
+import com.example.notepad.bullsandcows.data.databases.DBOperations;
+import com.example.notepad.bullsandcows.data.databases.DBOperationsSingleTone;
+import com.example.notepad.bullsandcows.data.databases.models.CurrentUserDB;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 public class UserLoginHolder {
+
+    public interface checkTokenCallback {
+        void isValidToken(boolean isValid);
+    }
 
     private static UserLoginHolder mUser;
 
@@ -22,6 +33,8 @@ public class UserLoginHolder {
     private boolean mKeepOnline;
 
     private boolean isLogged;
+
+    private String mToken;
 
     private UserLoginHolder() {
         mKeepOnline = false;
@@ -77,6 +90,14 @@ public class UserLoginHolder {
         this.mUserInfo = mUserInfo;
     }
 
+    public String getToken() {
+        return mToken;
+    }
+
+    public void setToken(String mToken) {
+        this.mToken = mToken;
+    }
+
     public void setOffline() {
         if (!mKeepOnline && isLogged()) {
             UserDataBase userInfo = UserLoginHolder.getInstance().getUserInfo();
@@ -109,11 +130,63 @@ public class UserLoginHolder {
         isLogged = logged;
     }
 
-    public void initHolder(UserDataBase pUserInfo){
+    public void initHolder(UserDataBase pUserInfo) {
         mUserInfo = pUserInfo;
         mUserName = pUserInfo.getUserName();
         mPassword = pUserInfo.getPassword();
         mUserImageUrl = pUserInfo.getMPhotoUrl();
-        isLogged  = true;
+        isLogged = true;
+    }
+
+    public void keepUserData(String pName, String pToken) {
+
+//        DBOperations dbOperations = new DBOperations();
+        ContentValues cv = new ContentValues();
+        cv.put(CurrentUserDB.ID, 1);
+        cv.put(CurrentUserDB.USER_NAME, pName);
+        cv.put(CurrentUserDB.TOKEN, pToken);
+        cv.put(CurrentUserDB.IS_KIPPING_LOGIN, 1);
+
+        int res = 0;
+//        res = dbOperations.update(CurrentUserDB.TABLE, cv);
+        res = DBOperationsSingleTone.getInstance().update(CurrentUserDB.TABLE, cv);
+        if (res <= 0) {
+//            dbOperations.insert(CurrentUserDB.TABLE, cv);
+            DBOperationsSingleTone.getInstance().insert(CurrentUserDB.TABLE, cv);
+        }
+    }
+
+    public void getSavedUserData(Context pContext, final UserLoginHolder.checkTokenCallback pCallback) {
+//        DBOperations dbOperations = new DBOperations();
+//        Cursor cursor = dbOperations.query(CurrentUserDB.TABLE, null, null, null, null, null, null);
+
+        Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex(CurrentUserDB.IS_KIPPING_LOGIN)) == 1) {
+            final String savedToken = cursor.getString(cursor.getColumnIndex(CurrentUserDB.TOKEN));
+            String userName = cursor.getString(cursor.getColumnIndex(CurrentUserDB.USER_NAME));
+            cursor.close();
+
+            UserBaseManager userBaseManager = new UserBaseManager();
+            userBaseManager.getUserInfo(pContext, userName, new UserLoginCallback() {
+                @Override
+                public void getUserInfoCallback(UserDataBase pUserInfo) {
+                    if (pUserInfo != null && pUserInfo.getMSex().equals(savedToken)) {
+                        initHolder(pUserInfo);
+                        pCallback.isValidToken(true);
+                    } else {
+                        pCallback.isValidToken(false);
+                    }
+                }
+            });
+
+        } else {
+            pCallback.isValidToken(false);
+        }
+    }
+
+    public void dontKeepUserData() {
+
+
     }
 }

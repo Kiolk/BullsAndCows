@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
@@ -42,9 +43,20 @@ public class SplashStartActivity extends Activity {
 
             @Override
             public void run() {
-                Intent intent = new Intent(SplashStartActivity.this, WelcomeActivity.class);
-                startActivity(intent);
-                finish();
+                UserLoginHolder.getInstance().getSavedUserData(SplashStartActivity.this, new UserLoginHolder.checkTokenCallback() {
+                    @Override
+                    public void isValidToken(boolean isValid) {
+                        if (isValid) {
+                            Intent intent = new Intent(SplashStartActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Intent intent = new Intent(SplashStartActivity.this, WelcomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });
             }
         }, SPLASH_DELAY_MILLIS);
     }

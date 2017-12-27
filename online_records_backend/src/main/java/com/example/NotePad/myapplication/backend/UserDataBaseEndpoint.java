@@ -156,4 +156,25 @@ public class UserDataBaseEndpoint {
             throw new NotFoundException("Could not find UserDataBase with ID: " + mUserName);
         }
     }
+
+
+    /**
+     * Returns the {@link UserDataBase} with the corresponding ID.
+     *,
+     * @param mUserName the ID of the entity to be retrieved
+     * @return the entity with the corresponding ID
+     * @throws NotFoundException if there is no {@code UserDataBase} with the provided ID.
+     */
+    @ApiMethod(
+            name = "check",
+            path = "userDataBase",
+            httpMethod = ApiMethod.HttpMethod.PUT)
+    public UserDataBase getByToken(@Named("mUserName") String mUserName,  @Nullable @Named("limit") Integer limit) throws NotFoundException {
+        logger.info("Getting UserDataBase with ID: " + mUserName);
+        UserDataBase userDataBase = ofy().load().type(UserDataBase.class).id(mUserName).now();
+        if (userDataBase == null) {
+            throw new NotFoundException("Could not find UserDataBase with ID: " + mUserName);
+        }
+        return userDataBase;
+    }
 }

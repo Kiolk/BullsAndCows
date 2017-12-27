@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.example.notepad.bullsandcows.data.databases.DBConnector;
 import com.example.notepad.bullsandcows.data.databases.DBOperations;
+import com.example.notepad.bullsandcows.data.databases.DBOperationsSingleTone;
 import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserInfoDB;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
@@ -77,7 +78,9 @@ public class RecordsContentProvider extends ContentProvider {
                 Log.d(TAG, "Records case");
                 dbOperations = new DBOperations();
 
-                Cursor cursor = dbOperations.query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+//                Cursor cursor = dbOperations.query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+                Cursor cursor = DBOperationsSingleTone.getInstance().query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);
                 return cursor;
             case SINGL_RECORD:
@@ -90,7 +93,8 @@ public class RecordsContentProvider extends ContentProvider {
             case USERS:
                 DBOperations dbOperation;
                 dbOperation = new DBOperations();
-                return dbOperation.query(UserInfoDB.TABLE, null, selection, selectionArgs, null, null, null);
+//                return dbOperation.query(UserInfoDB.TABLE, null, selection, selectionArgs, null, null, null);
+                return DBOperationsSingleTone.getInstance().query(UserInfoDB.TABLE, null, selection, selectionArgs, null, null, null);
             default:
                 throw new IllegalArgumentException("Not correct Uri");
         }
@@ -117,17 +121,19 @@ public class RecordsContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        DBOperations dbOperations = new DBOperations();
+//        DBOperations dbOperations = new DBOperations();
         long id;
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case RECORDS:
-                id = dbOperations.insert(UserRecordsDB.TABLE, values);
+//                id = dbOperations.insert(UserRecordsDB.TABLE, values);
+                id = DBOperationsSingleTone.getInstance().insert(UserRecordsDB.TABLE, values);
                 Log.d(TAG, "insert: record with id " + id);
                 break;
             case USERS:
-                id = dbOperations.insert(UserInfoDB.TABLE, values);
+//                id = dbOperations.insert(UserInfoDB.TABLE, values);
+                id = DBOperationsSingleTone.getInstance().insert(UserInfoDB.TABLE, values);
                 Log.d(TAG, "insert: user info with id" + id);
                 break;
             default:
@@ -146,16 +152,18 @@ public class RecordsContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        DBOperations dbOperations = new DBOperations();
+//        DBOperations dbOperations = new DBOperations();
         int result = 0;
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case RECORDS:
-                result = dbOperations.update(UserRecordsDB.TABLE, values);
+//                result = dbOperations.update(UserRecordsDB.TABLE, values);
+                result = DBOperationsSingleTone.getInstance().update(UserRecordsDB.TABLE, values);
                 break;
             case USERS:
-                result = dbOperations.update(UserInfoDB.TABLE, values);
+//                result = dbOperations.update(UserInfoDB.TABLE, values);
+                result = DBOperationsSingleTone.getInstance().update(UserInfoDB.TABLE, values);
                 break;
             default:
                 throw new IllegalArgumentException("Not correct Uri");
@@ -167,14 +175,15 @@ public class RecordsContentProvider extends ContentProvider {
     @Override
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         Log.d(TAG, "bulkInsert in content provider start");
-        DBOperations dbOperations = new DBOperations();
+//        DBOperations dbOperations = new DBOperations();
         boolean isNew = false;
         int successAdd = 0;
 
         int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case RECORDS:
-                successAdd = dbOperations.bulkInsert(UserRecordsDB.TABLE, values);
+                successAdd = DBOperationsSingleTone.getInstance().bulkInsert(UserRecordsDB.TABLE, values);
+//                successAdd = dbOperations.bulkInsert(UserRecordsDB.TABLE, values);
                 if (successAdd > 0) {
                     isNew = true;
                 }

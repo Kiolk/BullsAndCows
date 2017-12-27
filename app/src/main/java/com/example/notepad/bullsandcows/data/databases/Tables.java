@@ -1,5 +1,6 @@
 package com.example.notepad.bullsandcows.data.databases;
 
+import com.example.notepad.bullsandcows.data.databases.models.CurrentUserDB;
 import com.example.notepad.bullsandcows.data.databases.models.UserInfoDB;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 
@@ -42,4 +43,13 @@ public class Tables {
             UserInfoDB.USERS_BEST_RECORDS + " BLOB, " +
             UserInfoDB.USER_LAST_RECORDS + " BLOB, " +
             UserInfoDB.IS_ONLINE + " INT)";
+
+    public static final String CRATE_CURRENT_USER_TABLE =
+            "CREATE TABLE IF NOT EXISTS " +
+                    CurrentUserDB.TABLE + "(" +
+                    CurrentUserDB.ID + " BIGINT PRIMARY KEY, " +
+                    CurrentUserDB.USER_NAME + " TEXT, " +
+                    CurrentUserDB.IS_KIPPING_LOGIN + " INTEGER, " +
+                    CurrentUserDB.TOKEN + " TEXT)";
+
 }

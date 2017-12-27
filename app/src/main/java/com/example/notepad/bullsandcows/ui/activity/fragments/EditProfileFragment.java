@@ -1,7 +1,6 @@
 package com.example.notepad.bullsandcows.ui.activity.fragments;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
+import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
 import com.example.notepad.bullsandcows.ui.activity.listeners.CloseEditProfileListener;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
@@ -83,9 +83,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             mUrlUserPhoto.setText(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
         }
 
-        String password = UserLoginHolder.getInstance().getPassword();
-        mFirstPassword.setText(password);
-        mSecondPassword.setText(password);
+//        String password = UserLoginHolder.getInstance().getPassword();
+//        mFirstPassword.setText(password);
+//        mSecondPassword.setText(password);
 
         if (UserLoginHolder.getInstance().getUserInfo().getMAge() != null) {
             mUserAge.setText(String.valueOf(UserLoginHolder.getInstance().getUserInfo().getMAge()));
@@ -126,10 +126,19 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                         .inputTo(mUserPhoto);
                 break;
             case R.id.save_changes_edit_fragment_button:
-
+                //TODO My:Implement checking changes by password
                 if (updateInformation()) {
-                    new UserBaseManager().patchNewUserInformation(mUserUpdateInfo);
-                    closeFragment();
+                    new UserBaseManager().patchNewUserInformation(mUserUpdateInfo, new UserLoginCallback() {
+                        @Override
+                        public void getUserInfoCallback(UserDataBase pUserInfo) {
+                            if (pUserInfo != null) {
+                                Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_SUCCES_UPDATE, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_NOT_UPDATE, Toast.LENGTH_LONG).show();
+                            }
+                            closeFragment();
+                        }
+                    });
                 }
 
                 break;
@@ -153,7 +162,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             return true;
         } catch (Exception pE) {
             pE.getStackTrace();
-            String m = pE.getMessage();
+//            String m = pE.getMessage();
 //            if(pE.getMessage().equals("NumberFormatException")){
 //
 //            }

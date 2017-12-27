@@ -1,7 +1,5 @@
 package com.example.notepad.bullsandcows.data.factories;
 
-
-
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
 import org.json.JSONArray;

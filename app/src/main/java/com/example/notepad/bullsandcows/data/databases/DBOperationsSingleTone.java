@@ -9,19 +9,30 @@ import android.util.Log;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 
 import static android.content.ContentValues.TAG;
-@Deprecated
-public class DBOperations {
+
+public class DBOperationsSingleTone {
 
     private SQLiteOpenHelper mHelper;
 
-    public DBOperations() {
+    private static DBOperationsSingleTone mInstance;
+
+    private DBOperationsSingleTone() {
         mHelper = DBConnector.getInstance();
     }
 
-    public long insert(final String pTableName, final ContentValues pValues) {
+    public static DBOperationsSingleTone getInstance() {
+        if (mInstance == null) {
+            mInstance = new DBOperationsSingleTone();
+        }
+        return mInstance;
+    }
+
+
+    public synchronized long insert(final String pTableName, final ContentValues pValues) {
 
         SQLiteDatabase database = mHelper.getReadableDatabase();
         database.beginTransaction();
+        Log.d(TAG, "insert: start");
         long id = 0;
 
         try {
@@ -33,12 +44,13 @@ public class DBOperations {
             Log.d("MyLogs", this.getClass().getSimpleName() + pE.getLocalizedMessage());
         } finally {
             database.endTransaction();
+            Log.d(TAG, "insert: end");
             database.close();
         }
         return id;
     }
 
-    public int update(final String pTableName, final ContentValues pValues) {
+    public synchronized int update(final String pTableName, final ContentValues pValues) {
         SQLiteDatabase database = mHelper.getReadableDatabase();
         database.beginTransaction();
         int result = 0;
@@ -56,15 +68,15 @@ public class DBOperations {
         return result;
     }
 
-    public Cursor query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy,
-                        String having, String sortOrder) {
-
+    public synchronized Cursor query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy,
+                                     String having, String sortOrder) {
+        Log.d(TAG, "query: start");
         SQLiteDatabase database = mHelper.getReadableDatabase();
 
         return database.query(table, columns, selection, selectionArgs, groupBy, having, sortOrder);
     }
 
-    public int bulkInsert(String pTableName, ContentValues[] pArrayValues) {
+    public synchronized int bulkInsert(String pTableName, ContentValues[] pArrayValues) {
         SQLiteDatabase database = mHelper.getReadableDatabase();
         Log.d(TAG, "bulkInsert in DBOperation start: ");
 
@@ -72,6 +84,7 @@ public class DBOperations {
 
         for (ContentValues contentValues : pArrayValues) {
             database.beginTransaction();
+            Log.d(TAG, "bulkInsert: start inser one record");
 
             try {
                 long success = database.insert(pTableName, null, contentValues);
@@ -85,10 +98,11 @@ public class DBOperations {
                 pE.getStackTrace();
             } finally {
                 database.endTransaction();
+                Log.d(TAG, "bulkInsert: end insert one record");
             }
         }
         database.close();
-        Log.d(TAG, "bulkInsert: total adds: " + successAdd);
+        Log.d(TAG, "bulkInsert end: total adds: " + successAdd);
         return successAdd;
     }
 }
