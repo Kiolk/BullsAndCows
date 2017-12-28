@@ -9,7 +9,6 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
@@ -544,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         stopService(new Intent(this, WinSoundService.class));
     }
 
-    private void showRatingFragment(){
+    private void showRatingFragment() {
         mFrameLayout.setVisibility(View.VISIBLE);
         mTransaction = getFragmentManager().beginTransaction();
         mTransaction.add(R.id.win_container, mRatingFragment);
@@ -634,9 +633,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 closeWinFragment(null);
                 break;
             case R.id.day_rating_user_bar_text_view:
-                if(mRatingFragment.isVisible()){
+                if (mRatingFragment.isVisible()) {
                     closeRatingFragment();
-                }else {
+                } else {
                     showRatingFragment();
                 }
                 break;

@@ -3,11 +3,9 @@ package com.example.notepad.bullsandcows.ui.activity.fragments;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,7 +27,6 @@ import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.ui.activity.adapters.UserRecordsRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
 import com.example.notepad.bullsandcows.utils.converters.Converters;
-import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
@@ -76,6 +73,7 @@ public class UserInfoRecordCursorLoaderFragment extends Fragment implements Load
         cursor.moveToFirst();
 //        ContentValues cv = ModelConverterUtil.fromUserDataBaseToCv(pUserInfo);
 //        getActivity().getContentResolver().insert(RecordsContentProvider.CONTENT_USERS_URI, cv);
+        //TODO Question: How do save object in DB and get it again?
         String json = cursor.getString(cursor.getColumnIndex(UserInfoDB.USERS_BEST_RECORDS));
 //        BestUserRecords[] records = new Gson().fromJson(cursor.getString(cursor.getColumnIndex(UserInfoDB.USERS_BEST_RECORDS)), BestUserRecords[].class);
         BestUserRecords[] records = JsonParser.getBestUserRecordsFromJson(json);
@@ -128,13 +126,14 @@ public class UserInfoRecordCursorLoaderFragment extends Fragment implements Load
 
     public void showUserInfo(String pUserName) {
         mUserName1 = pUserName;
-       final Bundle args = new Bundle();
+        final Bundle args = new Bundle();
         args.putString(UserInfoDB.ID, UserInfoDB.ID + " = ?");
 
         UserBaseManager baseManager = new UserBaseManager();
         baseManager.getUserInfo(getActivity().getBaseContext(), pUserName, new UserLoginCallback() {
             @Override
             public void getUserInfoCallback(UserDataBase pUserInfo) {
+                //TODO Question: id for each loader must be unique?
                 getActivity().getLoaderManager().restartLoader(5, args, UserInfoRecordCursorLoaderFragment.this);
             }
         });
