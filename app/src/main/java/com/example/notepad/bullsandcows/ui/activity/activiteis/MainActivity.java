@@ -31,6 +31,7 @@ import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
+import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.services.WinSoundService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.MovesListCustomAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.EditProfileFragment;
@@ -405,6 +406,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             showWinFragment();
             submitStart();
             getUserDayRate();
+
+            startService(new Intent(this, WaiterNewRecordsService.class));
         }
     }
 

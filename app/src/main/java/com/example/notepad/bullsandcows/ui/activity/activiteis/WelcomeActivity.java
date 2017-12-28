@@ -33,6 +33,9 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 
 import kiolk.com.github.pen.utils.MD5Util;
 
+import static com.example.notepad.bullsandcows.utils.Constants.INT_FALSE_VALUE;
+import static com.example.notepad.bullsandcows.utils.Constants.INT_TRUE_VALUE;
+
 public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragment.UpdateAppListener, View.OnClickListener {
 
     public static final String IS_CHECKED_KEEP_PASSWORD = "isCheckedKeepPassword";
@@ -258,10 +261,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     private void checkForSavingToken(String userName, String token) {
 
         if (mCheckBox.isChecked()) {
-            UserLoginHolder.getInstance().keepUserData(null, null);
-            UserLoginHolder.getInstance().keepUserData(userName, token);
+            UserLoginHolder.getInstance().keepUserData(null, null, INT_FALSE_VALUE);
+            UserLoginHolder.getInstance().keepUserData(userName, token, INT_TRUE_VALUE);
         } else {
-            UserLoginHolder.getInstance().keepUserData(null, null);
+            UserLoginHolder.getInstance().keepUserData(null, null, INT_FALSE_VALUE);
         }
     }
 }

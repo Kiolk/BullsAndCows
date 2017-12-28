@@ -27,5 +27,7 @@ public class Constants {
     public static final long BACK_EPOCH_TIME_NOTATION = 3008586288000L;
     public static final long INNER_FILE_CACHE_SIZE_MB = 10L;
     public static final int QUALITY_IMAGE_COMPRESSION = 70;
+    public static final int INT_FALSE_VALUE = 0;
+    public static final int INT_TRUE_VALUE = 1;
 
 }

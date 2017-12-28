@@ -5,12 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 
-import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.DBOperationsSingleTone;
 import com.example.notepad.bullsandcows.data.databases.models.CurrentUserDB;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
+
+import static com.example.notepad.bullsandcows.utils.Constants.INT_TRUE_VALUE;
 
 public class UserLoginHolder {
 
@@ -138,14 +139,14 @@ public class UserLoginHolder {
         isLogged = true;
     }
 
-    public void keepUserData(String pName, String pToken) {
+    public void keepUserData(String pName, String pToken, int pKeepLogin) {
 
 //        DBOperations dbOperations = new DBOperations();
         ContentValues cv = new ContentValues();
         cv.put(CurrentUserDB.ID, 1);
         cv.put(CurrentUserDB.USER_NAME, pName);
         cv.put(CurrentUserDB.TOKEN, pToken);
-        cv.put(CurrentUserDB.IS_KIPPING_LOGIN, 1);
+        cv.put(CurrentUserDB.IS_KIPPING_LOGIN, pKeepLogin);
 
         int res = 0;
 //        res = dbOperations.update(CurrentUserDB.TABLE, cv);
@@ -162,7 +163,7 @@ public class UserLoginHolder {
 
         Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
 
-        if (cursor != null && cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex(CurrentUserDB.IS_KIPPING_LOGIN)) == 1) {
+        if (cursor != null && cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex(CurrentUserDB.IS_KIPPING_LOGIN)) == INT_TRUE_VALUE) {
             final String savedToken = cursor.getString(cursor.getColumnIndex(CurrentUserDB.TOKEN));
             String userName = cursor.getString(cursor.getColumnIndex(CurrentUserDB.USER_NAME));
             cursor.close();
