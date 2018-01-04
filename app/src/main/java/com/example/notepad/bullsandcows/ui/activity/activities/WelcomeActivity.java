@@ -41,6 +41,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     public static final String IS_CHECKED_KEEP_PASSWORD = "isCheckedKeepPassword";
     public static final String DEFAULT_PASSWORD_FOR_GUEST = "1111";
     public static final int REGISTRATION_REQUEST_CODE = 3;
+    public static final String REQUEST_PARAM = "name";
 
     private VersionOfApp mVersionOfApp;
     private EditText mLogin;
@@ -50,8 +51,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     private FragmentTransaction mFragmentTransaction;
     private FragmentManager mFragmentManager;
     private FrameLayout mUpdateFrame;
-
-    SharedPreferences mWelcomePreferences;
+    private SharedPreferences mWelcomePreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     protected void checkAppActualVersion() {
         AppInfoManager appManager = new AppInfoManager();
 
-        appManager.getCurrentAppInfo(new HttpRequest(BuildConfig.BACKEND_APP_VERSION_URL, "name"), new AppInfoCallbacks() {
+        appManager.getCurrentAppInfo(new HttpRequest(BuildConfig.BACKEND_APP_VERSION_URL, REQUEST_PARAM), new AppInfoCallbacks() {
 
             @Override
             public void getInfoAppCallback(VersionOfApp versionOfApp) {
@@ -138,7 +138,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         SharedPreferences.Editor editor = mWelcomePreferences.edit();
 
         editor.putString(Constants.NIK_NAME_OF_USER, mLogin.getText().toString());
-//        editor.putString(Constants.PASSWORD_OF_USER, mPassword.getText().toString());
         editor.putBoolean(IS_CHECKED_KEEP_PASSWORD, mCheckBox.isChecked());
 
         editor.apply();
@@ -150,7 +149,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
 
         if (mCheckBox.isChecked()) {
             mLogin.setText(mWelcomePreferences.getString(Constants.NIK_NAME_OF_USER, getResources().getString(R.string.GUEST)));
-//            mPassword.setText((mWelcomePreferences.getString(Constants.PASSWORD_OF_USER, DEFAULT_PASSWORD_FOR_GUEST)));
         } else {
             mLogin.setText(getResources().getString(R.string.GUEST));
             mPassword.setText(DEFAULT_PASSWORD_FOR_GUEST);
@@ -167,7 +165,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         mUpdateFrame.setVisibility(View.VISIBLE);
         mFragmentTransaction = getFragmentManager().beginTransaction();
         mFragmentTransaction.add(R.id.for_update_fragment_frame_layout, mUpdateFragment);
-        //TODO Why do need use commitAllowingStateLoss?
         mFragmentTransaction.commitAllowingStateLoss();
         mFragmentManager = getFragmentManager();
         mFragmentManager.executePendingTransactions();
@@ -204,42 +201,7 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
 
                 if (name.length() > 0 && password.length() > 0) {
                     if (CheckConnection.checkConnection(WelcomeActivity.this)) {
-                        UserBaseManager userManager = new UserBaseManager();
-                        userManager.getUserInfo(null, name, new UserLoginCallback() {
-                            @Override
-                            public void getUserInfoCallback(UserDataBase pUserInfo) {
-                                if (pUserInfo != null && password.equals(pUserInfo.getPassword())) {
-                                    UserLoginHolder.getInstance().initHolder(pUserInfo);
-                                    //create token for future using if token not exist
-                                    if (pUserInfo.getMSex() == null) {
-                                        String builderString = pUserInfo.getUserName() +
-                                                pUserInfo.getPassword();
-                                        final String token = MD5Util.getHashString(builderString);
-                                        pUserInfo.setMSex(token);
-                                        UserBaseManager userBaseManager = new UserBaseManager();
-                                        userBaseManager.patchNewUserInformation(pUserInfo, new UserLoginCallback() {
-                                            @Override
-                                            public void getUserInfoCallback(UserDataBase pUserInfo) {
-                                                if (pUserInfo != null && token.equals(pUserInfo.getMSex())) {
-                                                    UserLoginHolder.getInstance().initHolder(pUserInfo);
-                                                    checkForSavingToken(pUserInfo.getUserName(), token);
-                                                }
-                                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-                                                startMainActivity();
-                                            }
-                                        });
-                                    } else {
-                                        UserLoginHolder.getInstance().initHolder(pUserInfo);
-                                        checkForSavingToken(pUserInfo.getUserName(), pUserInfo.getMSex());
-                                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-                                        startMainActivity();
-                                    }
-                                } else {
-                                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
-
+                        checkCorrectUserInformation(name, password);
                     } else {
                         UserLoginHolder.getInstance().setLogged(false);
                         UserLoginHolder.getInstance().setUserName(mLogin.getText().toString());
@@ -256,6 +218,51 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
             default:
                 break;
         }
+    }
+
+    private void checkCorrectUserInformation(String pName, final String pPassword) {
+        UserBaseManager userManager = new UserBaseManager();
+        userManager.getUserInfo(null, pName, new UserLoginCallback() {
+            @Override
+            public void getUserInfoCallback(UserDataBase pUserInfo) {
+
+                if (pUserInfo != null && pPassword.equals(pUserInfo.getPassword())) {
+                    UserLoginHolder.getInstance().initHolder(pUserInfo);
+
+                    if (pUserInfo.getMSex() == null) {
+                        final String token = tokenGeneration(pUserInfo);
+                        pUserInfo.setMSex(token);
+
+                        UserBaseManager userBaseManager = new UserBaseManager();
+                        userBaseManager.patchNewUserInformation(pUserInfo, new UserLoginCallback() {
+                            @Override
+                            public void getUserInfoCallback(UserDataBase pUserInfo) {
+                                if (pUserInfo != null && token.equals(pUserInfo.getMSex())) {
+                                    UserLoginHolder.getInstance().initHolder(pUserInfo);
+                                    checkForSavingToken(pUserInfo.getUserName(), token);
+                                }
+                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+                                startMainActivity();
+                            }
+                        });
+                    } else {
+                        UserLoginHolder.getInstance().initHolder(pUserInfo);
+                        checkForSavingToken(pUserInfo.getUserName(), pUserInfo.getMSex());
+                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+                        startMainActivity();
+                    }
+                } else {
+                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private String tokenGeneration(UserDataBase pUserInfo) {
+        String builderString = pUserInfo.getUserName() +
+                pUserInfo.getPassword();
+
+        return MD5Util.getHashString(builderString);
     }
 
     private void checkForSavingToken(String userName, String token) {

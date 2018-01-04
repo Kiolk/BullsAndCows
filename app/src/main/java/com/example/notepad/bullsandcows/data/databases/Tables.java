@@ -50,6 +50,6 @@ public class Tables {
                     CurrentUserDB.ID + " BIGINT PRIMARY KEY, " +
                     CurrentUserDB.USER_NAME + " TEXT, " +
                     CurrentUserDB.IS_KIPPING_LOGIN + " INTEGER, " +
+                    CurrentUserDB.LAST_USER_VISIT + " BIGINT, " +
                     CurrentUserDB.TOKEN + " TEXT)";
-
 }

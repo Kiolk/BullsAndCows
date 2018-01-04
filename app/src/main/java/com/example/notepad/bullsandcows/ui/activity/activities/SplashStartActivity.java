@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -18,6 +19,7 @@ import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 
 import static com.example.notepad.bullsandcows.utils.Constants.DURATION_OF_ANIMATION;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
+import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
 public class SplashStartActivity extends Activity {
 
@@ -30,10 +32,19 @@ public class SplashStartActivity extends Activity {
 
         initView();
         timeOut();
+        prepareService();
+    }
 
-        Intent intent = new Intent(SplashStartActivity.this, WaiterNewRecordsService.class);
-        intent.putExtra(RECORDS_FROM_BACKEND_ON_DAY, 1513724487000L);
-        startService(intent);
+    private void prepareService() {
+        UserLoginHolder.getInstance().getLastUserVisit(new UserLoginHolder.LastVisitCallback() {
+            @Override
+            public void getLastVisit(Long pLastVisit) {
+                Intent intent = new Intent(SplashStartActivity.this, WaiterNewRecordsService.class);
+                intent.putExtra(RECORDS_FROM_BACKEND_ON_DAY, pLastVisit);
+                Log.d(TAG, "getLastVisit: " + pLastVisit);
+                startService(intent);
+            }
+        });
     }
 
     private void timeOut() {

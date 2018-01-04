@@ -6,7 +6,7 @@
     <dimen name="BLOCK_PADDING">4dp</dimen>
     <dimen name="BLOCK_MARGIN">4dp</dimen>
     <dimen name="BLOCK_ELEVATION">4dp</dimen>
-    <dimen name="MIDDLE_TEXT_SIZE">20sp</dimen>
+    <dimen name="MIDDLE_TEXT_SIZE">16sp</dimen>
     <dimen name="SMALL_MARGIN">4dp</dimen>
     <dimen name="BIG_BUTTON_PADDING_BETWEEN_ROWS">8dp</dimen>
     <dimen name="USER_PHOTO_HEIGHT">100dp</dimen>

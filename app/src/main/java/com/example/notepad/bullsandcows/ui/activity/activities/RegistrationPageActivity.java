@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
@@ -37,9 +34,8 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
     private ImageView mUserImage;
     private Button mRegisterButton;
     private UserDataBase mUser;
-    private Spinner mSpinner;
+    //    private Spinner mSpinner;
     private Spinner mSpinnerEx;
-    private TextView mDescriptionText;
     private boolean mNikFree;
 
     @Override
@@ -100,25 +96,25 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
     };
 
     private void initCountrySpinner() {
-        mSpinner = findViewById(R.id.country_registration_spinner);
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.countries_array));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSpinner.setAdapter(adapter);
-        mSpinner.setPromptId(R.string.COUNTRY_SPINNER);
-        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(RegistrationPageActivity.this, "Country: " + mSpinner.getSelectedItem().toString() + ". Position: " + i, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+//        mSpinner = findViewById(R.id.country_registration_spinner);
+//
+//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.countries_array));
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//        mSpinner.setAdapter(adapter);
+//        mSpinner.setPromptId(R.string.COUNTRY_SPINNER);
+//        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                Toast.makeText(RegistrationPageActivity.this, "Country: " + mSpinner.getSelectedItem().toString() + ". Position: " + i, Toast.LENGTH_LONG).show();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
 
         mSpinnerEx = findViewById(R.id.example_country_registration_spinner);
         CountrySpinnerAdapter spinnerAdapter = new CountrySpinnerAdapter(RegistrationPageActivity.this,
@@ -135,8 +131,8 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
         mUserImage = findViewById(R.id.user_image_registration_image_view);
         mShortDescription = findViewById(R.id.short_description_edit_text);
         mUserAge = findViewById(R.id.age_registration_edit_text);
-        mDescriptionText = findViewById(R.id.information_status_text_view);
-        mDescriptionText.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.AASSUANBRK));
+        TextView descriptionText = findViewById(R.id.information_status_text_view);
+        descriptionText.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.AASSUANBRK));
         mRegisterButton = findViewById(R.id.registration_button);
         Button setImageButton = findViewById(R.id.set_image_registration_button);
         mRegisterButton.setEnabled(false);
@@ -157,7 +153,7 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
         mUser = new UserDataBase();
         mUser.setUserName(mUserName.getText().toString());
         mUser.setPassword(mPassword.getText().toString());
-        mUser.setCountry(mSpinner.getSelectedItem().toString());
+//        mUser.setCountry(mSpinner.getSelectedItem().toString());
         Log.d(Constants.TAG, "User country: " + mUser.getCountry());
         mUser.setEmail(mEmail.getText().toString());
         mUser.setCountry(CountryUtils.getCountry(mSpinnerEx.getSelectedItemPosition()));

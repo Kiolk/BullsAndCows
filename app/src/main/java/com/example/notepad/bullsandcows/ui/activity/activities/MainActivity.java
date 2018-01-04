@@ -226,42 +226,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         number0.setOnClickListener(this);
         enterButton.setOnClickListener(this);
         startButton.setOnClickListener(this);
-//        mOptionMenu.setOnClickListener(this);
         del.setOnClickListener(this);
-//        mCodOfLanguage.setOnClickListener(this);
     }
 
     private void initToolBar() {
         final Toolbar mToolBar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolBar);
-//        mToolBar.setliste
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(UserLoginHolder.getInstance().getUserName());
-//            CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.main_collapsing_layout);
-//            collapsingToolbarLayout.setTitle(UserLoginHolder.getInstance().getUserName());
-//            ImageView appBarImage = findViewById(R.id.image_collapsing_layout);
-//            if (UserLoginHolder.getInstance().getUserInfo()!= null) {
-//                Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl()).inputTo(appBarImage);
-//            }
-//                GetBitmapCallback getBitmapCallback = new GetBitmapCallback() {
-//                    @Override
-//                    public Bitmap getBitmap(Bitmap pBitmapFromLoader) {
-////                    mToolBar.setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
-//////                    mToolBar.setLogo(R.drawable.ic_cow_good);
-//                        //TODO set userPhoto in toolBar. How Set additional views in tool bar?
-//                        mToolBar.findViewById(R.id.user_photo_tool_bar_image_view).setBackground(new BitmapDrawable(getResources(), pBitmapFromLoader));
-////                    mToolBar.findViewById(R.id.user_nik_tool_bar_text_view).des
-////     getSupportActionBar().setLogo(new BitmapDrawable(getResources(), pBitmapFromLoader));
-//                        return null;
-//                    }
-//                };
-////
-////                Pen.getInstance().getImageFromUrl(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl())
-////                        .getBitmapDirect(getBitmapCallback);
-//            }
         }
-//        setSupportActionBar(mToolBar);
     }
 
     private void intiUserBar() {

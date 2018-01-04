@@ -55,9 +55,9 @@ public class DBOperationsSingleTone {
         database.beginTransaction();
         int result = 0;
         try {
-            result = database.update(pTableName, pValues, UserRecordsDB.ID + " = ?", new String[]{pValues.getAsString(UserRecordsDB.ID)});
+            result = database.update(pTableName, pValues, "_id = ?", new String[]{pValues.getAsString(UserRecordsDB.ID)});
             database.setTransactionSuccessful();
-            Log.d("MyLogs", "Add one new record in UserRecordsDB");
+            Log.d("MyLogs", "Add one new record in " + pTableName);
         } catch (Exception pE) {
             pE.getStackTrace();
             Log.d("MyLogs", this.getClass().getSimpleName() + pE.getLocalizedMessage());
