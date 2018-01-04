@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows.ui.activity.activiteis;
+package com.example.notepad.bullsandcows.ui.activity.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,11 +16,10 @@ import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 
+import static com.example.notepad.bullsandcows.utils.Constants.DURATION_OF_ANIMATION;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 
 public class SplashStartActivity extends Activity {
-
-    public static final int SPLASH_DELAY_MILLIS = 3000;
 
     private TextView mNameOfGame;
 
@@ -58,7 +57,7 @@ public class SplashStartActivity extends Activity {
                     }
                 });
             }
-        }, SPLASH_DELAY_MILLIS);
+        }, DURATION_OF_ANIMATION);
     }
 
     private void initView() {

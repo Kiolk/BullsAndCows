@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/LIGHT_BLUE"
-    tools:context=".ui.activity.activiteis.RecordsCardActivity">
+    tools:context=".ui.activity.activities.RecordsCardActivity">
 
     <ProgressBar
         android:id="@+id/records_load_progress_bar"

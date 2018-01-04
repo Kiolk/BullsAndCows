@@ -10,6 +10,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -25,23 +26,23 @@ public class MockitoTest {
 
     @Before
     public void setUpTests() {
-    randomGenerator = new RandomNumberGenerator();
+        randomGenerator = new RandomNumberGenerator();
     }
 
     @Test
-    public void checkReturnString(){
+    public void checkReturnString() {
         assertNotNull(randomGenerator.generateRandomNumber(4));
     }
 
     @Test
-    public void checkReturnCorrectNumberOfDigits(){
+    public void checkReturnCorrectNumberOfDigits() {
         int codeDigits = 3;
         String resultOfMethod = randomGenerator.generateRandomNumber(codeDigits);
         assertEquals(codeDigits, resultOfMethod.length());
     }
 
     @Test
-    public void testWithCapture(){
+    public void testWithCapture() {
         RandomNumberGenerator randomNumberGenerator = Mockito.mock(RandomNumberGenerator.class);
         ArgumentCaptor<Integer> arg = ArgumentCaptor.forClass(Integer.class);
         Integer cod = 4;
@@ -50,23 +51,24 @@ public class MockitoTest {
         assertEquals(cod, arg.getValue());
 
     }
+
     @Mock
-    RandomNumberGenerator rNG = Mockito.mock(RandomNumberGenerator.class);
+    private RandomNumberGenerator rNG = Mockito.mock(RandomNumberGenerator.class);
 
     @Captor
-    ArgumentCaptor<Integer> arg = ArgumentCaptor.forClass(Integer.class);
+    private ArgumentCaptor<Integer> arg = ArgumentCaptor.forClass(Integer.class);
 
     @Test
-    public void testWithCapture2(){
+    public void testWithCapture2() {
         Integer cod = 5;
         rNG.generateRandomNumber(cod);
-       Mockito.verify(rNG).generateRandomNumber(arg.capture());
+        Mockito.verify(rNG).generateRandomNumber(arg.capture());
         assertEquals(cod, arg.getValue());
     }
 
 
     @Test
-    public void testWithDoReturn(){
+    public void testWithDoReturn() {
         RandomNumberGenerator randomWithSpy = Mockito.spy(RandomNumberGenerator.class);
         int cod = 3;
         randomWithSpy.generateRandomNumber(cod);
@@ -75,10 +77,10 @@ public class MockitoTest {
     }
 
     @Spy
-    RandomNumberGenerator mRandomNumberGenerator = Mockito.spy(RandomNumberGenerator.class);
+    private RandomNumberGenerator mRandomNumberGenerator = Mockito.spy(RandomNumberGenerator.class);
 
     @Test
-    public void testWithDoReturn2(){
+    public void testWithDoReturn2() {
         int cod = 4;
         mRandomNumberGenerator.generateRandomNumber(cod);
         Mockito.doReturn("45632").when(mRandomNumberGenerator).generateRandomNumber(cod);
@@ -87,7 +89,7 @@ public class MockitoTest {
     }
 
     @Test
-    public void testCheckNumberOfBulls(){
+    public void testCheckNumberOfBulls() {
         assertEquals(2, new RandomNumberGenerator().checkNumberOfBulls("2345", "8395"));
         assertEquals(4, new RandomNumberGenerator().checkNumberOfBulls("2345", "2345"));
         assertEquals(0, new RandomNumberGenerator().checkNumberOfBulls("2345", "0123"));
@@ -95,7 +97,7 @@ public class MockitoTest {
     }
 
     @Test
-    public void testCheckNumberOfCows(){
+    public void testCheckNumberOfCows() {
         assertEquals(0, new RandomNumberGenerator().checkNumberOfCows("2345", "8395"));
         assertEquals(4, new RandomNumberGenerator().checkNumberOfCows("1234", "4321"));
         assertEquals(2, new RandomNumberGenerator().checkNumberOfCows("6759", "6579"));
@@ -106,13 +108,12 @@ public class MockitoTest {
     }
 
     @Test
-    public void testCheckNumberForCorrectInput(){
+    public void testCheckNumberForCorrectInput() {
         assertEquals(true, new RandomNumberGenerator().checkNumberForCorrectInput("12345", 5));
         assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("1234", 5));
         assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("123", 6));
         assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("", 4));
         assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("12342", 5));
         assertEquals(false, new RandomNumberGenerator().checkNumberForCorrectInput("5677", 4));
-
     }
 }

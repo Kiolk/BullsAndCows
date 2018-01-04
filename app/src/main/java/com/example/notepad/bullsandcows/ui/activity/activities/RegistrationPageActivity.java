@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows.ui.activity.activiteis;
+package com.example.notepad.bullsandcows.ui.activity.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
@@ -19,6 +20,7 @@ import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
+import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import kiolk.com.github.pen.Pen;
@@ -30,17 +32,20 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
     private EditText mPassword2;
     private EditText mEmail;
     private EditText mImageUrl;
+    private EditText mShortDescription;
+    private EditText mUserAge;
     private ImageView mUserImage;
     private Button mRegisterButton;
     private UserDataBase mUser;
     private Spinner mSpinner;
     private Spinner mSpinnerEx;
+    private TextView mDescriptionText;
     private boolean mNikFree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration_age);
+        setContentView(R.layout.activity_registration_page);
 
         initView();
         initCountrySpinner();
@@ -128,6 +133,10 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
         mEmail = findViewById(R.id.email_registration_edit_text);
         mImageUrl = findViewById(R.id.image_url_edit_tet);
         mUserImage = findViewById(R.id.user_image_registration_image_view);
+        mShortDescription = findViewById(R.id.short_description_edit_text);
+        mUserAge = findViewById(R.id.age_registration_edit_text);
+        mDescriptionText = findViewById(R.id.information_status_text_view);
+        mDescriptionText.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.AASSUANBRK));
         mRegisterButton = findViewById(R.id.registration_button);
         Button setImageButton = findViewById(R.id.set_image_registration_button);
         mRegisterButton.setEnabled(false);
@@ -154,6 +163,8 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
         mUser.setCountry(CountryUtils.getCountry(mSpinnerEx.getSelectedItemPosition()));
         mUser.setMCountryFlag(CountryUtils.getCountryResources(mUser.getCountry()));
         mUser.setMPhotoUrl(mImageUrl.getText().toString());
+        mUser.setMAge(Integer.parseInt(mUserAge.getText().toString()));
+        mUser.setMShortDescription(mShortDescription.getText().toString());
     }
 
     @Override

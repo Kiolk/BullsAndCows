@@ -22,11 +22,10 @@ import com.example.notepad.bullsandcows.utils.converters.QueryConverterUtil;
 
 import java.util.HashMap;
 
-import static com.example.notepad.bullsandcows.ui.activity.activiteis.RecordsCardActivityFromCursorLoaderActivity.CODED_BUNDL_KEY;
-import static com.example.notepad.bullsandcows.ui.activity.activiteis.RecordsCardActivityFromCursorLoaderActivity.LAST_RESULT_BUNDLE_KEY;
-import static com.example.notepad.bullsandcows.ui.activity.activiteis.RecordsCardActivityFromCursorLoaderActivity.USER_NAME_BUNDLE_KEY;
+import static com.example.notepad.bullsandcows.ui.activity.activities.RecordsCardActivityFromCursorLoaderActivity.CODED_BUNDL_KEY;
+import static com.example.notepad.bullsandcows.ui.activity.activities.RecordsCardActivityFromCursorLoaderActivity.LAST_RESULT_BUNDLE_KEY;
+import static com.example.notepad.bullsandcows.ui.activity.activities.RecordsCardActivityFromCursorLoaderActivity.USER_NAME_BUNDLE_KEY;
 import static com.example.notepad.bullsandcows.utils.Constants.ContentProvidersConstant.SORT_ITEM_BY_MOVES_TIME;
-import static com.example.notepad.bullsandcows.utils.Constants.ContentProvidersConstant.SORT_ITEM_BY_TIME;
 
 public class UsersRatingFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 

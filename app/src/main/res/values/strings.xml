@@ -21,7 +21,7 @@
     <string name="PASSWORD">Password</string>
     <string name="CONFIRM_YOUR_PASSWORD">Confirm password</string>
     <string name="COUNTRY">Country</string>
-    <string name="EMAIL_FIELD">email</string>
+    <string name="EMAIL_FIELD">Email</string>
     <string name="NEW_USER">Registered new player</string>
     <string name="MESSAGE_FOR_REGISTRATION">Please, complete  this form</string>
     <string name="LOGIN_BUTTON">Login</string>
@@ -34,6 +34,7 @@
     <string name="FAILED_DOWNLOAD_NEW_VERSION">Failed download</string>
     <string name="TRY_AGAIN">Try download later</string>
     <string name="VISIT_SITE">Visit site of project</string>
+    <string name="SHORT_DESCRIPTION">Short description</string>
     <string name="BUTTON_1">1</string>
     <string name="BUTTON_2">2</string>
     <string name="BUTTON_3">3</string>
@@ -129,6 +130,8 @@
     <string name="CODED">Coded: "</string>
     <string name="PROFILE_SUCCES_UPDATE">Profile success update</string>
     <string name="PROFILE_NOT_UPDATE">Profile not update</string>
+    <string name="UPLOAD_PHOTO">Upload photo</string>
+    <string name="ENTERED_URL_OF_PHOTO">Entered photo url</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

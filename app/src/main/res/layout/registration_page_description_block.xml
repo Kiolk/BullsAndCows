@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/GeneralBlock"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_registration_page">
+
+    <EditText
+        android:id="@+id/short_description_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/short_description_text_view"
+        style="@style/MultiLineEditTextStyle" />
+
+    <TextView
+        android:id="@+id/short_description_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SHORT_DESCRIPTION"
+        android:textColor="@color/GENERAL_COLOR_TEXT"
+        android:textSize="@dimen/MIDDLE_TEXT_SIZE" />
+</RelativeLayout>

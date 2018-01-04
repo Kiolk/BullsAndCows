@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/LIGHT_COLOR"
-    tools:context=".ui.activity.activiteis.WelcomeActivity">
+    tools:context=".ui.activity.activities.WelcomeActivity">
 
     <LinearLayout
-        style="@style/upper_bar"
+        style="@style/GeneralBlock"
         android:layout_above="@+id/regestration_region_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -19,7 +19,7 @@
     </LinearLayout>
 
     <LinearLayout
-        style="@style/upper_bar"
+        style="@style/GeneralBlock"
         android:id="@+id/regestration_region_linear_layout"
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            style="@style/upper_bar"
+            style="@style/GeneralBlock"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -65,7 +65,7 @@
         </LinearLayout>
 
         <LinearLayout
-            style="@style/upper_bar"
+            style="@style/GeneralBlock"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">

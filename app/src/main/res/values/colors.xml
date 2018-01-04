@@ -5,8 +5,11 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="title_color">#ff9900</color>
-    <color name="colorOfText">#FFFFFF</color>
+    <color name="WHITE_COLOR_TEXT">#FFFFFF</color>
+    <color name="BLACK_COLOR_TEXT">#000000</color>
+    <color name="GENERAL_COLOR_TEXT">#424242</color>
     <color name="win_background_color">#3C91E6</color>
+    <color name="LIGHT_BACKGROUND_COLOR">#fafafa</color>
     <color name="ERROR_EDIT_TEXT">#f44336</color>
     <color name="CORRECT_EDIT_TEXT">#4caf50</color>
     <color name="LIGHT_GREY">#D1D3D4</color>

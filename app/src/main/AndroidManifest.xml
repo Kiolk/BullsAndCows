@@ -16,7 +16,7 @@
         android:roundIcon="@drawable/bullgood"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.activiteis.SplashStartActivity">
+        <activity android:name=".ui.activity.activities.SplashStartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,29 +24,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.activiteis.MainActivity"
+            android:name=".ui.activity.activities.MainActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".ui.activity.activiteis.RulesPageActivity"
-            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
+            android:name=".ui.activity.activities.RulesPageActivity"
+            android:parentActivityName=".ui.activity.activities.MainActivity" />
         <activity
-            android:name=".ui.activity.activiteis.SettingActivity"
-            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
+            android:name=".ui.activity.activities.SettingActivity"
+            android:parentActivityName=".ui.activity.activities.MainActivity" />
         <activity
-            android:name=".ui.activity.activiteis.AboutActivity"
-            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
+            android:name=".ui.activity.activities.AboutActivity"
+            android:parentActivityName=".ui.activity.activities.MainActivity" />
         <activity
-            android:name=".ui.activity.activiteis.WelcomeActivity"
-            android:parentActivityName=".ui.activity.activiteis.MainActivity" />
+            android:name=".ui.activity.activities.WelcomeActivity"
+            android:parentActivityName=".ui.activity.activities.MainActivity" />
 
         <service android:name=".services.WinSoundService" />
         <service android:name=".services.WaiterNewRecordsService"/>
         <service android:name=".services.UpdateAppService" />
 
-        <activity android:name=".ui.activity.activiteis.RegistrationPageActivity" />
-        <activity android:name=".ui.activity.activiteis.RecordsCardActivity" />
-        <activity android:name=".ui.activity.activiteis.RecordsCardActivityFromBD" />
-        <activity android:name=".ui.activity.activiteis.RecordsCardActivityFromCursorLoaderActivity" />
+        <activity android:name=".ui.activity.activities.RegistrationPageActivity" />
+        <activity android:name=".ui.activity.activities.RecordsCardActivity" />
+        <activity android:name=".ui.activity.activities.RecordsCardActivityFromBD" />
+        <activity android:name=".ui.activity.activities.RecordsCardActivityFromCursorLoaderActivity" />
         <provider
             android:authorities="com.example.notepad.bullsandcows.data.providers"
             android:name=".data.providers.RecordsContentProvider">

@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows.ui.activity.activiteis;
+package com.example.notepad.bullsandcows.ui.activity.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;

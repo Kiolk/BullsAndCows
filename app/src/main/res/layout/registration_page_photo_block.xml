@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/GeneralBlock"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_registration_page">
+
+    <ImageView
+        android:id="@+id/user_image_registration_image_view"
+        android:layout_width="@dimen/USER_PHOTO_WIDTH"
+        android:layout_height="@dimen/USER_PHOTO_HEIGHT"
+        android:contentDescription="@string/USER_PHOTO"
+        android:scaleType="centerCrop"
+        tools:background="@drawable/ic_bull_big_size" />
+
+    <EditText
+        android:id="@+id/image_url_edit_tet"
+        style="@style/CustomEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/set_image_registration_button"
+        android:layout_marginLeft="@dimen/SMALL_MARGIN"
+        android:layout_marginStart="@dimen/SMALL_MARGIN"
+        android:layout_marginTop="@dimen/SMALL_MARGIN"
+        android:layout_toEndOf="@+id/user_image_registration_image_view"
+        android:layout_toRightOf="@+id/user_image_registration_image_view"
+        android:hint="@string/ENTERED_URL_OF_PHOTO"
+        android:inputType="textUri"
+        android:maxLength="20" />
+
+    <Button
+        android:id="@+id/set_image_registration_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/user_image_registration_image_view"
+        android:layout_toEndOf="@+id/user_image_registration_image_view"
+        android:layout_toRightOf="@+id/user_image_registration_image_view"
+        android:text="@string/UPLOAD_PHOTO" />
+</RelativeLayout>

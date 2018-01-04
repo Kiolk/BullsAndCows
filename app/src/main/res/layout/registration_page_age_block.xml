@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/GeneralBlock"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_registration_page">
+
+    <LinearLayout
+        style="@style/LinearRowStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/example_country_registration_spinner"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <TextView
+            style="@style/LiableTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="@string/COUNTRY" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LinearRowStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/email_registration_edit_text"
+            style="@style/CustomEditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:hint=""
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            style="@style/LiableTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/EMAIL_FIELD" />
+
+        <EditText
+            android:id="@+id/age_registration_edit_text"
+            style="@style/CustomEditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/SMALL_MARGIN"
+            android:layout_marginStart="@dimen/SMALL_MARGIN"
+            android:layout_weight="1"
+            android:hint=""
+            android:inputType="number" />
+
+        <TextView
+            style="@style/LiableTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/AGE" />
+    </LinearLayout>
+</LinearLayout>

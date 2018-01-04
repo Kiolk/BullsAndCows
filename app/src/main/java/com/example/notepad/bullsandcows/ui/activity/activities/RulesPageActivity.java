@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows.ui.activity.activiteis;
+package com.example.notepad.bullsandcows.ui.activity.activities;
 
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;

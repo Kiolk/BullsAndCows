@@ -31,11 +31,19 @@ public class WaiterNewRecordsService extends Service {
         recordsManager.getRecordsFromBackend(onDay, new RecordsCallbacks() {
 
             @Override
-            public void getRecordsBackendCallback(ResponseRecordModel pResponse) {
+            public void getRecordsBackendCallback(final ResponseRecordModel pResponse) {
+
                 if (pResponse.getmRecordsArray() != null) {
-                    ContentValues[] arrayValues = ModelConverterUtil
-                            .fromArrayRecordToNetToCv(pResponse.getmRecordsArray());
-                    getContentResolver().bulkInsert(RecordsContentProvider.CONTENT_URI, arrayValues);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ContentValues[] arrayValues = ModelConverterUtil
+                                    .fromArrayRecordToNetToCv(pResponse.getmRecordsArray());
+                            getContentResolver().bulkInsert(RecordsContentProvider.CONTENT_URI, arrayValues);
+
+                        }
+                    });
+                    thread.start();
                 }
                 //TODO Question: Do possible use contentResolver in Other thread?
                 stopSelf();

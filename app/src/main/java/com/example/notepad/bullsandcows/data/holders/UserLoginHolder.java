@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.os.Handler;
 
 import com.example.notepad.bullsandcows.data.databases.DBOperationsSingleTone;
 import com.example.notepad.bullsandcows.data.databases.models.CurrentUserDB;
@@ -157,37 +158,65 @@ public class UserLoginHolder {
         }
     }
 
-    public void getSavedUserData(Context pContext, final UserLoginHolder.checkTokenCallback pCallback) {
-//        DBOperations dbOperations = new DBOperations();
-//        Cursor cursor = dbOperations.query(CurrentUserDB.TABLE, null, null, null, null, null, null);
+    public void getSavedUserData(final Context pContext, final UserLoginHolder.checkTokenCallback pCallback) {
 
-        Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
+        final Handler cursorHandler = new Handler();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
+                cursorHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (cursor != null && cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex(CurrentUserDB.IS_KIPPING_LOGIN)) == INT_TRUE_VALUE) {
+                            final String savedToken = cursor.getString(cursor.getColumnIndex(CurrentUserDB.TOKEN));
+                            String userName = cursor.getString(cursor.getColumnIndex(CurrentUserDB.USER_NAME));
+                            cursor.close();
 
-        if (cursor != null && cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex(CurrentUserDB.IS_KIPPING_LOGIN)) == INT_TRUE_VALUE) {
-            final String savedToken = cursor.getString(cursor.getColumnIndex(CurrentUserDB.TOKEN));
-            String userName = cursor.getString(cursor.getColumnIndex(CurrentUserDB.USER_NAME));
-            cursor.close();
+                            UserBaseManager userBaseManager = new UserBaseManager();
+                            userBaseManager.getUserInfo(pContext, userName, new UserLoginCallback() {
+                                @Override
+                                public void getUserInfoCallback(UserDataBase pUserInfo) {
+                                    if (pUserInfo != null && pUserInfo.getMSex().equals(savedToken)) {
+                                        initHolder(pUserInfo);
+                                        pCallback.isValidToken(true);
+                                    } else {
+                                        pCallback.isValidToken(false);
+                                    }
+                                }
+                            });
 
-            UserBaseManager userBaseManager = new UserBaseManager();
-            userBaseManager.getUserInfo(pContext, userName, new UserLoginCallback() {
-                @Override
-                public void getUserInfoCallback(UserDataBase pUserInfo) {
-                    if (pUserInfo != null && pUserInfo.getMSex().equals(savedToken)) {
-                        initHolder(pUserInfo);
-                        pCallback.isValidToken(true);
-                    } else {
-                        pCallback.isValidToken(false);
+                        } else {
+                            pCallback.isValidToken(false);
+                        }
                     }
-                }
-            });
+                });
+            }
+        });
+        thread.start();
 
-        } else {
-            pCallback.isValidToken(false);
-        }
-    }
+//        Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
 
-    public void dontKeepUserData() {
-
-
+//        if (cursor != null && cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex(CurrentUserDB.IS_KIPPING_LOGIN)) == INT_TRUE_VALUE) {
+//            final String savedToken = cursor.getString(cursor.getColumnIndex(CurrentUserDB.TOKEN));
+//            String userName = cursor.getString(cursor.getColumnIndex(CurrentUserDB.USER_NAME));
+//            cursor.close();
+//
+//            UserBaseManager userBaseManager = new UserBaseManager();
+//            userBaseManager.getUserInfo(pContext, userName, new UserLoginCallback() {
+//                @Override
+//                public void getUserInfoCallback(UserDataBase pUserInfo) {
+//                    if (pUserInfo != null && pUserInfo.getMSex().equals(savedToken)) {
+//                        initHolder(pUserInfo);
+//                        pCallback.isValidToken(true);
+//                    } else {
+//                        pCallback.isValidToken(false);
+//                    }
+//                }
+//            });
+//
+//        } else {
+//            pCallback.isValidToken(false);
+//        }
     }
 }

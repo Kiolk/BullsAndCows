@@ -234,7 +234,4 @@ public class UserBaseManager {
         });
         thread.start();
     }
-//
-//    public Cursor
-
 }

@@ -9,10 +9,12 @@ public class CountryUtils {
 
     public static ArrayList<ItemCountryData> getCountryList(){
         ArrayList<ItemCountryData> listOfCountry = new ArrayList<>();
-
+        //TODO not very good idea show countries and it flahs like this
         listOfCountry.add(new ItemCountryData("Belarus", R.drawable.ic_belarus));
         listOfCountry.add(new ItemCountryData("USA", R.drawable.ic_us));
         listOfCountry.add(new ItemCountryData("Grate Britany", R.drawable.ic_gb_eng));
+        listOfCountry.add(new ItemCountryData("Poland", R.drawable.ic_pol));
+        listOfCountry.add(new ItemCountryData("Ukraine", R.drawable.ic_ukr));
 
         return listOfCountry;
     }

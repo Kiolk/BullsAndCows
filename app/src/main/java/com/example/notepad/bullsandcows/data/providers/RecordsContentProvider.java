@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.notepad.bullsandcows.data.databases.DBConnector;
-import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.DBOperationsSingleTone;
 import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserInfoDB;
@@ -73,10 +72,10 @@ public class RecordsContentProvider extends ContentProvider {
         switch (uriType) {
 
             case RECORDS:
-                DBOperations dbOperations;
+//                DBOperations dbOperations;
                 queryBuilder.setTables(UserRecordsDB.TABLE);
                 Log.d(TAG, "Records case");
-                dbOperations = new DBOperations();
+//                dbOperations = new DBOperations();
 
 //                Cursor cursor = dbOperations.query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
                 Cursor cursor = DBOperationsSingleTone.getInstance().query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
@@ -91,8 +90,8 @@ public class RecordsContentProvider extends ContentProvider {
                 return queryBuilder.query(db, projection, selection, selectionArgs, null,
                         null, sortOrder);
             case USERS:
-                DBOperations dbOperation;
-                dbOperation = new DBOperations();
+//                DBOperations dbOperation;
+//                dbOperation = new DBOperations();
 //                return dbOperation.query(UserInfoDB.TABLE, null, selection, selectionArgs, null, null, null);
                 return DBOperationsSingleTone.getInstance().query(UserInfoDB.TABLE, null, selection, selectionArgs, null, null, null);
             default:

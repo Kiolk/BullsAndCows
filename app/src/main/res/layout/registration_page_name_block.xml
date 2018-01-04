@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/GeneralBlock"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:showIn="@layout/activity_registration_page">
+
+
+    <LinearLayout
+        style="@style/LinearRowStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/name_registration_edit_text"
+            style="@style/CustomEditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:hint=""
+            tools:text="Jordan" />
+
+        <TextView
+            style="@style/LiableTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="@string/USER_NAME_REGISTRATION_TEXT_VIEW" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LinearRowStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/password_registration_edit_text"
+            style="@style/CustomEditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint=""
+            android:inputType="textPassword"
+            tools:text="1234456" />
+
+        <TextView
+            style="@style/LiableTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/PASSWORD" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LinearRowStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/password2_registration_edit_text"
+            style="@style/CustomEditText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint=""
+            android:inputType="textPassword" />
+
+        <TextView
+            style="@style/LiableTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:text="@string/CONFIRM_YOUR_PASSWORD" />
+    </LinearLayout>
+
+</LinearLayout>

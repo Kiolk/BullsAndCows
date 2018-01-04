@@ -29,5 +29,6 @@ public class Constants {
     public static final int QUALITY_IMAGE_COMPRESSION = 70;
     public static final int INT_FALSE_VALUE = 0;
     public static final int INT_TRUE_VALUE = 1;
+    public static final int DURATION_OF_ANIMATION = 2000;
 
 }

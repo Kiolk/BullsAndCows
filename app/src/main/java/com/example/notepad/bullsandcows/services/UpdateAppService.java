@@ -14,7 +14,7 @@ import android.util.Log;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
 import com.example.notepad.bullsandcows.data.models.RequestUpdateModel;
-import com.example.notepad.bullsandcows.ui.activity.activiteis.MainActivity;
+import com.example.notepad.bullsandcows.ui.activity.activities.MainActivity;
 
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 

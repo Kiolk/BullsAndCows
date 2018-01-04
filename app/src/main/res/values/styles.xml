@@ -11,8 +11,8 @@
 
     <style name="Buttons">
         <item name="android:background">@drawable/ripple_selector_for_button</item>
-        <item name="android:layout_marginBottom">@dimen/SIZE_OF_MARGINE</item>
-        <item name="android:layout_marginRight">@dimen/SIZE_OF_MARGINE</item>
+        <item name="android:layout_marginBottom">@dimen/SIZE_OF_MARGIN</item>
+        <item name="android:layout_marginRight">@dimen/SIZE_OF_MARGIN</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/SIZE_OF_BUTTON_TEXT</item>
         <item name="android:textColor">@color/LIGHT_COLOR</item>
@@ -25,13 +25,16 @@
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="upper_bar">
+    <style name="GeneralBlock">
         <item name="android:background">@drawable/myrect</item>
-        <item name="android:elevation">4dp</item>
-        <item name="android:layout_margin">4dp</item>
+        <item name="android:elevation">@dimen/BLOCK_ELEVATION</item>
+        <item name="android:layout_marginTop">@dimen/BLOCK_MARGIN</item>
+        <item name="android:layout_marginLeft">@dimen/BLOCK_MARGIN</item>
+        <item name="android:layout_marginRight">@dimen/BLOCK_MARGIN</item>
         <item name="android:gravity">center</item>
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/BLACK_COLOR_TEXT</item>
+        <item name="android:textSize">@dimen/MIDDLE_TEXT_SIZE</item>
+        <item name="android:padding">@dimen/BLOCK_PADDING</item>
     </style>
 
     <style name="ShadowOfBlock">
@@ -47,4 +50,29 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="LinearRowStyle">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingBottom">@dimen/BIG_BUTTON_PADDING_BETWEEN_ROWS</item>
+    </style>
+
+    <style name="CustomEditText">
+        <item name="android:background">@drawable/edit_text_custom</item>
+        <item name="android:textSize">@dimen/MIDDLE_TEXT_SIZE</item>
+    </style>
+
+    <style name="LiableTextStyle">
+        <item name="android:gravity">end|center_vertical</item>
+        <item name="android:textSize">@dimen/MIDDLE_TEXT_SIZE</item>
+        <item name="android:textColor">@color/GENERAL_COLOR_TEXT</item>
+    </style>
+
+    <style name="MultiLineEditTextStyle">
+        <item name="android:background">@drawable/edit_text_multiline_custom</item>
+        <item name="android:gravity">top|start</item>
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:maxLines">8</item>
+        <item name="android:minLines">4</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:textSize">@dimen/MIDDLE_TEXT_SIZE</item>
+    </style>
 </resources>
