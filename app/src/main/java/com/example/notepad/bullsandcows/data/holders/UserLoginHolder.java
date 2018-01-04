@@ -238,14 +238,4 @@ public class UserLoginHolder {
         });
         thread.start();
     }
-
-//    public void updateLastUserVisit() {
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-////            DBOperationsSingleTone.getInstance().update()
-//            }
-//        });
-//        thread.start();
-//    }
 }

@@ -80,6 +80,7 @@ public class HttpClient {
                 e.printStackTrace();
             }
         }
+
         return gettingResponse;
     }
 }

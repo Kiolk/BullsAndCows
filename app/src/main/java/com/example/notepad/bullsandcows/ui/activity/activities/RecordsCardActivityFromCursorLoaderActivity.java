@@ -51,7 +51,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     public static final String CODED_BUNDL_KEY = "coded";
     public static final String LAST_RESULT_BUNDLE_KEY = "lastResult";
 
-//    private UserInfoRecordFragment mUserInfoFragment;
     private UserInfoRecordCursorLoaderFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
     private FragmentTransaction mFragmentTransaction;
@@ -99,7 +98,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     private void initFragments() {
         mInfoFrameLayout = findViewById(R.id.user_info_record_frame_layout);
         mInfoFrameLayout.setOnClickListener(this);
-//        mUserInfoFragment = new UserInfoRecordFragment();
         mUserInfoFragment = new UserInfoRecordCursorLoaderFragment();
     }
 
@@ -141,24 +139,8 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     private void getUserInformation(String pUserName) {
-
-//        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_USERS_URI, null, UserInfoDB.ID + " = " + pUserName,
-//                null, null);
-//        if(cursor.getCount() != 0){
-//
-//        }else {
         Log.d(TAG, "getUserInformation: " + pUserName);
         mUserInfoFragment.showUserInfo(pUserName);
-
-         /*   UserBaseManager userManager = new UserBaseManager();
-            userManager.getUserInfo(pUserName, new UserLoginCallback() {
-                @Override
-                public void getUserInfoCallback(UserDataBase pUserInfo) {
-                    mUserInfoFragment.showInfoAboutUser(RecordsCardActivityFromCursorLoaderActivity.this, pUserInfo);
-
-                }
-            });*/
-//        }
     }
 
     private void showInfoUserFragment() {
@@ -222,10 +204,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         if (args != null) {
-//            String userName = args.getString(USER_NAME_BUNDLE_KEY);
-//            String coded = args.getString(CODED_BUNDL_KEY);
-//            String lastTimeSort = args.getString(LAST_RESULT_BUNDLE_KEY);
-//            String[] request = new String[]{userName, coded, lastTimeSort};
 
             HashMap<String, String> selectionArgsMap = new HashMap<>();
             selectionArgsMap.put(UserRecordsDB.NIK_NAME, args.getString(USER_NAME_BUNDLE_KEY));
@@ -250,24 +228,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
-
-//    @Override
-////    @Deprecated
-//    public RecordsToNet setResult(RecordsToNet pRecord) {
-//        Log.d(TAG, "Start callback setResult for update i bd");
-//        if (pRecord != null) {
-//            ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
-//
-//            cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
-//
-//            new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
-//            new DBOperations().update(UserRecordsDB.TABLE, cv);
-//            //TODO how correct listen new changes i BD
-//            getLoaderManager().getLoader(0).forceLoad();
-//        }
-//
-//        return null;
-//    }
 
     @Override
     public void successSetResultListener(RecordsToNet pRecord) {

@@ -14,16 +14,16 @@ import java.util.ArrayList;
 
 public class MovesListCustomAdapter extends BaseAdapter{
 
-    Context mContext;
-    ArrayList<String> mMoves = new ArrayList<>();
-    ArrayList<String> mNumbers = new ArrayList<>();
-    ArrayList<String> mCows = new ArrayList<>();
-    ArrayList<String> mBuls = new ArrayList<>();
-    LayoutInflater mLayoutInflater;
-    Boolean mColorMode;
+//    private Context mContext;
+    private ArrayList<String> mMoves = new ArrayList<>();
+    private ArrayList<String> mNumbers = new ArrayList<>();
+    private ArrayList<String> mCows = new ArrayList<>();
+    private ArrayList<String> mBuls = new ArrayList<>();
+    private LayoutInflater mLayoutInflater;
+    private Boolean mColorMode;
 
     public MovesListCustomAdapter(Context aplicationContext, ArrayList<String> mMoves, ArrayList<String> mNumbers, ArrayList<String> mBuls, ArrayList<String> mCows, Boolean pBoolean){
-        this.mContext = aplicationContext;
+//        this.mContext = aplicationContext;
         this.mMoves = mMoves;
         this.mNumbers = mNumbers;
         this.mCows = mCows;
@@ -55,7 +55,7 @@ public class MovesListCustomAdapter extends BaseAdapter{
 
         pView = mLayoutInflater.inflate(R.layout.list_moves, null);
         if (mColorMode) {
-            TextView pBull = (TextView) pView.findViewById(R.id.bulls_list_text_view);
+            TextView pBull =  pView.findViewById(R.id.bulls_list_text_view);
             pBull.setTextColor(Color.WHITE);
             TextView pCow = (TextView) pView.findViewById(R.id.cows_list_text_view);
             pCow.setTextColor(Color.WHITE);

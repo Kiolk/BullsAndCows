@@ -105,6 +105,21 @@
     <string name="PRESS_FOR_UPGRADE">Press for upgrade yor app for version</string>
     <string name="SORT_ITEM">Sort records</string>
 
+    <string-array name="rules_items">
+        <item>This is simple logical game</item>
+        <item>"You mast be find number what coded your nice phone </item>
+        <item>If number stay in same position it is bull</item>
+        <item>If number stay in other position it is cow</item>
+        <item>Good luck! </item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+    </string-array>
+
     <string-array name="coded_list_array">
         <item>Eny</item>
         <item>1</item>
@@ -132,6 +147,8 @@
     <string name="PROFILE_NOT_UPDATE">Profile not update</string>
     <string name="UPLOAD_PHOTO">Upload photo</string>
     <string name="ENTERED_URL_OF_PHOTO">Entered photo url</string>
+    <string name="PRESS_FOR_GET_RULES">Press for me, if you want know rules</string>
+    <string name="BULL">Bull</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

@@ -45,7 +45,6 @@ public class WaiterNewRecordsService extends Service {
                     });
                     thread.start();
                 }
-                //TODO Question: Do possible use contentResolver in Other thread?
                 stopSelf();
             }
         });

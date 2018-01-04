@@ -1,6 +1,5 @@
 package com.example.notepad.bullsandcows.data.managers;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
@@ -42,14 +41,16 @@ public class UserBaseManager {
                     e.printStackTrace();
                 }
 
-                if(userInfo != null && pContext != null) {
+                if (userInfo != null && pContext != null) {
                     Uri result = pContext.getContentResolver().insert(RecordsContentProvider.CONTENT_USERS_URI, ModelConverterUtil.fromUserDataBaseToCv(userInfo));
 
-                    if(Integer.parseInt(result.getLastPathSegment())  <= 0) {
-                        pContext.getContentResolver().update(RecordsContentProvider.CONTENT_USERS_URI, ModelConverterUtil.fromUserDataBaseToCv(userInfo), UserInfoDB.ID + " = ?", new String[]{pUserNik});
-                        Log.d(TAG, "update user data: ");
-                    }else {
-                        Log.d(TAG, "insert new user data");
+                    if (result != null) {
+                        if (Integer.parseInt(result.getLastPathSegment()) <= 0) {
+                            pContext.getContentResolver().update(RecordsContentProvider.CONTENT_USERS_URI, ModelConverterUtil.fromUserDataBaseToCv(userInfo), UserInfoDB.ID + " = ?", new String[]{pUserNik});
+                            Log.d(TAG, "update user data: ");
+                        } else {
+                            Log.d(TAG, "insert new user data");
+                        }
                     }
                 }
 
@@ -129,7 +130,6 @@ public class UserBaseManager {
                 return o2.getDate().compareTo(o1.getDate());
             }
         };
-        //TODO implement revers sort
         Collections.sort(lastFive, comparator);
 
         return lastFive;
@@ -208,15 +208,15 @@ public class UserBaseManager {
         thread.start();
     }
 
-    public void patchNewUserInformation(final UserDataBase pUserNewInfo, final  UserLoginCallback pCallback) {
+    public void patchNewUserInformation(final UserDataBase pUserNewInfo, final UserLoginCallback pCallback) {
         final Handler handler = new Handler();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                final  UserDataBase userGettingInfo;
+                final UserDataBase userGettingInfo;
                 UserDataBase tmp;
                 try {
-                 tmp = BackendEndpointClient.getUserDataBaseApi().patch(pUserNewInfo.getUserName(), pUserNewInfo).execute();
+                    tmp = BackendEndpointClient.getUserDataBaseApi().patch(pUserNewInfo.getUserName(), pUserNewInfo).execute();
                 } catch (IOException e) {
                     e.printStackTrace();
                     tmp = null;

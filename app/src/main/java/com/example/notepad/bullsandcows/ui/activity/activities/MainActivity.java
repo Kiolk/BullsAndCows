@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String INPUT_NUMBER = "InputNumber";
     public static final String DEFAULT_VLUE_FOR_STRING = "Error";
     public static final String CODED_NUMBER = "codedNumber";
-    //    public static final String USER_NAME = "userName";
     public static final String START_STATE = "startState";
     public static final String MOVES_ARRAY_LIST = "movesArrayList";
     public static final String INPUTTED_NUMBER_ARRAY_LIST = "inputtedNumberArrayList";
@@ -147,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onSaveInstanceState(outState);
         outState.putString(INPUT_NUMBER, mInputNumberView.getText().toString());
         outState.putString(CODED_NUMBER, mCodedNumber);
-//        outState.putString(USER_NAME, mNikOfUser.getText().toString());
         outState.putBoolean(START_STATE, start);
         outState.putStringArrayList(MOVES_ARRAY_LIST, mMoves);
         outState.putStringArrayList(INPUTTED_NUMBER_ARRAY_LIST, mNumbers);
@@ -164,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onRestoreInstanceState(savedInstanceState);
         mInputNumberView.setText(savedInstanceState.getString(INPUT_NUMBER, DEFAULT_VLUE_FOR_STRING));
         mCodedNumber = savedInstanceState.getString(CODED_NUMBER, DEFAULT_VLUE_FOR_STRING);
-//        mNikOfUser.setText(savedInstanceState.getString(USER_NAME, DEFAULT_VLUE_FOR_STRING));
         start = savedInstanceState.getBoolean(START_STATE, false);
         DIG = savedInstanceState.getInt(NUMBER_OF_CODED_DIGITS, 4);
         cntMoves = savedInstanceState.getInt(COUNT_OF_MOVES, 1);
@@ -199,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView number0 = findViewById(R.id.buttom0);
         TextView enterButton = findViewById(R.id.enter);
         TextView del = findViewById(R.id.buttomDel);
-//        TextView mCodOfLanguage = findViewById(R.id.language_cod_text_view);
 
         startButton = findViewById(R.id.start);
 

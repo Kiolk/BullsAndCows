@@ -1,6 +1,5 @@
 package com.example.notepad.bullsandcows.ui.activity.adapters;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +17,7 @@ import java.util.ArrayList;
 
 public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRecordsRecyclerViewAdapter.UserRecordsViewHolder> {
 
-    private Context mContext;
+//    private Context mContext;
     private ArrayList<BestUserRecords> mBestUserRecords;
 
     public UserRecordsRecyclerViewAdapter(ArrayList<BestUserRecords> mBestUserRecords) {
@@ -36,7 +35,7 @@ public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRec
     public void onBindViewHolder(UserRecordsViewHolder holder, int position) {
         final BestUserRecords userRecord = mBestUserRecords.get(position);
 
-        if(position % 2 == 0){
+        if (position % 2 == 0) {
             holder.mCardView.setBackgroundColor(Color.GRAY);
         }
 
@@ -53,7 +52,7 @@ public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRec
         return (null != mBestUserRecords ? mBestUserRecords.size() : 0);
     }
 
-    class UserRecordsViewHolder extends RecyclerView.ViewHolder{
+    class UserRecordsViewHolder extends RecyclerView.ViewHolder {
 
         TextView mCod;
         TextView mNikName;

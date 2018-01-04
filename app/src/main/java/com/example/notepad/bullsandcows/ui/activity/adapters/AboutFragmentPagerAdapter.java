@@ -11,9 +11,9 @@ import com.example.notepad.bullsandcows.ui.activity.fragments.AboutDeveloperFrag
 
 public class AboutFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    public static final int ABOUT_APP_PAGE = 0;
-    public static final int ABOUT_DEVELOPER_PAGE = 1;
-    public static final int TOTAL_NUMBER_OF_FRAGMENTS = 2;
+    private static final int ABOUT_APP_PAGE = 0;
+    private static final int ABOUT_DEVELOPER_PAGE = 1;
+    private static final int TOTAL_NUMBER_OF_FRAGMENTS = 2;
 
     private Context mContext;
 

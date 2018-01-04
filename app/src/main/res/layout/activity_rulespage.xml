@@ -1,35 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/LIGHT_BACKGROUND_COLOR"
     tools:context="com.example.notepad.bullsandcows.ui.activity.activities.RulesPageActivity">
-
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/bull"
-        android:padding="8dp">
-
+        android:layout_margin="@dimen/SMALL_MARGIN">
 
         <TextView
             android:id="@+id/helpFromBull"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
-
-            android:textSize="30sp"
             android:layout_centerInParent="true"
-            android:layout_margin="20dp"
-            android:text="Press for me, if you want know rules"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/boble"
-            android:text="Press for me, if you want know rules"/>
+            android:background="@drawable/ic_ballon3"
+            android:paddingBottom="@dimen/LARGE_BLOB_PADDING"
+            android:paddingLeft="@dimen/SMALL_BLOB_PADDING"
+            android:paddingRight="@dimen/SMALL_BLOB_PADDING"
+            android:paddingTop="@dimen/SMALL_BLOB_PADDING"
+            android:text="@string/PRESS_FOR_GET_RULES"
+            android:textColor="@color/GENERAL_COLOR_TEXT"
+            android:textSize="@dimen/GIANT_TEXT_SIZE" />
 
     </RelativeLayout>
 
@@ -37,9 +32,10 @@
         android:id="@+id/bull"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:padding="8dp"
-        app:srcCompat="@drawable/bullgood"
-        android:onClick="submitBull"/>
+        android:layout_margin="@dimen/SMALL_MARGIN"
+        android:contentDescription="@string/BULL"
+        android:onClick="submitBull"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_bull_big_size" />
 </RelativeLayout>
