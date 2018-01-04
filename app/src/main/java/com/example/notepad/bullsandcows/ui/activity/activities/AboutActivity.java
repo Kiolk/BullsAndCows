@@ -11,6 +11,7 @@ import com.example.notepad.bullsandcows.ui.activity.adapters.AboutFragmentPagerA
 
 public class AboutActivity extends AppCompatActivity {
 
+    //TODO accessors
     ViewPager mAboutViewPager;
     TabLayout mAboutTabLayout;
     AboutFragmentPagerAdapter mAdapter;
@@ -20,6 +21,8 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        //TODO move to Authorization manager
+        //TODO should be connected to Application lifecircle
         UserLoginHolder.getInstance().setUserOnline();
 
         initView();

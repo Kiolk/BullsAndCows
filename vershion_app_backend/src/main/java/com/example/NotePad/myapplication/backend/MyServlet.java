@@ -15,6 +15,7 @@ import java.io.IOException;
 
 import javax.servlet.http.*;
 
+//TODO rename! to MyGodServlet :)
 public class MyServlet extends HttpServlet {
 
     public static final String NAME_OF_APP = "Bulls_And_Cows";
@@ -31,14 +32,18 @@ public class MyServlet extends HttpServlet {
         resp.getWriter().println("Please use the form to POST to this url");
     }
 
+    //TODO move to doGet.
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
+        //TODO remove the magic 'name'
         String name = req.getParameter("name");
         resp.setContentType("text/plain");
         if (name == null) {
             resp.getWriter().println("Please enter a name");
         }
+
+        //TODO use getters and setters instead of multi params
         VersionOfApp actualVersion = new VersionOfApp(NAME_OF_APP, VERSION_OF_APP, 12223232L,
                 POWERED, FEATURES, URL_NEW_VERSION_OF_APP,
                 USER_RECORD_BACKEND, NEW_APP_FEATURES);

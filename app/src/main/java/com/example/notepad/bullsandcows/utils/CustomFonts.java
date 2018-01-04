@@ -3,6 +3,7 @@ package com.example.notepad.bullsandcows.utils;
 import android.content.Context;
 import android.graphics.Typeface;
 
+//TODO google provides solution for custom fonts
 public class CustomFonts {
 
     public static final int ANNABELLE = 0;

@@ -1,5 +1,7 @@
 package com.example.notepad.bullsandcows.utils.converters;
 
+import android.text.format.DateUtils;
+
 import com.example.notepad.bullsandcows.utils.Constants;
 
 import java.text.DateFormat;
@@ -12,6 +14,7 @@ public class Converters {
     //todo find correct path conversion for time
     public static long getActualDay(long pActualTime) {
         pActualTime = Constants.BACK_EPOCH_TIME_NOTATION - pActualTime;
+        ///TODO magic numbers
         long oneDay = 1000 * 60 * 60 * 24;
         long shiftConstant = 51888000;
         pActualTime = pActualTime - shiftConstant;
@@ -21,6 +24,8 @@ public class Converters {
 
     public static long getActualWeek(long pActualTime) {
         pActualTime = Constants.BACK_EPOCH_TIME_NOTATION - pActualTime;
+        //TODO magic numbers
+        //DateUtils.WEEK_IN_MILLIS
         long oneWeek = 1000 * 60 * 60 * 24 * 7;
         long shiftConstant = 51888000;
         pActualTime = pActualTime - shiftConstant;

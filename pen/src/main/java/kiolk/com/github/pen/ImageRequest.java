@@ -22,6 +22,8 @@ public class ImageRequest {
         this.mBitmapCallback = mBitmapCallback;
     }
 
+
+    //TODO rename all methods 'get"m"'
     String getmUrl() {
         return mUrl;
     }

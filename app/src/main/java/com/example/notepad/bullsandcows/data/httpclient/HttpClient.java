@@ -58,6 +58,7 @@ public class HttpClient {
             pE.printStackTrace();
             gettingResponse.setHttpError(pE);
         } finally {
+            //TODO close to IOUtils.close(Closeable)
             try {
                 if (bufferedWriter != null) {
                     bufferedWriter.close();

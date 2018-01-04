@@ -61,6 +61,7 @@ import kiolk.com.github.pen.Pen;
 import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
 import static com.example.notepad.bullsandcows.utils.Constants.EMPTY_STRING;
 
+//TODO should be splited on small classes - single responsibility principle
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String INPUT_NUMBER = "InputNumber";
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int VIBRATION_MILLISECONDS = 500;
     public static final String TIMESTAMP_MM_SS = "mm:ss";
 
+    //TODO List/ArrayList
     private ArrayList<String> mMoves = new ArrayList<>();
     private ArrayList<String> mNumbers = new ArrayList<>();
     private ArrayList<String> mCows = new ArrayList<>();
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mInputNumberView.setText(savedInstanceState.getString(INPUT_NUMBER, DEFAULT_VLUE_FOR_STRING));
+        //TODO put to Serializable / Parcelable
         mCodedNumber = savedInstanceState.getString(CODED_NUMBER, DEFAULT_VLUE_FOR_STRING);
         start = savedInstanceState.getBoolean(START_STATE, false);
         DIG = savedInstanceState.getInt(NUMBER_OF_CODED_DIGITS, 4);
@@ -174,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (start) {
             if (mBulls.size() != 0 && !(mBulls.get(mBulls.size() - 1).equals("" + DIG))) {
+                //TODO move to onStart/onStop or onPause onResume
                 startTimer();
             } else if (mBulls.size() == 0) {
                 startTimer();
@@ -184,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initializationOfView() {
+        //TODO refactor to tags
         TextView number1 = findViewById(R.id.buttom1);
         TextView number2 = findViewById(R.id.buttom2);
         TextView number3 = findViewById(R.id.buttom3);
@@ -332,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ++cntMoves;
     }
 
+    //TODO refactor method - a lot lines of code
     public void checkNumberForWin() {
         int numberOfBulls = new RandomNumberGenerator().checkNumberOfBulls(mCodedNumber, mInputNumberView.getText().toString());
 
@@ -373,7 +379,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             showWinFragment();
+            //TODO name is not clear
             submitStart();
+            //TODO rename
             getUserDayRate();
 
             startService(new Intent(this, WaiterNewRecordsService.class));
@@ -391,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     getUserDayRate();
                     if (checkRestart != DIG && start) {
                         checkRestart = DIG;
+                        //TODO why not 8? or 666?
                         TextView start7 = findViewById(R.id.start);
                         start7.setText(getResources().getString(R.string.START_GAME));
                         mInputNumberView.setText(mCodedNumber); // change this
@@ -434,6 +443,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void startTimer() {
+        //TODO move logic with timer to separate class and use callbacks for notifications
         mTimer.post(new Runnable() {
 
             @Override
@@ -472,6 +482,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void cleanListView() {
+        //TODO should be created class Game with method newGame(), saveState(), restoreState()
         mMoves.clear();
         mCows.clear();
         mBulls.clear();
@@ -534,6 +545,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String buf;
         buf = mInputNumberView.getText().toString();
+        //TODO buf += Integer.valueOf(v.getTag().toString());
         switch (v.getId()) {
             case R.id.buttom1:
                 buf += 1;
@@ -615,11 +627,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getUserDayRate() {
+        //TODO move to separate class that works with DB.
+        //example Operation with AsyncTask or Loader
 //        String[] request = new String[]{EMPTY_STRING, String.valueOf(DIG), Tables.LAST_DAY};
         String sortOrder = UserRecordsDB.MOVES + Tables.ASC + ", " + UserRecordsDB.TIME + Tables.ASC;
         int position = 0;
         boolean hasResult = false;
 
+        //TODO clear all warnings Map vs HashMap, List vs ArrayList
         HashMap<String, String> selectionArgs = new HashMap<>();
         selectionArgs.put(UserRecordsDB.NIK_NAME, EMPTY_STRING);
         selectionArgs.put(UserRecordsDB.CODES, String.valueOf(DIG));

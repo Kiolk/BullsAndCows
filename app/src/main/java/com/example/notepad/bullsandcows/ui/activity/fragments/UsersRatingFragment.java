@@ -67,7 +67,8 @@ public class UsersRatingFragment extends Fragment implements LoaderManager.Loade
         selectionArgsMap.put(UserRecordsDB.ID, args.getString(LAST_RESULT_BUNDLE_KEY));
 
         QuerySelectionArgsModel readySelection = QueryConverterUtil.convertSelectionArg(selectionArgsMap);
-
+        //getActivity().getContentResolver().notifyChange(RecordsContentProvider.CONTENT_URI);
+        //getActivity().getContentResolver().registerContentObserver(RecordsContentProvider.CONTENT_URI, );
         return new CursorLoader(getActivity().getBaseContext(), RecordsContentProvider.CONTENT_URI,
                 null, readySelection.getSelection(), readySelection.getSelectionArgs(), SORT_ITEM_BY_MOVES_TIME);
     }

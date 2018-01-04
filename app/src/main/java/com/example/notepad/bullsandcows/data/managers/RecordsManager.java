@@ -14,6 +14,8 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 
 
+//TODO threads management in one class - operations in another
+//generic Callback<Result> onSuccess(Result result) and onException(Exception ex)
 public class RecordsManager{
 
     public void postRecordOnBackend(final RecordsToNet pRecord, @Nullable final PostRecordSuccessListener pCallback){

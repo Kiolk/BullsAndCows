@@ -93,6 +93,7 @@ public class UserInfoRecordCursorLoaderFragment extends Fragment implements Load
             mYourProfile.setVisibility(View.VISIBLE);
         }
 
+        //TODO refactor!
         try {
             int flag = CountryUtils.getCountryResources(cursor.getString(cursor.getColumnIndex(UserInfoDB.COUNTRY)));    //R.drawable.ic_belarus;
             mCountryFlag.setImageDrawable(getResources().getDrawable(flag, null));

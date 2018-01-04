@@ -1,5 +1,6 @@
 package com.example.notepad.bullsandcows.data.databases.models;
 
+//TODO add method convertToContentValues() maybe move to separate interface
 public class UserRecordsDB {
 
     public static final String TABLE = "Records";

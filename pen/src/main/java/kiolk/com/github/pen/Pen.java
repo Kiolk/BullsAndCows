@@ -21,6 +21,7 @@ import kiolk.com.github.pen.utils.PlaceHolderUtil;
 
 public class Pen {
 
+    //TODO move to enums
     public static final int WITHOUT_CACHE = 0;
     public static final int MEMORY_CACHE = 1;
     public static final int INNER_FILE_CACHE = 2;
@@ -33,6 +34,7 @@ public class Pen {
     //TODO What style are used for static fields?
     static File CACHE_DIR;
     static int QUALITY_OF_COMPRESSION_BMP;
+    //TODO rename, why it's static?
     private static int mTypeOfMemoryCache;
 
     private static Pen instance = null;
@@ -56,14 +58,19 @@ public class Pen {
         mStrategySaveImage = SAVE_SCALING_IMAGE_STRATEGY;
 
         initialisationLruCache();
+        //TODO need to be later, do not require to be static
         DiskCache.getInstance();
         LogUtil.msg("Create object of Pen");
     }
 
     private void initialisationLruCache() {
+        //TODO move calculations to separate methods
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / ConstantsUtil.KILOBYTE_SIZE);
+
+        //TODO should be clear that size in KB
         final int cacheSize = maxMemory / ConstantsUtil.PART_OF_MEMORY_CACHE;
 
+        //TODO move Runtime.getRuntime().maxMemory() to var
         LogUtil.msg("maxMemory = " + maxMemory + ". MaxMemory from Runtime: "
                 + Runtime.getRuntime().maxMemory() + ". CacheSize: " + cacheSize);
 
@@ -71,6 +78,7 @@ public class Pen {
 
             @Override
             protected int sizeOf(String key, Bitmap value) {
+                //TODO wrong calculation
                 return value.getByteCount() / ConstantsUtil.KILOBYTE_SIZE;
             }
         };
@@ -101,6 +109,7 @@ public class Pen {
         ImageView imageView = imageRequest.getmTarget().get();
 
         //TODO What is best practice: check through if or covered it try-catch? How get resources in module?
+        //TODO put to ImageRequest model
         if (PlaceHolderUtil.getInstance().getDefaultDrawable() != null) {
             imageView.setImageDrawable(PlaceHolderUtil.getInstance().getDefaultDrawable());
         }
@@ -123,6 +132,7 @@ public class Pen {
             mQueue.addFirst(imageRequest);
             LogUtil.msg("Image view" + imageRequest.getmTarget().get().toString() + " start setup");
             try {
+                //TODO to use ExecutorService / executeOnExecutor
                 new ImageLoadingAsyncTask().execute(mQueue.takeFirst());
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -179,7 +189,8 @@ public class Pen {
                     pRequest.setmWidth(v.getWidth());
                     pRequest.setmHeight(v.getHeight());
                     enqueue(pRequest);
-                    //correct variant for remove OnPreDrawListener
+                    //TODO remove comments correct variant for remove OnPreDrawListener
+                    //TODO memory leak! should be removed in any case
                     v.getViewTreeObserver().removeOnPreDrawListener(this);
                 }
 
@@ -240,7 +251,7 @@ public class Pen {
         public void inputTo(ImageView pView) {
             WeakReference<ImageView> weakReference = new WeakReference<>(pView);
             ImageRequest imageRequest = new ImageRequest(mBuilder.mUrl, weakReference);
-
+            //TODO we already inside Pen?
             Pen.getInstance().enqueue(imageRequest);
         }
 

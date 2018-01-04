@@ -22,6 +22,7 @@ import java.util.HashSet;
 
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
+//TODO split logic i
 public class RecordsContentProvider extends ContentProvider {
 
     private static final String AUTHORITY_PATH = "com.example.notepad.bullsandcows.data.providers";
@@ -78,6 +79,7 @@ public class RecordsContentProvider extends ContentProvider {
 //                dbOperations = new DBOperations();
 
 //                Cursor cursor = dbOperations.query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
+                //TODO create one
                 Cursor cursor = DBOperationsSingleTone.getInstance().query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
 
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);

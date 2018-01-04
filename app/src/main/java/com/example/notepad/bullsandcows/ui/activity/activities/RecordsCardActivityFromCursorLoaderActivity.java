@@ -42,6 +42,8 @@ import java.util.HashMap;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
+
+//TODO refactor implements to small class and create instances inside activitt
 public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivity
         implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>,

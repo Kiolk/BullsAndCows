@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+//TODO split logic to: HttpRequest, FileCache, Parser -> join them in one operation.
 public class NewAppVersionLoader extends AsyncTask<RequestUpdateModel, Void, RequestUpdateModel> {
 
     private static final String APK_FILE_RESOLUTION = ".apk";

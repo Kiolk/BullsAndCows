@@ -90,6 +90,8 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         });
     }
 
+    //TODO introduce new class like Editor that will prepare and post data to backend.
+    //TODO adaptor can't know about it
     private void getRecordForUpdate() {
         RecordsToNet pRecord = new RecordsToNet();
         pRecord.setNikName(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.NIK_NAME)));

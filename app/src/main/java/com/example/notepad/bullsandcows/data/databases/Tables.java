@@ -4,6 +4,7 @@ import com.example.notepad.bullsandcows.data.databases.models.CurrentUserDB;
 import com.example.notepad.bullsandcows.data.databases.models.UserInfoDB;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 
+//TODO split by entities
 public class Tables {
 
     public static final String DESC = " DESC";

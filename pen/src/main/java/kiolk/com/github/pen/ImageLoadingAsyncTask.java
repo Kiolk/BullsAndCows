@@ -24,7 +24,7 @@ public class ImageLoadingAsyncTask extends AsyncTask<ImageRequest, Void, ImageRe
     protected void onPostExecute(ImageResult pImageResult) {
         super.onPostExecute(pImageResult);
 
-
+        //TODO pImageResult.getmBitmap() to var and others
         if (pImageResult.getmBitmap() != null
                 && pImageResult.getmRequest().getmBitmapCallback() == null
                 && pImageResult.getmRequest().getmTarget() != null) {

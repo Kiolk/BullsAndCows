@@ -6,6 +6,7 @@ import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import java.util.HashMap;
 import java.util.Set;
 
+//TODO rename to clear name, maybe split to bussines entities
 public class QueryConverterUtil {
 
     public static QuerySelectionArgsModel convertSelectionArg(HashMap<String, String> pSelectionArgs) {

@@ -23,6 +23,7 @@ class DiskCache {
     private static final long DEFAULT_FILE_CACHE_SIZE = 10 * 1024 * 1024;
     private static final String IMAGE_CACHE_DESTINATION = "ImageCache";
 
+    //TODO needs to be usual class not a singleton
     private static DiskCache mDiskCache;
     private long mAvailableCacheSize;
     final Object mLock;

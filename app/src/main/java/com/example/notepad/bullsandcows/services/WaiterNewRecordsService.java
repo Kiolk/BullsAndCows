@@ -37,6 +37,7 @@ public class WaiterNewRecordsService extends Service {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            //TODO separate operation
                             ContentValues[] arrayValues = ModelConverterUtil
                                     .fromArrayRecordToNetToCv(pResponse.getmRecordsArray());
                             getContentResolver().bulkInsert(RecordsContentProvider.CONTENT_URI, arrayValues);

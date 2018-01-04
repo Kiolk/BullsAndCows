@@ -13,4 +13,6 @@ public class CurrentUserDB {
     public static final String IS_KIPPING_LOGIN = "KeepLogin";
 
     public static final String LAST_USER_VISIT = "LastUserVisit";
+
+    //TODO CREATE_TABLE_SQL
 }

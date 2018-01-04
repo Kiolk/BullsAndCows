@@ -16,6 +16,7 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 import static com.example.notepad.bullsandcows.utils.Constants.INT_TRUE_VALUE;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
+//TODO reduce count of singletone google low coupling and higher cohesion
 public class UserLoginHolder {
 
     public interface checkTokenCallback {

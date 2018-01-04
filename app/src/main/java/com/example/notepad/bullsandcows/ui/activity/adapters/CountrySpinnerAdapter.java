@@ -20,6 +20,7 @@ import java.util.zip.Inflater;
 
 public class CountrySpinnerAdapter extends ArrayAdapter<ItemCountryData> {
 
+    //todo accessors
     Context mContext;
 
     int mGroupId;

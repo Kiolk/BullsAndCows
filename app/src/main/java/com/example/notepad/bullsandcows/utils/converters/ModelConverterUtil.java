@@ -12,13 +12,15 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 
 import java.util.ArrayList;
 
+//TODO split to small ones. Some of them related to DB some of them to JSON
 public class ModelConverterUtil {
 
+    //TODO move to classes related to SQL or DB
     public static final int TRUE = 1;
     public static final int FALSE = 0;
 
+    //TODO create separate class and move bussines
     public static ContentValues fromRecordToNetToCv(RecordsToNet pRecord) {
-
         ContentValues cv = new ContentValues();
 
         cv.put(UserRecordsDB.ID, pRecord.getDate());
@@ -45,6 +47,7 @@ public class ModelConverterUtil {
         return recordForCheck;
     }
 
+    //TODO method name is not clear
     public static ContentValues[] fromArrayRecordToNetToCv(ArrayList<RecordsToNet> pArrayRecords) {
         ContentValues[] arrayContentValues = new ContentValues[pArrayRecords.size()];
         int i = 0;
