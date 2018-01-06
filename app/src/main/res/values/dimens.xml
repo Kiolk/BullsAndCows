@@ -7,6 +7,7 @@
     <dimen name="BLOCK_MARGIN">4dp</dimen>
     <dimen name="BLOCK_ELEVATION">4dp</dimen>
     <dimen name="MIDDLE_TEXT_SIZE">16sp</dimen>
+    <dimen name="LARGE_TEXT_SIZE">24sp</dimen>
     <dimen name="GIANT_TEXT_SIZE">36sp</dimen>
     <dimen name="SMALL_MARGIN">4dp</dimen>
     <dimen name="SMALL_BLOB_PADDING">20dp</dimen>

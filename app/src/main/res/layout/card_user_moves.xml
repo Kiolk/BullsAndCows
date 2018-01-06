@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:tools="http://schemas.android.com/tools"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/LIGHT_BACKGROUND_COLOR">
+
+    <LinearLayout
+        style="@style/GeneralBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/move_number_card_moves_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:text="1"
+            style="@style/MovesCardStyle"/>
+
+        <TextView
+            android:id="@+id/input_number_card_moves_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            style="@style/MovesCardStyle"
+            android:textSize="@dimen/GIANT_TEXT_SIZE"
+            tools:text="1234"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_bull_big_size"
+            android:contentDescription="@string/BULL"/>
+
+        <TextView
+            android:id="@+id/bulls_card_moves_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="@style/MovesCardStyle"
+            tools:text="2"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_cow_good"
+            android:contentDescription="@string/COW"/>
+
+        <TextView
+            android:id="@+id/cows_card_moves_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            style="@style/MovesCardStyle"
+            tools:text="1"/>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

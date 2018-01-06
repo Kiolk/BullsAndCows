@@ -75,4 +75,10 @@
         <item name="android:scrollbars">vertical</item>
         <item name="android:textSize">@dimen/MIDDLE_TEXT_SIZE</item>
     </style>
+
+    <style name="MovesCardStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/LARGE_TEXT_SIZE</item>
+        <item name="android:textColor">@color/GENERAL_COLOR_TEXT</item>
+    </style>
 </resources>

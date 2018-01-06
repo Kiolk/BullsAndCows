@@ -36,10 +36,10 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
     }
 
     @Override
-    public RecordsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
+    public RecordsViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+        final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_record_card_layout, parent, false);
-        return new RecordsViewHolder(v);
+        return new RecordsViewHolder(view);
     }
 
     @Override

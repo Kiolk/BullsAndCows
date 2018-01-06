@@ -29,6 +29,7 @@ import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
+import com.example.notepad.bullsandcows.data.models.UserMoveModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.services.WinSoundService;
@@ -43,6 +44,8 @@ import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.bullsandcows.utils.converters.QueryConverterUtil;
+import com.example.notepad.bullsandcows.utils.logic.Game;
+import com.example.notepad.bullsandcows.utils.logic.GameTimer;
 import com.example.notepad.bullsandcows.utils.logic.RandomNumberGenerator;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
@@ -52,6 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final String TIMESTAMP_MM_SS = "mm:ss";
 
     //TODO List/ArrayList
+    private List<UserMoveModel> mUserMoves;
     private ArrayList<String> mMoves = new ArrayList<>();
     private ArrayList<String> mNumbers = new ArrayList<>();
     private ArrayList<String> mCows = new ArrayList<>();
@@ -111,6 +116,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private long mStartGameTime;
     private FragmentManager mFragmentManager;
     private CloseEditProfileListener mCloseEditListener;
+    private Game.WinWaiter mWinWaiter;
+
+    private Game mGame;
 
 
     @Override
@@ -120,11 +128,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         UserLoginHolder.getInstance().setUserOnline();
-
+        mUserMoves = new ArrayList<>();
         initToolBar();
         initializationOfView();
         initEditProfileFragment();
         intiUserBar();
+        initWinCallback();
+        mGame = new Game(this, mTimer, mWinWaiter);
     }
 
     private void initEditProfileFragment() {
@@ -343,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (numberOfBulls == DIG) {
             mInputNumberView.setText(R.string.WON_MESSAGE);
-            mTimerTimer.cancel();
+//            mTimerTimer.cancel();
 
             RecordsToNet note = new RecordsToNet();
 
@@ -417,69 +427,79 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void submitStart() {
         if (!start) {
-            mCodedNumber = new RandomNumberGenerator().generateRandomNumber(DIG);
+//            mCodedNumber = new RandomNumberGenerator().generateRandomNumber(DIG);
+            mCodedNumber = mGame.startGame(DIG);
             startButton.setText(getResources().getString(R.string.SHOW_NUMBER));
-            restartTimer();
+//            restartTimer();
             start = true;
             cntMoves = 1;
-            Context context = getApplicationContext();
-            String message = getResources().getString(R.string.ENTER_NUMBER) + DIG + getResources().getString(R.string.TOAST_MESSAGE_WITH_RULE);
-            int duration = Toast.LENGTH_LONG;
-            Toast toast = Toast.makeText(context, message, duration);
-            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-            toast.show();
+//            Context context = getApplicationContext();
+//            String message = getResources().getString(R.string.ENTER_NUMBER) + DIG + getResources().getString(R.string.TOAST_MESSAGE_WITH_RULE);
+//            int duration = Toast.LENGTH_LONG;
+//            Toast toast = Toast.makeText(context, message, duration);
+//            toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+//            toast.show();
 
             cleanListView();
             createListViewWithMoves();
             mInputNumberView.setText(Constants.EMPTY_STRING);
         } else {
+            mGame.cancelGame();
             TextView start2 = findViewById(R.id.start);
             start2.setText(getResources().getString(R.string.START_GAME));
             mInputNumberView.setText(mCodedNumber);
             mCodedNumber = Constants.EMPTY_STRING;
             start = false;
-            mTimerTimer.cancel();
+//            mTimerTimer.cancel();
         }
     }
 
     public void startTimer() {
         //TODO move logic with timer to separate class and use callbacks for notifications
-        mTimer.post(new Runnable() {
-
-            @Override
-            public void run() {
-                new AnimationOfView().enteredView(mTimer);
-            }
-        });
-        mStartGameTime = System.currentTimeMillis();
-        mTimer.setText(Constants.EMPTY_STRING);
-        mTimerTimer = new Timer();
-
-        mTimerTimer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Date pDate = new Date(mTimerCount * 1000);
-//                        Locale locale = new Locale(Locale.ENGLISH);
-                        DateFormat format = new SimpleDateFormat(TIMESTAMP_MM_SS, Locale.ENGLISH);
-//                        DateFormat format = getData //new SimpleDateFormat(TIMESTAMP_MM_SS);
-                        String formatedTime = format.format(pDate);
-                        mTimer.setText(String.valueOf(formatedTime));
-                        ++mTimerCount;
-                    }
-                });
-            }
-        }, 1000, 1000);
+//        GameTimer gameTimer = new GameTimer(mTimer);
+//        gameTimer.startTimer(new GameTimer.Callback(){
+//
+//            @Override
+//            public void refreshTimer(final String pNewTime) {
+//                mTimer.setText(pNewTime);
+//            }
+//        });
+//        mTimer.post(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                new AnimationOfView().enteredView(mTimer);
+//            }
+//        });
+//        mStartGameTime = System.currentTimeMillis();
+//        mTimer.setText(Constants.EMPTY_STRING);
+//        mTimerTimer = new Timer();
+//
+//        mTimerTimer.scheduleAtFixedRate(new TimerTask() {
+//
+//            @Override
+//            public void run() {
+//                runOnUiThread(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        Date pDate = new Date(mTimerCount * 1000);
+////                        Locale locale = new Locale(Locale.ENGLISH);
+//                        DateFormat format = new SimpleDateFormat(TIMESTAMP_MM_SS, Locale.ENGLISH);
+////                        DateFormat format = getData //new SimpleDateFormat(TIMESTAMP_MM_SS);
+//                        String formatedTime = format.format(pDate);
+//                        mTimer.setText(String.valueOf(formatedTime));
+//                        ++mTimerCount;
+//                    }
+//                });
+//            }
+//        }, 1000, 1000);
     }
 
-    public void restartTimer() {
-        mTimerCount = 0;
-        startTimer();
-    }
+//    public void restartTimer() {
+//        mTimerCount = 0;
+//        startTimer();
+//    }
 
     public void cleanListView() {
         //TODO should be created class Game with method newGame(), saveState(), restoreState()
@@ -596,8 +616,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.enter:
                 if (start) {
                     if (new RandomNumberGenerator().checkNumberForCorrectInput(mInputNumberView.getText().toString(), DIG)) {
+                        mGame.checkNumber(mInputNumberView.getText().toString(), mUserMoves);
                         getNumber();
-                        checkNumberForWin();
+//                        checkNumberForWin();
                         mInputNumberView.setText("");
                     } else {
                         Context context = getApplicationContext();
@@ -678,5 +699,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             mDayRating.setText(String.valueOf(position));
         }
+    }
+
+    private void initWinCallback() {
+        mWinWaiter = new Game.WinWaiter() {
+
+            @Override
+            public void onWinCallback() {
+                mInputNumberView.setText(R.string.WON_MESSAGE);
+                showWinFragment();
+                //TODO name is not clear
+                submitStart();
+                //TODO rename
+                getUserDayRate();
+                mUserMoves = new ArrayList<>();
+            }
+        };
     }
 }

@@ -149,6 +149,7 @@
     <string name="ENTERED_URL_OF_PHOTO">Entered photo url</string>
     <string name="PRESS_FOR_GET_RULES">Press for me, if you want know rules</string>
     <string name="BULL">Bull</string>
+    <string name="COW">Cow</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>
