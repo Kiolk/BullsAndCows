@@ -1,4 +1,4 @@
-package com.example.NotePad.myapplication.backend;
+package com.example.notepad.myapplication.backend;
 
 
 import com.google.appengine.repackaged.com.google.gson.annotations.SerializedName;

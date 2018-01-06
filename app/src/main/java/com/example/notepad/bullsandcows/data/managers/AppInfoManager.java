@@ -3,7 +3,7 @@ package com.example.notepad.bullsandcows.data.managers;
 import android.os.Handler;
 import android.util.Log;
 
-import com.example.NotePad.myapplication.backend.VersionOfApp;
+import com.example.notepad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.data.factories.AppInfoJsonFactory;
 import com.example.notepad.bullsandcows.data.httpclient.HttpClient;
 import com.example.notepad.bullsandcows.data.httpclient.models.HttpRequest;

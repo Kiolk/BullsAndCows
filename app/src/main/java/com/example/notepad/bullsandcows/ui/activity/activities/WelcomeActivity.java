@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.NotePad.myapplication.backend.VersionOfApp;
+import com.example.notepad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.BuildConfig;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;

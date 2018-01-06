@@ -4,12 +4,9 @@
    https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloWorld
 */
 
-package com.example.NotePad.myapplication.backend;
+package com.example.notepad.myapplication.backend;
 
 import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 

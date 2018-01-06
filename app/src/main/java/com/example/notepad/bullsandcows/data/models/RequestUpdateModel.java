@@ -1,6 +1,6 @@
 package com.example.notepad.bullsandcows.data.models;
 
-import com.example.NotePad.myapplication.backend.VersionOfApp;
+import com.example.notepad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.services.UploadNewVersionAppCallback;
 
 public class RequestUpdateModel {

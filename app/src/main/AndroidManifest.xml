@@ -52,7 +52,9 @@
             android:name=".data.providers.RecordsContentProvider">
 
         </provider>
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5461e4d1143447088c0d753d7daa1aa0904a2876" />
     </application>
 
 </manifest>

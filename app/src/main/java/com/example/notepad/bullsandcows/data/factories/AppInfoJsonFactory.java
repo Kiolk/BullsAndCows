@@ -1,6 +1,6 @@
 package com.example.notepad.bullsandcows.data.factories;
 
-import com.example.NotePad.myapplication.backend.VersionOfApp;
+import com.example.notepad.myapplication.backend.VersionOfApp;
 import com.google.gson.Gson;
 
 public class AppInfoJsonFactory {

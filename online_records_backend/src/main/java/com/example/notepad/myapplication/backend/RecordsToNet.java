@@ -1,4 +1,4 @@
-package com.example.NotePad.myapplication.backend;
+package com.example.notepad.myapplication.backend;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;

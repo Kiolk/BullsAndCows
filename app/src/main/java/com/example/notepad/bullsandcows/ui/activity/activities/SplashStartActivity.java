@@ -20,6 +20,8 @@ import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 import static com.example.notepad.bullsandcows.utils.Constants.DURATION_OF_ANIMATION;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class SplashStartActivity extends Activity {
 
@@ -29,7 +31,7 @@ public class SplashStartActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_start);
-
+        Fabric.with(this, new Crashlytics());
         initView();
         timeOut();
         prepareService();

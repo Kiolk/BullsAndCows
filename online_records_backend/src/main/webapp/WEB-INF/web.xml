@@ -5,9 +5,9 @@
         <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
         <init-param>
             <param-name>services</param-name>
-            <param-value>com.example.NotePad.myapplication.backend.MyEndpoint,,
-                com.example.NotePad.myapplication.backend.RecordsToNetEndpoint,
-                com.example.NotePad.myapplication.backend.UserDataBaseEndpoint</param-value>
+            <param-value>com.example.notepad.myapplication.backend.MyEndpoint,,
+                com.example.notepad.myapplication.backend.RecordsToNetEndpoint,
+                com.example.notepad.myapplication.backend.UserDataBaseEndpoint</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

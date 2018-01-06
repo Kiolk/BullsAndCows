@@ -1,6 +1,6 @@
 package com.example.notepad.bullsandcows.data.holders;
 
-import com.example.NotePad.myapplication.backend.VersionOfApp;
+import com.example.notepad.myapplication.backend.VersionOfApp;
 
 public class AppInfoHolder {
 

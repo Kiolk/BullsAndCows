@@ -1,4 +1,4 @@
-package com.example.NotePad.myapplication.backend;
+package com.example.notepad.myapplication.backend;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;

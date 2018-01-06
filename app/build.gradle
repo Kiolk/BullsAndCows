@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'io.fabric'
 android {
     signingConfigs {
         config {
@@ -10,7 +10,7 @@ android {
         }
     }
     compileSdkVersion 27
-    buildToolsVersion "26.0.2"
+    buildToolsVersion "27.0.2"
     defaultConfig {
         applicationId "com.example.notepad.bullsandcows"
         minSdkVersion 15
@@ -82,4 +82,7 @@ dependencies {
     compile project(':pen')
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:recyclerview-v7:27.0.2'
+    compile('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
+        transitive = true;
+    }
 }

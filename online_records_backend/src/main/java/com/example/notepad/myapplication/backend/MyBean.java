@@ -1,4 +1,4 @@
-package com.example.NotePad.myapplication.backend;
+package com.example.notepad.myapplication.backend;
 
 /**
  * The object model for the data we are sending through endpoints
