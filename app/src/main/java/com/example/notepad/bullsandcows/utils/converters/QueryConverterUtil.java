@@ -4,12 +4,13 @@ import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 //TODO rename to clear name, maybe split to bussines entities
 public class QueryConverterUtil {
 
-    public static QuerySelectionArgsModel convertSelectionArg(HashMap<String, String> pSelectionArgs) {
+    public static QuerySelectionArgsModel convertSelectionArg(Map<String, String> pSelectionArgs) {
 
 
         StringBuilder builderSelection = new StringBuilder();

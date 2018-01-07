@@ -24,10 +24,11 @@ public class WinFragment extends Fragment {
         return view;
     }
 
-    public void setWinMessage(String pUserName, int pCodedNumber, int pMoves, String pWinTime) {
-        String winMessage = getResources().getString(R.string.CONGRATULATIONS) + pUserName + getResources().getString(R.string.YOU_WIN);
-        mWinText.setText(winMessage);
-        String winResult = getResources().getString(R.string.YOUR_RESULT) + pCodedNumber + getResources().getString(R.string.NUMBER_OF_DIGITS) + pMoves + getResources().getString(R.string.WIN_TIME) + pWinTime;
-        mResultText.setText(winResult);
+//    public void setWinMessage(String pUserName, int pCodedNumber, int pMoves, String pWinTime) {
+        public void setWinMessage(String pWinMessage) {
+//        String winMessage = getResources().getString(R.string.CONGRATULATIONS) + pUserName + getResources().getString(R.string.YOU_WIN);
+        mWinText.setText(pWinMessage);
+//        String winResult = getResources().getString(R.string.YOUR_RESULT) + pCodedNumber + getResources().getString(R.string.NUMBER_OF_DIGITS) + pMoves + getResources().getString(R.string.WIN_TIME) + pWinTime;
+//        mResultText.setText(winResult);
     }
 }

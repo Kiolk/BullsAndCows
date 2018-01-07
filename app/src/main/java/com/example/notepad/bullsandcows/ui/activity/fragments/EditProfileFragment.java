@@ -114,7 +114,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     }
 
     private void closeFragment() {
-        mCloseListener.closeFragment();
+        mCloseListener.onCloseFragment();
     }
 
     @Override

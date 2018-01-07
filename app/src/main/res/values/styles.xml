@@ -37,6 +37,10 @@
         <item name="android:padding">@dimen/BLOCK_PADDING</item>
     </style>
 
+    <style name="GeneralBlock.Single">
+        <item name="android:layout_marginBottom">@dimen/BLOCK_MARGIN</item>
+    </style>
+
     <style name="ShadowOfBlock">
         <item name="android:background">@drawable/myrect</item>
         <item name="android:elevation">4dp</item>
