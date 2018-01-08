@@ -3,7 +3,7 @@
     <item>
         <shape>
             <solid android:color="@color/LIGHT_GREY" />
-            <corners android:radius="@dimen/ANGLE_RADIUS"/>
+            <corners android:radius="@dimen/ANGLE_SMALL_RADIUS"/>
         </shape>
     </item>
 </layer-list>

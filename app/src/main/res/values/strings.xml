@@ -140,7 +140,7 @@
         <item>Last week</item>
     </string-array>
     <string name="SUCCESS_UPLOAD">Success upload</string>
-    <string name="DAY_RAITING">Day raiting</string>
+    <string name="DAY_RATING">Day raiting</string>
     <string name="DASH">---</string>
     <string name="CODED">Coded: "</string>
     <string name="PROFILE_SUCCES_UPDATE">Profile success update</string>
@@ -150,6 +150,10 @@
     <string name="PRESS_FOR_GET_RULES">Press for me, if you want know rules</string>
     <string name="BULL">Bull</string>
     <string name="COW">Cow</string>
+    <string name="ACTUAL_RATING_POSITION">Position: \"</string>
+    <string name="HINT_FOR_INPUT_FIELD">Number</string>
+    <string name="START_TIMER">00:00</string>
+    <string name="WEEK_RATING">Week rating</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

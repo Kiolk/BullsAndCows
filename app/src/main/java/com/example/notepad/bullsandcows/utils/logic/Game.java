@@ -20,20 +20,24 @@ import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.MovesRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.converters.Converters;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.bullsandcows.utils.converters.QueryConverterUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
 import static com.example.notepad.bullsandcows.utils.Constants.EMPTY_STRING;
 
 public class Game {
+
+    private static final String FIRST_POSITION = "1";
+    private List<RecordsToNet> mRatingList;
 
     public interface WinWaiter {
 
@@ -42,27 +46,24 @@ public class Game {
 
     private static final int S_X_OFFSET = 0;
     private static final int S_Y_OFFSET = 0;
-    private static final String TIMESTAMP_MM_SS = "mm:ss";
 
     private final Context mContext;
     private int mNumberCodedDigits;
-    private int mTimerCount;
     private int mCountMoves;
-    private long mStartGameTime;
     private String mCodedNumber;
-    //    private String mWinInformationString;
-    private TextView mTimerView;
+    private final TextView mTimerView;
+    private final TextView mRatingPosition;
 
     private GameTimer mGameTimer;
-    private RandomNumberGenerator mRandomNumberGenerator;
-    private Timer mTimer;
-    private WinWaiter mWinWaiter;
+    private final RandomNumberGenerator mRandomNumberGenerator;
+    private final WinWaiter mWinWaiter;
 
-    public Game(final Context pContext, final TextView pTimerView, WinWaiter pWinCallback) {
+    public Game(final Context pContext, final TextView pTimerView, final WinWaiter pWinCallback, final TextView pRatingPosition) {
         mContext = pContext;
         mTimerView = pTimerView;
         mRandomNumberGenerator = new RandomNumberGenerator();
         mWinWaiter = pWinCallback;
+        mRatingPosition = pRatingPosition;
     }
 
     public String startGame(final int pNumberCodedDigits) {
@@ -81,13 +82,13 @@ public class Game {
         mCountMoves = 0;
     }
 
-    public void checkNumber(final String pInputNumber, List<UserMoveModel> pUserMoves, MovesRecyclerViewAdapter pMovesAdapter) {
+    public void checkNumber(final String pInputNumber, final List<UserMoveModel> pUserMoves, final MovesRecyclerViewAdapter pMovesAdapter) {
         mCountMoves++;
 
         final UserMoveModel newMove = new UserMoveModel();
         newMove.setInputNumber(pInputNumber);
         newMove.setMove(String.valueOf(mCountMoves));
-        int numberOfBulls = mRandomNumberGenerator.checkNumberOfBulls(mCodedNumber, pInputNumber);
+        final int numberOfBulls = mRandomNumberGenerator.checkNumberOfBulls(mCodedNumber, pInputNumber);
         newMove.setBulls(String.valueOf(numberOfBulls));
         newMove.setCows(String.valueOf(mRandomNumberGenerator.checkNumberOfCows(mCodedNumber, pInputNumber)));
 
@@ -103,7 +104,7 @@ public class Game {
 
     private void submitResultInBD() {
 
-        RecordsToNet note = new RecordsToNet();
+        final RecordsToNet note = new RecordsToNet();
 
         note.setDate(BACK_EPOCH_TIME_NOTATION - System.currentTimeMillis());
         note.setTime(mGameTimer.getWinTime());
@@ -115,7 +116,7 @@ public class Game {
             note.setUserUrlPhoto(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
         }
 
-        ContentValues contentValues = ModelConverterUtil.fromRecordToNetToCv(note);
+        final ContentValues contentValues = ModelConverterUtil.fromRecordToNetToCv(note);
 
         if (CheckConnection.checkConnection(mContext)) {
             contentValues.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
@@ -125,19 +126,19 @@ public class Game {
 
         mContext.getContentResolver().insert(RecordsContentProvider.CONTENT_URI, contentValues);
 
-        BestUserRecords recordForCheck = ModelConverterUtil.fromRecordToNetToBestUserRecords(note);
+        final BestUserRecords recordForCheck = ModelConverterUtil.fromRecordToNetToBestUserRecords(note);
 
         if (UserLoginHolder.getInstance().isLogged()) {
 
             new UserBaseManager().checkNewBestRecord(recordForCheck);
-            RecordsManager recordsManager = new RecordsManager();
+            final RecordsManager recordsManager = new RecordsManager();
             recordsManager.postRecordOnBackend(note, null);
         }
 
         mContext.startService(new Intent(mContext, WaiterNewRecordsService.class));
     }
 
-    private void sendToast() {
+    public void sendToast() {
         final String message = mContext.getResources().getString(R.string.ENTER_NUMBER) +
                 mNumberCodedDigits +
                 mContext.getResources().getString(R.string.TOAST_MESSAGE_WITH_RULE);
@@ -154,6 +155,8 @@ public class Game {
             @Override
             public void refreshTimer(final String pNewTime) {
                 mTimerView.setText(pNewTime);
+//                final String actualRating = mContext.getResources().getString(R.string.ACTUAL_RATING_POSITION) + getActualPosition();
+                mRatingPosition.setText(getActualPosition());
             }
         });
     }
@@ -168,25 +171,25 @@ public class Game {
                 mGameTimer.getWinTime();
     }
 
-    public int calculateUserRating(int pNumberCodedDigits) {
+    public int calculateUserRating(final int pNumberCodedDigits) {
         //TODO move to separate class that works with DB.
         //example Operation with AsyncTask or Loader
 //        String[] request = new String[]{EMPTY_STRING, String.valueOf(DIG), Tables.LAST_DAY};
-        String sortOrder = UserRecordsDB.MOVES + Tables.ASC + ", " + UserRecordsDB.TIME + Tables.ASC;
+        final String sortOrder = UserRecordsDB.MOVES + Tables.ASC + ", " + UserRecordsDB.TIME + Tables.ASC;
         int position = 0;
         boolean hasResult = false;
 
         //TODO clear all warnings Map vs HashMap, List vs ArrayList
-        Map<String, String> selectionArgs = new HashMap<>();
+        final Map<String, String> selectionArgs = new HashMap<>();
         selectionArgs.put(UserRecordsDB.NIK_NAME, EMPTY_STRING);
         selectionArgs.put(UserRecordsDB.CODES, String.valueOf(pNumberCodedDigits));
         selectionArgs.put(UserRecordsDB.ID, Tables.LAST_DAY);
 
 //        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_URI,
 //                null, null, request, sortOrder);
-        QuerySelectionArgsModel readySelection = QueryConverterUtil.convertSelectionArg(selectionArgs);
+        final QuerySelectionArgsModel readySelection = QueryConverterUtil.convertSelectionArg(selectionArgs);
 
-        Cursor cursor = mContext.getContentResolver().query(RecordsContentProvider.CONTENT_URI,
+        final Cursor cursor = mContext.getContentResolver().query(RecordsContentProvider.CONTENT_URI,
                 null, readySelection.getSelection(), readySelection.getSelectionArgs(), sortOrder);
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -200,8 +203,10 @@ public class Game {
                 ++position;
             } while (!cursor.getString(cursor.getColumnIndex(UserRecordsDB.NIK_NAME))
                     .equals(UserLoginHolder.getInstance().getUserName()) && !cursor.isLast() && cursor.moveToNext());
+            setRatingList(cursor);
         } else {
             position = 0;
+            setRatingList(null);
         }
 
         if (cursor != null && cursor.getCount() == position && !hasResult) {
@@ -212,5 +217,36 @@ public class Game {
             cursor.close();
         }
         return position;
+    }
+
+    private void setRatingList(final Cursor pCursor) {
+        if (pCursor == null) {
+            mRatingList = new ArrayList<>();
+        } else {
+            pCursor.moveToFirst();
+            mRatingList = new ArrayList<>();
+            do {
+                mRatingList.add(UserRecordsDB.convertFromCursor(pCursor));
+            } while (pCursor.moveToNext());
+        }
+    }
+
+    private String getActualPosition() {
+        if (mRatingList.isEmpty()) {
+            return FIRST_POSITION;
+        }
+        int actualPosition = 0;
+        final int actualTime = Converters.gameTimeToSeconds(mGameTimer.getWinTime());
+        do {
+            actualPosition++;
+            if (mCountMoves + 1 == Integer.parseInt(mRatingList.get(actualPosition - 1).getMoves())) {
+                if (actualTime < Converters.gameTimeToSeconds(mRatingList.get(actualPosition - 1).getTime())) {
+                    return String.valueOf(actualPosition);
+                }
+            } else if (mCountMoves + 1 < Integer.parseInt(mRatingList.get(actualPosition - 1).getMoves())) {
+                return String.valueOf(actualPosition);
+            }
+        } while (mRatingList.size() != actualPosition);
+        return String.valueOf(actualPosition);
     }
 }

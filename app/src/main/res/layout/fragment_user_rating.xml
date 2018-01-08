@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@color/LIGHT_COLOR">
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/day_rating_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:textSize="@dimen/MIDDLE_TEXT_SIZE"
+            android:textColor="@color/BLACK_COLOR_TEXT"
+            android:text="@string/DAY_RATING"/>
+
+        <RadioButton
+            android:id="@+id/week_rating_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/MIDDLE_TEXT_SIZE"
+            android:textColor="@color/BLACK_COLOR_TEXT"
+            android:text="@string/WEEK_RATING"/>
+    </RadioGroup>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/users_rating_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/LIGHT_COLOR"
-        android:layout_gravity="center">
-
+        android:layout_gravity="center"
+        android:background="@color/LIGHT_COLOR">
     </android.support.v7.widget.RecyclerView>
-
 </LinearLayout>

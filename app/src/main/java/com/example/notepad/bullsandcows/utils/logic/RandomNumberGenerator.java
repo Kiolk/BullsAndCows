@@ -4,17 +4,17 @@ import com.example.notepad.bullsandcows.utils.Constants;
 
 import java.util.Random;
 
-public class RandomNumberGenerator  {
+public class RandomNumberGenerator {
 
     private static final int NUMBER_TO_9 = 10;
 
-    public String generateRandomNumber(int pNumberOfDigits) {
-        int[] randomNumber = new int[10];
-        StringBuilder result = new StringBuilder(Constants.EMPTY_STRING);
+    public String generateRandomNumber(final int pNumberOfDigits) {
+        final int[] randomNumber = new int[10];
+        final StringBuilder result = new StringBuilder(Constants.EMPTY_STRING);
 
         for (int i = 0, j; i < pNumberOfDigits; ++i) {
-            Random r = new Random();
-            int k = r.nextInt(NUMBER_TO_9);
+            final Random r = new Random();
+            final int k = r.nextInt(NUMBER_TO_9);
             if (i == 0) {
                 randomNumber[i] = k;
             } else {
@@ -36,10 +36,10 @@ public class RandomNumberGenerator  {
         return result.toString();
     }
 
-    public int checkNumberOfBulls(String pCodedNumber, String pEnteredNumber) {
+    public int checkNumberOfBulls(final String pCodedNumber, final String pEnteredNumber) {
         int numberOfBulls = 0;
-        char[] codedNumberArray = pCodedNumber.toCharArray();
-        char[] enteredNumberArray = pEnteredNumber.toCharArray();
+        final char[] codedNumberArray = pCodedNumber.toCharArray();
+        final char[] enteredNumberArray = pEnteredNumber.toCharArray();
 
         for (int i = 0; i < pCodedNumber.length(); ++i) {
             if (codedNumberArray[i] == enteredNumberArray[i]) {
@@ -50,11 +50,11 @@ public class RandomNumberGenerator  {
         return numberOfBulls;
     }
 
-    public int checkNumberOfCows(String pCodedNumber, String pEnteredNumber) {
+    public int checkNumberOfCows(final String pCodedNumber, final String pEnteredNumber) {
         int numberOfCows = 0;
-        char[] codedNumberArray = pCodedNumber.toCharArray();
-        char[] enteredNumberArray = pEnteredNumber.toCharArray();
-        int lengthOfNumber = codedNumberArray.length;
+        final char[] codedNumberArray = pCodedNumber.toCharArray();
+        final char[] enteredNumberArray = pEnteredNumber.toCharArray();
+        final int lengthOfNumber = codedNumberArray.length;
 
         for (int i = 0; i < lengthOfNumber; ++i) {
             for (int j = 0; j < lengthOfNumber; ++j) {
@@ -67,7 +67,7 @@ public class RandomNumberGenerator  {
         return numberOfCows;
     }
 
-    public boolean checkNumberForCorrectInput(String pEnteredNumber, int pNumberOfDigits) {
+    public boolean checkNumberForCorrectInput(final String pEnteredNumber, final int pNumberOfDigits) {
 
         if (pEnteredNumber.length() == pNumberOfDigits) {
 
@@ -85,7 +85,7 @@ public class RandomNumberGenerator  {
             }
 
             if (numberForChecking >= k) {
-                int[] numberArray;
+                final int[] numberArray;
                 numberArray = new int[pNumberOfDigits];
                 for (int i = pNumberOfDigits - 1; i >= 0; --i) {
                     numberArray[i] = numberForChecking % 10;
@@ -105,7 +105,7 @@ public class RandomNumberGenerator  {
                 return true;
 
             } else if (pEnteredNumber.charAt(0) == '0' && numberForChecking >= k / 10) {
-                int[] numberArray;
+                final int[] numberArray;
                 numberArray = new int[pNumberOfDigits];
 
                 for (int i = pNumberOfDigits - 1; i >= 1; --i) {
@@ -116,7 +116,7 @@ public class RandomNumberGenerator  {
                 for (int i = 0, cnt = 0; i < pNumberOfDigits; ++i) {
                     for (int j = 0; j < pNumberOfDigits; ++j) {
                         if (numberArray[i] == numberArray[j]) {
-                            ++cnt;
+                            cnt++;
                         }
                         if (cnt > pNumberOfDigits) {
                             return false;

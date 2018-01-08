@@ -11,6 +11,9 @@ import java.util.TimeZone;
 
 public class Converters {
 
+    public static final String SPLITING_SYMBOL = ":";
+    public static final int SECONDS_IN_MINUTE = 60;
+
     //todo find correct path conversion for time
     public static long getActualDay(long pActualTime) {
         pActualTime = Constants.BACK_EPOCH_TIME_NOTATION - pActualTime;
@@ -53,5 +56,10 @@ public class Converters {
 
     public static long convertToBackendTime(long pEpochTime){
         return Constants.BACK_EPOCH_TIME_NOTATION - pEpochTime;
+    }
+
+    public static int gameTimeToSeconds(final String pTime){
+        final String[] time = pTime.split(SPLITING_SYMBOL);
+        return Integer.parseInt(time[0])* SECONDS_IN_MINUTE + Integer.parseInt(time[1]);
     }
 }

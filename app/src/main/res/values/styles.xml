@@ -42,9 +42,8 @@
     </style>
 
     <style name="ShadowOfBlock">
-        <item name="android:background">@drawable/myrect</item>
         <item name="android:elevation">4dp</item>
-        <item name="android:layout_margin">4dp</item>
+        <item name="android:layout_marginTop">@dimen/SMALL_MARGIN</item>
     </style>
 
     <style name="RegisteredButton">
@@ -84,5 +83,22 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">@dimen/LARGE_TEXT_SIZE</item>
         <item name="android:textColor">@color/GENERAL_COLOR_TEXT</item>
+    </style>
+
+    <style name="RoundedButtonStyle">
+        <item name="android:layout_marginTop">@dimen/SMALL_MARGIN</item>
+        <item name="android:clickable">true</item>
+        <item name="android:padding">@dimen/BLOCK_PADDING</item>
+        <item name="android:textColor">@color/WHITE_COLOR_TEXT</item>
+        <item name="android:textSize">@dimen/LARGE_TEXT_SIZE</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="RoundedButtonStyle.Normal">
+        <item name="android:layout_width">@dimen/INFO_NORMAL_VIEW_WIDTH</item>
+    </style>
+
+    <style name="RoundedButtonStyle.Small">
+        <item name="android:layout_width">@dimen/INFO_SMALL_VIEW_WIDTH</item>
     </style>
 </resources>

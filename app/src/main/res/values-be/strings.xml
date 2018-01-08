@@ -125,11 +125,14 @@
         <item>Last week</item>
     </string-array>
     <string name="SUCCESS_UPLOAD">Success upload</string>
-    <string name="DAY_RAITING">Day raiting</string>
+    <string name="DAY_RATING">Day raiting</string>
     <string name="DASH">---</string>
     <string name="CODED">Coded: "</string>
     <string name="PROFILE_SUCCES_UPDATE">Profile success update</string>
     <string name="PROFILE_NOT_UPDATE">Profile not update</string>
+    <string name="number">HINT_FOR_INPUT_FIELD</string>
+    <string name="START_TIMER">00:00</string>
+    <string name="WEEK_RATING">Week rating</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

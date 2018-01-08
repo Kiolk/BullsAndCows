@@ -1,5 +1,9 @@
 package com.example.notepad.bullsandcows.data.databases.models;
 
+import android.database.Cursor;
+
+import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
+
 //TODO add method convertToContentValues() maybe move to separate interface
 public class UserRecordsDB {
 
@@ -25,4 +29,12 @@ public class UserRecordsDB {
 
     public static final String[] AVAILABLE_COLUMNS = {ID, NIK_NAME,
             CODES, TIME, MOVES, USER_PHOTO_URL, IS_UPDATE_ONLINE};
+
+    public static RecordsToNet convertFromCursor(final Cursor pCursor){
+        final RecordsToNet record = new RecordsToNet();
+        record.setMoves(pCursor.getString(pCursor.getColumnIndex(MOVES)));
+        record.setNikName(pCursor.getString(pCursor.getColumnIndex(NIK_NAME)));
+        record.setTime(pCursor.getString(pCursor.getColumnIndex(TIME)));
+        return record;
+    }
 }
