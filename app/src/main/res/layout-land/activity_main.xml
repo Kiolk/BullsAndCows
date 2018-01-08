@@ -12,7 +12,7 @@
         android:layout_weight="0.5"
         android:orientation="horizontal">
 
-        <include layout="@layout/upper_bar"></include>
+        <!--<include layout="@layout/upper_bar"></include>-->
     </LinearLayout>
 
     <LinearLayout

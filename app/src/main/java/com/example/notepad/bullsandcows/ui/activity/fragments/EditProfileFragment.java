@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,54 +28,62 @@ import kiolk.com.github.pen.Pen;
 
 public class EditProfileFragment extends Fragment implements View.OnClickListener {
 
-    private TextView mUserNik;
     private EditText mUrlUserPhoto;
     private EditText mFirstPassword;
     private EditText mSecondPassword;
-    private EditText mUserSex;
     private EditText mUserAge;
     private EditText mUserEmail;
     private EditText mAboutItself;
-    private Button mSaveButton;
-    private Button mSubmitPhoto;
-    private Spinner mCountrySpinner;
+
     private ImageView mUserPhoto;
+
+    private Spinner mCountrySpinner;
+
     private CloseEditProfileListener mCloseListener;
     private UserDataBase mUserUpdateInfo;
 
-
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.fragment_edit_profile, null);
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, final Bundle savedInstanceState) {
+        final View fragmentView = inflater.inflate(R.layout.fragment_edit_profile, null);
 
         fragmentView.setBackgroundColor(Color.GRAY);
 
-        mUserNik = fragmentView.findViewById(R.id.user_name_edit_fragment_text_view);
-        mUrlUserPhoto = fragmentView.findViewById(R.id.image_url_edit_fragment_edit_text);
-        mFirstPassword = fragmentView.findViewById(R.id.first_password_edit_fragment_edit_text);
-        mSecondPassword = fragmentView.findViewById(R.id.second_password_edit_fragment_edit_text);
-        mUserSex = fragmentView.findViewById(R.id.sex_edit_fragment_edit_text);
-        mUserAge = fragmentView.findViewById(R.id.age_edit_fragment_edit_text);
-        mUserEmail = fragmentView.findViewById(R.id.email_edit_fragment_edit_text);
-        mAboutItself = fragmentView.findViewById(R.id.about_itself_edit_fragment_edit_text);
-
-        mCountrySpinner = fragmentView.findViewById(R.id.example_country_registration_spinner);
-        CountrySpinnerAdapter spinnerAdapter = new CountrySpinnerAdapter(getActivity().getBaseContext(),
-                R.layout.item_country_spinner_layout, 2, CountryUtils.getCountryList());
-        mCountrySpinner.setAdapter(spinnerAdapter);
-
-        mSaveButton = fragmentView.findViewById(R.id.save_changes_edit_fragment_button);
-        mSaveButton.setOnClickListener(this);
-        mSubmitPhoto = fragmentView.findViewById(R.id.set_image_edit_fragment_button);
-        mSubmitPhoto.setOnClickListener(this);
-        mUserPhoto = fragmentView.findViewById(R.id.user_image_edit_fragment_image_view);
+        initView(fragmentView);
 
         return fragmentView;
     }
 
+    private void initView(final View pFragmentView) {
+        final TextView confirmPasswords = pFragmentView.findViewById(R.id.additional_information_text_view);
+        confirmPasswords.setText(getResources().getString(R.string.CONFIRM_PASSWORDS_FOR_SAVE_CHANGES));
+
+        mUrlUserPhoto = pFragmentView.findViewById(R.id.image_url_edit_tet);
+        mFirstPassword = pFragmentView.findViewById(R.id.password_registration_edit_text);
+        mSecondPassword = pFragmentView.findViewById(R.id.password2_registration_edit_text);
+
+        final EditText waste = pFragmentView.findViewById(R.id.name_registration_edit_text);
+        waste.setVisibility(View.GONE);
+
+        mUserAge = pFragmentView.findViewById(R.id.age_registration_edit_text);
+        mUserEmail = pFragmentView.findViewById(R.id.email_registration_edit_text);
+        mAboutItself = pFragmentView.findViewById(R.id.short_description_edit_text);
+
+        mCountrySpinner = pFragmentView.findViewById(R.id.example_country_registration_spinner);
+        final SpinnerAdapter spinnerAdapter = new CountrySpinnerAdapter(getActivity().getBaseContext(),
+                R.layout.item_country_spinner_layout, 2, CountryUtils.getCountryList());
+        mCountrySpinner.setAdapter(spinnerAdapter);
+
+        final Button saveButton = pFragmentView.findViewById(R.id.save_changes_edit_fragment_button);
+        saveButton.setOnClickListener(this);
+
+        final Button submitPhoto = pFragmentView.findViewById(R.id.set_image_registration_button);
+        submitPhoto.setOnClickListener(this);
+
+        mUserPhoto = pFragmentView.findViewById(R.id.user_image_registration_image_view);
+    }
+
     public void editUserProfile() {
-        mUserNik.setText(UserLoginHolder.getInstance().getUserName());
 
         if (UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl() != null) {
             Pen.getInstance()
@@ -83,16 +92,8 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             mUrlUserPhoto.setText(UserLoginHolder.getInstance().getUserInfo().getMPhotoUrl());
         }
 
-//        String password = UserLoginHolder.getInstance().getPassword();
-//        mFirstPassword.setText(password);
-//        mSecondPassword.setText(password);
-
         if (UserLoginHolder.getInstance().getUserInfo().getMAge() != null) {
             mUserAge.setText(String.valueOf(UserLoginHolder.getInstance().getUserInfo().getMAge()));
-        }
-
-        if (UserLoginHolder.getInstance().getUserInfo().getMSex() != null) {
-            mUserSex.setText(UserLoginHolder.getInstance().getUserInfo().getMSex());
         }
 
         if (UserLoginHolder.getInstance().getUserInfo().getEmail() != null) {
@@ -109,28 +110,32 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    public void setCloseListener(CloseEditProfileListener pListener) {
+    public void setCloseListener(final CloseEditProfileListener pListener) {
         mCloseListener = pListener;
     }
 
-    private void closeFragment() {
+    protected void closeFragment() {
         mCloseListener.onCloseFragment();
     }
 
     @Override
-    public void onClick(View pView) {
+    public void onClick(final View pView) {
         switch (pView.getId()) {
-            case R.id.set_image_edit_fragment_button:
+            case R.id.set_image_registration_button:
                 Pen.getInstance()
                         .getImageFromUrl(mUrlUserPhoto.getText().toString())
                         .inputTo(mUserPhoto);
                 break;
             case R.id.save_changes_edit_fragment_button:
-                //TODO My:Implement checking changes by password
-                if (updateInformation()) {
+
+                final String userPassword = UserLoginHolder.getInstance().getUserInfo().getPassword();
+                final String setPassword = mFirstPassword.getText().toString();
+
+                if (updateInformation() && userPassword.equals(setPassword)) {
                     new UserBaseManager().patchNewUserInformation(mUserUpdateInfo, new UserLoginCallback() {
+
                         @Override
-                        public void getUserInfoCallback(UserDataBase pUserInfo) {
+                        public void getUserInfoCallback(final UserDataBase pUserInfo) {
                             if (pUserInfo != null) {
                                 Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_SUCCES_UPDATE, Toast.LENGTH_LONG).show();
                             } else {
@@ -153,19 +158,15 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
             mUserUpdateInfo.setPassword(mSecondPassword.getText().toString());
             mUserUpdateInfo.setMPhotoUrl(mUrlUserPhoto.getText().toString());
-            mUserUpdateInfo.setMSex(mUserSex.getText().toString());
             mUserUpdateInfo.setMAge(Integer.parseInt(mUserAge.getText().toString()));
             mUserUpdateInfo.setEmail(mUserEmail.getText().toString());
-            String country = CountryUtils.getCountry(mCountrySpinner.getSelectedItemPosition());
+            final String country = CountryUtils.getCountry(mCountrySpinner.getSelectedItemPosition());
             mUserUpdateInfo.setCountry(country);
-
+            mUserUpdateInfo.setMShortDescription(mAboutItself.getText().toString());
             return true;
-        } catch (Exception pE) {
+        } catch (final Exception pE) {
             pE.getStackTrace();
-//            String m = pE.getMessage();
-//            if(pE.getMessage().equals("NumberFormatException")){
-//
-//            }
+
             return false;
         }
     }

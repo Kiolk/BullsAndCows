@@ -322,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
         final Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         if (vibrator != null) {
-            vibrator.vibrate(VibrationEffect.createOneShot(VIBRATION_MILLISECONDS, 0));
+            vibrator.vibrate(VIBRATION_MILLISECONDS);
         }
 
         mWinFragment.setWinMessage(mGame.getWinMessage());

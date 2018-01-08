@@ -27,8 +27,7 @@
         android:layout_toEndOf="@+id/user_image_registration_image_view"
         android:layout_toRightOf="@+id/user_image_registration_image_view"
         android:hint="@string/ENTERED_URL_OF_PHOTO"
-        android:inputType="textUri"
-        android:maxLength="20" />
+        android:inputType="textUri"/>
 
     <Button
         android:id="@+id/set_image_registration_button"

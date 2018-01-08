@@ -6,194 +6,27 @@
 
     <TextView
         android:id="@+id/user_name_edit_fragment_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
+        style="@style/GeneralBlock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="@string/EDIT_YOUR_PROFILE"
+        android:textSize="@dimen/GIANT_TEXT_SIZE"
+        android:textColor="@color/BLACK_COLOR_TEXT"
+        android:visibility="gone"/>
 
-        <ImageView
-            android:id="@+id/user_image_edit_fragment_image_view"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="@string/USER_PHOTO"
-            android:scaleType="centerInside" />
 
-        <EditText
-            android:id="@+id/image_url_edit_fragment_edit_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/IMAGE_URL"
-            android:maxLines="2"
-            android:inputType="textUri" />
+    <include layout="@layout/registration_page_photo_block" />
 
-    </LinearLayout>
+    <include layout="@layout/registration_page_age_block" />
 
-    <Button
-        android:id="@+id/set_image_edit_fragment_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/SUBMIT_PHOTO" />
+    <include layout="@layout/registration_page_description_block" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/first_password_edit_fragment_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:hint=""
-            android:inputType="textPassword" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="end|center_vertical"
-            android:text="@string/PASSWORD"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/second_password_edit_fragment_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:hint=""
-            android:inputType="textPassword" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="end|center_vertical"
-            android:text="@string/CONFIRM_YOUR_PASSWORD"
-            android:textSize="20sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/email_edit_fragment_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:inputType="textEmailAddress"
-            android:hint="@string/EMAIL"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="end|center_vertical"
-            android:text="@string/EMAIL"
-            android:textSize="20sp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/sex_edit_fragment_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:inputType="text"
-            android:hint="@string/SEX"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="end|center_vertical"
-            android:text="@string/SEX"
-            android:textSize="20sp"/>
-
-        <EditText
-            android:id="@+id/age_edit_fragment_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:inputType="number"
-            android:hint="@string/AGE"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="end|center_vertical"
-            android:text="@string/AGE"
-            android:textSize="20sp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/example_country_registration_spinner"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="6" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:gravity="end|center_vertical"
-            android:text="@string/COUNTRY"
-            android:textSize="20sp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/about_itself_edit_fragment_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="6"
-            android:maxLines="5"
-            android:inputType="text"
-            android:hint="@string/ABOUT_ITSELF"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="end|center_vertical"
-            android:text="@string/ABOUT_ITSELF"
-            android:textSize="20sp"/>
-    </LinearLayout>
+    <include layout="@layout/registration_page_name_block" />
 
     <Button
         android:id="@+id/save_changes_edit_fragment_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:textSize="@dimen/LARGE_TEXT_SIZE"
         android:text="@string/SAVE_CHANGES"/>
-
 </LinearLayout>
