@@ -21,7 +21,7 @@ import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.ui.activity.adapters.UserRecordsRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
-import com.example.notepad.bullsandcows.utils.converters.Converters;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
@@ -64,16 +64,16 @@ public class UserInfoRecordFragment extends Fragment {
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP) //TODO may be not this method not work on early version
-    public void showInfoAboutUser(Context pContext, UserDataBase pUserInfo) {
+    public void showInfoAboutUser(final Context pContext, final UserDataBase pUserInfo) {
 
-        ContentValues cv = ModelConverterUtil.fromUserDataBaseToCv(pUserInfo);
-        getActivity().getContentResolver().insert(RecordsContentProvider.CONTENT_USERS_URI, cv);
+        final ContentValues contentValues = ModelConverterUtil.fromUserDataBaseToCv(pUserInfo);
+        getActivity().getContentResolver().insert(RecordsContentProvider.CONTENT_USERS_URI, contentValues);
 
-        ArrayList<BestUserRecords> listRecords = (ArrayList<BestUserRecords>) pUserInfo.getBestUserRecords();
+        final ArrayList<BestUserRecords> listRecords = (ArrayList<BestUserRecords>) pUserInfo.getBestUserRecords();
         Log.d("MyLogs", listRecords.toString());
         mUserName.setText(pUserInfo.getUserName());
-        mLastVisit.setText(Converters.convertDirectTimeToString(pUserInfo.getMLastUserVisit()));
-        String res = Constants.EMPTY_STRING + pUserInfo.getMNumberPlayedGames();
+        mLastVisit.setText(TimeConvertersUtil.convertDirectTimeToString(pUserInfo.getMLastUserVisit(), getActivity().getBaseContext()));
+        final String res = Constants.EMPTY_STRING + pUserInfo.getMNumberPlayedGames();
         mPlayedGames.setText(res);
 
         if(pUserInfo.getIsOnline()){
@@ -85,15 +85,15 @@ public class UserInfoRecordFragment extends Fragment {
         }
 
         try {
-            int flag = CountryUtils.getCountryResources(pUserInfo.getCountry());    //R.drawable.ic_belarus;
+            final int flag = CountryUtils.getCountryResources(pUserInfo.getCountry());    //R.drawable.ic_belarus;
             mCountryFlag.setImageDrawable(getResources().getDrawable(flag, null));
-        } catch (Exception pE) {
+        } catch (final Exception pE) {
             pE.getStackTrace();
         }
 
         try{
             Pen.getInstance().getImageFromUrl(pUserInfo.getMPhotoUrl()).inputTo(mUseImage);
-        }catch (Exception pE){
+        }catch (final Exception pE){
             pE.getStackTrace();
         }
 

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
@@ -207,10 +206,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!mEditProfileFragment.isVisible()) {
+        if (!mEditProfileFragment.isVisible() && !mRatingFragment.isVisible()) {
             super.onBackPressed();
-        } else {
+        } else if (mEditProfileFragment.isVisible()) {
             mCloseEditListener.onCloseFragment();
+        } else {
+            closeRatingFragment();
         }
     }
 
@@ -249,7 +250,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.edit_profile_menu:
-                showEditProfileFragment();
+                if (!mEditProfileFragment.isVisible()) {
+                    showEditProfileFragment();
+                }
                 break;
             default:
                 break;

@@ -20,7 +20,7 @@ import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.MovesRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
-import com.example.notepad.bullsandcows.utils.converters.Converters;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.bullsandcows.utils.converters.QueryConverterUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
@@ -236,11 +236,11 @@ public class Game {
             return FIRST_POSITION;
         }
         int actualPosition = 0;
-        final int actualTime = Converters.gameTimeToSeconds(mGameTimer.getWinTime());
+        final int actualTime = TimeConvertersUtil.gameTimeToSeconds(mGameTimer.getWinTime());
         do {
             actualPosition++;
             if (mCountMoves + 1 == Integer.parseInt(mRatingList.get(actualPosition - 1).getMoves())) {
-                if (actualTime < Converters.gameTimeToSeconds(mRatingList.get(actualPosition - 1).getTime())) {
+                if (actualTime < TimeConvertersUtil.gameTimeToSeconds(mRatingList.get(actualPosition - 1).getTime())) {
                     return String.valueOf(actualPosition);
                 }
             } else if (mCountMoves + 1 < Integer.parseInt(mRatingList.get(actualPosition - 1).getMoves())) {

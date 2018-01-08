@@ -18,7 +18,7 @@ import com.example.notepad.bullsandcows.ui.activity.listeners.UpdateLaterCallbac
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
-import com.example.notepad.bullsandcows.utils.converters.Converters;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import kiolk.com.github.pen.Pen;
@@ -69,8 +69,8 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         }
 
         holder.mCodTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.CODES)));
-        long date = mCursor.getLong(mCursor.getColumnIndex(UserRecordsDB.ID));
-        String dateString = Converters.convertTimeToString(date);
+        final long date = mCursor.getLong(mCursor.getColumnIndex(UserRecordsDB.ID));
+        final String dateString = TimeConvertersUtil.convertTimeToString(date, mContext);
         holder.mDateTextView.setText(dateString);
         final String nikName = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.NIK_NAME));
         holder.mNikNameTextView.setText(nikName);

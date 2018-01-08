@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserInfoRecordListener;
 import com.example.notepad.bullsandcows.ui.activity.listeners.UserNikClickListener;
-import com.example.notepad.bullsandcows.utils.converters.Converters;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
@@ -57,7 +57,7 @@ public class RecordRecyclerViewWithPaginationAdapter extends RecyclerView.Adapte
         }
         holder.mCodTextView.setText(model.getCodes());
 
-        holder.mDateTextView.setText(Converters.convertTimeToString(model.getDate()));
+        holder.mDateTextView.setText(TimeConvertersUtil.convertTimeToString(model.getDate(), mContext));
         holder.mNikNameTextView.setText(model.getNikName());
         holder.mMovesTextView.setText(model.getMoves());
         holder.mTimeTextView.setText(model.getTime());

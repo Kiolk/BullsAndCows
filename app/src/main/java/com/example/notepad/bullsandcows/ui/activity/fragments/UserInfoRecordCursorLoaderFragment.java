@@ -26,7 +26,7 @@ import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.ui.activity.adapters.UserRecordsRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
-import com.example.notepad.bullsandcows.utils.converters.Converters;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
@@ -81,8 +81,7 @@ public class UserInfoRecordCursorLoaderFragment extends Fragment implements Load
         //    Log.d("MyLogs", listRecords.toString());
 
         mUserName.setText(cursor.getString(cursor.getColumnIndex(UserInfoDB.ID)));
-        mLastVisit.setText(Converters.convertDirectTimeToString(cursor.getLong(cursor.getColumnIndex(UserInfoDB.LAST_VISIT))));
-//        String res = Constants.EMPTY_STRING + pUserInfo.getMNumberPlayedGames();
+        mLastVisit.setText(TimeConvertersUtil.convertDirectTimeToString(cursor.getLong(cursor.getColumnIndex(UserInfoDB.LAST_VISIT)), mUserName.getContext()));
         mPlayedGames.setText(String.valueOf(cursor.getInt(cursor.getColumnIndex(UserInfoDB.NUMBER_OF_PLAYED_GAMES))));
 
         if (cursor.getInt(cursor.getColumnIndex(UserInfoDB.IS_ONLINE)) == 1) {

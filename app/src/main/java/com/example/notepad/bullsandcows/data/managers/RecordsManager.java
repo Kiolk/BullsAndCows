@@ -6,7 +6,7 @@ import com.example.notepad.bullsandcows.data.factories.RecordJsonFactory;
 import com.example.notepad.bullsandcows.data.httpclient.BackendEndpointClient;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
 import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
-import com.example.notepad.bullsandcows.utils.converters.Converters;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class RecordsManager{
                         }
                         response = new RecordJsonFactory().getRecordsFromBackend(response);
                     } while (pAllRecordsOnDate != null
-                            && Converters.convertToBackendTime(pAllRecordsOnDate) > response.getmRecordsArray().get(response.getmRecordsArray().size() - 1).getDate());
+                            && TimeConvertersUtil.convertToBackendTime(pAllRecordsOnDate) > response.getmRecordsArray().get(response.getmRecordsArray().size() - 1).getDate());
 
                 } catch (IOException pE) {
                     pE.printStackTrace();

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.utils.Constants;
-import com.example.notepad.bullsandcows.utils.converters.Converters;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
 import java.util.ArrayList;
@@ -42,8 +42,8 @@ public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRec
         holder.mCod.setText(userRecord.getCodes());
         holder.mTime.setText(userRecord.getTime());
         holder.mMoves.setText(userRecord.getMoves());
-        holder.mDate.setText(Converters.convertTimeToString(userRecord.getDate()));
-        String number = Constants.EMPTY_STRING + userRecord.getMNumberGames();
+        holder.mDate.setText(TimeConvertersUtil.convertTimeToString(userRecord.getDate(), holder.mCardView.getContext()));
+        final String number = Constants.EMPTY_STRING + userRecord.getMNumberGames();
         holder.mNikName.setText(number);
     }
 
