@@ -159,7 +159,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
                 case R.id.user_name_card_text_view:
                     if (mUserNikListener != null) {
                         mUserNikListener.clickItemNik(v, getAdapterPosition());
-                        Toast.makeText(mContext, "NikName of user: " + mNikNameTextView.getText() + ". Position: " + getAdapterPosition(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(mContext, "NikName of user: " + mNikNameTextView.getText() + ". Position: " + getAdapterPosition(), Toast.LENGTH_LONG).show();
                     }
                     break;
                 case R.id.online_update_record_image_view:

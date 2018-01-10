@@ -12,12 +12,13 @@
         android:text="@string/WIN_MASSAGE"
         android:textSize="40sp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/bullgood"
+        android:src="@drawable/ic_bull_big_size"
         android:id="@+id/imageView2"
         android:layout_below="@+id/win_text_view"
         android:layout_centerHorizontal="true"
@@ -31,6 +32,8 @@
         android:textSize="20sp"
         android:layout_below="@+id/win_text_view"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="12dp"/>
+        android:layout_marginStart="12dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"/>
 
 </RelativeLayout>

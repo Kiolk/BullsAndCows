@@ -95,7 +95,7 @@
     <string name="SUCCESS_UPDATE">Success update</string>
     <string name="WRONG_UPDATE">Wrong update</string>
     <string name="LAST_USER_VISIT">Last visit: "</string>
-    <string name="TOTAL_PLAYED_GAMES">Total played games "</string>
+    <string name="TOTAL_PLAYED_GAMES">Total played games: "</string>
     <string name="NUMBER_GAME_BY_COD">Played games</string>
     <string name="UPDATE_YOUR_APP">Press, for download new version</string>
     <string name="UPDATE_RESULT_TO_ONLINE">Update result to online</string>

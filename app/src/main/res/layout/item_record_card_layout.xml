@@ -31,7 +31,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="5dp"
-            android:src="@drawable/bullgood" />
+            android:src="@drawable/ic_bull_big_size" />
 
         <TextView
             android:id="@+id/user_name_card_text_view"

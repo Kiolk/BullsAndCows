@@ -4,7 +4,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="title_color">#ff9900</color>
+    <color name="BACKGROUND_TITLE_COLOR">#ff9900</color>
     <color name="WHITE_COLOR_TEXT">#FFFFFF</color>
     <color name="BLACK_COLOR_TEXT">#000000</color>
     <color name="GENERAL_COLOR_TEXT">#424242</color>
@@ -17,6 +17,7 @@
     <color name="LIGHT_COLOR">#F2F3F3</color>
     <color name="OTHER_BUTTON">#FFC857</color>
     <color name="RED_BUTTON">#ED474F</color>
+    <color name="SLIGHTLY_RED_BUTTON">#ED0799</color>
     <color name="TEXT_SHADOW">#7F000000</color>
     <color name="ITEM_YELLOW_LIGHT">#fff9c4</color>
     <color name="ITEM_YELLOW_DARK">#ffee58</color>

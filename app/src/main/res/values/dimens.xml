@@ -9,6 +9,8 @@
     <dimen name="MIDDLE_TEXT_SIZE">16sp</dimen>
     <dimen name="LARGE_TEXT_SIZE">24sp</dimen>
     <dimen name="GIANT_TEXT_SIZE">36sp</dimen>
+    <dimen name="SMALL_TEXT_SIZE">12sp</dimen>
+    <dimen name="VERY_SMALL_TEXT_SIZE">8sp</dimen>
     <dimen name="SMALL_MARGIN">4dp</dimen>
     <dimen name="INFO_NORMAL_VIEW_WIDTH">100dp</dimen>
     <dimen name="INFO_SMALL_VIEW_WIDTH">50dp</dimen>
@@ -19,4 +21,6 @@
     <dimen name="USER_PHOTO_WIDTH">100dp</dimen>
     <dimen name="ANGLE_BIG_RADIUS">15dp</dimen>
     <dimen name="ZERO_DP">0dp</dimen>
+    <dimen name="VERY_SMALL_MARGIN">2dp</dimen>
+    <dimen name="SMALL_PADDING">2dp</dimen>
 </resources>

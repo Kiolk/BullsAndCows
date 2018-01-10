@@ -11,9 +11,9 @@
     <application
         android:name=".BullsAndCowsApp"
         android:allowBackup="true"
-        android:icon="@drawable/bullgood"
+        android:icon="@drawable/ic_bull_big_size"
         android:label="@string/APP_NAME"
-        android:roundIcon="@drawable/bullgood"
+        android:roundIcon="@drawable/ic_bull_big_size"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.activity.activities.SplashStartActivity">

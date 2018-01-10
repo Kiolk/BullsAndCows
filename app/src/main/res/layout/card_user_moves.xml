@@ -46,7 +46,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@string/COW"
-            android:src="@drawable/ic_cow_good"/>
+            android:src="@drawable/ic_cow_big_size"/>
 
         <TextView
             android:id="@+id/cows_card_moves_text_view"

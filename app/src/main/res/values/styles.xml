@@ -101,4 +101,25 @@
     <style name="RoundedButtonStyle.Small">
         <item name="android:layout_width">@dimen/INFO_SMALL_VIEW_WIDTH</item>
     </style>
+
+    <style name="TitleStyle">
+        <item name="android:layout_margin">@dimen/VERY_SMALL_MARGIN</item>
+        <item name="android:background">@color/BACKGROUND_TITLE_COLOR</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/VERY_SMALL_TEXT_SIZE</item>
+        <item name="android:textColor">@color/BLACK_COLOR_TEXT</item>
+    </style>
+
+    <style name="BigTitleStyle">
+        <item name="android:padding">@dimen/SMALL_PADDING</item>
+        <item name="android:textColor">@color/BLACK_COLOR_TEXT</item>
+        <item name="android:textSize">@dimen/LARGE_TEXT_SIZE</item>
+    </style>
+
+    <style name="SmallTitleStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/BLACK_COLOR_TEXT</item>
+        <item name="android:textSize">@dimen/SMALL_TEXT_SIZE</item>
+    </style>
 </resources>

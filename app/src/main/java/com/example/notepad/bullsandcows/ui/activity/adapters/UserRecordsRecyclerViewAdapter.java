@@ -14,13 +14,13 @@ import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRecordsRecyclerViewAdapter.UserRecordsViewHolder> {
 
-//    private Context mContext;
-    private ArrayList<BestUserRecords> mBestUserRecords;
+    private List<BestUserRecords> mBestUserRecords;
 
-    public UserRecordsRecyclerViewAdapter(ArrayList<BestUserRecords> mBestUserRecords) {
+    public UserRecordsRecyclerViewAdapter(List<BestUserRecords> mBestUserRecords) {
         this.mBestUserRecords = mBestUserRecords;
     }
 

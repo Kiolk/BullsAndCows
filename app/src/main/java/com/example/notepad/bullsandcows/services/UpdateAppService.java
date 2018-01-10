@@ -36,7 +36,7 @@ public class UpdateAppService extends Service implements UploadNewVersionAppCall
     public int onStartCommand(Intent intent, int flags, int startId) {
         String chanelId = "UploadChanel";
         mBuilder = new NotificationCompat.Builder(UpdateAppService.this, chanelId).
-                setSmallIcon(R.drawable.bullgood).
+                setSmallIcon(R.drawable.ic_bull_big_size).
                 setContentTitle(getResources().getString(R.string.START_DOWNLOAD_NEW_VERSION)).
                 setContentText(getResources().getString(R.string.NEW_VERSION_TITLE) +
                         AppInfoHolder.getInstance().getVersionApp().getNameOfApp()).

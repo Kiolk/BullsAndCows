@@ -19,7 +19,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/rules_item_menu"
-        android:icon="@drawable/bullgood"
+        android:icon="@drawable/ic_bull_big_size"
         android:title="@string/RULES_MENU"
         app:showAsAction="ifRoom" />
     <item

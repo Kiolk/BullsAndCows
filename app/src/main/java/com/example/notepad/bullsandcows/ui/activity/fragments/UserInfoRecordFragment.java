@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,7 +31,7 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataB
 import java.util.ArrayList;
 
 import kiolk.com.github.pen.Pen;
-
+@Deprecated
 public class UserInfoRecordFragment extends Fragment {
 
     private TextView mUserName;

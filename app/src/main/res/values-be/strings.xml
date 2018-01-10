@@ -22,7 +22,7 @@
     <string name="PASSWORD">Password</string>
     <string name="CONFIRM_YOUR_PASSWORD">Confirm password</string>
     <string name="COUNTRY">Country</string>
-    <string name="EMAIL_FIELD">email</string>
+    <string name="EMAIL_FIELD">Email</string>
     <string name="NEW_USER">Registered new player</string>
     <string name="MESSAGE_FOR_REGISTRATION">Please, complete  this form</string>
     <string name="LOGIN_BUTTON">Login</string>
@@ -35,6 +35,7 @@
     <string name="FAILED_DOWNLOAD_NEW_VERSION">Failed download</string>
     <string name="TRY_AGAIN">Try download later</string>
     <string name="VISIT_SITE">Visit site of project</string>
+    <string name="SHORT_DESCRIPTION">Short description</string>
     <string name="BUTTON_1">1</string>
     <string name="BUTTON_2">2</string>
     <string name="BUTTON_3">3</string>
@@ -105,6 +106,21 @@
     <string name="PRESS_FOR_UPGRADE">Press for upgrade yor app for version</string>
     <string name="SORT_ITEM">Sort records</string>
 
+    <string-array name="rules_items">
+        <item>This is simple logical game</item>
+        <item>"You mast be find number what coded your nice phone </item>
+        <item>If number stay in same position it is bull</item>
+        <item>If number stay in other position it is cow</item>
+        <item>Good luck! </item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+        <item>This is simple logical game</item>
+    </string-array>
+
     <string-array name="coded_list_array">
         <item>Eny</item>
         <item>1</item>
@@ -130,7 +146,13 @@
     <string name="CODED">Coded: "</string>
     <string name="PROFILE_SUCCES_UPDATE">Profile success update</string>
     <string name="PROFILE_NOT_UPDATE">Profile not update</string>
-    <string name="number">HINT_FOR_INPUT_FIELD</string>
+    <string name="UPLOAD_PHOTO">Upload photo</string>
+    <string name="ENTERED_URL_OF_PHOTO">Entered photo url</string>
+    <string name="PRESS_FOR_GET_RULES">Press for me, if you want know rules</string>
+    <string name="BULL">Bull</string>
+    <string name="COW">Cow</string>
+    <string name="ACTUAL_RATING_POSITION">Position: \"</string>
+    <string name="HINT_FOR_INPUT_FIELD">Number</string>
     <string name="START_TIMER">00:00</string>
     <string name="WEEK_RATING">Week rating</string>
     <string name="EDIT_YOUR_PROFILE">Edit your profile</string>
