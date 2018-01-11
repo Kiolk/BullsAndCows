@@ -156,6 +156,7 @@
     <string name="WEEK_RATING">Week rating</string>
     <string name="EDIT_YOUR_PROFILE">Edit your profile</string>
     <string name="CONFIRM_PASSWORDS_FOR_SAVE_CHANGES">Confirm passwords for save changes</string>
+    <string name="ONLY_ONLINE_RESULT">Only online results</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

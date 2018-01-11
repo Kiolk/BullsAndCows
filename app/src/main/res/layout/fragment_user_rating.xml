@@ -28,6 +28,12 @@
             android:text="@string/WEEK_RATING"/>
     </RadioGroup>
 
+    <CheckBox
+        android:id="@+id/offline_result_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ONLY_ONLINE_RESULT"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/users_rating_recycler_view"
         android:layout_width="match_parent"

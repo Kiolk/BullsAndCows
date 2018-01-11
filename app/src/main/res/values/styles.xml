@@ -122,4 +122,12 @@
         <item name="android:textColor">@color/BLACK_COLOR_TEXT</item>
         <item name="android:textSize">@dimen/SMALL_TEXT_SIZE</item>
     </style>
+
+    <style name="BalloonTextStyle">
+        <item name="android:paddingBottom">@dimen/LARGE_BLOB_PADDING</item>
+        <item name="android:paddingLeft">@dimen/SMALL_BLOB_PADDING</item>
+        <item name="android:paddingRight">@dimen/SMALL_BLOB_PADDING</item>
+        <item name="android:paddingTop">@dimen/SMALL_BLOB_PADDING</item>
+        <item name="android:textSize">@dimen/GIANT_TEXT_SIZE</item>
+    </style>
 </resources>

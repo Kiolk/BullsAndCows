@@ -6,29 +6,39 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.utils.animation.SlideAnimationUtil;
 
 public class WinFragment extends Fragment {
 
-    private TextView mWinText;
     private TextView mResultText;
+
+    private ImageView mBullImage;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.win_fragment, null);
-        mWinText = view.findViewById(R.id.win_text_view);
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.win_fragment, null);
+
         mResultText = view.findViewById(R.id.win_result_text_view);
+        mBullImage = view.findViewById(R.id.bull_image_view);
+
         return view;
     }
 
-//    public void setWinMessage(String pUserName, int pCodedNumber, int pMoves, String pWinTime) {
-        public void setWinMessage(String pWinMessage) {
-//        String winMessage = getResources().getString(R.string.CONGRATULATIONS) + pUserName + getResources().getString(R.string.YOU_WIN);
-        mWinText.setText(pWinMessage);
-//        String winResult = getResources().getString(R.string.YOUR_RESULT) + pCodedNumber + getResources().getString(R.string.NUMBER_OF_DIGITS) + pMoves + getResources().getString(R.string.WIN_TIME) + pWinTime;
-//        mResultText.setText(winResult);
+    public void setWinMessage(final CharSequence pWinMessage) {
+        mBullImage.setVisibility(View.VISIBLE);
+
+        SlideAnimationUtil.slideInFromLeft(getActivity().getBaseContext(), mBullImage, new SlideAnimationUtil.SlideAnimationListener() {
+
+            @Override
+            public void animationEnd() {
+                mResultText.setVisibility(View.VISIBLE);
+                mResultText.setText(pWinMessage);
+            }
+        }, SlideAnimationUtil.SLOWLY);
     }
 }

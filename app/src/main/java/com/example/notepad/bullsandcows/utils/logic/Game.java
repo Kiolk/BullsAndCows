@@ -20,9 +20,9 @@ import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.MovesRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
-import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
-import com.example.notepad.bullsandcows.utils.converters.QueryConverterUtil;
+import com.example.notepad.bullsandcows.utils.converters.QuerySelectionFormer;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
@@ -155,8 +155,7 @@ public class Game {
             @Override
             public void refreshTimer(final String pNewTime) {
                 mTimerView.setText(pNewTime);
-//                final String actualRating = mContext.getResources().getString(R.string.ACTUAL_RATING_POSITION) + getActualPosition();
-                mRatingPosition.setText(getActualPosition());
+                mRatingPosition.setText(getActualPosition(false));
             }
         });
     }
@@ -168,7 +167,7 @@ public class Game {
                 mContext.getResources().getString(R.string.YOUR_RESULT) +
                 mCountMoves +
                 mContext.getResources().getString(R.string.WIN_TIME) +
-                mGameTimer.getWinTime();
+                mGameTimer.getWinTime() +(Integer.parseInt(getActualPosition(true)) - 1);
     }
 
     public int calculateUserRating(final int pNumberCodedDigits) {
@@ -187,7 +186,7 @@ public class Game {
 
 //        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_URI,
 //                null, null, request, sortOrder);
-        final QuerySelectionArgsModel readySelection = QueryConverterUtil.convertSelectionArg(selectionArgs);
+        final QuerySelectionArgsModel readySelection = QuerySelectionFormer.convertSelectionArg(selectionArgs);
 
         final Cursor cursor = mContext.getContentResolver().query(RecordsContentProvider.CONTENT_URI,
                 null, readySelection.getSelection(), readySelection.getSelectionArgs(), sortOrder);
@@ -231,19 +230,28 @@ public class Game {
         }
     }
 
-    private String getActualPosition() {
+    private String getActualPosition(final boolean isWin) {
+
         if (mRatingList.isEmpty()) {
             return FIRST_POSITION;
         }
+
+        final int countMoves;
+        if (isWin) {
+            countMoves = mCountMoves;
+        } else {
+            countMoves = mCountMoves + 1;
+        }
+
         int actualPosition = 0;
         final int actualTime = TimeConvertersUtil.gameTimeToSeconds(mGameTimer.getWinTime());
         do {
             actualPosition++;
-            if (mCountMoves + 1 == Integer.parseInt(mRatingList.get(actualPosition - 1).getMoves())) {
+            if (countMoves == Integer.parseInt(mRatingList.get(actualPosition - 1).getMoves())) {
                 if (actualTime < TimeConvertersUtil.gameTimeToSeconds(mRatingList.get(actualPosition - 1).getTime())) {
                     return String.valueOf(actualPosition);
                 }
-            } else if (mCountMoves + 1 < Integer.parseInt(mRatingList.get(actualPosition - 1).getMoves())) {
+            } else if (countMoves < Integer.parseInt(mRatingList.get(actualPosition - 1).getMoves())) {
                 return String.valueOf(actualPosition);
             }
         } while (mRatingList.size() != actualPosition);

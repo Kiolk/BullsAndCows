@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/LIGHT_COLOR"
-    android:orientation="vertical"
-    tools:context=".ui.activity.activities.WelcomeActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/LIGHT_COLOR"
+                android:orientation="vertical"
+                tools:context=".ui.activity.activities.WelcomeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,13 +19,12 @@
             android:layout_height="0dp"
             android:layout_weight="1">
 
-            <include layout="@layout/upper_block_information" />
+            <include layout="@layout/upper_block_information"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -36,7 +34,7 @@
                 android:layout_weight="2"
                 android:orientation="vertical">
 
-                <include layout="@layout/login_password_block_welcome_page" />
+                <include layout="@layout/login_password_block_welcome_page"/>
 
             </LinearLayout>
 
@@ -47,7 +45,7 @@
                 android:layout_weight="2"
                 android:orientation="horizontal">
 
-                <include layout="@layout/registration_button_welcome_page" />
+                <include layout="@layout/registration_button_welcome_page"/>
 
             </LinearLayout>
 
@@ -56,8 +54,7 @@
         <LinearLayout
             style="@style/GeneralBlock"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -66,11 +63,11 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <include layout="@layout/applection_information" />
+                <include layout="@layout/applection_information"/>
 
             </LinearLayout>
 
-            <include layout="@layout/button_visit_site_welcome_page" />
+            <include layout="@layout/button_visit_site_welcome_page"/>
 
         </LinearLayout>
 

@@ -34,24 +34,24 @@ import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewA
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordCursorLoaderFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
-import com.example.notepad.bullsandcows.utils.converters.QueryConverterUtil;
+import com.example.notepad.bullsandcows.utils.converters.QuerySelectionFormer;
+import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.CODED_BUNDLE_KEY;
+import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.LAST_RESULT_BUNDLE_KEY;
+import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.USER_NAME_BUNDLE_KEY;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
-
 
 //TODO refactor implements to small class and create instances inside activitt
 public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivity
         implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>,
         PostRecordSuccessListener {
-
-    public static final String USER_NAME_BUNDLE_KEY = "userName";
-    public static final String CODED_BUNDL_KEY = "coded";
-    public static final String LAST_RESULT_BUNDLE_KEY = "lastResult";
 
     private UserInfoRecordCursorLoaderFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
@@ -61,7 +61,7 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     private Spinner mLastTimeSpinner;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_records_card);
@@ -76,21 +76,21 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     private void initView() {
-        Button mSortButton = findViewById(R.id.sort_record_button);
+        final Button mSortButton = findViewById(R.id.sort_record_button);
         mSortByName = findViewById(R.id.sort_by_name_record_edit_text);
         mSortButton.setOnClickListener(this);
     }
 
     private void initSpinners() {
         mCodedSpinner = findViewById(R.id.coded_number_sort_spinner);
-        ArrayAdapter<String> codedAdapter = new ArrayAdapter<>(this,
+        final ArrayAdapter<String> codedAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, getResources()
                 .getStringArray(R.array.coded_list_array));
         codedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mCodedSpinner.setAdapter(codedAdapter);
 
         mLastTimeSpinner = findViewById(R.id.last_time_sort_spinner);
-        ArrayAdapter<String> lastTimeAdapter = new ArrayAdapter<>(this,
+        final ArrayAdapter<String> lastTimeAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 getResources().getStringArray(R.array.last_result_time_array));
         lastTimeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -104,19 +104,19 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     void startWaiterRecordService() {
-        Intent intent = new Intent(RecordsCardActivityFromCursorLoaderActivity.this, WaiterNewRecordsService.class);
-        intent.putExtra(RECORDS_FROM_BACKEND_ON_DAY, 1513724487000L);
+        final Intent intent = new Intent(this, WaiterNewRecordsService.class);
+        intent.putExtra(RECORDS_FROM_BACKEND_ON_DAY, TimeConvertersUtil.getActualDay(System.currentTimeMillis()));
         startService(intent);
     }
 
-    private void firstTimeShowRecycler(Cursor pCursor) {
-        RecyclerView mRecordRecyclerView = findViewById(R.id.records_recycler_view);
+    private void firstTimeShowRecycler(final Cursor pCursor) {
+        final RecyclerView mRecordRecyclerView = findViewById(R.id.records_recycler_view);
 
-        RecordRecyclerViewAdapter adapter = new RecordRecyclerViewAdapter(this, pCursor) {
+        final RecordRecyclerViewAdapter adapter = new RecordRecyclerViewAdapter(this, pCursor) {
 
             @Override
-            public String showInfoFragment(String pUserName) {
-                String userName = super.showInfoFragment(pUserName);
+            public String showInfoFragment(final String pUserName) {
+                final String userName = super.showInfoFragment(pUserName);
                 closeInfoUserFragment();
                 showInfoUserFragment();
                 getUserInformation(userName);
@@ -124,11 +124,11 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
             }
 
             @Override
-            public RecordsToNet updateLateRecordCallback(RecordsToNet pRecord) {
-                RecordsToNet record = super.updateLateRecordCallback(pRecord);
+            public RecordsToNet updateLateRecordCallback(final RecordsToNet pRecord) {
+                final RecordsToNet record = super.updateLateRecordCallback(pRecord);
                 Toast.makeText(RecordsCardActivityFromCursorLoaderActivity.this,
                         record.getTime(), Toast.LENGTH_LONG).show();
-                RecordsManager recordsManager = new RecordsManager();
+                final RecordsManager recordsManager = new RecordsManager();
                 recordsManager.postRecordOnBackend(pRecord, RecordsCardActivityFromCursorLoaderActivity.this);
                 return record;
             }
@@ -140,17 +140,16 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
         adapter.notifyDataSetChanged();
     }
 
-    private void getUserInformation(String pUserName) {
-        Log.d(TAG, "getUserInformation: " + pUserName);
+    protected void getUserInformation(final String pUserName) {
         mUserInfoFragment.showUserInfo(pUserName);
     }
 
-    private void showInfoUserFragment() {
+    protected void showInfoUserFragment() {
         mInfoFrameLayout.setVisibility(View.VISIBLE);
         mFragmentTransaction = getFragmentManager().beginTransaction();
         mFragmentTransaction.add(R.id.user_info_record_frame_layout, mUserInfoFragment);
         mFragmentTransaction.commit();
-        FragmentManager mFragmentManager = getFragmentManager();
+        final FragmentManager mFragmentManager = getFragmentManager();
         mFragmentManager.executePendingTransactions();
     }
 
@@ -162,15 +161,15 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.user_info_record_frame_layout:
                 closeInfoUserFragment();
                 break;
             case R.id.sort_record_button:
-                Bundle args = new Bundle();
+                final Bundle args = new Bundle();
                 args.putString(USER_NAME_BUNDLE_KEY, mSortByName.getText().toString());
-                args.putString(CODED_BUNDL_KEY, mCodedSpinner.getSelectedItem().toString());
+                args.putString(CODED_BUNDLE_KEY, mCodedSpinner.getSelectedItem().toString());
                 args.putString(LAST_RESULT_BUNDLE_KEY, mLastTimeSpinner.getSelectedItem().toString());
 
                 getLoaderManager().restartLoader(0, args, this);
@@ -204,15 +203,15 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         if (args != null) {
 
-            HashMap<String, String> selectionArgsMap = new HashMap<>();
+            final Map<String, String> selectionArgsMap = new HashMap<>();
             selectionArgsMap.put(UserRecordsDB.NIK_NAME, args.getString(USER_NAME_BUNDLE_KEY));
-            selectionArgsMap.put(UserRecordsDB.CODES, args.getString(CODED_BUNDL_KEY));
+            selectionArgsMap.put(UserRecordsDB.CODES, args.getString(CODED_BUNDLE_KEY));
             selectionArgsMap.put(UserRecordsDB.ID, args.getString(LAST_RESULT_BUNDLE_KEY));
 
-            QuerySelectionArgsModel readySelection = QueryConverterUtil.convertSelectionArg(selectionArgsMap);
+            final QuerySelectionArgsModel readySelection = QuerySelectionFormer.convertSelectionArg(selectionArgsMap);
 
             return new CursorLoader(this, RecordsContentProvider.CONTENT_URI,
                     null, readySelection.getSelection(), readySelection.getSelectionArgs(), null);
@@ -222,20 +221,19 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
         firstTimeShowRecycler(data);
     }
 
-
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(final Loader<Cursor> loader) {
     }
 
     @Override
-    public void successSetResultListener(RecordsToNet pRecord) {
+    public void successSetResultListener(final RecordsToNet pRecord) {
         Log.d(TAG, "Start callback setResult for update i bd");
         if (pRecord != null) {
-            ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
+            final ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
 
             cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
 

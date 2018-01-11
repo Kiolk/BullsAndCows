@@ -15,6 +15,19 @@ public class Constants {
        String SORT_ITEM_BY_MOVES_TIME = SORT_ITEM_BY_MOVES + " , " + SORT_ITEM_BY_TIME;
     }
 
+    public interface DBConstants{
+        String LAST_DAY = "Last day";
+        String LAST_WEEK = "Last week";
+        String ENY = "Eny";
+        String NOT_UPDATED = "0";
+        String UPDATE = "1";
+        String RESULT_ON_BACKEND = "onBackend";
+        String UPDATE_TO_SERVER_BUNDLE_KEY = "updateToServer";
+        String USER_NAME_BUNDLE_KEY = "userName";
+        String CODED_BUNDLE_KEY = "coded";
+        String LAST_RESULT_BUNDLE_KEY = "lastResult";
+    }
+
     public final static String TAG = "MyLogs";
     public final static String FOLDER_DESTINATION_IN_SD = "Download";
     public static final String NIK_NAME_OF_USER = "nikNameOfUser";

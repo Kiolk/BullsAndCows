@@ -2,38 +2,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/win_background_color">
-
-    <TextView
-        android:id="@+id/win_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/WIN_MASSAGE"
-        android:textSize="40sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
+                xmlns:tools="http://schemas.android.com/tools"
+                android:background="@android:color/transparent">
 
     <ImageView
+        android:id="@+id/bull_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:contentDescription="@string/BULL"
+        android:padding="@dimen/BLOCK_PADDING"
         android:src="@drawable/ic_bull_big_size"
-        android:id="@+id/imageView2"
-        android:layout_below="@+id/win_text_view"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"/>
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
-    <TextView
-        android:id="@+id/win_result_text_view"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/WIN_RESULT_MASSAGE"
-        android:textSize="20sp"
-        android:layout_below="@+id/win_text_view"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="12dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="12dp"/>
+        android:layout_above="@+id/bull_image_view"
+        android:paddingLeft="@dimen/LARGE_BLOB_PADDING"
+        android:paddingStart="@dimen/LARGE_BLOB_PADDING">
 
+        <TextView
+            android:id="@+id/win_result_text_view"
+            style="@style/BalloonTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_balloon_left"
+            android:text="@string/WIN_RESULT_MASSAGE"
+            android:visibility="gone"
+            android:textSize="@dimen/LARGE_TEXT_SIZE"
+            tools:visibility="visible"/>
+    </RelativeLayout>
 </RelativeLayout>

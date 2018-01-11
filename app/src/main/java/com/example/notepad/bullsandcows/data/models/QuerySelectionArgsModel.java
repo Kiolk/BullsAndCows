@@ -2,13 +2,13 @@ package com.example.notepad.bullsandcows.data.models;
 
 public class QuerySelectionArgsModel {
 
-    private String mSelection;
+    private final String mSelection;
 
-    private String mSelectionArgs[];
+    private final String[] mSelectionArgs;
 
-    public QuerySelectionArgsModel(String mSelection, String[] mSelectionArgs) {
-        this.mSelection = mSelection;
-        this.mSelectionArgs = mSelectionArgs;
+    public QuerySelectionArgsModel(final String pSelection, final String[] pSelectionArgs) {
+        mSelection = pSelection;
+        mSelectionArgs = pSelectionArgs;
     }
 
     public String getSelection() {

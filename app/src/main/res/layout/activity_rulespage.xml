@@ -17,14 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:background="@drawable/ic_ballon3"
-            android:paddingBottom="@dimen/LARGE_BLOB_PADDING"
-            android:paddingLeft="@dimen/SMALL_BLOB_PADDING"
-            android:paddingRight="@dimen/SMALL_BLOB_PADDING"
-            android:paddingTop="@dimen/SMALL_BLOB_PADDING"
+            android:background="@drawable/ic_balloon_left"
             android:text="@string/PRESS_FOR_GET_RULES"
             android:textColor="@color/GENERAL_COLOR_TEXT"
-            android:textSize="@dimen/GIANT_TEXT_SIZE" />
+            style="@style/BalloonTextStyle"/>
 
     </RelativeLayout>
 

@@ -317,9 +317,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void showWinFragment() {
         mFrameLayout.setVisibility(View.VISIBLE);
-        new AnimationOfView().enteredView(mFrameLayout);
+//        new AnimationOfView().enteredView(mFrameLayout);
 
-        showFragment(R.id.win_container, mWinFragment);
+        showFragment(R.id.for_fragments_in_main_frame_layout, mWinFragment);
 
         startService(new Intent(this, WinSoundService.class));
         final Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);

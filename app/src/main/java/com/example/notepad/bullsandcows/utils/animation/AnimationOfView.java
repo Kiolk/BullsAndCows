@@ -9,7 +9,7 @@ import static com.example.notepad.bullsandcows.utils.Constants.DURATION_OF_ANIMA
 
 public class AnimationOfView {
 
-    @TargetApi(21)
+    @TargetApi(23)
     public void enteredView(View pView) {
         int cx = (pView.getLeft() + pView.getRight()) / 2;
         int cy = (pView.getBottom() + pView.getTop()) / 2;

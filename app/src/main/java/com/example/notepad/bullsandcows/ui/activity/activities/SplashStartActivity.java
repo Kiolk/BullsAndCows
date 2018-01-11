@@ -1,5 +1,6 @@
 package com.example.notepad.bullsandcows.ui.activity.activities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,7 +21,9 @@ import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 import static com.example.notepad.bullsandcows.utils.Constants.DURATION_OF_ANIMATION;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
+
 import com.crashlytics.android.Crashlytics;
+
 import io.fabric.sdk.android.Fabric;
 
 public class SplashStartActivity extends Activity {
@@ -39,6 +42,7 @@ public class SplashStartActivity extends Activity {
 
     private void prepareService() {
         UserLoginHolder.getInstance().getLastUserVisit(new UserLoginHolder.LastVisitCallback() {
+
             @Override
             public void getLastVisit(Long pLastVisit) {
                 Intent intent = new Intent(SplashStartActivity.this, WaiterNewRecordsService.class);
@@ -56,6 +60,7 @@ public class SplashStartActivity extends Activity {
             @Override
             public void run() {
                 UserLoginHolder.getInstance().getSavedUserData(SplashStartActivity.this, new UserLoginHolder.checkTokenCallback() {
+
                     @Override
                     public void isValidToken(boolean isValid) {
                         if (isValid) {
@@ -85,7 +90,7 @@ public class SplashStartActivity extends Activity {
 
             @Override
             public void run() {
-                new AnimationOfView().enteredView(mNameOfGame);
+//                new AnimationOfView().enteredView(mNameOfGame);
             }
         });
 
@@ -94,7 +99,7 @@ public class SplashStartActivity extends Activity {
 
             @Override
             public void run() {
-                new AnimationOfView().enteredView(layout);
+//                new AnimationOfView().enteredView(layout);
             }
         });
     }
