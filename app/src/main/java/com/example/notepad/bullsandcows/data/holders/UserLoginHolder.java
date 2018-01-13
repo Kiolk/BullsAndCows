@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.example.notepad.bullsandcows.data.databases.DBOperationsSingleTone;
@@ -17,13 +18,18 @@ import static com.example.notepad.bullsandcows.utils.Constants.INT_TRUE_VALUE;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
 //TODO reduce count of singletone google low coupling and higher cohesion
-public class UserLoginHolder {
+public final class UserLoginHolder {
 
     public interface checkTokenCallback {
-        void isValidToken(boolean isValid);
+//        void isValidToken(boolean isValid);
+
+        void validToken();
+
+        void unValidToken();
     }
 
     public interface LastVisitCallback {
+
         void getLastVisit(Long pLastVisit);
     }
 
@@ -63,7 +69,7 @@ public class UserLoginHolder {
         return mUserName;
     }
 
-    public void setUserName(String mUserName) {
+    public void setUserName(final String mUserName) {
         this.mUserName = mUserName;
     }
 
@@ -71,7 +77,7 @@ public class UserLoginHolder {
         return mPassword;
     }
 
-    public void setPassword(String mPassword) {
+    public void setPassword(final String mPassword) {
         this.mPassword = mPassword;
     }
 
@@ -79,15 +85,15 @@ public class UserLoginHolder {
         return mUserImageUrl;
     }
 
-    public void setUserImageUrl(String mUserImageUrl) {
+    public void setUserImageUrl(final String mUserImageUrl) {
         this.mUserImageUrl = mUserImageUrl;
     }
 
-    public Bitmap getmUserBitmap() {
+    public Bitmap getUserBitmap() {
         return mUserBitmap;
     }
 
-    public void setmUserBitmap(Bitmap mUserBitmap) {
+    public void setUserBitmap(final Bitmap mUserBitmap) {
         this.mUserBitmap = mUserBitmap;
     }
 
@@ -95,7 +101,7 @@ public class UserLoginHolder {
         return mUserInfo;
     }
 
-    public void setUserInfo(UserDataBase mUserInfo) {
+    public void setUserInfo(final UserDataBase mUserInfo) {
         this.mUserInfo = mUserInfo;
     }
 
@@ -103,18 +109,30 @@ public class UserLoginHolder {
         return mToken;
     }
 
-    public void setToken(String mToken) {
+    public void setToken(final String mToken) {
         this.mToken = mToken;
     }
 
+    @Deprecated
     public void setOffline() {
         if (!mKeepOnline && isLogged()) {
-            UserDataBase userInfo = UserLoginHolder.getInstance().getUserInfo();
+            final UserDataBase userInfo = mUserInfo;
             userInfo.setMLastUserVisit(System.currentTimeMillis());
             userInfo.setIsOnline(false);
             new UserBaseManager().updateLastUserVisit(userInfo, false);
         }
         mKeepOnline = false;
+    }
+
+    public void setUserOffline() {
+
+        if (mUserInfo != null && isLogged()) {
+            final UserDataBase userInfo = mUserInfo;
+            userInfo.setMLastUserVisit(System.currentTimeMillis());
+//            userInfo.setIsOnline(false);
+            new UserBaseManager().updateLastUserVisit(userInfo, false);
+            Log.d(TAG, "setUserOffline: ");
+        }
     }
 
     public void keepUserOnline() {
@@ -125,8 +143,9 @@ public class UserLoginHolder {
         try {
             if (mUserInfo != null && isLogged()) {
                 new UserBaseManager().updateLastUserVisit(mUserInfo, true);
+                Log.d(TAG, "setUserOnline: ");
             }
-        } catch (Exception pE) {
+        } catch (final Exception pE) {
             pE.getStackTrace();
         }
     }
@@ -135,11 +154,11 @@ public class UserLoginHolder {
         return isLogged;
     }
 
-    public void setLogged(boolean logged) {
+    public void setLogged(final boolean logged) {
         isLogged = logged;
     }
 
-    public void initHolder(UserDataBase pUserInfo) {
+    public void initHolder(final UserDataBase pUserInfo) {
         mUserInfo = pUserInfo;
         mUserName = pUserInfo.getUserName();
         mPassword = pUserInfo.getPassword();
@@ -150,16 +169,17 @@ public class UserLoginHolder {
     public void keepUserData(final String pName, final String pToken, final int pKeepLogin) {
         Log.d(TAG, "keepUserData: start");
         new Thread(new Runnable() {
+
             @Override
             public void run() {
-                ContentValues cv = new ContentValues();
+                final ContentValues cv = new ContentValues();
                 cv.put(CurrentUserDB.ID, 1);
                 cv.put(CurrentUserDB.USER_NAME, pName);
                 cv.put(CurrentUserDB.TOKEN, pToken);
                 cv.put(CurrentUserDB.IS_KIPPING_LOGIN, pKeepLogin);
                 cv.put(CurrentUserDB.LAST_USER_VISIT, System.currentTimeMillis());
 
-                int res = DBOperationsSingleTone.getInstance().update(CurrentUserDB.TABLE, cv);
+                final int res = DBOperationsSingleTone.getInstance().update(CurrentUserDB.TABLE, cv);
 
                 if (res <= 0) {
                     DBOperationsSingleTone.getInstance().insert(CurrentUserDB.TABLE, cv);
@@ -172,37 +192,43 @@ public class UserLoginHolder {
     public void getSavedUserData(final Context pContext, final UserLoginHolder.checkTokenCallback pCallback) {
 
         final Handler cursorHandler = new Handler();
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
+
             @Override
             public void run() {
                 final Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
                 cursorHandler.post(new Runnable() {
+
                     @Override
                     public void run() {
                         if (cursor != null && cursor.moveToFirst() && cursor.getInt(cursor.getColumnIndex(CurrentUserDB.IS_KIPPING_LOGIN)) == INT_TRUE_VALUE) {
                             final String savedToken = cursor.getString(cursor.getColumnIndex(CurrentUserDB.TOKEN));
 
-                            String userName = cursor.getString(cursor.getColumnIndex(CurrentUserDB.USER_NAME));
-                            String userToken = cursor.getString(cursor.getColumnIndex(CurrentUserDB.TOKEN));
+                            final String userName = cursor.getString(cursor.getColumnIndex(CurrentUserDB.USER_NAME));
+                            final String userToken = cursor.getString(cursor.getColumnIndex(CurrentUserDB.TOKEN));
 
                             keepUserData(userName, userToken, INT_TRUE_VALUE);
                             cursor.close();
 
-                            UserBaseManager userBaseManager = new UserBaseManager();
+                            final UserBaseManager userBaseManager = new UserBaseManager();
                             userBaseManager.getUserInfo(pContext, userName, new UserLoginCallback() {
+
                                 @Override
-                                public void getUserInfoCallback(UserDataBase pUserInfo) {
+                                public void getUserInfoCallback(final UserDataBase pUserInfo) {
                                     if (pUserInfo != null && pUserInfo.getMSex().equals(savedToken)) {
                                         initHolder(pUserInfo);
-                                        pCallback.isValidToken(true);
+//                                        pCallback.isValidToken(true);
+                                        pCallback.validToken();
                                     } else {
-                                        pCallback.isValidToken(false);
+//                                        pCallback.isValidToken(false);
+                                        pCallback.unValidToken();
                                     }
                                 }
                             });
 
                         } else {
-                            pCallback.isValidToken(false);
+                            pCallback.unValidToken();
+//                            pCallback.isValidToken(false);
                         }
                     }
                 });
@@ -213,11 +239,12 @@ public class UserLoginHolder {
 
     public void getLastUserVisit(final UserLoginHolder.LastVisitCallback pCallback) {
         final Handler handler = new Handler();
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
+
             @Override
             public void run() {
-                Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
-                final Long lastVisit;
+                final Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
+                @Nullable final Long lastVisit;
 
                 if (cursor != null && cursor.moveToFirst()) {
                     lastVisit = cursor.getLong(cursor.getColumnIndex(CurrentUserDB.LAST_USER_VISIT));
@@ -230,6 +257,7 @@ public class UserLoginHolder {
                 }
 
                 handler.post(new Runnable() {
+
                     @Override
                     public void run() {
                         pCallback.getLastVisit(lastVisit);

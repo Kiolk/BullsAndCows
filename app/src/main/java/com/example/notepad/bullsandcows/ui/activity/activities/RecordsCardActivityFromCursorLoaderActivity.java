@@ -180,12 +180,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        UserLoginHolder.getInstance().keepUserOnline();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
     }
@@ -194,12 +188,6 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     protected void onResume() {
         super.onResume();
         startWaiterRecordService();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        UserLoginHolder.getInstance().setOffline();
     }
 
     @Override

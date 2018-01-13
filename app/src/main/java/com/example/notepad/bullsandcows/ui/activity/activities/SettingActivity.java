@@ -20,10 +20,11 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     private int mNumberOfDigits;
 
     private SeekBar mCodsNumberSeekBar;
+
     private TextView mCodedNumber;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_setting);
@@ -36,14 +37,14 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getInfoFromIntent() {
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         mNumberOfDigits = intent.getIntExtra(Constants.CODED_DIGITS, 4);
     }
 
     private void initView() {
         mCodedNumber = findViewById(R.id.text);
         mCodedNumber.setText(String.valueOf(mCodsNumberSeekBar.getProgress()));
-        Button applyButton = findViewById(R.id.apply_all_changes_button);
+        final Button applyButton = findViewById(R.id.apply_all_changes_button);
         applyButton.setOnClickListener(this);
     }
 
@@ -52,19 +53,20 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         mCodsNumberSeekBar.setMax(MAX_CODED_NUMBER);
         mCodsNumberSeekBar.setProgress(mNumberOfDigits);
 
-        SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
+        final SeekBar.OnSeekBarChangeListener listener = new SeekBar.OnSeekBarChangeListener() {
+
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
                 mCodedNumber.setText(String.valueOf(progress));
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(final SeekBar seekBar) {
 
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onStopTrackingTouch(final SeekBar seekBar) {
 
             }
         };
@@ -73,28 +75,15 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        UserLoginHolder.getInstance().setOffline();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        UserLoginHolder.getInstance().setOffline();
-    }
-
-    @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.apply_all_changes_button:
-                String number = mCodedNumber.getText().toString();
+                final String number = mCodedNumber.getText().toString();
 
-                Intent intent3 = new Intent();
+                final Intent intent3 = new Intent();
                 intent3.putExtra(Constants.CODED_DIGITS, number);
                 setResult(RESULT_OK, intent3);
 
-                UserLoginHolder.getInstance().setOffline();
                 finish();
                 break;
             default:

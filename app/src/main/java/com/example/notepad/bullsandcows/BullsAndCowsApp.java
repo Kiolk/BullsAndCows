@@ -1,89 +1,92 @@
 package com.example.notepad.bullsandcows;
 
-import android.app.Activity;
 import android.app.Application;
-import android.os.Bundle;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.notepad.bullsandcows.data.databases.DBConnector;
 import com.example.notepad.bullsandcows.utils.Constants;
+import com.example.notepad.bullsandcows.utils.KeepUserOnlineUtil;
 
+import io.fabric.sdk.android.Fabric;
 import kiolk.com.github.pen.Pen;
 
-
 public class BullsAndCowsApp extends Application {
+
+    private int mCountStartedActivities = 0;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d(Constants.TAG, "onCreate: BullsAndCowsApp");
-        setImageLoaderConfiguration();
+        initImageLoaderConfiguration();
         DBConnector.initInstance(this);
-        //TODO separate class
+
+//        new KeepUserOnlineUtil().setupOnlineStatusObserver();
+
+        Fabric.with(this, new Crashlytics());
+        registerActivityLifecycleCallbacks(new KeepUserOnlineUtil().getActivityLifeCycleCallback());
 //        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
 //
-//            public int count;
-//
 //            @Override
-//            public void onActivityCreated(Activity pActivity, Bundle pBundle) {
-//                count++;
+//            public void onActivityCreated(final Activity pActivity, final Bundle pBundle) {
+//                mCountStartedActivities++;
+//                Log.d(TAG, "onActivityResumed: ");
 //            }
 //
 //            @Override
-//            public void onActivityStarted(Activity pActivity) {
-//
-//            }
-//
-//            @Override
-//            public void onActivityResumed(Activity pActivity) {
+//            public void onActivityStarted(final Activity pActivity) {
 //
 //            }
 //
 //            @Override
-//            public void onActivityPaused(Activity pActivity) {
+//            public void onActivityResumed(final Activity pActivity) {
 //
 //            }
 //
 //            @Override
-//            public void onActivityStopped(Activity pActivity) {
+//            public void onActivityPaused(final Activity pActivity) {
 //
 //            }
 //
 //            @Override
-//            public void onActivitySaveInstanceState(Activity pActivity, Bundle pBundle) {
+//            public void onActivityStopped(final Activity pActivity) {
 //
 //            }
 //
 //            @Override
-//            public void onActivityDestroyed(Activity pActivity) {
-//                count--;
-//                if (count > 0) {
-//                    //TODO online
+//            public void onActivitySaveInstanceState(final Activity pActivity, final Bundle pBundle) {
+//
+//            }
+//
+//            @Override
+//            public void onActivityDestroyed(final Activity pActivity) {
+//                mCountStartedActivities--;
+//                Log.d(TAG, "onActivityPaused: ");
+//                Log.d(TAG, "onActivityStopped: ");
+//
+//                if (mCountStartedActivities == 0) {
+//                    UserLoginHolder.getInstance().setUserOffline();
+//                    Log.d(TAG, "onActivityStopped: ");
 //                } else {
-//                    //TODO offline
+//                    UserLoginHolder.getInstance().setUserOnline();
+//                    Log.d(TAG, "onActivityStopped: ");
 //                }
 //            }
 //        });
     }
 
-    //TODO remove or use
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-        Log.d(Constants.TAG, "onTerminate: BullsAndCowsApp");
-    }
 
     //TODO rename to init or similar
-    private void setImageLoaderConfiguration() {
+    private void initImageLoaderConfiguration() {
         Pen.getInstance().setLoaderSettings()
                 .setContext(this)
                 .setDefaultDrawable(getResources().getDrawable(R.drawable.ic_bull_big_size))
-                .setErrorDrawable(getResources().getDrawable(R.drawable.ic_image_no_load))
+//                .setErrorDrawable(getResources().getDrawable(R.drawable.ic_image_no_load))
                 .setSavingStrategy(Pen.SAVE_SCALING_IMAGE_STRATEGY)
                 .setTypeOfCache(Pen.INNER_FILE_CACHE)
                 .setSizeInnerFileCache(Constants.INNER_FILE_CACHE_SIZE_MB)
                 .setQualityImageCompression(Constants.QUALITY_IMAGE_COMPRESSION)
                 .setUp();
-        Log.d(Constants.TAG, "setImageLoaderConfiguration: ");
     }
 }

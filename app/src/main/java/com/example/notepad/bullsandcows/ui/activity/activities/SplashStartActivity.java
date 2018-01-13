@@ -1,6 +1,5 @@
 package com.example.notepad.bullsandcows.ui.activity.activities;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,25 +15,17 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
-import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 
 import static com.example.notepad.bullsandcows.utils.Constants.DURATION_OF_ANIMATION;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
-import com.crashlytics.android.Crashlytics;
-
-import io.fabric.sdk.android.Fabric;
-
 public class SplashStartActivity extends Activity {
 
-    private TextView mNameOfGame;
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_start);
-        Fabric.with(this, new Crashlytics());
         initView();
         timeOut();
         prepareService();
@@ -44,8 +35,8 @@ public class SplashStartActivity extends Activity {
         UserLoginHolder.getInstance().getLastUserVisit(new UserLoginHolder.LastVisitCallback() {
 
             @Override
-            public void getLastVisit(Long pLastVisit) {
-                Intent intent = new Intent(SplashStartActivity.this, WaiterNewRecordsService.class);
+            public void getLastVisit(final Long pLastVisit) {
+                final Intent intent = new Intent(SplashStartActivity.this, WaiterNewRecordsService.class);
                 intent.putExtra(RECORDS_FROM_BACKEND_ON_DAY, pLastVisit);
                 Log.d(TAG, "getLastVisit: " + pLastVisit);
                 startService(intent);
@@ -54,7 +45,7 @@ public class SplashStartActivity extends Activity {
     }
 
     private void timeOut() {
-        Handler mHandler = new Handler();
+        final Handler mHandler = new Handler();
         mHandler.postDelayed(new Runnable() {
 
             @Override
@@ -62,16 +53,17 @@ public class SplashStartActivity extends Activity {
                 UserLoginHolder.getInstance().getSavedUserData(SplashStartActivity.this, new UserLoginHolder.checkTokenCallback() {
 
                     @Override
-                    public void isValidToken(boolean isValid) {
-                        if (isValid) {
-                            Intent intent = new Intent(SplashStartActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Intent intent = new Intent(SplashStartActivity.this, WelcomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }
+                    public void validToken() {
+                        final Intent intent = new Intent(SplashStartActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void unValidToken() {
+                        final Intent intent = new Intent(SplashStartActivity.this, WelcomeActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 });
             }
@@ -79,14 +71,14 @@ public class SplashStartActivity extends Activity {
     }
 
     private void initView() {
-        TextView mStartText = findViewById(R.id.start_splash_text_view);
-        Animation hyperJumpAnimation = AnimationUtils.loadAnimation(SplashStartActivity.this, R.anim.hyperspace_jump);
+        final TextView mStartText = findViewById(R.id.start_splash_text_view);
+        final Animation hyperJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.hyperspace_jump);
         mStartText.startAnimation(hyperJumpAnimation);
         mStartText.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.ANNABELLE));
 
-        mNameOfGame = findViewById(R.id.name_of_game_text_view);
-        mNameOfGame.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.AASSUANBRK));
-        mNameOfGame.post(new Runnable() {
+        final TextView nameOfGame = findViewById(R.id.name_of_game_text_view);
+        nameOfGame.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.AASSUANBRK));
+        nameOfGame.post(new Runnable() {
 
             @Override
             public void run() {

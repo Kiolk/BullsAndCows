@@ -15,7 +15,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.notepad.myapplication.backend.VersionOfApp;
 import com.example.notepad.bullsandcows.BuildConfig;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
@@ -29,6 +28,7 @@ import com.example.notepad.bullsandcows.ui.activity.fragments.UpdateAppFragment;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
+import com.example.notepad.myapplication.backend.VersionOfApp;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import kiolk.com.github.pen.utils.MD5Util;
@@ -54,12 +54,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     private SharedPreferences mWelcomePreferences;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_welcome);
-
-        UserLoginHolder.getInstance().setUserOnline();
 
         initView();
         checkAppActualVersion();
@@ -67,15 +65,15 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     }
 
     protected void checkAppActualVersion() {
-        AppInfoManager appManager = new AppInfoManager();
+        final AppInfoManager appManager = new AppInfoManager();
 
         appManager.getCurrentAppInfo(new HttpRequest(BuildConfig.BACKEND_APP_VERSION_URL, REQUEST_PARAM), new AppInfoCallbacks() {
 
             @Override
-            public void getInfoAppCallback(VersionOfApp versionOfApp) {
+            public void getInfoAppCallback(final VersionOfApp versionOfApp) {
                 mVersionOfApp = versionOfApp;
                 AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
-                String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
+                final String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
 
                 if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
                     showUpdateAppFragment();
@@ -84,15 +82,14 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         });
     }
 
-
     private void initView() {
-        Button loginButton = findViewById(R.id.login_button);
-        Button registrationButton = findViewById(R.id.registration_welcome_button);
+        final Button loginButton = findViewById(R.id.login_button);
+        final Button registrationButton = findViewById(R.id.registration_welcome_button);
         mLogin = findViewById(R.id.login_welcome_page_edit_text);
         mPassword = findViewById(R.id.password_welcome_page_edit_text);
         mCheckBox = findViewById(R.id.keep_password_check_box);
-        TextView welcomeInformationTextView = findViewById(R.id.welcome_text_text_view);
-        welcomeInformationTextView.setTypeface(CustomFonts.getTypeFace(WelcomeActivity.this, CustomFonts.AASSUANBRK));
+        final TextView welcomeInformationTextView = findViewById(R.id.welcome_text_text_view);
+        welcomeInformationTextView.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.AASSUANBRK));
 
         registrationButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
@@ -104,14 +101,11 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (UserLoginHolder.getInstance().getUserInfo() != null) {
-            UserLoginHolder.getInstance().setOffline();
-        }
         saveDataInPreferences();
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
             case REGISTRATION_REQUEST_CODE:
 
@@ -127,15 +121,14 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     }
 
     private void startMainActivity() {
-        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-        UserLoginHolder.getInstance().keepUserOnline();
+        final Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
 
     private void saveDataInPreferences() {
         mWelcomePreferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = mWelcomePreferences.edit();
+        final SharedPreferences.Editor editor = mWelcomePreferences.edit();
 
         editor.putString(Constants.NIK_NAME_OF_USER, mLogin.getText().toString());
         editor.putBoolean(IS_CHECKED_KEEP_PASSWORD, mCheckBox.isChecked());
@@ -153,12 +146,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
             mLogin.setText(getResources().getString(R.string.GUEST));
             mPassword.setText(DEFAULT_PASSWORD_FOR_GUEST);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        UserLoginHolder.getInstance().keepUserOnline();
     }
 
     public void showUpdateAppFragment() {
@@ -185,10 +172,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     }
 
     @Override
-    public void onClick(View pView) {
+    public void onClick(final View pView) {
         switch (pView.getId()) {
             case R.id.registration_welcome_button:
-                Intent intentRegistration = new Intent(WelcomeActivity.this, RegistrationPageActivity.class);
+                final Intent intentRegistration = new Intent(this, RegistrationPageActivity.class);
 
                 intentRegistration.putExtra(Constants.REGISTRATION_NAME_OF_USER, Constants.EMPTY_STRING);
                 intentRegistration.putExtra(Constants.REGISTRATION_PASSWORD, Constants.EMPTY_STRING);
@@ -196,11 +183,11 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                 startActivityForResult(intentRegistration, REGISTRATION_REQUEST_CODE);
                 break;
             case R.id.login_button:
-                String name = mLogin.getText().toString();
+                final String name = mLogin.getText().toString();
                 final String password = mPassword.getText().toString();
 
-                if (name.length() > 0 && password.length() > 0) {
-                    if (CheckConnection.checkConnection(WelcomeActivity.this)) {
+                if (!name.isEmpty() && !password.isEmpty()) {
+                    if (CheckConnection.checkConnection(this)) {
                         checkCorrectUserInformation(name, password);
                     } else {
                         UserLoginHolder.getInstance().setLogged(false);
@@ -209,10 +196,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
 
                         startMainActivity();
 
-                        Toast.makeText(WelcomeActivity.this, getString(R.string.CONTINUE_OFFLINE_GAME), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.CONTINUE_OFFLINE_GAME), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
                 }
                 break;
             default:
@@ -220,11 +207,12 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         }
     }
 
-    private void checkCorrectUserInformation(String pName, final String pPassword) {
-        UserBaseManager userManager = new UserBaseManager();
+    private void checkCorrectUserInformation(final String pName, final String pPassword) {
+        final UserBaseManager userManager = new UserBaseManager();
         userManager.getUserInfo(null, pName, new UserLoginCallback() {
+
             @Override
-            public void getUserInfoCallback(UserDataBase pUserInfo) {
+            public void getUserInfoCallback(final UserDataBase pUserInfo) {
 
                 if (pUserInfo != null && pPassword.equals(pUserInfo.getPassword())) {
                     UserLoginHolder.getInstance().initHolder(pUserInfo);
@@ -233,10 +221,11 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                         final String token = tokenGeneration(pUserInfo);
                         pUserInfo.setMSex(token);
 
-                        UserBaseManager userBaseManager = new UserBaseManager();
+                        final UserBaseManager userBaseManager = new UserBaseManager();
                         userBaseManager.patchNewUserInformation(pUserInfo, new UserLoginCallback() {
+
                             @Override
-                            public void getUserInfoCallback(UserDataBase pUserInfo) {
+                            public void getUserInfoCallback(final UserDataBase pUserInfo) {
                                 if (pUserInfo != null && token.equals(pUserInfo.getMSex())) {
                                     UserLoginHolder.getInstance().initHolder(pUserInfo);
                                     checkForSavingToken(pUserInfo.getUserName(), token);
@@ -258,14 +247,14 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         });
     }
 
-    private String tokenGeneration(UserDataBase pUserInfo) {
-        String builderString = pUserInfo.getUserName() +
+    protected String tokenGeneration(final UserDataBase pUserInfo) {
+        final String builderString = pUserInfo.getUserName() +
                 pUserInfo.getPassword();
 
         return MD5Util.getHashString(builderString);
     }
 
-    private void checkForSavingToken(String userName, String token) {
+    private void checkForSavingToken(final String userName, final String token) {
 
         if (mCheckBox.isChecked()) {
             UserLoginHolder.getInstance().keepUserData(null, null, INT_FALSE_VALUE);

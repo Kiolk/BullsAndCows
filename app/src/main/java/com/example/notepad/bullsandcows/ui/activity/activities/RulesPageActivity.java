@@ -15,7 +15,7 @@ public class RulesPageActivity extends AppCompatActivity {
     private TextView mRuleText;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_rulespage);
@@ -25,7 +25,7 @@ public class RulesPageActivity extends AppCompatActivity {
         mRuleText = findViewById(R.id.helpFromBull);
     }
 
-    public void submitBull(View view) {
+    public void submitBull(final View view) {
         mRuleText.setText(mRulesArray[mCnt]);
         mCnt++;
         if (mCnt == mRulesArray.length) {

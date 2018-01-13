@@ -34,7 +34,6 @@ import com.example.notepad.bullsandcows.ui.activity.fragments.WinFragment;
 import com.example.notepad.bullsandcows.ui.activity.listeners.CloseEditProfileListener;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
-import com.example.notepad.bullsandcows.utils.animation.AnimationOfView;
 import com.example.notepad.bullsandcows.utils.animation.SlideAnimationUtil;
 import com.example.notepad.bullsandcows.utils.logic.Game;
 import com.example.notepad.bullsandcows.utils.logic.RandomNumberGenerator;
@@ -223,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(final MenuItem item) {
-        UserLoginHolder.getInstance().keepUserOnline();
         final Intent intent;
 
         switch (item.getItemId()) {
@@ -241,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.login_page_item_menu:
+                UserLoginHolder.getInstance().setUserOffline();
                 intent = new Intent(this, WelcomeActivity.class);
                 startActivity(intent);
                 finish();

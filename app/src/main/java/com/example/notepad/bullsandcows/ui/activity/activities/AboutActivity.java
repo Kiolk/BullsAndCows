@@ -6,30 +6,25 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.ui.activity.adapters.AboutFragmentPagerAdapter;
 
 public class AboutActivity extends AppCompatActivity {
 
-    //TODO accessors
-    ViewPager mAboutViewPager;
-    TabLayout mAboutTabLayout;
-    AboutFragmentPagerAdapter mAdapter;
-
+    private ViewPager mAboutViewPager;
+    private TabLayout mAboutTabLayout;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-        //TODO move to Authorization manager
-        //TODO should be connected to Application lifecircle
-        UserLoginHolder.getInstance().setUserOnline();
 
         initView();
+        initAdapter();
+    }
 
-        mAdapter = new AboutFragmentPagerAdapter(this, getSupportFragmentManager());
-
-        mAboutViewPager.setAdapter(mAdapter);
+    private void initAdapter() {
+        final AboutFragmentPagerAdapter adapter = new AboutFragmentPagerAdapter(this, getSupportFragmentManager());
+        mAboutViewPager.setAdapter(adapter);
         mAboutTabLayout.setupWithViewPager(mAboutViewPager);
     }
 
@@ -37,17 +32,4 @@ public class AboutActivity extends AppCompatActivity {
         mAboutViewPager = findViewById(R.id.about_page_view_pager);
         mAboutTabLayout = findViewById(R.id.about_page_tab_layout);
     }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        UserLoginHolder.getInstance().keepUserOnline();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        UserLoginHolder.getInstance().setOffline();
-    }
-
 }
