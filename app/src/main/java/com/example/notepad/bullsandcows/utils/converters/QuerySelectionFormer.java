@@ -34,35 +34,39 @@ public final class QuerySelectionFormer {
         for (int i = 0; i < pSelectionArgs.size(); ++i) {
             builderSelection.append(arrayKeys[i]);
 
-            if (arrayKeys[i].equals(UserRecordsDB.IS_UPDATE_ONLINE)) {
+            switch (arrayKeys[i]) {
+                case UserRecordsDB.IS_UPDATE_ONLINE:
 
-                if (pSelectionArgs.get(arrayKeys[i]).equals(UPDATE)
-                        && pSelectionArgs.get(arrayKeys[i]).equals(NOT_UPDATED)) {
-                    builderSelection.append(EQUAL_SMTH);
-                } else {
-                    builderSelection.append(IS_NOT_SMTH);
-                }
+                    if (pSelectionArgs.get(arrayKeys[i]).equals(UPDATE)
+                            && pSelectionArgs.get(arrayKeys[i]).equals(NOT_UPDATED)) {
+                        builderSelection.append(EQUAL_SMTH);
+                    } else {
+                        builderSelection.append(IS_NOT_SMTH);
+                    }
 
-            } else if (arrayKeys[i].equals(UserRecordsDB.ID)) {
+                    break;
+                case UserRecordsDB.ID:
 
-                if (pSelectionArgs.get(arrayKeys[i]).equals(LAST_DAY)) {
-                    builderSelection.append(LESS_THEN);
-                    pSelectionArgs.put(arrayKeys[i], String.valueOf(TimeConvertersUtil.getActualDay(System.currentTimeMillis())));
-                } else if (pSelectionArgs.get(arrayKeys[i]).equals(LAST_WEEK)) {
-                    builderSelection.append(LESS_THEN);
-                    pSelectionArgs.put(arrayKeys[i], String.valueOf(TimeConvertersUtil.getActualWeek(System.currentTimeMillis())));
-                } else if (pSelectionArgs.get(arrayKeys[i]).equals(ENY)) {
-                    builderSelection.append(IS_NOT_SMTH);
-                } else {
-                    builderSelection.append(IS_NOT_SMTH);
-                }
-            } else {
-                if (!pSelectionArgs.get(arrayKeys[i]).equals(EMPTY_STRING)
-                        && !pSelectionArgs.get(arrayKeys[i]).equals(ENY)) {
-                    builderSelection.append(EQUAL_SMTH);
-                } else {
-                    builderSelection.append(IS_NOT_SMTH);
-                }
+                    if (pSelectionArgs.get(arrayKeys[i]).equals(LAST_DAY)) {
+                        builderSelection.append(LESS_THEN);
+                        pSelectionArgs.put(arrayKeys[i], String.valueOf(TimeConvertersUtil.getActualDay(System.currentTimeMillis())));
+                    } else if (pSelectionArgs.get(arrayKeys[i]).equals(LAST_WEEK)) {
+                        builderSelection.append(LESS_THEN);
+                        pSelectionArgs.put(arrayKeys[i], String.valueOf(TimeConvertersUtil.getActualWeek(System.currentTimeMillis())));
+                    } else if (pSelectionArgs.get(arrayKeys[i]).equals(ENY)) {
+                        builderSelection.append(IS_NOT_SMTH);
+                    } else {
+                        builderSelection.append(IS_NOT_SMTH);
+                    }
+                    break;
+                default:
+                    if (!pSelectionArgs.get(arrayKeys[i]).equals(EMPTY_STRING)
+                            && !pSelectionArgs.get(arrayKeys[i]).equals(ENY)) {
+                        builderSelection.append(EQUAL_SMTH);
+                    } else {
+                        builderSelection.append(IS_NOT_SMTH);
+                    }
+                    break;
             }
 
             if (i < size - 1) {

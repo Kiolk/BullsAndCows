@@ -8,32 +8,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecordJsonFactory {
 
-    public ResponseRecordModel getRecordsFromBackend(ResponseRecordModel pResponse) {
+    public ResponseRecordModel getRecordsFromBackend(final ResponseRecordModel pResponse) {
 
-        ArrayList<RecordsToNet> listRecords;
+        final List<RecordsToNet> listRecords;
         RecordsToNet recordModel;
-        String jsonString = pResponse.getmJsonFromBackend();
+        final String jsonString = pResponse.getJsonFromBackend();
 
-        if (pResponse.getmRecordsArray() == null) {
+        if (pResponse.getRecordsArray() == null) {
             listRecords = new ArrayList<>();
         } else {
-            listRecords = pResponse.getmRecordsArray();
+            listRecords = pResponse.getRecordsArray();
         }
 
         try {
-            JSONObject listOfRecords = new JSONObject(jsonString);
-            JSONArray detailsOneRecord = listOfRecords.getJSONArray("items");
-            String cursor = listOfRecords.getString("nextPageToken");
-            int arrayIndex = detailsOneRecord.length();
+            final JSONObject listOfRecords = new JSONObject(jsonString);
+            final JSONArray detailsOneRecord = listOfRecords.getJSONArray("items");
+            final String cursor = listOfRecords.getString("nextPageToken");
+            final int arrayIndex = detailsOneRecord.length();
 
             for (int i = 0; i < arrayIndex; ++i) {
                 recordModel = new RecordsToNet();
-                JSONObject record = detailsOneRecord.getJSONObject(i);
+                final JSONObject record = detailsOneRecord.getJSONObject(i);
                 recordModel.setCodes(record.getString("codes"));
-                Long dateOfRecord = record.getLong("date");
+                final Long dateOfRecord = record.getLong("date");
 //                String date = Converters.convertTimeToString(dateOfRecord);
                 recordModel.setDate(dateOfRecord);
                 recordModel.setNikName(record.getString("nikName"));
@@ -42,7 +43,7 @@ public class RecordJsonFactory {
 
                 try {
                     recordModel.setUserUrlPhoto(record.getString("userUrlPhoto"));
-                } catch (Exception pE) {
+                } catch (final Exception pE) {
                     pE.getStackTrace();
                     recordModel.setUserUrlPhoto(null);
                 }
@@ -50,13 +51,13 @@ public class RecordJsonFactory {
                 listRecords.add(recordModel);
             }
 
-            pResponse.setmRecordsArray(listRecords);
-            pResponse.setmCursor(cursor);
+            pResponse.setRecordsArray(listRecords);
+            pResponse.setCursor(cursor);
 
             return pResponse;
-        } catch (JSONException pE) {
+        } catch (final JSONException pE) {
             pE.printStackTrace();
-            pResponse.setmException(pE);
+            pResponse.setException(pE);
 
             return pResponse;
         }

@@ -11,17 +11,18 @@ import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserR
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 //TODO split to small ones. Some of them related to DB some of them to JSON
-public class ModelConverterUtil {
+public final class ModelConverterUtil {
 
     //TODO move to classes related to SQL or DB
     public static final int TRUE = 1;
     public static final int FALSE = 0;
 
     //TODO create separate class and move bussines
-    public static ContentValues fromRecordToNetToCv(RecordsToNet pRecord) {
-        ContentValues cv = new ContentValues();
+    public static ContentValues fromRecordToNetToCv(final RecordsToNet pRecord) {
+        final ContentValues cv = new ContentValues();
 
         cv.put(UserRecordsDB.ID, pRecord.getDate());
         cv.put(UserRecordsDB.NIK_NAME, pRecord.getNikName());
@@ -34,9 +35,9 @@ public class ModelConverterUtil {
         return cv;
     }
 
-    public static BestUserRecords fromRecordToNetToBestUserRecords(RecordsToNet pRecord) {
+    public static BestUserRecords fromRecordToNetToBestUserRecords(final RecordsToNet pRecord) {
 
-        BestUserRecords recordForCheck = new BestUserRecords();
+        final BestUserRecords recordForCheck = new BestUserRecords();
 
         recordForCheck.setCodes(pRecord.getCodes());
         recordForCheck.setDate(pRecord.getDate());
@@ -48,11 +49,11 @@ public class ModelConverterUtil {
     }
 
     //TODO method name is not clear
-    public static ContentValues[] fromArrayRecordToNetToCv(ArrayList<RecordsToNet> pArrayRecords) {
-        ContentValues[] arrayContentValues = new ContentValues[pArrayRecords.size()];
+    public static ContentValues[] fromArrayRecordToNetToCv(final List<RecordsToNet> pArrayRecords) {
+        final ContentValues[] arrayContentValues = new ContentValues[pArrayRecords.size()];
         int i = 0;
 
-        for (RecordsToNet note : pArrayRecords) {
+        for (final RecordsToNet note : pArrayRecords) {
 
             arrayContentValues[i] = fromRecordToNetToCv(note);
 
@@ -61,8 +62,8 @@ public class ModelConverterUtil {
         return arrayContentValues;
     }
 
-    public static ContentValues fromUserDataBaseToCv(UserDataBase pUserInfo) {
-        ContentValues cv = new ContentValues();
+    public static ContentValues fromUserDataBaseToCv(final UserDataBase pUserInfo) {
+        final ContentValues cv = new ContentValues();
         cv.put(UserInfoDB.ID, pUserInfo.getUserName());
         cv.put(UserInfoDB.COUNTRY, pUserInfo.getCountry());
         cv.put(UserInfoDB.SEX, pUserInfo.getMSex());
@@ -74,7 +75,6 @@ public class ModelConverterUtil {
         cv.put(UserInfoDB.DESCRIPTION, pUserInfo.getMShortDescription());
         cv.put(UserInfoDB.LAST_VISIT, pUserInfo.getMLastUserVisit());
         cv.put(UserInfoDB.REGISTRATION_TIME, pUserInfo.getMUserRegistrationTime());
-        //tine place, possible something
         if(pUserInfo.getIsOnline()) {
             cv.put(UserInfoDB.IS_ONLINE, TRUE);
         }
@@ -82,7 +82,7 @@ public class ModelConverterUtil {
             cv.put(UserInfoDB.IS_ONLINE, FALSE);
         }
         cv.put(UserInfoDB.USER_FRIENDS, String.valueOf(pUserInfo.getUserFriends()));
-        Log.d(Constants.TAG, "fromUserDataBaseToCv:  " + String.valueOf(pUserInfo.getUserFriends()));
+        Log.d(Constants.TAG, "fromUserDataBaseToCv:  " + pUserInfo.getUserFriends());
         cv.put(UserInfoDB.USER_MESSAGES, String.valueOf(pUserInfo.getUserMessages()));
         cv.put(UserInfoDB.USERS_BEST_RECORDS, String.valueOf(pUserInfo.getBestUserRecords()));
         cv.put(UserInfoDB.USER_LAST_RECORDS, String.valueOf(pUserInfo.getLastFiveUserRecords()));

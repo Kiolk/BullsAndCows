@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -143,6 +144,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
+            final Intent intent = new Intent(this, WelcomeActivity.class);
+            startActivity(intent);
+            finish();
+            Log.d(Constants.TAG, "onRestoreInstanceState: ");
+        }
         super.onRestoreInstanceState(savedInstanceState);
         mInputNumberView.setText(savedInstanceState.getString(INPUT_NUMBER, DEFAULT_VALUE_FOR_STRING));
         //TODO put to Serializable / Parcelable

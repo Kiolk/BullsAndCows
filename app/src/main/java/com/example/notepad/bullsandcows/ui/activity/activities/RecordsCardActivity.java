@@ -42,13 +42,13 @@ public class RecordsCardActivity extends AppCompatActivity {
 //            @Override
 //            public ResponseRecordModel getResponseBackendCallback(ResponseRecordModel pResponse) {
 //                ResponseRecordModel response = super.getResponseBackendCallback(pResponse);
-//                Log.d(Constants.TAG, ", cursor :" + response.getmCursor());
-//                recordModelArrayList = response.getmRecordsArray();
+//                Log.d(Constants.TAG, ", cursor :" + response.getCursor());
+//                recordModelArrayList = response.getRecordsArray();
 //
 //                closeProgressBar();
 //                firstTimeShowRecycler();
 //
-//                mCursor = response.getmCursor();
+//                mCursor = response.getCursor();
 //
 //                return response;
 //            }
@@ -99,11 +99,11 @@ public class RecordsCardActivity extends AppCompatActivity {
 //
 //                closeProgressBar();
 //
-//                if (response.getmRecordsArray() != null) {
-//                    mCursor = response.getmCursor();
+//                if (response.getRecordsArray() != null) {
+//                    mCursor = response.getCursor();
 //                    isLoading = false;
 //
-//                    recordModelArrayList.addAll(response.getmRecordsArray());
+//                    recordModelArrayList.addAll(response.getRecordsArray());
 //                    adapter.notifyDataSetChanged();
 //                }
 //

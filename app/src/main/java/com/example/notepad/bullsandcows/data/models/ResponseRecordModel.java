@@ -2,14 +2,14 @@ package com.example.notepad.bullsandcows.data.models;
 
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ResponseRecordModel {
 
     private RequestRecordModel mTarget;
     private String mJsonFromBackend;
     private Exception mException;
-    private ArrayList<RecordsToNet> mRecordsArray;
+    private List<RecordsToNet> mRecordsArray;
     private String mCursor;
 
     public ResponseRecordModel() {
@@ -20,43 +20,43 @@ public class ResponseRecordModel {
         this.mCursor = null;
     }
 
-    public RequestRecordModel getmTarget() {
+    public RequestRecordModel getTarget() {
         return mTarget;
     }
 
-    public void setmTarget(RequestRecordModel mTarget) {
+    public void setTarget(final RequestRecordModel mTarget) {
         this.mTarget = mTarget;
     }
 
-    public String getmJsonFromBackend() {
+    public String getJsonFromBackend() {
         return mJsonFromBackend;
     }
 
-    public void setmJsonFromBackend(String mJsonFromBackend) {
+    public void setJsonFromBackend(final String mJsonFromBackend) {
         this.mJsonFromBackend = mJsonFromBackend;
     }
 
-    public Exception getmException() {
+    public Exception getException() {
         return mException;
     }
 
-    public void setmException(Exception mException) {
+    public void setException(final Exception mException) {
         this.mException = mException;
     }
 
-    public ArrayList<RecordsToNet> getmRecordsArray() {
+    public List<RecordsToNet> getRecordsArray() {
         return mRecordsArray;
     }
 
-    public void setmRecordsArray(ArrayList<RecordsToNet> mRecordsArray) {
-        this.mRecordsArray = mRecordsArray;
+    public void setRecordsArray(final List<RecordsToNet> pRecordsArray) {
+        mRecordsArray = pRecordsArray;
     }
 
-    public String getmCursor() {
+    public String getCursor() {
         return mCursor;
     }
 
-    public void setmCursor(String mCursor) {
+    public void setCursor(final String mCursor) {
         this.mCursor = mCursor;
     }
 }

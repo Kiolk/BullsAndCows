@@ -33,13 +33,13 @@ public class WaiterNewRecordsService extends Service {
             @Override
             public void getRecordsBackendCallback(final ResponseRecordModel pResponse) {
 
-                if (pResponse.getmRecordsArray() != null) {
+                if (pResponse.getRecordsArray() != null) {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             //TODO separate operation
                             ContentValues[] arrayValues = ModelConverterUtil
-                                    .fromArrayRecordToNetToCv(pResponse.getmRecordsArray());
+                                    .fromArrayRecordToNetToCv(pResponse.getRecordsArray());
                             getContentResolver().bulkInsert(RecordsContentProvider.CONTENT_URI, arrayValues);
 
                         }

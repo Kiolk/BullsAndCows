@@ -57,11 +57,6 @@ public class KeepUserOnlineUtil  {
 
             @Override
             public void onActivityDestroyed(final Activity pActivity) {
-
-//                else {
-//                    UserLoginHolder.getInstance().setUserOnline();
-//                    Log.d(TAG, "onActivityStopped: ");
-//                }
             }
         };
     }

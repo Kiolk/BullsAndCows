@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 
 import static com.example.notepad.bullsandcows.utils.Constants.DURATION_OF_ANIMATION;
-
+@Deprecated
 public class AnimationOfView {
 
     @TargetApi(23)

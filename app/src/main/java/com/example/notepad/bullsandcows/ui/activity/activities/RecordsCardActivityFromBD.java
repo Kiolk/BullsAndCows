@@ -56,8 +56,8 @@ public class RecordsCardActivityFromBD extends AppCompatActivity  {
 //            @Override
 //            public ResponseRecordModel getResponseBackendCallback(ResponseRecordModel pResponse) {
 //                ResponseRecordModel response = super.getResponseBackendCallback(pResponse);
-//                Log.d(Constants.TAG, ", cursor :" + response.getmCursor());
-//                recordModelArrayList = response.getmRecordsArray();
+//                Log.d(Constants.TAG, ", cursor :" + response.getCursor());
+//                recordModelArrayList = response.getRecordsArray();
 //
 //                mArrayContentValues = new ContentValues[recordModelArrayList.size()];
 //                int i = 0;
@@ -80,7 +80,7 @@ public class RecordsCardActivityFromBD extends AppCompatActivity  {
 //
 //                new DBOperations().query(mCursorListener);
 //
-//                mCursorString = response.getmCursor();
+//                mCursorString = response.getCursor();
 //
 //                return response;
 //            }
@@ -139,11 +139,11 @@ public class RecordsCardActivityFromBD extends AppCompatActivity  {
 //
 //                closeProgressBar();
 //
-//                if (response.getmRecordsArray() != null) {
-//                    mCursorString = response.getmCursor();
+//                if (response.getRecordsArray() != null) {
+//                    mCursorString = response.getCursor();
 //                    isLoading = false;
 //
-//                    recordModelArrayList.addAll(response.getmRecordsArray());
+//                    recordModelArrayList.addAll(response.getRecordsArray());
 //                    adapter.notifyDataSetChanged();
 //                }
 //

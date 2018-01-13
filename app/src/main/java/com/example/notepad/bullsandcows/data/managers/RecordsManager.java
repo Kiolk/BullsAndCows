@@ -57,18 +57,18 @@ public class RecordsManager{
                 try {
 
                     do {
-                        if (response.getmCursor() == null) {
-                            response.setmJsonFromBackend(BackendEndpointClient.getRecordToNetApi().list().setCursor(null).execute().toString());
+                        if (response.getCursor() == null) {
+                            response.setJsonFromBackend(BackendEndpointClient.getRecordToNetApi().list().setCursor(null).execute().toString());
                         } else {
-                            response.setmJsonFromBackend(BackendEndpointClient.getRecordToNetApi().list().setCursor(response.getmCursor()).execute().toString());
+                            response.setJsonFromBackend(BackendEndpointClient.getRecordToNetApi().list().setCursor(response.getCursor()).execute().toString());
                         }
                         response = new RecordJsonFactory().getRecordsFromBackend(response);
                     } while (pAllRecordsOnDate != null
-                            && TimeConvertersUtil.convertToBackendTime(pAllRecordsOnDate) > response.getmRecordsArray().get(response.getmRecordsArray().size() - 1).getDate());
+                            && TimeConvertersUtil.convertToBackendTime(pAllRecordsOnDate) > response.getRecordsArray().get(response.getRecordsArray().size() - 1).getDate());
 
                 } catch (IOException pE) {
                     pE.printStackTrace();
-                    response.setmException(pE);
+                    response.setException(pE);
                 }
                 final ResponseRecordModel readyResponse = response;
                 handler.post(new Runnable() {
