@@ -44,9 +44,7 @@
         <service android:name=".services.UpdateAppService" />
 
         <activity android:name=".ui.activity.activities.RegistrationPageActivity" />
-        <activity android:name=".ui.activity.activities.RecordsCardActivity" />
-        <activity android:name=".ui.activity.activities.RecordsCardActivityFromBD" />
-        <activity android:name=".ui.activity.activities.RecordsCardActivityFromCursorLoaderActivity" />
+        <activity android:name=".ui.activity.activities.RecordsActivity" />
         <provider
             android:authorities="com.example.notepad.bullsandcows.data.providers"
             android:name=".data.providers.RecordsContentProvider">

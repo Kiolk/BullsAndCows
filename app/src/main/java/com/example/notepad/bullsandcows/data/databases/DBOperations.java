@@ -9,44 +9,55 @@ import android.util.Log;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 
 import static android.content.ContentValues.TAG;
-@Deprecated
-public class DBOperations {
 
-    private SQLiteOpenHelper mHelper;
+public final class DBOperations {
 
-    public DBOperations() {
+    private final SQLiteOpenHelper mHelper;
+
+    private static DBOperations mInstance;
+
+    private DBOperations() {
         mHelper = DBConnector.getInstance();
     }
 
-    public long insert(final String pTableName, final ContentValues pValues) {
+    public static DBOperations getInstance() {
+        if (mInstance == null) {
+            mInstance = new DBOperations();
+        }
+        return mInstance;
+    }
 
-        SQLiteDatabase database = mHelper.getReadableDatabase();
+    public synchronized long insert(final String pTableName, final ContentValues pValues) {
+
+        final SQLiteDatabase database = mHelper.getReadableDatabase();
         database.beginTransaction();
+        Log.d(TAG, "insert: start");
         long id = 0;
 
         try {
             id = database.insert(pTableName, null, pValues);
             database.setTransactionSuccessful();
-            Log.d("MyLogs", "Add one new record in " + pTableName + pValues.toString());
-        } catch (Exception pE) {
+            Log.d("MyLogs", "Add one new record in " + pTableName + pValues);
+        } catch (final Exception pE) {
             pE.getStackTrace();
             Log.d("MyLogs", this.getClass().getSimpleName() + pE.getLocalizedMessage());
         } finally {
             database.endTransaction();
+            Log.d(TAG, "insert: end");
             database.close();
         }
         return id;
     }
 
-    public int update(final String pTableName, final ContentValues pValues) {
-        SQLiteDatabase database = mHelper.getReadableDatabase();
+    public synchronized int update(final String pTableName, final ContentValues pValues) {
+        final SQLiteDatabase database = mHelper.getReadableDatabase();
         database.beginTransaction();
         int result = 0;
         try {
-            result = database.update(pTableName, pValues, UserRecordsDB.ID + " = ?", new String[]{pValues.getAsString(UserRecordsDB.ID)});
+            result = database.update(pTableName, pValues, "_id = ?", new String[]{pValues.getAsString(UserRecordsDB.ID)});
             database.setTransactionSuccessful();
-            Log.d("MyLogs", "Add one new record in UserRecordsDB");
-        } catch (Exception pE) {
+            Log.d("MyLogs", "Add one new record in " + pTableName);
+        } catch (final Exception pE) {
             pE.getStackTrace();
             Log.d("MyLogs", this.getClass().getSimpleName() + pE.getLocalizedMessage());
         } finally {
@@ -56,39 +67,41 @@ public class DBOperations {
         return result;
     }
 
-    public Cursor query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy,
-                        String having, String sortOrder) {
-
-        SQLiteDatabase database = mHelper.getReadableDatabase();
+    public synchronized Cursor query(final String table, final String[] columns, final String selection, final String[] selectionArgs, final String groupBy,
+                                     final String having, final String sortOrder) {
+        Log.d(TAG, "query: start");
+        final SQLiteDatabase database = mHelper.getReadableDatabase();
 
         return database.query(table, columns, selection, selectionArgs, groupBy, having, sortOrder);
     }
 
-    public int bulkInsert(String pTableName, ContentValues[] pArrayValues) {
-        SQLiteDatabase database = mHelper.getReadableDatabase();
+    public synchronized int bulkInsert(final String pTableName, final ContentValues[] pArrayValues) {
+        final SQLiteDatabase database = mHelper.getReadableDatabase();
         Log.d(TAG, "bulkInsert in DBOperation start: ");
 
         int successAdd = 0;
 
-        for (ContentValues contentValues : pArrayValues) {
+        for (final ContentValues contentValues : pArrayValues) {
             database.beginTransaction();
+            Log.d(TAG, "bulkInsert: start inser one record");
 
             try {
-                long success = database.insert(pTableName, null, contentValues);
+                final long success = database.insert(pTableName, null, contentValues);
                 database.setTransactionSuccessful();
                 Log.d(TAG, "bulkInsert: success" + success);
 
                 if (success > 0) {
                     ++successAdd;
                 }
-            } catch (Exception pE) {
+            } catch (final Exception pE) {
                 pE.getStackTrace();
             } finally {
                 database.endTransaction();
+                Log.d(TAG, "bulkInsert: end insert one record");
             }
         }
         database.close();
-        Log.d(TAG, "bulkInsert: total adds: " + successAdd);
+        Log.d(TAG, "bulkInsert end: total adds: " + successAdd);
         return successAdd;
     }
 }

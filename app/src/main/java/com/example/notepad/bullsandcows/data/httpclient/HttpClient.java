@@ -2,6 +2,7 @@ package com.example.notepad.bullsandcows.data.httpclient;
 
 import com.example.notepad.bullsandcows.data.httpclient.models.HttpRequest;
 import com.example.notepad.bullsandcows.data.httpclient.models.HttpResponse;
+import com.example.notepad.bullsandcows.utils.IOCloseUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,24 +13,28 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static com.example.notepad.bullsandcows.utils.Constants.UTF_8;
+
 public class HttpClient {
 
-    public HttpResponse post(HttpRequest pRequest) {
-        HttpResponse gettingResponse = new HttpResponse();
+    private static final String POST_REQUEST_METHOD = "POST";
+
+    public HttpResponse post(final HttpRequest pRequest) {
+        final HttpResponse gettingResponse = new HttpResponse();
         OutputStream outputStream = null;
         BufferedWriter bufferedWriter = null;
         BufferedReader reader = null;
 
         try {
-            URL url = new URL(pRequest.getUrl());
+            final URL url = new URL(pRequest.getUrl());
 
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("POST");
+            final HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod(POST_REQUEST_METHOD);
             httpURLConnection.setDoInput(true);
             httpURLConnection.setDoOutput(true);
 
             outputStream = httpURLConnection.getOutputStream();
-            bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, UTF_8));
             if (pRequest.getParam() != null) {
                 bufferedWriter.write(pRequest.getParam());
             } else {
@@ -39,8 +44,8 @@ public class HttpClient {
             httpURLConnection.connect();
 
             // Read response
-            int respondCod = httpURLConnection.getResponseCode();
-            StringBuilder responseString = new StringBuilder();
+            final int respondCod = httpURLConnection.getResponseCode();
+            final StringBuilder responseString = new StringBuilder();
             reader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String line;
 
@@ -54,32 +59,10 @@ public class HttpClient {
             } else {
                 gettingResponse.setHttpOk(false);
             }
-        } catch (IOException pE) {
-            pE.printStackTrace();
+        } catch (final IOException pE) {
             gettingResponse.setHttpError(pE);
         } finally {
-            //TODO close to IOUtils.close(Closeable)
-            try {
-                if (bufferedWriter != null) {
-                    bufferedWriter.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            new IOCloseUtils().addForClose(bufferedWriter).addForClose(outputStream).addForClose(reader).close();
         }
 
         return gettingResponse;

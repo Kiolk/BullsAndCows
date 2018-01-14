@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/LIGHT_BLUE"
-    tools:context=".ui.activity.activities.RecordsCardActivity">
+    android:background="@color/LIGHT_BLUE">
 
     <ProgressBar
         android:id="@+id/records_load_progress_bar"

@@ -8,7 +8,7 @@ public class HttpRequest {
 
     private String mParam;
 
-    public HttpRequest(@Nonnull String mUrl, @Nonnull String mParam) {
+    public HttpRequest(@Nonnull final String mUrl, @Nonnull final String mParam) {
         this.mUrl = mUrl;
         this.mParam = mParam;
     }
@@ -17,7 +17,7 @@ public class HttpRequest {
         return mUrl;
     }
 
-    public void setUrl(String mUrl) {
+    public void setUrl(final String mUrl) {
         this.mUrl = mUrl;
     }
 
@@ -25,7 +25,7 @@ public class HttpRequest {
         return mParam;
     }
 
-    public void setParam(String mParam) {
+    public void setParam(final String mParam) {
         this.mParam = mParam;
     }
 }

@@ -130,4 +130,10 @@
         <item name="android:paddingTop">@dimen/SMALL_BLOB_PADDING</item>
         <item name="android:textSize">@dimen/GIANT_TEXT_SIZE</item>
     </style>
+
+    <style name="SplashTextStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/WHITE_COLOR_TEXT</item>
+        <item name="android:textSize">@dimen/BIGEST_TEXT_SIZE</item>
+    </style>
 </resources>

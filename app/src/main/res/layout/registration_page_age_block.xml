@@ -57,7 +57,7 @@
             android:layout_marginLeft="@dimen/SMALL_MARGIN"
             android:layout_marginStart="@dimen/SMALL_MARGIN"
             android:layout_weight="1"
-            android:hint=""
+            android:text="@string/DEFAULT_AGE"
             android:inputType="number" />
 
         <TextView

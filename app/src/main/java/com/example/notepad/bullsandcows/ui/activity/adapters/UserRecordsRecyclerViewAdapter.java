@@ -13,26 +13,25 @@ import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.BestUserRecords;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRecordsRecyclerViewAdapter.UserRecordsViewHolder> {
 
-    private List<BestUserRecords> mBestUserRecords;
+    private final List<BestUserRecords> mBestUserRecords;
 
-    public UserRecordsRecyclerViewAdapter(List<BestUserRecords> mBestUserRecords) {
+    public UserRecordsRecyclerViewAdapter(final List<BestUserRecords> mBestUserRecords) {
         this.mBestUserRecords = mBestUserRecords;
     }
 
     @Override
-    public UserRecordsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+    public UserRecordsViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+        final View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_view_best_user_records, parent, false);
         return new UserRecordsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(UserRecordsViewHolder holder, int position) {
+    public void onBindViewHolder(final UserRecordsViewHolder holder, final int position) {
         final BestUserRecords userRecord = mBestUserRecords.get(position);
 
         if (position % 2 == 0) {
@@ -49,19 +48,19 @@ public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRec
 
     @Override
     public int getItemCount() {
-        return (null != mBestUserRecords ? mBestUserRecords.size() : 0);
+        return (mBestUserRecords != null ? mBestUserRecords.size() : 0);
     }
 
     class UserRecordsViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mCod;
-        TextView mNikName;
-        TextView mDate;
-        TextView mMoves;
-        TextView mTime;
-        CardView mCardView;
+        private final TextView mCod;
+        private final TextView mNikName;
+        private final TextView mDate;
+        private final TextView mMoves;
+        private final TextView mTime;
+        private final CardView mCardView;
 
-        UserRecordsViewHolder(View pView) {
+        UserRecordsViewHolder(final View pView) {
             super(pView);
             mCod = pView.findViewById(R.id.coded_number_best_card_text_view);
             mDate = pView.findViewById(R.id.date_of_won_best_card_text_view);

@@ -29,20 +29,20 @@ public class UserBaseManager {
     private static final int MAX_USER_LAST_RECORD = 5;
     private static final int MAX_BEST_RECORDS_NOTES = 10;
 
-    public void getUserInfo(final Context pContext, final String pUserNik, final UserLoginCallback pCallback) {
+    public void getUserInfo(final Context pContext, final String pUserNik, final OnResultCallback<UserDataBase> pCallback) {
         final Handler handler = new Handler();
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 UserDataBase userInfo = null;
                 try {
                     userInfo = BackendEndpointClient.getUserDataBaseApi().get(pUserNik).execute();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
 
                 if (userInfo != null && pContext != null) {
-                    Uri result = pContext.getContentResolver().insert(RecordsContentProvider.CONTENT_USERS_URI, ModelConverterUtil.fromUserDataBaseToCv(userInfo));
+                    final Uri result = pContext.getContentResolver().insert(RecordsContentProvider.CONTENT_USERS_URI, ModelConverterUtil.fromUserDataBaseToCv(userInfo));
 
                     if (result != null) {
                         if (Integer.parseInt(result.getLastPathSegment()) <= 0) {
@@ -60,7 +60,11 @@ public class UserBaseManager {
                     @Override
                     public void run() {
                         if (pCallback != null) {
-                            pCallback.getUserInfoCallback(userGettingInfo);
+                            if (userGettingInfo != null) {
+                                pCallback.onSuccess(userGettingInfo);
+                            } else {
+                                pCallback.onError(null);
+                            }
                         }
                     }
                 });
@@ -70,12 +74,12 @@ public class UserBaseManager {
     }
 
     public void createNewUser(final UserDataBase pNewUser) {
-        Thread addUserThread = new Thread(new Runnable() {
+        final Thread addUserThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     BackendEndpointClient.getUserDataBaseApi().insert(pNewUser).execute();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -84,11 +88,11 @@ public class UserBaseManager {
     }
 
     public void checkNewBestRecord(final BestUserRecords pRecord) {
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    UserDataBase userInfo = BackendEndpointClient.getUserDataBaseApi().get(pRecord.getNikName()).execute();
+                    final UserDataBase userInfo = BackendEndpointClient.getUserDataBaseApi().get(pRecord.getNikName()).execute();
                     List<BestUserRecords> listRecords = userInfo.getBestUserRecords();
 
                     if (listRecords != null) {
@@ -104,7 +108,7 @@ public class UserBaseManager {
                     userInfo.setLastFiveUserRecords(updateLastRecords(userInfo.getLastFiveUserRecords(), pRecord));
                     userInfo.setMNumberPlayedGames(userInfo.getMNumberPlayedGames() + ADD_ONE_NEW_GAME);
                     BackendEndpointClient.getUserDataBaseApi().update(userInfo.getUserName(), userInfo).execute();
-                } catch (IOException pE) {
+                } catch (final IOException pE) {
                     pE.getStackTrace();
                 }
             }
@@ -112,7 +116,7 @@ public class UserBaseManager {
         thread.start();
     }
 
-    private List<BestUserRecords> updateLastRecords(List<BestUserRecords> lastFiveUserRecords, BestUserRecords pRecord) {
+    private List<BestUserRecords> updateLastRecords(final List<BestUserRecords> lastFiveUserRecords, final BestUserRecords pRecord) {
         List<BestUserRecords> lastFive = lastFiveUserRecords;
 
         if (lastFive == null) {
@@ -124,9 +128,9 @@ public class UserBaseManager {
             lastFive.remove(0);
         }
 
-        Comparator<BestUserRecords> comparator = new Comparator<BestUserRecords>() {
+        final Comparator<BestUserRecords> comparator = new Comparator<BestUserRecords>() {
             @Override
-            public int compare(BestUserRecords o1, BestUserRecords o2) {
+            public int compare(final BestUserRecords o1, final BestUserRecords o2) {
                 return o2.getDate().compareTo(o1.getDate());
             }
         };
@@ -136,17 +140,17 @@ public class UserBaseManager {
     }
 
 
-    private List<BestUserRecords> insertPossibleBestRecord(List<BestUserRecords> listRecords, BestUserRecords pRecord) {
+    private List<BestUserRecords> insertPossibleBestRecord(List<BestUserRecords> listRecords, final BestUserRecords pRecord) {
         boolean isCodPresent = false;
 
         for (int i = 0; i < listRecords.size(); ++i) {
             if (listRecords.get(i).getCodes().equals(pRecord.getCodes())) {
                 isCodPresent = true;
-                int playedGames = listRecords.get(i).getMNumberGames() + ADD_ONE_NEW_GAME;
+                final int playedGames = listRecords.get(i).getMNumberGames() + ADD_ONE_NEW_GAME;
 
                 if (listRecords.get(i).getMoves().equals(pRecord.getMoves())) {
-                    String[] time1 = listRecords.get(i).getTime().split(SPLITTER_FOR_TIMER);
-                    String[] time2 = pRecord.getTime().split(SPLITTER_FOR_TIMER);
+                    final String[] time1 = listRecords.get(i).getTime().split(SPLITTER_FOR_TIMER);
+                    final String[] time2 = pRecord.getTime().split(SPLITTER_FOR_TIMER);
                     if (Integer.parseInt(time2[MINUTE_TIME]) < Integer.parseInt(time1[MINUTE_TIME])) {
                         listRecords.remove(i);
                         listRecords.add(pRecord);
@@ -174,11 +178,11 @@ public class UserBaseManager {
         return listRecords;
     }
 
-    private List<BestUserRecords> sortListRecords(List<BestUserRecords> listRecords) {
+    private List<BestUserRecords> sortListRecords(final List<BestUserRecords> listRecords) {
 
-        Comparator<BestUserRecords> listComparator = new Comparator<BestUserRecords>() {
+        final Comparator<BestUserRecords> listComparator = new Comparator<BestUserRecords>() {
             @Override
-            public int compare(BestUserRecords pRecord1, BestUserRecords pRecord2) {
+            public int compare(final BestUserRecords pRecord1, final BestUserRecords pRecord2) {
                 return pRecord1.getCodes().compareTo(pRecord2.getCodes());
             }
         };
@@ -188,19 +192,19 @@ public class UserBaseManager {
     }
 
     public void updateLastUserVisit(final UserDataBase pUserInfo, final boolean pIsOnline) {
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
 
-                    String userName = pUserInfo.getUserName();
-                    UserDataBase userInfo = BackendEndpointClient.getUserDataBaseApi().get(userName).execute();
+                    final String userName = pUserInfo.getUserName();
+                    final UserDataBase userInfo = BackendEndpointClient.getUserDataBaseApi().get(userName).execute();
                     userInfo.setMLastUserVisit(System.currentTimeMillis());
                     userInfo.setIsOnline(pIsOnline);
 
                     BackendEndpointClient.getUserDataBaseApi().patch(userName, userInfo).execute();
 
-                } catch (IOException pE) {
+                } catch (final IOException pE) {
                     pE.getStackTrace();
                 }
             }
@@ -208,16 +212,16 @@ public class UserBaseManager {
         thread.start();
     }
 
-    public void patchNewUserInformation(final UserDataBase pUserNewInfo, final UserLoginCallback pCallback) {
+    public void patchNewUserInformation(final UserDataBase pUserNewInfo, final OnResultCallback<UserDataBase> pCallback) {
         final Handler handler = new Handler();
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 final UserDataBase userGettingInfo;
                 UserDataBase tmp;
                 try {
                     tmp = BackendEndpointClient.getUserDataBaseApi().patch(pUserNewInfo.getUserName(), pUserNewInfo).execute();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                     tmp = null;
                 }
@@ -226,7 +230,7 @@ public class UserBaseManager {
                     @Override
                     public void run() {
                         if (pCallback != null) {
-                            pCallback.getUserInfoCallback(userGettingInfo);
+                            pCallback.onSuccess(userGettingInfo);
                         }
                     }
                 });

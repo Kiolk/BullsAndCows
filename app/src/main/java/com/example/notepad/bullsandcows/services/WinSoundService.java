@@ -15,14 +15,14 @@ public class WinSoundService extends Service {
 
     @Nullable
     @Override
-    public IBinder onBind(Intent pIntent) {
+    public IBinder onBind(final Intent pIntent) {
         return null;
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
         Log.d("sound", "start");
-        mMediaPlayer = MediaPlayer.create(WinSoundService.this, R.raw.bull);
+        mMediaPlayer = MediaPlayer.create(this, R.raw.bull);
         mMediaPlayer.start();
         mMediaPlayer.setLooping(false);
         return super.onStartCommand(intent, flags, startId);

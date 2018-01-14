@@ -1,5 +1,5 @@
 package com.example.notepad.bullsandcows.data.models;
-
+@Deprecated
 public class RecordModel {
     
     private String mCod;
@@ -11,7 +11,7 @@ public class RecordModel {
     public RecordModel() {
     }
 
-    public RecordModel(String mCod, String mDate, String mNikName, String mMoves, String mTime) {
+    public RecordModel(final String mCod, final String mDate, final String mNikName, final String mMoves, final String mTime) {
         this.mCod = mCod;
         this.mDate = mDate;
         this.mNikName = mNikName;
@@ -23,7 +23,7 @@ public class RecordModel {
         return mCod;
     }
 
-    public void setmCod(String mCod) {
+    public void setmCod(final String mCod) {
         this.mCod = mCod;
     }
 
@@ -31,7 +31,7 @@ public class RecordModel {
         return mDate;
     }
 
-    public void setmDate(String mDate) {
+    public void setmDate(final String mDate) {
         this.mDate = mDate;
     }
 
@@ -39,7 +39,7 @@ public class RecordModel {
         return mNikName;
     }
 
-    public void setmNikName(String mNikName) {
+    public void setmNikName(final String mNikName) {
         this.mNikName = mNikName;
     }
 
@@ -47,7 +47,7 @@ public class RecordModel {
         return mMoves;
     }
 
-    public void setmMoves(String mMoves) {
+    public void setmMoves(final String mMoves) {
         this.mMoves = mMoves;
     }
 
@@ -55,7 +55,7 @@ public class RecordModel {
         return mTime;
     }
 
-    public void setmTime(String mTime) {
+    public void setmTime(final String mTime) {
         this.mTime = mTime;
     }
 }

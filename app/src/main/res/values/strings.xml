@@ -157,6 +157,8 @@
     <string name="EDIT_YOUR_PROFILE">Edit your profile</string>
     <string name="CONFIRM_PASSWORDS_FOR_SAVE_CHANGES">Confirm passwords for save changes</string>
     <string name="ONLY_ONLINE_RESULT">Only online results</string>
+    <string name="TRY_LOGIN_LATE">Try login later</string>
+    <string name="DEFAULT_AGE">0</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

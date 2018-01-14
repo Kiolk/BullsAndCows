@@ -1,4 +1,4 @@
-package com.example.notepad.bullsandcows.data.factories;
+package com.example.notepad.bullsandcows.data.parsers;
 
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
@@ -10,7 +10,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordJsonFactory {
+public class RecordJsonParser {
+
+    private static final String ITEMS = "items";
+    private static final String NEXT_PAGE_TOKEN = "nextPageToken";
+    private static final String CODED_DIGITS = "codes";
+    private static final String DATE = "date";
+    private static final String NIK_NAME = "nikName";
+    private static final String MOVES = "moves";
+    private static final String TIME = "time";
+    private static final String USER_URL_PHOTO = "userUrlPhoto";
 
     public ResponseRecordModel getRecordsFromBackend(final ResponseRecordModel pResponse) {
 
@@ -26,25 +35,23 @@ public class RecordJsonFactory {
 
         try {
             final JSONObject listOfRecords = new JSONObject(jsonString);
-            final JSONArray detailsOneRecord = listOfRecords.getJSONArray("items");
-            final String cursor = listOfRecords.getString("nextPageToken");
+            final JSONArray detailsOneRecord = listOfRecords.getJSONArray(ITEMS);
+            final String cursor = listOfRecords.getString(NEXT_PAGE_TOKEN);
             final int arrayIndex = detailsOneRecord.length();
 
             for (int i = 0; i < arrayIndex; ++i) {
                 recordModel = new RecordsToNet();
                 final JSONObject record = detailsOneRecord.getJSONObject(i);
-                recordModel.setCodes(record.getString("codes"));
-                final Long dateOfRecord = record.getLong("date");
-//                String date = Converters.convertTimeToString(dateOfRecord);
+                recordModel.setCodes(record.getString(CODED_DIGITS));
+                final Long dateOfRecord = record.getLong(DATE);
                 recordModel.setDate(dateOfRecord);
-                recordModel.setNikName(record.getString("nikName"));
-                recordModel.setMoves(record.getString("moves"));
-                recordModel.setTime(record.getString("time"));
+                recordModel.setNikName(record.getString(NIK_NAME));
+                recordModel.setMoves(record.getString(MOVES));
+                recordModel.setTime(record.getString(TIME));
 
                 try {
-                    recordModel.setUserUrlPhoto(record.getString("userUrlPhoto"));
+                    recordModel.setUserUrlPhoto(record.getString(USER_URL_PHOTO));
                 } catch (final Exception pE) {
-                    pE.getStackTrace();
                     recordModel.setUserUrlPhoto(null);
                 }
 
@@ -56,7 +63,6 @@ public class RecordJsonFactory {
 
             return pResponse;
         } catch (final JSONException pE) {
-            pE.printStackTrace();
             pResponse.setException(pE);
 
             return pResponse;

@@ -12,6 +12,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
+import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
@@ -24,6 +25,10 @@ import kiolk.com.github.pen.Pen;
 
 public class RegistrationPageActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private boolean mNikFree;
+
+    private UserDataBase mUser;
+
     private EditText mUserName;
     private EditText mPassword;
     private EditText mPassword2;
@@ -31,11 +36,13 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
     private EditText mImageUrl;
     private EditText mShortDescription;
     private EditText mUserAge;
+
     private ImageView mUserImage;
+
     private Button mRegisterButton;
-    private UserDataBase mUser;
+
     private Spinner mSpinnerEx;
-    private boolean mNikFree;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -54,18 +61,37 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
                 if (mUserName.length() != 0) {
                     final UserBaseManager userInfo = new UserBaseManager();
 
-                    userInfo.getUserInfo(null, mUserName.getText().toString(), new UserLoginCallback() {
+                    userInfo.getUserInfo(null, mUserName.getText().toString(), new OnResultCallback<UserDataBase>() {
 
                         @Override
-                        public void getUserInfoCallback(final UserDataBase pUserInfo) {
-                            if (pUserInfo == null || !pUserInfo.getUserName().equals(mUserName.getText().toString())) {
+                        public void onSuccess(final UserDataBase pResult) {
+                            if ( !pResult.getUserName().equals(mUserName.getText().toString())) {
                                 mUserName.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
                                 mNikFree = true;
                             } else {
                                 mUserName.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
                             }
                         }
+
+                        @Override
+                        public void onError(final Exception pException) {
+                            mUserName.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
+                            mNikFree = true;
+                        }
                     });
+
+//                    new UserLoginCallback() {
+//
+//                        @Override
+//                        public void getUserInfoCallback(final UserDataBase pUserInfo) {
+//                            if (pUserInfo == null || !pUserInfo.getUserName().equals(mUserName.getText().toString())) {
+//                                mUserName.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
+//                                mNikFree = true;
+//                            } else {
+//                                mUserName.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
+//                            }
+//                        }
+//                    });
                 }
             }
         }
@@ -111,15 +137,19 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
         mImageUrl = findViewById(R.id.image_url_edit_tet);
         mUserImage = findViewById(R.id.user_image_registration_image_view);
         mShortDescription = findViewById(R.id.short_description_edit_text);
+
         mUserAge = findViewById(R.id.age_registration_edit_text);
         final TextView descriptionText = findViewById(R.id.information_status_text_view);
         descriptionText.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.AASSUANBRK));
+
         mRegisterButton = findViewById(R.id.registration_button);
         final Button setImageButton = findViewById(R.id.set_image_registration_button);
         mRegisterButton.setEnabled(false);
+
         mUserName.setOnFocusChangeListener(nameFocusListener);
         mPassword.setOnFocusChangeListener(passFocusListener);
         mPassword2.setOnFocusChangeListener(pass2FocusListener);
+
         mRegisterButton.setOnClickListener(this);
         setImageButton.setOnClickListener(this);
     }

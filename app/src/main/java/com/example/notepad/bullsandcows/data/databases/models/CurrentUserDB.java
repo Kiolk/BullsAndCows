@@ -14,5 +14,12 @@ public class CurrentUserDB {
 
     public static final String LAST_USER_VISIT = "LastUserVisit";
 
-    //TODO CREATE_TABLE_SQL
+    public static final String CRATE_CURRENT_USER_TABLE =
+            "CREATE TABLE IF NOT EXISTS " +
+                    CurrentUserDB.TABLE + "(" +
+                    CurrentUserDB.ID + " BIGINT PRIMARY KEY, " +
+                    CurrentUserDB.USER_NAME + " TEXT, " +
+                    CurrentUserDB.IS_KIPPING_LOGIN + " INTEGER, " +
+                    CurrentUserDB.LAST_USER_VISIT + " BIGINT, " +
+                    CurrentUserDB.TOKEN + " TEXT)";
 }

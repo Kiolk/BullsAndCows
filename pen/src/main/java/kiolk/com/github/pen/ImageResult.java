@@ -2,37 +2,39 @@ package kiolk.com.github.pen;
 
 import android.graphics.Bitmap;
 
-public class ImageResult {
+class ImageResult {
 
     private ImageRequest mRequest;
+
     private Bitmap mBitmap;
+
     private Exception mException;
 
-    ImageResult(ImageRequest request) {
+    ImageResult(final ImageRequest request) {
         this.mRequest = request;
     }
 
-    ImageRequest getmRequest() {
+    ImageRequest getRequest() {
         return mRequest;
     }
 
-    public void setRequest(ImageRequest mRequest) {
+    public void setRequest(final ImageRequest mRequest) {
         this.mRequest = mRequest;
     }
 
-    Bitmap getmBitmap() {
+    Bitmap getBitmap() {
         return mBitmap;
     }
 
-    void setmBitmap(Bitmap mBitmap) {
+    void setBitmap(final Bitmap mBitmap) {
         this.mBitmap = mBitmap;
     }
 
-    Exception getmException() {
+    Exception getException() {
         return mException;
     }
 
-    void setmException(Exception mException) {
+    void setException(final Exception mException) {
         this.mException = mException;
     }
 }

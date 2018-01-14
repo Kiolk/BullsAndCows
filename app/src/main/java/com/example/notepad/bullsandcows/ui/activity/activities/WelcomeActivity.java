@@ -20,8 +20,8 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.httpclient.models.HttpRequest;
-import com.example.notepad.bullsandcows.data.managers.AppInfoCallbacks;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
+import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UpdateAppFragment;
@@ -65,21 +65,42 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     }
 
     protected void checkAppActualVersion() {
+
+        mUpdateFragment = new UpdateAppFragment();
+
         final AppInfoManager appManager = new AppInfoManager();
 
-        appManager.getCurrentAppInfo(new HttpRequest(BuildConfig.BACKEND_APP_VERSION_URL, REQUEST_PARAM), new AppInfoCallbacks() {
+        appManager.getCurrentAppInfo(new HttpRequest(BuildConfig.BACKEND_APP_VERSION_URL, REQUEST_PARAM), new OnResultCallback<VersionOfApp>() {
 
             @Override
-            public void getInfoAppCallback(final VersionOfApp versionOfApp) {
-                mVersionOfApp = versionOfApp;
+            public void onSuccess(final VersionOfApp pResult) {
+                mVersionOfApp = pResult;
                 AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
                 final String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
-
                 if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
                     showUpdateAppFragment();
                 }
             }
+
+            @Override
+            public void onError(final Exception pException) {
+
+            }
         });
+
+//                new AppInfoCallbacks() {
+//
+//            @Override
+//            public void getInfoAppCallback(final VersionOfApp versionOfApp) {
+//                mVersionOfApp = versionOfApp;
+//                AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
+//                final String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
+//
+//                if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
+//                    showUpdateAppFragment();
+//                }
+//            }
+//        });
     }
 
     private void initView() {
@@ -88,13 +109,13 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         mLogin = findViewById(R.id.login_welcome_page_edit_text);
         mPassword = findViewById(R.id.password_welcome_page_edit_text);
         mCheckBox = findViewById(R.id.keep_password_check_box);
+
         final TextView welcomeInformationTextView = findViewById(R.id.welcome_text_text_view);
         welcomeInformationTextView.setTypeface(CustomFonts.getTypeFace(this, CustomFonts.AASSUANBRK));
 
         registrationButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
 
-        mUpdateFragment = new UpdateAppFragment();
         mUpdateFrame = findViewById(R.id.for_update_fragment_frame_layout);
     }
 
@@ -209,42 +230,105 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
 
     private void checkCorrectUserInformation(final String pName, final String pPassword) {
         final UserBaseManager userManager = new UserBaseManager();
-        userManager.getUserInfo(null, pName, new UserLoginCallback() {
+        userManager.getUserInfo(null, pName, new OnResultCallback<UserDataBase>() {
 
             @Override
-            public void getUserInfoCallback(final UserDataBase pUserInfo) {
+            public void onSuccess(final UserDataBase pUserInfo) {
+                UserLoginHolder.getInstance().initHolder(pUserInfo);
 
-                if (pUserInfo != null && pPassword.equals(pUserInfo.getPassword())) {
-                    UserLoginHolder.getInstance().initHolder(pUserInfo);
+                if (pUserInfo.getMSex() == null) {
+                    final String token = tokenGeneration(pUserInfo);
+                    pUserInfo.setMSex(token);
 
-                    if (pUserInfo.getMSex() == null) {
-                        final String token = tokenGeneration(pUserInfo);
-                        pUserInfo.setMSex(token);
+                    final UserBaseManager userBaseManager = new UserBaseManager();
+                    userBaseManager.patchNewUserInformation(pUserInfo, new OnResultCallback<UserDataBase>() {
 
-                        final UserBaseManager userBaseManager = new UserBaseManager();
-                        userBaseManager.patchNewUserInformation(pUserInfo, new UserLoginCallback() {
-
-                            @Override
-                            public void getUserInfoCallback(final UserDataBase pUserInfo) {
-                                if (pUserInfo != null && token.equals(pUserInfo.getMSex())) {
-                                    UserLoginHolder.getInstance().initHolder(pUserInfo);
-                                    checkForSavingToken(pUserInfo.getUserName(), token);
-                                }
-                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-                                startMainActivity();
+                        @Override
+                        public void onSuccess(final UserDataBase pResult) {
+                            if (token.equals(pUserInfo.getMSex())) {
+                                UserLoginHolder.getInstance().initHolder(pUserInfo);
+                                checkForSavingToken(pUserInfo.getUserName(), token);
                             }
-                        });
-                    } else {
-                        UserLoginHolder.getInstance().initHolder(pUserInfo);
-                        checkForSavingToken(pUserInfo.getUserName(), pUserInfo.getMSex());
-                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-                        startMainActivity();
-                    }
+                            Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+                            startMainActivity();
+                        }
+
+                        @Override
+                        public void onError(final Exception pException) {
+                            Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.TRY_LOGIN_LATE), Toast.LENGTH_LONG).show();
+                        }
+                    });
+//
+//                        new UserLoginCallback() {
+//
+//                            @Override
+//                            public void getUserInfoCallback(final UserDataBase pUserInfo) {
+//
+//                            }
+//                        });
                 } else {
-                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+                    UserLoginHolder.getInstance().initHolder(pUserInfo);
+                    checkForSavingToken(pUserInfo.getUserName(), pUserInfo.getMSex());
+                    Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+                    startMainActivity();
                 }
             }
+
+            @Override
+            public void onError(final Exception pException) {
+                Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+            }
         });
+
+//        new UserLoginCallback() {
+//
+//            @Override
+//            public void getUserInfoCallback(final UserDataBase pUserInfo) {
+//
+//                if (pUserInfo != null && pPassword.equals(pUserInfo.getPassword())) {
+//                    UserLoginHolder.getInstance().initHolder(pUserInfo);
+//
+//                    if (pUserInfo.getMSex() == null) {
+//                        final String token = tokenGeneration(pUserInfo);
+//                        pUserInfo.setMSex(token);
+//
+//                        final UserBaseManager userBaseManager = new UserBaseManager();
+//                        userBaseManager.patchNewUserInformation(pUserInfo, new OnResultCallback<UserDataBase>() {
+//
+//                            @Override
+//                            public void onSuccess(final UserDataBase pResult) {
+//                                if (token.equals(pUserInfo.getMSex())) {
+//                                    UserLoginHolder.getInstance().initHolder(pUserInfo);
+//                                    checkForSavingToken(pUserInfo.getUserName(), token);
+//                                }
+//                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+//                                startMainActivity();
+//                            }
+//
+//                            @Override
+//                            public void onError(final Exception pException) {
+//                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.TRY_LOGIN_LATE), Toast.LENGTH_LONG).show();
+//                            }
+//                        });
+////
+////                        new UserLoginCallback() {
+////
+////                            @Override
+////                            public void getUserInfoCallback(final UserDataBase pUserInfo) {
+////
+////                            }
+////                        });
+//                    } else {
+//                        UserLoginHolder.getInstance().initHolder(pUserInfo);
+//                        checkForSavingToken(pUserInfo.getUserName(), pUserInfo.getMSex());
+//                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
+//                        startMainActivity();
+//                    }
+//                } else {
+//                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
     }
 
     protected String tokenGeneration(final UserDataBase pUserInfo) {

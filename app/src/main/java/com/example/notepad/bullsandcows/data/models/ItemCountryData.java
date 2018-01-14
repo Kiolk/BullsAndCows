@@ -6,7 +6,7 @@ public class ItemCountryData {
 
     private int mResource;
 
-    public ItemCountryData(String mCountry, int mResource) {
+    public ItemCountryData(final String mCountry, final int mResource) {
         this.mCountry = mCountry;
         this.mResource = mResource;
     }
@@ -15,7 +15,7 @@ public class ItemCountryData {
         return mCountry;
     }
 
-    public void setCountry(String mCountry) {
+    public void setCountry(final String mCountry) {
         this.mCountry = mCountry;
     }
 
@@ -23,7 +23,7 @@ public class ItemCountryData {
         return mResource;
     }
 
-    public void setResource(int mResource) {
+    public void setResource(final int mResource) {
         this.mResource = mResource;
     }
 }

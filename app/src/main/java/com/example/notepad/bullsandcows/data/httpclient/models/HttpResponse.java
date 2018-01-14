@@ -14,7 +14,7 @@ public class HttpResponse {
         return mTargetRequest;
     }
 
-    public void setTargetRequest(HttpRequest mTargetRequest) {
+    public void setTargetRequest(final HttpRequest mTargetRequest) {
         this.mTargetRequest = mTargetRequest;
     }
 
@@ -22,7 +22,7 @@ public class HttpResponse {
         return mResponse;
     }
 
-    public void setResponse(String mGettingResponse) {
+    public void setResponse(final String mGettingResponse) {
         this.mResponse = mGettingResponse;
     }
 
@@ -30,7 +30,7 @@ public class HttpResponse {
         return mHttpError;
     }
 
-    public void setHttpError(Exception mHttpError) {
+    public void setHttpError(final Exception mHttpError) {
         this.mHttpError = mHttpError;
     }
 
@@ -38,7 +38,7 @@ public class HttpResponse {
         return isHttpOk;
     }
 
-    public void setHttpOk(boolean httpOk) {
+    public void setHttpOk(final boolean httpOk) {
         isHttpOk = httpOk;
     }
 }

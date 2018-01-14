@@ -4,7 +4,7 @@ import android.widget.ImageView;
 
 import java.lang.ref.WeakReference;
 
-public class ImageRequest {
+class ImageRequest {
 
     private String mUrl;
     private WeakReference<ImageView> mTarget;
@@ -12,55 +12,53 @@ public class ImageRequest {
     private int mHeight;
     private GetBitmapCallback mBitmapCallback;
 
-    ImageRequest(String mUrl, WeakReference<ImageView> mTarget) {
+    ImageRequest(final String mUrl, final WeakReference<ImageView> mTarget) {
         this.mUrl = mUrl;
         this.mTarget = mTarget;
     }
 
-    ImageRequest(String mUrl, GetBitmapCallback mBitmapCallback) {
+    ImageRequest(final String mUrl, final GetBitmapCallback mBitmapCallback) {
         this.mUrl = mUrl;
         this.mBitmapCallback = mBitmapCallback;
     }
 
-
-    //TODO rename all methods 'get"m"'
-    String getmUrl() {
+    String getUrl() {
         return mUrl;
     }
 
-    void setUrl(String mUrl) {
+    void setUrl(final String mUrl) {
         this.mUrl = mUrl;
     }
 
-    WeakReference<ImageView> getmTarget() {
+    WeakReference<ImageView> getTarget() {
         return mTarget;
     }
 
-    void setTarget(WeakReference<ImageView> mTarget) {
+    void setTarget(final WeakReference<ImageView> mTarget) {
         this.mTarget = mTarget;
     }
 
-    int getmWidth() {
+    int getWidth() {
         return mWidth;
     }
 
-    void setmWidth(int mWidth) {
+    void setWidth(final int mWidth) {
         this.mWidth = mWidth;
     }
 
-    int getmHeight() {
+    int getHeight() {
         return mHeight;
     }
 
-    void setmHeight(int mHeight) {
+    void setHeight(final int mHeight) {
         this.mHeight = mHeight;
     }
 
-    GetBitmapCallback getmBitmapCallback() {
+    GetBitmapCallback getBitmapCallback() {
         return mBitmapCallback;
     }
 
-    public void setmBitmapCallback(GetBitmapCallback mBitmapCallback) {
+    public void setBitmapCallback(final GetBitmapCallback mBitmapCallback) {
         this.mBitmapCallback = mBitmapCallback;
     }
 }

@@ -45,19 +45,19 @@ class DiskCache {
         return mDiskCache;
     }
 
-    void setUserCacheSize(long userCacheSize) {
+    void setUserCacheSize(final long userCacheSize) {
         this.mAvailableCacheSize = userCacheSize * KILOBYTE_SIZE * KILOBYTE_SIZE;
         LogUtil.msg("User size of cache = " + this.mAvailableCacheSize + " Mb");
     }
 
-    boolean saveBitmapInDiskCache(Bitmap pBitmap, String pName) {
+    boolean saveBitmapInDiskCache(final Bitmap pBitmap, final String pName) {
         FileOutputStream fileOutputStream = null;
 
         if (mCacheDir == null) {
             getCacheDir();
         }
 
-        File myPath = new File(mCacheDir, pName + STORAGE_FILE_FORMAT);
+        final File myPath = new File(mCacheDir, pName + STORAGE_FILE_FORMAT);
         myPath.setLastModified(System.currentTimeMillis());
         boolean isSaved = false;
 
@@ -65,7 +65,7 @@ class DiskCache {
             fileOutputStream = new FileOutputStream(myPath);
             pBitmap.compress(Bitmap.CompressFormat.PNG, Pen.QUALITY_OF_COMPRESSION_BMP, fileOutputStream);
             isSaved = true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         } finally {
             try {
@@ -73,7 +73,7 @@ class DiskCache {
                     fileOutputStream.close();
                     keepSizeCacheFolder();
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
@@ -81,14 +81,14 @@ class DiskCache {
         return isSaved;
     }
 
-    Bitmap loadBitmapFromDiskCache(String pName) {
-        File myPath = new File(mCacheDir, pName + STORAGE_FILE_FORMAT);
+    Bitmap loadBitmapFromDiskCache(final String pName) {
+        final File myPath = new File(mCacheDir, pName + STORAGE_FILE_FORMAT);
         myPath.setLastModified(System.currentTimeMillis());
         Bitmap bitmap = null;
 
         try {
             bitmap = BitmapFactory.decodeStream(new FileInputStream(myPath));
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -96,10 +96,10 @@ class DiskCache {
     }
 
     private void sizeCacheFolder() {
-        File[] listFiles = mCacheDir.listFiles();
+        final File[] listFiles = mCacheDir.listFiles();
         long sizeCache = 0;
 
-        for (File listFile : listFiles) {
+        for (final File listFile : listFiles) {
             sizeCache += listFile.length();
             LogUtil.msg("Size of file " + listFile.getName() + " equal: " + listFile.length());
         }
@@ -111,16 +111,16 @@ class DiskCache {
     private void keepSizeCacheFolder() {
         sizeCacheFolder();
         if (mCurrentSizeCache > mAvailableCacheSize) {
-            File[] listFiles = mCacheDir.listFiles();
-            ArrayList<File> arrayFiles = new ArrayList<>();
+            final File[] listFiles = mCacheDir.listFiles();
+            final ArrayList<File> arrayFiles = new ArrayList<>();
             arrayFiles.addAll(Arrays.asList(listFiles));
 
-            Comparator<File> comparator = new Comparator<File>() {
+            final Comparator<File> comparator = new Comparator<File>() {
 
                 @Override
-                public int compare(File o1, File o2) {
-                    String lastModificationFile1 = String.valueOf(o1.lastModified());
-                    String lastModificationFile2 = String.valueOf(o2.lastModified());
+                public int compare(final File o1, final File o2) {
+                    final String lastModificationFile1 = String.valueOf(o1.lastModified());
+                    final String lastModificationFile2 = String.valueOf(o2.lastModified());
 
                     return lastModificationFile1.compareTo(lastModificationFile2);
                 }
@@ -131,7 +131,7 @@ class DiskCache {
 
             do {
                 LogUtil.msg("File remove: " + arrayFiles.get(i).getName());
-                boolean deleteResult = arrayFiles.get(i).delete();
+                final boolean deleteResult = arrayFiles.get(i).delete();
 
                 if (deleteResult) {
                     arrayFiles.remove(i);
@@ -146,11 +146,11 @@ class DiskCache {
     }
 
     private void getCacheDir() {
-        File cachePath = Pen.CACHE_DIR;
-        File imageFolder = new File(cachePath, IMAGE_CACHE_DESTINATION);
+        final File cachePath = Pen.CACHE_DIR;
+        final File imageFolder = new File(cachePath, IMAGE_CACHE_DESTINATION);
 
         if (!imageFolder.exists()) {
-            boolean isDirCreated = imageFolder.mkdir();
+            final boolean isDirCreated = imageFolder.mkdir();
 
             if (isDirCreated) {
                 mCacheDir = imageFolder;

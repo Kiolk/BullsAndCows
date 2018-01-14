@@ -1,9 +1,8 @@
 package kiolk.com.github.pen.utils;
 
 import android.graphics.drawable.Drawable;
-import android.view.View;
 
-public class PlaceHolderUtil {
+public final class PlaceHolderUtil {
 
     private static PlaceHolderUtil mPlaceHolder;
 
@@ -26,7 +25,7 @@ public class PlaceHolderUtil {
         return mDefaultDrawable;
     }
 
-    public void setDefaultDrawable(Drawable mDefaultDrawable) {
+    public void setDefaultDrawable(final Drawable mDefaultDrawable) {
         this.mDefaultDrawable = mDefaultDrawable;
     }
 
@@ -34,7 +33,7 @@ public class PlaceHolderUtil {
         return mErrorDrawable;
     }
 
-    public void setErrorDrawable(Drawable mErrorDrawable) {
+    public void setErrorDrawable(final Drawable mErrorDrawable) {
         this.mErrorDrawable = mErrorDrawable;
     }
 }

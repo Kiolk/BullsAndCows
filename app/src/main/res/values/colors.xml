@@ -25,6 +25,7 @@
     <color name="USER_UPDATE_RESULT">#FFF377</color>
     <color name="USER_NOT_UPDATE_RESULT">#D8D39C</color>
     <color name="NOT_UPDATE_RESULT">#C4C3B4</color>
+    <color name="DARK_BACKGROUND_COLOR">#000000</color>
     <drawable name="BACKGROUND_COLOR_BUTTON">#467082</drawable>
     <drawable name="PRESS_BUTTON">#303F9F</drawable>
     <drawable name="SELECT_BUTTON">#ED474F</drawable>

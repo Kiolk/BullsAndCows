@@ -2,10 +2,9 @@ package com.example.notepad.bullsandcows.data.managers;
 
 import android.os.Handler;
 
-import com.example.notepad.bullsandcows.data.factories.RecordJsonFactory;
+import com.example.notepad.bullsandcows.data.parsers.RecordJsonParser;
 import com.example.notepad.bullsandcows.data.httpclient.BackendEndpointClient;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
-import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
@@ -18,26 +17,28 @@ import javax.annotation.Nullable;
 //generic Callback<Result> onSuccess(Result result) and onException(Exception ex)
 public class RecordsManager{
 
-    public void postRecordOnBackend(final RecordsToNet pRecord, @Nullable final PostRecordSuccessListener pCallback){
+    public void postRecordOnBackend(final RecordsToNet pRecord, @Nullable final OnResultCallback<RecordsToNet> pCallback){
         final Handler handler = new Handler();
 
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                RecordsToNet setupRecord = null;
+                Exception gettingException = null;
                 try {
                    setupRecord = BackendEndpointClient.getRecordToNetApi().insert(pRecord).execute();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (final IOException pException) {
+                    gettingException = pException;
                 }
                 final RecordsToNet responseRecord = setupRecord;
+                final Exception exception = gettingException;
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
                         if(pCallback != null && responseRecord != null ){
-                            pCallback.successSetResultListener(pRecord);
+                            pCallback.onSuccess(pRecord);
                         }else if (pCallback != null){
-                            pCallback.successSetResultListener(null);
+                            pCallback.onError(exception);
                         }
                     }
                 });
@@ -47,9 +48,9 @@ public class RecordsManager{
         thread.start();
     }
 
-    public void getRecordsFromBackend(@Nullable final Long pAllRecordsOnDate, final RecordsCallbacks pCallback) {
+    public void getRecordsFromBackend(@Nullable final Long pAllRecordsOnDate, final OnResultCallback<ResponseRecordModel> pCallback) {
         final Handler handler = new Handler();
-        Thread thread = new Thread(new Runnable() {
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 ResponseRecordModel response = new ResponseRecordModel();
@@ -62,7 +63,7 @@ public class RecordsManager{
                         } else {
                             response.setJsonFromBackend(BackendEndpointClient.getRecordToNetApi().list().setCursor(response.getCursor()).execute().toString());
                         }
-                        response = new RecordJsonFactory().getRecordsFromBackend(response);
+                        response = new RecordJsonParser().getRecordsFromBackend(response);
                     } while (pAllRecordsOnDate != null
                             && TimeConvertersUtil.convertToBackendTime(pAllRecordsOnDate) > response.getRecordsArray().get(response.getRecordsArray().size() - 1).getDate());
 
@@ -74,7 +75,7 @@ public class RecordsManager{
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        pCallback.getRecordsBackendCallback(readyResponse);
+                        pCallback.onSuccess(readyResponse);
                     }
                 });
             }

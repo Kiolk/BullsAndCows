@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -48,11 +47,11 @@ import static com.example.notepad.bullsandcows.utils.Constants.EMPTY_STRING;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String INPUT_NUMBER = "InputNumber";
-    private static final String DEFAULT_VALUE_FOR_STRING = "Error";
-    private static final String CODED_NUMBER = "codedNumber";
-    private static final String START_STATE = "startState";
-    private static final String NUMBER_OF_CODED_DIGITS = "numberOfCodedDigits";
+//    private static final String INPUT_NUMBER = "InputNumber";
+//    private static final String DEFAULT_VALUE_FOR_STRING = "Error";
+//    private static final String CODED_NUMBER = "codedNumber";
+//    private static final String START_STATE = "startState";
+//    private static final String NUMBER_OF_CODED_DIGITS = "numberOfCodedDigits";
     private static final int SETTING_REQUEST_CODE = 1;
     private static final int VIBRATION_MILLISECONDS = 500;
     private static final String BACKGROUND_PICTURE_URL = "https://i.pinimg.com/736x/f0/f6/56/f0f656e5f331aa25ba8dd38447435be4--cow-pics-highland-cattle.jpg";
@@ -136,26 +135,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(INPUT_NUMBER, mInputNumberView.getText().toString());
-        outState.putString(CODED_NUMBER, mCodedNumber);
-        outState.putBoolean(START_STATE, start);
-        outState.putInt(NUMBER_OF_CODED_DIGITS, DIG);
+//        outState.putString(INPUT_NUMBER, mInputNumberView.getText().toString());
+//        outState.putString(CODED_NUMBER, mCodedNumber);
+//        outState.putBoolean(START_STATE, start);
+//        outState.putInt(NUMBER_OF_CODED_DIGITS, DIG);
     }
 
     @Override
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
-        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
-            final Intent intent = new Intent(this, WelcomeActivity.class);
-            startActivity(intent);
-            finish();
-            Log.d(Constants.TAG, "onRestoreInstanceState: ");
-        }
-        super.onRestoreInstanceState(savedInstanceState);
-        mInputNumberView.setText(savedInstanceState.getString(INPUT_NUMBER, DEFAULT_VALUE_FOR_STRING));
-        //TODO put to Serializable / Parcelable
-        mCodedNumber = savedInstanceState.getString(CODED_NUMBER, DEFAULT_VALUE_FOR_STRING);
-        start = savedInstanceState.getBoolean(START_STATE, false);
-        DIG = savedInstanceState.getInt(NUMBER_OF_CODED_DIGITS, 4);
+//        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
+//            final Intent intent = new Intent(this, WelcomeActivity.class);
+//            startActivity(intent);
+//            finish();
+//            Log.d(Constants.TAG, "onRestoreInstanceState: ");
+//        }
+//        super.onRestoreInstanceState(savedInstanceState);
+//        mInputNumberView.setText(savedInstanceState.getString(INPUT_NUMBER, DEFAULT_VALUE_FOR_STRING));
+//        //TODO put to Serializable / Parcelable
+//        mCodedNumber = savedInstanceState.getString(CODED_NUMBER, DEFAULT_VALUE_FOR_STRING);
+//        start = savedInstanceState.getBoolean(START_STATE, false);
+//        DIG = savedInstanceState.getInt(NUMBER_OF_CODED_DIGITS, 4);
     }
 
     public void initializationOfView() {
@@ -252,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.record_item_menu:
-                intent = new Intent(this, RecordsCardActivityFromCursorLoaderActivity.class);
+                intent = new Intent(this, RecordsActivity.class);
                 startActivity(intent);
                 break;
             case R.id.edit_profile_menu:

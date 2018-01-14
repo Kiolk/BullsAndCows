@@ -18,10 +18,10 @@ import android.widget.TextView;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.models.UserInfoDB;
-import com.example.notepad.bullsandcows.data.factories.JsonParser;
+import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
+import com.example.notepad.bullsandcows.data.parsers.JsonParser;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
-import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.ui.activity.adapters.UserRecordsRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
@@ -38,16 +38,20 @@ import kiolk.com.github.pen.Pen;
 
 public class UserInfoRecordCursorLoaderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private String mUserNik;
+
     private TextView mUserName;
     private TextView mLastVisit;
     private TextView mPlayedGames;
     private TextView mYourProfile;
+
     private ImageView mCountryFlag;
     private ImageView mUseImage;
     private ImageView mOnlineStatus;
+
     private RecyclerView mRecordRecyclerView;
     private RecyclerView mLastRecordsRecyclerView;
-    private String mUserName1;
+
     private RelativeLayout mUpperBlock;
     private RelativeLayout mMiddleBlock;
     private RelativeLayout mLastBlock;
@@ -73,7 +77,6 @@ public class UserInfoRecordCursorLoaderFragment extends Fragment implements Load
         return view;
     }
 
-    //    @TargetApi(Build.VERSION_CODES.LOLLIPOP) //TODO may be not this method not work on early version
     private void setupData(final Cursor cursor) {
         cursor.moveToFirst();
         final String json = cursor.getString(cursor.getColumnIndex(UserInfoDB.USERS_BEST_RECORDS));
@@ -95,7 +98,7 @@ public class UserInfoRecordCursorLoaderFragment extends Fragment implements Load
         //TODO refactor!
         try {
             final int flag = CountryUtils.getCountryResources(cursor.getString(cursor.getColumnIndex(UserInfoDB.COUNTRY)));    //R.drawable.ic_belarus;
-            mCountryFlag.setImageDrawable(getResources().getDrawable(flag, null));
+            mCountryFlag.setImageDrawable(getResources().getDrawable(flag));
         } catch (final Exception pE) {
             pE.getStackTrace();
         }
@@ -125,32 +128,45 @@ public class UserInfoRecordCursorLoaderFragment extends Fragment implements Load
     }
 
     public void showUserInfo(final String pUserName) {
-        mUserName1 = pUserName;
+        mUserNik = pUserName;
         final Bundle args = new Bundle();
         args.putString(UserInfoDB.ID, UserInfoDB.ID + " = ?");
 
         final UserBaseManager baseManager = new UserBaseManager();
-        baseManager.getUserInfo(getActivity().getBaseContext(), pUserName, new UserLoginCallback() {
+        baseManager.getUserInfo(getActivity().getBaseContext(), pUserName, new OnResultCallback<UserDataBase>() {
 
             @Override
-            public void getUserInfoCallback(final UserDataBase pUserInfo) {
+            public void onSuccess(final UserDataBase pResult) {
                 getActivity().getLoaderManager().restartLoader(5, args, UserInfoRecordCursorLoaderFragment.this);
+            }
+
+            @Override
+            public void onError(final Exception pException) {
+
             }
         });
 
+//        new UserLoginCallback() {
+//
+//            @Override
+//            public void getUserInfoCallback(final UserDataBase pUserInfo) {
+//                getActivity().getLoaderManager().restartLoader(5, args, UserInfoRecordCursorLoaderFragment.this);
+//            }
+//        });
+
         mUpperBlock.setVisibility(View.VISIBLE);
-        SlideAnimationUtil.slideInFromLeft(getContext(), mUpperBlock, null, SlideAnimationUtil.FASTER);
+        SlideAnimationUtil.slideInFromLeft(getActivity().getBaseContext(), mUpperBlock, null, SlideAnimationUtil.FASTER);
         mMiddleBlock.setVisibility(View.VISIBLE);
-        SlideAnimationUtil.slideInFromRight(getContext(), mMiddleBlock, null, SlideAnimationUtil.FASTER);
+        SlideAnimationUtil.slideInFromRight(getActivity().getBaseContext(), mMiddleBlock, null, SlideAnimationUtil.FASTER);
         mLastBlock.setVisibility(View.VISIBLE);
-        SlideAnimationUtil.slideInFromLeft(getContext(), mLastBlock, null, SlideAnimationUtil.FASTER);
+        SlideAnimationUtil.slideInFromLeft(getActivity().getBaseContext(), mLastBlock, null, SlideAnimationUtil.FASTER);
 
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         final String selection = args.getString(UserInfoDB.ID);
-        final String[] selectionArgs = new String[]{mUserName1};
+        final String[] selectionArgs = new String[]{mUserNik};
         return new CursorLoader(getActivity().getBaseContext(), RecordsContentProvider.CONTENT_USERS_URI,
                 null, selection, selectionArgs, null);
     }

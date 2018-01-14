@@ -45,6 +45,14 @@ public final class SlideAnimationUtil {
         runSimpleAnimation(pContext, pView, R.anim.slide_from_top, pSlideAnimationListener, pDuration);
     }
 
+    public static void slideInFromTop(final Context pContext, final View pView, @Nullable final SlideAnimationListener pSlideAnimationListener, final long pDuration) {
+        runSimpleAnimation(pContext, pView, R.anim.slide_to_bottom, pSlideAnimationListener, pDuration);
+    }
+
+    public static void slideOutFromTop(final Context pContext, final View pView, @Nullable final SlideAnimationListener pSlideAnimationListener, final long pDuration) {
+        runSimpleAnimation(pContext, pView, R.anim.slide_from_bottom, pSlideAnimationListener, pDuration);
+    }
+
     private static void runSimpleAnimation(final Context pContext, final View pView,
                                            final int pAnimResources,
                                            @Nullable final SlideAnimationListener pListener,

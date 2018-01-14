@@ -30,6 +30,17 @@ public final class UserRecordsDB {
     public static final String[] AVAILABLE_COLUMNS = {ID, NIK_NAME,
             CODES, TIME, MOVES, USER_PHOTO_URL, IS_UPDATE_ONLINE};
 
+    public static final String CRATE_USERS_RECORDS_TABLE =
+            "CREATE TABLE IF NOT EXISTS " +
+                    UserRecordsDB.TABLE + "(" +
+                    UserRecordsDB.ID + " BIGINT PRIMARY KEY, " +
+                    UserRecordsDB.CODES + " INTEGER, " +
+                    UserRecordsDB.NIK_NAME + " TEXT, " +
+                    UserRecordsDB.MOVES + " INTEGER, " +
+                    UserRecordsDB.TIME + " TEXT, " +
+                    UserRecordsDB.USER_PHOTO_URL + " TEXT, " +
+                    UserRecordsDB.IS_UPDATE_ONLINE + " TEXT)";
+
     public static RecordsToNet convertFromCursor(final Cursor pCursor){
         final RecordsToNet record = new RecordsToNet();
         record.setMoves(pCursor.getString(pCursor.getColumnIndex(MOVES)));

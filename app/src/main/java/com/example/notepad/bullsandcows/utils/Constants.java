@@ -1,23 +1,29 @@
 package com.example.notepad.bullsandcows.utils;
 
-import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
+
+import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.ASC;
 
 public class Constants {
 
     public interface IntentKeys {
+
         String RECORDS_FROM_BACKEND_ON_DAY = "RecordsFromBackendOnDay";
     }
 
-    public interface ContentProvidersConstant{
-       String SORT_ITEM_BY_TIME = UserRecordsDB.TIME + Tables.ASC;
-       String SORT_ITEM_BY_MOVES = UserRecordsDB.MOVES + Tables.ASC;
-       String SORT_ITEM_BY_MOVES_TIME = SORT_ITEM_BY_MOVES + " , " + SORT_ITEM_BY_TIME;
+    public interface ContentProvidersConstant {
+
+        String SORT_ITEM_BY_TIME = UserRecordsDB.TIME + ASC;
+        String SORT_ITEM_BY_MOVES = UserRecordsDB.MOVES + ASC;
+        String SORT_ITEM_BY_MOVES_TIME = SORT_ITEM_BY_MOVES + " , " + SORT_ITEM_BY_TIME;
     }
 
-    public interface DBConstants{
+    public interface DBConstants {
+
         String LAST_DAY = "Last day";
         String LAST_WEEK = "Last week";
+        String DESC = " DESC";
+        String ASC = " ASC";
         String ENY = "Eny";
         String NOT_UPDATED = "0";
         String UPDATE = "1";
@@ -30,6 +36,7 @@ public class Constants {
 
     public final static String TAG = "MyLogs";
     public final static String FOLDER_DESTINATION_IN_SD = "Download";
+    public static final String UTF_8 = "UTF-8";
     public static final String NIK_NAME_OF_USER = "nikNameOfUser";
     public static final String CODED_DIGITS = "codedNumberOfDigits";
     public static final String REGISTRATION_NAME_OF_USER = "nameOfUser";

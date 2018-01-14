@@ -27,37 +27,37 @@ public class UpdateAppService extends Service implements UploadNewVersionAppCall
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         Log.d(TAG, "onBind: start UpdateAppService");
         return null;
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        String chanelId = "UploadChanel";
-        mBuilder = new NotificationCompat.Builder(UpdateAppService.this, chanelId).
+    public int onStartCommand(final Intent intent, final int flags, final int startId) {
+        final String chanelId = "UploadChanel";
+        mBuilder = new NotificationCompat.Builder(this, chanelId).
                 setSmallIcon(R.drawable.ic_bull_big_size).
                 setContentTitle(getResources().getString(R.string.START_DOWNLOAD_NEW_VERSION)).
                 setContentText(getResources().getString(R.string.NEW_VERSION_TITLE) +
                         AppInfoHolder.getInstance().getVersionApp().getNameOfApp()).
                 setProgress(0, 0, true);
 
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        String[] newFeatures = AppInfoHolder.getInstance().getVersionApp().getmNewVersionFeatures();
+        final NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        final String[] newFeatures = AppInfoHolder.getInstance().getVersionApp().getmNewVersionFeatures();
 
         inboxStyle.setBigContentTitle(AppInfoHolder.getInstance().getVersionApp().getNameOfApp());
 
-        for (String newFeature : newFeatures) {
+        for (final String newFeature : newFeatures) {
             inboxStyle.addLine(newFeature);
         }
 
         mBuilder.setStyle(inboxStyle);
         //TODO How do implement start setup new version on press notification
-        Intent resultIntent = new Intent(UpdateAppService.this, MainActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(UpdateAppService.this);
+        final Intent resultIntent = new Intent(this, MainActivity.class);
+        final TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MainActivity.class);
         stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -65,7 +65,7 @@ public class UpdateAppService extends Service implements UploadNewVersionAppCall
             mNotificationManager.notify(UPLOAD_NOTIFICATION_ID, mBuilder.build());
         }
 
-        RequestUpdateModel request = new RequestUpdateModel();
+        final RequestUpdateModel request = new RequestUpdateModel();
         request.setCallback(this);
         request.setVersionApp(AppInfoHolder.getInstance().getVersionApp());
         new NewAppVersionLoader().execute(request);
@@ -80,7 +80,7 @@ public class UpdateAppService extends Service implements UploadNewVersionAppCall
     }
 
     @Override
-    public void sendUploadResultsCallback(RequestUpdateModel pRequest) {
+    public void sendUploadResultsCallback(final RequestUpdateModel pRequest) {
         if (pRequest.getException() == null) {
             mBuilder.setProgress(0, 0, false)
                     .setContentTitle(getResources().getString(R.string.SUCCESS_UPLOAD));

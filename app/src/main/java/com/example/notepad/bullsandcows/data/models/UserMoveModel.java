@@ -14,7 +14,7 @@ public class UserMoveModel {
         return mMove;
     }
 
-    public void setMove(String pMove) {
+    public void setMove(final String pMove) {
         mMove = pMove;
     }
 
@@ -22,7 +22,7 @@ public class UserMoveModel {
         return mInputNumber;
     }
 
-    public void setInputNumber(String pInputNumber) {
+    public void setInputNumber(final String pInputNumber) {
         mInputNumber = pInputNumber;
     }
 
@@ -30,7 +30,7 @@ public class UserMoveModel {
         return mBulls;
     }
 
-    public void setBulls(String pBulls) {
+    public void setBulls(final String pBulls) {
         mBulls = pBulls;
     }
 
@@ -38,7 +38,7 @@ public class UserMoveModel {
         return mCows;
     }
 
-    public void setCows(String pCows) {
+    public void setCows(final String pCows) {
         mCows = pCows;
     }
 }

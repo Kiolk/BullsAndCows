@@ -15,17 +15,20 @@ import kiolk.com.github.pen.utils.MD5Util;
 import static kiolk.com.github.pen.utils.ConstantsUtil.KILOBYTE_SIZE;
 import static kiolk.com.github.pen.utils.ConstantsUtil.LOG;
 
-class ImageFactory {
+final class ImageFactory {
+
+    private static final Object mLock = new Object();
+
 
     static ImageResult creteBitmapFromUrl(ImageResult pResult) {
-        String url = pResult.getmRequest().getmUrl();
+        final String url = pResult.getRequest().getUrl();
 
         switch (Pen.getInstance().getTypeOfMemoryCache()) {
             case Pen.MEMORY_CACHE:
-                synchronized (Pen.getInstance().mLock) {
+                synchronized (mLock) {
 
                     if (Pen.getInstance().getBitmapFromLruCache(url) != null) {
-                        pResult.setmBitmap(Pen.getInstance().getBitmapFromLruCache(url));
+                        pResult.setBitmap(Pen.getInstance().getBitmapFromLruCache(url));
                         LogUtil.msg("Set bitmap from LruCache");
 
                         return pResult;
@@ -33,12 +36,12 @@ class ImageFactory {
                 }
                 break;
             case Pen.INNER_FILE_CACHE:
-                synchronized (DiskCache.getInstance().mLock) {
-                    String name = getName(pResult);
-                    Bitmap bitmap = DiskCache.getInstance().loadBitmapFromDiskCache(name);
+                synchronized (mLock) {
+                    final String name = getName(pResult);
+                    final Bitmap bitmap = DiskCache.getInstance().loadBitmapFromDiskCache(name);
 
                     if (bitmap != null) {
-                        pResult.setmBitmap(bitmap);
+                        pResult.setBitmap(bitmap);
                         LogUtil.msg("Set bitmap from DiskCache");
 
                         return pResult;
@@ -54,20 +57,20 @@ class ImageFactory {
         switch (Pen.getInstance().getTypeOfMemoryCache()) {
             case Pen.MEMORY_CACHE:
 
-                synchronized (Pen.getInstance().mLock) {
-                    if(pResult.getmException() == null) { //Checking  for no correct saving bmp
-                        Pen.getInstance().addBitmapForLruCache(pResult.getmRequest().getmUrl(), pResult.getmBitmap());
+                synchronized (mLock) {
+                    if(pResult.getException() == null) { //Checking  for no correct saving bmp
+                        Pen.getInstance().addBitmapForLruCache(pResult.getRequest().getUrl(), pResult.getBitmap());
                     }
                 }
 
                 break;
             case Pen.INNER_FILE_CACHE:
 
-                synchronized (DiskCache.getInstance().mLock) {
-                    boolean resultOfSave;
+                synchronized (mLock){
+                    final boolean resultOfSave;
 
-                    String name = getName(pResult);
-                    Bitmap bitmap = pResult.getmBitmap();
+                    final String name = getName(pResult);
+                    final Bitmap bitmap = pResult.getBitmap();
                     resultOfSave = DiskCache.getInstance().saveBitmapInDiskCache(bitmap, name);
                     if (resultOfSave) {
                         LogUtil.msg("Save " + name + " to DiskCache");
@@ -82,50 +85,50 @@ class ImageFactory {
         return pResult;
     }
 
-    private static ImageResult creteBitmap(ImageResult pResult) {
-        String url = pResult.getmRequest().getmUrl();
-        int reqHeight = pResult.getmRequest().getmHeight();
-        int reqWidth = pResult.getmRequest().getmWidth();
+    private static ImageResult creteBitmap(final ImageResult pResult) {
+        final String url = pResult.getRequest().getUrl();
+        final int reqHeight = pResult.getRequest().getHeight();
+        final int reqWidth = pResult.getRequest().getWidth();
 
         try {
             int bytesRead;
-            InputStream stream = new URL(url).openStream();
-            ByteArrayOutputStream byteArrayInputStream = new ByteArrayOutputStream(stream.available());
-            byte[] arrayByte = new byte[KILOBYTE_SIZE];
+            final InputStream stream = new URL(url).openStream();
+            final ByteArrayOutputStream byteArrayInputStream = new ByteArrayOutputStream(stream.available());
+            final byte[] arrayByte = new byte[KILOBYTE_SIZE];
 
             while ((bytesRead = stream.read(arrayByte)) > 0) {
                 byteArrayInputStream.write(arrayByte, 0, bytesRead);
             }
 
-            byte[] bytes = byteArrayInputStream.toByteArray();
+            final byte[] bytes = byteArrayInputStream.toByteArray();
 
             if (Pen.getInstance().getStrategySaveImage() == Pen.SAVE_SCALING_IMAGE_STRATEGY) {
-                BitmapFactory.Options options = new BitmapFactory.Options();
+                final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
 
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
                 options.inJustDecodeBounds = false;
                 options.inSampleSize = ImageFactory.calculateInSimpleSize(options, reqHeight, reqWidth);
-                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+                final Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
 
-                int size = bmp.getByteCount();
-                pResult.setmBitmap(bmp);
+                final int size = bmp.getByteCount();
+                pResult.setBitmap(bmp);
             } else {
-                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                final Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 LogUtil.msg("Size non scaled file = " + bmp.getByteCount());
-                pResult.setmBitmap(bmp);
+                pResult.setBitmap(bmp);
             }
 
             return pResult;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
-            pResult.setmException(e);
+            pResult.setException(e);
 
             return pResult;
         }
     }
 
-    private static int calculateInSimpleSize(BitmapFactory.Options pOptions, int pHeight, int pWidth) {
+    private static int calculateInSimpleSize(final BitmapFactory.Options pOptions, final int pHeight, final int pWidth) {
         int outHeight = pOptions.outHeight;
         int outWidth = pOptions.outWidth;
         int inSimpleSize = 1;
@@ -145,7 +148,7 @@ class ImageFactory {
         return inSimpleSize;
     }
 
-    private static String getName(ImageResult pResult) {
-        return MD5Util.getHashString(pResult.getmRequest().getmUrl());
+    private static String getName(final ImageResult pResult) {
+        return MD5Util.getHashString(pResult.getRequest().getUrl());
     }
 }

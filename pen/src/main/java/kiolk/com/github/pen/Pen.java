@@ -48,7 +48,6 @@ public class Pen {
 
     final Object mLock;
 
-
     private Pen() {
         mQueue = new LinkedBlockingDeque<>();
         mExecutor = Executors.newFixedThreadPool(3);
@@ -77,7 +76,7 @@ public class Pen {
         mBitmapLruCache = new LruCache<String, Bitmap>(cacheSize) {
 
             @Override
-            protected int sizeOf(String key, Bitmap value) {
+            protected int sizeOf(final String key, final Bitmap value) {
                 //TODO wrong calculation
                 return value.getByteCount() / ConstantsUtil.KILOBYTE_SIZE;
             }
@@ -100,13 +99,13 @@ public class Pen {
         return mStrategySaveImage;
     }
 
-    public Builder getImageFromUrl(String url) {
+    public Builder getImageFromUrl(final String url) {
         return mBuilder.getBitmapFromUrl(url);
     }
 
-    private void enqueue(ImageRequest imageRequest) {
+    private void enqueue(final ImageRequest imageRequest) {
 
-        ImageView imageView = imageRequest.getmTarget().get();
+        final ImageView imageView = imageRequest.getTarget().get();
 
         //TODO What is best practice: check through if or covered it try-catch? How get resources in module?
         //TODO put to ImageRequest model
@@ -114,10 +113,9 @@ public class Pen {
             imageView.setImageDrawable(PlaceHolderUtil.getInstance().getDefaultDrawable());
         }
 
-        if (imageRequest.getmUrl() == null) {
+        if (imageRequest.getUrl() == null) {
             return;
         }
-
 
         if (imageView == null) {
             LogUtil.msg("Target image view not exist");
@@ -126,15 +124,15 @@ public class Pen {
         }
 
         if (imageHasSize(imageRequest)) {
-            String tag = MD5Util.getHashString(imageRequest.getmUrl());
+            final String tag = MD5Util.getHashString(imageRequest.getUrl());
             imageView.setTag(tag);
-            LogUtil.msg(" get image " + tag + " " + imageRequest.getmUrl());
+            LogUtil.msg(" get image " + tag + " " + imageRequest.getUrl());
             mQueue.addFirst(imageRequest);
-            LogUtil.msg("Image view" + imageRequest.getmTarget().get().toString() + " start setup");
+            LogUtil.msg("Image view" + imageRequest.getTarget().get().toString() + " start setup");
             try {
                 //TODO to use ExecutorService / executeOnExecutor
                 new ImageLoadingAsyncTask().execute(mQueue.takeFirst());
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
         } else {
@@ -146,20 +144,20 @@ public class Pen {
         return mBuilder;
     }
 
-    private boolean imageHasSize(ImageRequest request) {
+    private boolean imageHasSize(final ImageRequest request) {
 
-        if (request.getmHeight() > 0 && request.getmWidth() > 0) {
+        if (request.getHeight() > 0 && request.getWidth() > 0) {
             return true;
         }
 
-        ImageView view = request.getmTarget().get();
+        final ImageView view = request.getTarget().get();
 
         if (view != null && view.getHeight() > 0 && view.getWidth() > 0) {
-            int viewHeight = view.getHeight();
-            int viewWidth = view.getWidth();
+            final int viewHeight = view.getHeight();
+            final int viewWidth = view.getWidth();
 
-            request.setmHeight(viewHeight);
-            request.setmWidth(viewWidth);
+            request.setHeight(viewHeight);
+            request.setWidth(viewWidth);
 
             return true;
         }
@@ -168,39 +166,38 @@ public class Pen {
     }
 
     private void waiterImageViewShow(final ImageRequest pRequest) {
-        LogUtil.msg("Image view" + pRequest.getmTarget().get().toString() + " wait for draw");
+        LogUtil.msg("Image view" + pRequest.getTarget().get().toString() + " wait for draw");
 
-        ImageView viewWaitDraw = pRequest.getmTarget().get();
+        final ImageView viewWaitDraw = pRequest.getTarget().get();
 
         viewWaitDraw.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
 
             @Override
             public boolean onPreDraw() {
-                ImageView v = pRequest.getmTarget().get();
+                final ImageView v = pRequest.getTarget().get();
 
                 if (v == null) {
                     return true;
                 }
 
-//                v.getViewTreeObserver().removeOnPreDrawListener(this);
                 if (v.getWidth() > 0 && v.getHeight() > 0) {
-                    LogUtil.msg("Image view" + pRequest.getmTarget().get().toString() + " start draw");
+                    LogUtil.msg("Image view" + pRequest.getTarget().get().toString() + " start draw");
 
-                    pRequest.setmWidth(v.getWidth());
-                    pRequest.setmHeight(v.getHeight());
+                    pRequest.setWidth(v.getWidth());
+                    pRequest.setHeight(v.getHeight());
                     enqueue(pRequest);
                     //TODO remove comments correct variant for remove OnPreDrawListener
                     //TODO memory leak! should be removed in any case
                     v.getViewTreeObserver().removeOnPreDrawListener(this);
                 }
-
+                v.getViewTreeObserver().removeOnPreDrawListener(this);
                 return true;
             }
         });
     }
 
     //add bitmap for LruCache
-    void addBitmapForLruCache(String key, Bitmap bitmap) {
+    void addBitmapForLruCache(final String key, final Bitmap bitmap) {
         if (getBitmapFromLruCache(key) == null) {
             mBitmapLruCache.put(key, bitmap);
             LogUtil.msg("Add bitmap by key: " + key);
@@ -208,12 +205,11 @@ public class Pen {
     }
 
     //get bitmap from LruCache
-    Bitmap getBitmapFromLruCache(String key) {
+    Bitmap getBitmapFromLruCache(final String key) {
         LogUtil.msg("Try bitmap by key " + key);
 
         return mBitmapLruCache.get(key);
     }
-
 
     public class Builder {
 
@@ -222,17 +218,17 @@ public class Pen {
 
         private String mUrl;
 
-        private void setUrl(String mUrl) {
+        private void setUrl(final String mUrl) {
             this.mUrl = mUrl;
         }
 
-        private Builder getBitmapFromUrl(String url) {
+        private Builder getBitmapFromUrl(final String url) {
             setUrl(url);
 
             return mBuilder;
         }
 
-        public Builder setTypeOfCache(int pTypeOfCache) {
+        public Builder setTypeOfCache(final int pTypeOfCache) {
             if (pTypeOfCache >= WITHOUT_CACHE && pTypeOfCache <= INNER_FILE_CACHE) {
                 mTypeOfMemoryCache = pTypeOfCache;
             }
@@ -240,7 +236,7 @@ public class Pen {
             return mBuilder;
         }
 
-        public Builder setSavingStrategy(int pTypeStrategy) {
+        public Builder setSavingStrategy(final int pTypeStrategy) {
             if (pTypeStrategy >= SAVE_SCALING_IMAGE_STRATEGY && pTypeStrategy <= SAVE_FULL_IMAGE_STRATEGY) {
                 mStrategySaveImage = pTypeStrategy;
             }
@@ -248,38 +244,37 @@ public class Pen {
             return mBuilder;
         }
 
-        public void inputTo(ImageView pView) {
-            WeakReference<ImageView> weakReference = new WeakReference<>(pView);
-            ImageRequest imageRequest = new ImageRequest(mBuilder.mUrl, weakReference);
-            //TODO we already inside Pen?
-            Pen.getInstance().enqueue(imageRequest);
+        public void inputTo(final ImageView pView) {
+            final WeakReference<ImageView> weakReference = new WeakReference<>(pView);
+            final ImageRequest imageRequest = new ImageRequest(mBuilder.mUrl, weakReference);
+            enqueue(imageRequest);
         }
 
-        public Builder setSizeInnerFileCache(Long pSizeMB) {
+        public Builder setSizeInnerFileCache(final Long pSizeMB) {
             DiskCache.getInstance().setUserCacheSize(pSizeMB);
 
             return mBuilder;
         }
 
-        public Builder setContext(Context pContext) {
+        public Builder setContext(final Context pContext) {
             CACHE_DIR = pContext.getCacheDir();
 
             return mBuilder;
         }
 
-        public Builder setDefaultDrawable(Drawable pDefaultDrawable) {
+        public Builder setDefaultDrawable(final Drawable pDefaultDrawable) {
             PlaceHolderUtil.getInstance().setDefaultDrawable(pDefaultDrawable);
 
             return mBuilder;
         }
 
-        public Builder setErrorDrawable(Drawable pErorDrawable) {
+        public Builder setErrorDrawable(final Drawable pErorDrawable) {
 
             PlaceHolderUtil.getInstance().setErrorDrawable(pErorDrawable);
             return mBuilder;
         }
 
-        public Builder setQualityImageCompression(int pCompression) {
+        public Builder setQualityImageCompression(final int pCompression) {
             if (pCompression > MIN_COMPRESSION && pCompression <= MAX_COMPRESSION) {
                 QUALITY_OF_COMPRESSION_BMP = pCompression;
             }
@@ -287,9 +282,9 @@ public class Pen {
             return mBuilder;
         }
 
-        public void getBitmapDirect(GetBitmapCallback pCallBack) {
+        public void getBitmapDirect(final GetBitmapCallback pCallBack) {
 
-            ImageRequest request = new ImageRequest(mBuilder.mUrl, pCallBack);
+            final ImageRequest request = new ImageRequest(mBuilder.mUrl, pCallBack);
             new ImageLoadingAsyncTask().execute(request);
         }
 

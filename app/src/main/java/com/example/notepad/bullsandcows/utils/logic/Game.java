@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
-import com.example.notepad.bullsandcows.data.databases.Tables;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
@@ -32,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.notepad.bullsandcows.utils.Constants.BACK_EPOCH_TIME_NOTATION;
+import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.ASC;
+import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.LAST_DAY;
 import static com.example.notepad.bullsandcows.utils.Constants.EMPTY_STRING;
 
 public class Game {
@@ -174,7 +175,7 @@ public class Game {
         //TODO move to separate class that works with DB.
         //example Operation with AsyncTask or Loader
 //        String[] request = new String[]{EMPTY_STRING, String.valueOf(DIG), Tables.LAST_DAY};
-        final String sortOrder = UserRecordsDB.MOVES + Tables.ASC + ", " + UserRecordsDB.TIME + Tables.ASC;
+        final String sortOrder = UserRecordsDB.MOVES + ASC + ", " + UserRecordsDB.TIME + ASC;
         int position = 0;
         boolean hasResult = false;
 
@@ -182,7 +183,7 @@ public class Game {
         final Map<String, String> selectionArgs = new HashMap<>();
         selectionArgs.put(UserRecordsDB.NIK_NAME, EMPTY_STRING);
         selectionArgs.put(UserRecordsDB.CODES, String.valueOf(pNumberCodedDigits));
-        selectionArgs.put(UserRecordsDB.ID, Tables.LAST_DAY);
+        selectionArgs.put(UserRecordsDB.ID, LAST_DAY);
 
 //        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_URI,
 //                null, null, request, sortOrder);

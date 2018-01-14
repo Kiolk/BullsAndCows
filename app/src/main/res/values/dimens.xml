@@ -23,4 +23,7 @@
     <dimen name="ZERO_DP">0dp</dimen>
     <dimen name="VERY_SMALL_MARGIN">2dp</dimen>
     <dimen name="SMALL_PADDING">2dp</dimen>
+    <dimen name="BIGEST_TEXT_SIZE">50sp</dimen>
+    <dimen name="BIG_MARGIN">20dp</dimen>
+    <dimen name="EXTRA_BIG_MARGIN">40dp</dimen>
 </resources>

@@ -15,15 +15,15 @@ public class AboutFragmentPagerAdapter extends FragmentPagerAdapter {
     private static final int ABOUT_DEVELOPER_PAGE = 1;
     private static final int TOTAL_NUMBER_OF_FRAGMENTS = 2;
 
-    private Context mContext;
+    private final Context mContext;
 
-    public AboutFragmentPagerAdapter(Context pContext, FragmentManager pFm) {
+    public AboutFragmentPagerAdapter(final Context pContext, final FragmentManager pFm) {
         super(pFm);
         mContext = pContext;
     }
 
     @Override
-    public Fragment getItem(int pPosition) {
+    public Fragment getItem(final int pPosition) {
         switch (pPosition) {
             case ABOUT_APP_PAGE:
 
@@ -43,7 +43,7 @@ public class AboutFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public CharSequence getPageTitle(int pPosition) {
+    public CharSequence getPageTitle(final int pPosition) {
         switch (pPosition) {
             case ABOUT_APP_PAGE:
 

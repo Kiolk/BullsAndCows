@@ -7,6 +7,7 @@ import android.util.Log;
 import com.example.notepad.bullsandcows.data.models.RequestUpdateModel;
 import com.example.notepad.bullsandcows.utils.CheckExternalStorage;
 import com.example.notepad.bullsandcows.utils.Constants;
+import com.example.notepad.bullsandcows.utils.IOCloseUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,25 +22,25 @@ public class NewAppVersionLoader extends AsyncTask<RequestUpdateModel, Void, Req
     private static final String APK_FILE_RESOLUTION = ".apk";
 
     @Override
-    protected void onPostExecute(RequestUpdateModel requestUpdateModel) {
-        UploadNewVersionAppCallback callback = requestUpdateModel.getCallback();
+    protected void onPostExecute(final RequestUpdateModel requestUpdateModel) {
+        final UploadNewVersionAppCallback callback = requestUpdateModel.getCallback();
         callback.sendUploadResultsCallback(requestUpdateModel);
     }
 
     @Override
-    protected RequestUpdateModel doInBackground(RequestUpdateModel... requestUpdateModels) {
-        RequestUpdateModel request = requestUpdateModels[0];
-        String downloadUrl = request.getVersionApp().getUrlNewVersionOfApp();
+    protected RequestUpdateModel doInBackground(final RequestUpdateModel... requestUpdateModels) {
+        final RequestUpdateModel request = requestUpdateModels[0];
+        final String downloadUrl = request.getVersionApp().getUrlNewVersionOfApp();
         File apkStorage = null;
-        File outputFile;
-        String downloadFile = request.getVersionApp().getNameOfApp() + APK_FILE_RESOLUTION;
+        final File outputFile;
+        final String downloadFile = request.getVersionApp().getNameOfApp() + APK_FILE_RESOLUTION;
         FileOutputStream fOS = null;
         InputStream in = null;
 
         try {
 
-            URL mUrl = new URL(downloadUrl);
-            HttpURLConnection connection = (HttpURLConnection) mUrl.openConnection();
+            final URL mUrl = new URL(downloadUrl);
+            final HttpURLConnection connection = (HttpURLConnection) mUrl.openConnection();
             connection.setRequestMethod("GET");
             connection.connect();
 
@@ -70,34 +71,34 @@ public class NewAppVersionLoader extends AsyncTask<RequestUpdateModel, Void, Req
 
             fOS = new FileOutputStream(outputFile);
             in = connection.getInputStream();
-            byte[] buffer = new byte[1024];
+            final byte[] buffer = new byte[1024];
             int lin1;
 
             while ((lin1 = in.read(buffer)) != -1) {
                 fOS.write(buffer, 0, lin1);
             }
 
-        } catch (Exception pE) {
+        } catch (final Exception pE) {
             pE.printStackTrace();
             Log.d(Constants.TAG, "Message of error: " + pE.getMessage());
             request.setException(pE);
         } finally {
-
-            try {
-                if (fOS != null) {
-                    fOS.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            new IOCloseUtils().addForClose(fOS).addForClose(in).close();
+//            try {
+//                if (fOS != null) {
+//                    fOS.close();
+//                }
+//            } catch (final IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            try {
+//                if (in != null) {
+//                    in.close();
+//                }
+//            } catch (final IOException e) {
+//                e.printStackTrace();
+//            }
         }
 
         return request;

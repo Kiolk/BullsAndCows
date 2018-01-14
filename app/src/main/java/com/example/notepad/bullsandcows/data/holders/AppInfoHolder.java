@@ -2,7 +2,7 @@ package com.example.notepad.bullsandcows.data.holders;
 
 import com.example.notepad.myapplication.backend.VersionOfApp;
 
-public class AppInfoHolder {
+public final class AppInfoHolder {
 
     private static AppInfoHolder mInstance;
 
@@ -24,7 +24,7 @@ public class AppInfoHolder {
         return mVersionApp;
     }
 
-    public void setVersionApp(VersionOfApp mVersionApp) {
+    public void setVersionApp(final VersionOfApp mVersionApp) {
         this.mVersionApp = mVersionApp;
     }
 }

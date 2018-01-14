@@ -1,14 +1,14 @@
 package com.example.notepad.bullsandcows.data.models;
 
-import com.example.notepad.bullsandcows.data.managers.UniversalThreadCallback;
-
+import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
+@Deprecated
 public class UniversalRequestParams<T> {
 
     private T mFirstParam;
 
-    private UniversalThreadCallback mCallback;
+    private OnResultCallback mCallback;
 
-    public UniversalRequestParams(final T pFirstParam, final UniversalThreadCallback pCallback){
+    public UniversalRequestParams(final T pFirstParam, final OnResultCallback pCallback){
         mFirstParam = pFirstParam;
         mCallback = pCallback;
     }
@@ -17,7 +17,7 @@ public class UniversalRequestParams<T> {
         return mFirstParam;
     }
 
-    public UniversalThreadCallback getCallback() {
+    public OnResultCallback getCallback() {
         return mCallback;
     }
 }

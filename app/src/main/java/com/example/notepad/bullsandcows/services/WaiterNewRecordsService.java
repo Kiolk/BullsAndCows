@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.notepad.bullsandcows.data.managers.RecordsCallbacks;
+import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
@@ -19,7 +19,7 @@ import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 public class WaiterNewRecordsService extends Service {
 
     @Override
-    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+    public int onStartCommand(@Nullable final Intent intent, final int flags, final int startId) {
         Log.d(TAG, "onStartCommand: ");
         Long onDay = null;
 
@@ -27,47 +27,50 @@ public class WaiterNewRecordsService extends Service {
             onDay = intent.getLongExtra(RECORDS_FROM_BACKEND_ON_DAY, System.currentTimeMillis());
         }
 
-        RecordsManager recordsManager = new RecordsManager();
-        recordsManager.getRecordsFromBackend(onDay, new RecordsCallbacks() {
+        final RecordsManager recordsManager = new RecordsManager();
+        recordsManager.getRecordsFromBackend(onDay, new OnResultCallback<ResponseRecordModel>() {
 
             @Override
-            public void getRecordsBackendCallback(final ResponseRecordModel pResponse) {
+            public void onSuccess(final ResponseRecordModel pResult) {
+                final Thread thread = new Thread(new Runnable() {
 
-                if (pResponse.getRecordsArray() != null) {
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //TODO separate operation
-                            ContentValues[] arrayValues = ModelConverterUtil
-                                    .fromArrayRecordToNetToCv(pResponse.getRecordsArray());
-                            getContentResolver().bulkInsert(RecordsContentProvider.CONTENT_URI, arrayValues);
+                    @Override
+                    public void run() {
+                        //TODO separate operation
+                        final ContentValues[] arrayValues = ModelConverterUtil
+                                .fromArrayRecordToNetToCv(pResult.getRecordsArray());
+                        getContentResolver().bulkInsert(RecordsContentProvider.CONTENT_URI, arrayValues);
 
-                        }
-                    });
-                    thread.start();
-                }
+                    }
+                });
+                thread.start();
+                stopSelf();
+            }
+
+            @Override
+            public void onError(final Exception pException) {
                 stopSelf();
             }
         });
 
+//        new RecordsCallbacks() {
+//
+//            @Override
+//            public void getRecordsBackendCallback(final ResponseRecordModel pResponse) {
+//
+//                if (pResponse.getRecordsArray() != null) {
+//
+//                }
+//                stopSelf();
+//            }
+//        });
+
         return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.d(TAG, "onCreate service start");
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "onDestroy: ");
-        super.onDestroy();
     }
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(final Intent intent) {
         Log.d(TAG, "onBind: ");
         return null;
     }

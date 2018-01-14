@@ -26,11 +26,11 @@ import kiolk.com.github.pen.Pen;
 public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecyclerViewAdapter.RecordsViewHolder>
         implements UserInfoRecordListener, UpdateLaterCallback {
 
-    private Context mContext;
-    private Cursor mCursor;
+    private final Context mContext;
+    private final Cursor mCursor;
     private RecordsToNet mRecord;
 
-    protected RecordRecyclerViewAdapter(Context pContext, Cursor pCursor) {
+    protected RecordRecyclerViewAdapter(final Context pContext, final Cursor pCursor) {
         this.mContext = pContext;
         mCursor = pCursor;
     }
@@ -53,7 +53,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
         mCursor.moveToPosition(position);
 
-        int indexUpdateOnline = mCursor.getColumnIndex(UserRecordsDB.IS_UPDATE_ONLINE);
+        final int indexUpdateOnline = mCursor.getColumnIndex(UserRecordsDB.IS_UPDATE_ONLINE);
 
         if (mCursor.getString(indexUpdateOnline) != null
                 && mCursor.getString(indexUpdateOnline)
@@ -77,14 +77,11 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         holder.mMovesTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.MOVES)));
         holder.mTimeTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.TIME)));
 
-        String url = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL));
-//        holder.mUserImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.bullgood));
-//        if (url != null) {
+        final String url = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL));
             Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
-//        }
         holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
             @Override
-            public void clickItemNik(View pView, int pPosition) {
+            public void clickItemNik(final View pView, final int pPosition) {
                 showInfoFragment(nikName);
             }
         });
@@ -93,7 +90,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
     //TODO introduce new class like Editor that will prepare and post data to backend.
     //TODO adaptor can't know about it
     private void getRecordForUpdate() {
-        RecordsToNet pRecord = new RecordsToNet();
+        final RecordsToNet pRecord = new RecordsToNet();
         pRecord.setNikName(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.NIK_NAME)));
         pRecord.setUserUrlPhoto(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL)));
         pRecord.setMoves(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.MOVES)));
@@ -109,35 +106,35 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return super.getItemId(position);
     }
 
     @Override
-    public String showInfoFragment(String pUserName) {
+    public String showInfoFragment(final String pUserName) {
         return pUserName;
     }
 
     @Override
-    public RecordsToNet updateLateRecordCallback(RecordsToNet pRecord) {
+    public RecordsToNet updateLateRecordCallback(final RecordsToNet pRecord) {
         return pRecord;
     }
 
     public class RecordsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView mCodTextView;
-        private TextView mDateTextView;
-        private TextView mNikNameTextView;
-        private TextView mMovesTextView;
-        private TextView mTimeTextView;
-        private ImageView mUserImage;
-        private ImageView mToUpdateResult;
-        private RelativeLayout mRelativeLayout;
+        private final TextView mCodTextView;
+        private final TextView mDateTextView;
+        private final TextView mNikNameTextView;
+        private final TextView mMovesTextView;
+        private final TextView mTimeTextView;
+        private final ImageView mUserImage;
+        private final ImageView mToUpdateResult;
+        private final RelativeLayout mRelativeLayout;
         private RecordsToNet mRecordInfo;
         private UserNikClickListener.ClickUserNik mUserNikListener;
         private UpdateLaterCallback mLaterUpdateCallback;
 
-        RecordsViewHolder(View itemView) {
+        RecordsViewHolder(final View itemView) {
             super(itemView);
             mRelativeLayout = itemView.findViewById(R.id.record_card_relative_layout);
             mCodTextView = itemView.findViewById(R.id.coded_number_card_text_view);
@@ -154,7 +151,7 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
 
 
         @Override
-        public void onClick(View v) {
+        public void onClick(final View v) {
             switch (v.getId()) {
                 case R.id.user_name_card_text_view:
                     if (mUserNikListener != null) {
@@ -170,15 +167,15 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             }
         }
 
-        void setClickNikListener(UserNikClickListener.ClickUserNik pUserNikListener) {
+        void setClickNikListener(final UserNikClickListener.ClickUserNik pUserNikListener) {
             mUserNikListener = pUserNikListener;
         }
 
-        void setLaterUpdateCallback(UpdateLaterCallback pLaterUpdateCallback) {
+        void setLaterUpdateCallback(final UpdateLaterCallback pLaterUpdateCallback) {
             mLaterUpdateCallback = pLaterUpdateCallback;
         }
 
-        void setRecordInfo(RecordsToNet pRecord) {
+        void setRecordInfo(final RecordsToNet pRecord) {
             mRecordInfo = pRecord;
         }
     }

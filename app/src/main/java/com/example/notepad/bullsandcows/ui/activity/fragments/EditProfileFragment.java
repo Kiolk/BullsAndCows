@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
+import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
@@ -40,6 +41,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private Spinner mCountrySpinner;
 
     private CloseEditProfileListener mCloseListener;
+
     private UserDataBase mUserUpdateInfo;
 
     @Nullable
@@ -132,18 +134,33 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 final String setPassword = mFirstPassword.getText().toString();
 
                 if (updateInformation() && userPassword.equals(setPassword)) {
-                    new UserBaseManager().patchNewUserInformation(mUserUpdateInfo, new UserLoginCallback() {
+                    new UserBaseManager().patchNewUserInformation(mUserUpdateInfo, new OnResultCallback<UserDataBase>() {
 
                         @Override
-                        public void getUserInfoCallback(final UserDataBase pUserInfo) {
-                            if (pUserInfo != null) {
-                                Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_SUCCES_UPDATE, Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_NOT_UPDATE, Toast.LENGTH_LONG).show();
-                            }
+                        public void onSuccess(final UserDataBase pResult) {
+                            Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_SUCCES_UPDATE, Toast.LENGTH_LONG).show();
+                            closeFragment();
+                        }
+
+                        @Override
+                        public void onError(final Exception pException) {
+                            Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_NOT_UPDATE, Toast.LENGTH_LONG).show();
                             closeFragment();
                         }
                     });
+//
+//                    new UserLoginCallback() {
+//
+//                        @Override
+//                        public void getUserInfoCallback(final UserDataBase pUserInfo) {
+//                            if (pUserInfo != null) {
+//                                Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_SUCCES_UPDATE, Toast.LENGTH_LONG).show();
+//                            } else {
+//                                Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_NOT_UPDATE, Toast.LENGTH_LONG).show();
+//                            }
+//                            closeFragment();
+//                        }
+//                    });
                 }
 
                 break;

@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -26,13 +25,13 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.RecordsManager;
+import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordCursorLoaderFragment;
-import com.example.notepad.bullsandcows.ui.activity.listeners.PostRecordSuccessListener;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.bullsandcows.utils.converters.QuerySelectionFormer;
 import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
@@ -45,13 +44,11 @@ import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.CODED
 import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.LAST_RESULT_BUNDLE_KEY;
 import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.USER_NAME_BUNDLE_KEY;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
-import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
 //TODO refactor implements to small class and create instances inside activitt
-public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivity
+public class RecordsActivity extends AppCompatActivity
         implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor>,
-        PostRecordSuccessListener {
+        LoaderManager.LoaderCallbacks<Cursor>{
 
     private UserInfoRecordCursorLoaderFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
@@ -126,10 +123,27 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
             @Override
             public RecordsToNet updateLateRecordCallback(final RecordsToNet pRecord) {
                 final RecordsToNet record = super.updateLateRecordCallback(pRecord);
-                Toast.makeText(RecordsCardActivityFromCursorLoaderActivity.this,
+                Toast.makeText(RecordsActivity.this,
                         record.getTime(), Toast.LENGTH_LONG).show();
                 final RecordsManager recordsManager = new RecordsManager();
-                recordsManager.postRecordOnBackend(pRecord, RecordsCardActivityFromCursorLoaderActivity.this);
+
+                recordsManager.postRecordOnBackend(pRecord, new OnResultCallback<RecordsToNet>() {
+
+                    @Override
+                    public void onSuccess(final RecordsToNet pResult) {
+                        final ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
+
+                        cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
+
+                        new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
+                        getContentResolver().update(RecordsContentProvider.CONTENT_URI, cv, null, null);
+                    }
+
+                    @Override
+                    public void onError(final Exception pException) {
+
+                    }
+                });
                 return record;
             }
         };
@@ -217,16 +231,16 @@ public class RecordsCardActivityFromCursorLoaderActivity extends AppCompatActivi
     public void onLoaderReset(final Loader<Cursor> loader) {
     }
 
-    @Override
-    public void successSetResultListener(final RecordsToNet pRecord) {
-        Log.d(TAG, "Start callback setResult for update i bd");
-        if (pRecord != null) {
-            final ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
-
-            cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
-
-            new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
-            getContentResolver().update(RecordsContentProvider.CONTENT_URI, cv, null, null);
-        }
-    }
+//    @Override
+//    public void successSetResultListener(final RecordsToNet pRecord) {
+//        Log.d(TAG, "Start callback setResult for update i bd");
+//        if (pRecord != null) {
+//            final ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
+//
+//            cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
+//
+//            new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
+//            getContentResolver().update(RecordsContentProvider.CONTENT_URI, cv, null, null);
+//        }
+//    }
 }

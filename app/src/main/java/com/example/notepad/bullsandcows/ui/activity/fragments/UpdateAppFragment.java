@@ -27,11 +27,11 @@ public class UpdateAppFragment extends Fragment implements View.OnClickListener 
     private UpdateAppListener mUpdateListener;
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(final Activity activity) {
         super.onAttach(activity);
         try {
             mUpdateListener = (UpdateAppListener) activity;
-        } catch (Exception pE) {
+        } catch (final Exception pE) {
             pE.getStackTrace();
             super.onAttach(activity);
         }
@@ -39,36 +39,36 @@ public class UpdateAppFragment extends Fragment implements View.OnClickListener 
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_update_application, container, false);
+    public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_update_application, container, false);
 
-        TextView titleNewVersion = view.findViewById(R.id.title_new_features_text_view);
-        String title = getString(R.string.NEW_VERSION_TITLE) + " "+ AppInfoHolder.getInstance().getVersionApp().getNameOfApp();
+        final TextView titleNewVersion = view.findViewById(R.id.title_new_features_text_view);
+        final String title = getString(R.string.NEW_VERSION_TITLE) + " "+ AppInfoHolder.getInstance().getVersionApp().getNameOfApp();
         titleNewVersion.setText(title);
 
-        TextView newFeatures = view.findViewById(R.id.new_features_app_text_view);
+        final TextView newFeatures = view.findViewById(R.id.new_features_app_text_view);
         newFeatures.setText(listNewFeaturesGenerator());
 
-        Button updateButton = view.findViewById(R.id.update_app_fragment_button);
+        final Button updateButton = view.findViewById(R.id.update_app_fragment_button);
         updateButton.setOnClickListener(this);
 
         return view;
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
         Log.d(ConstantsUtil.Log.LOG_TAG, "Press update button on Fragment");
 
-        Intent uploadAppIntent = new Intent(getActivity(), UpdateAppService.class);
+        final Intent uploadAppIntent = new Intent(getActivity(), UpdateAppService.class);
         getActivity().startService(uploadAppIntent);
 
         mUpdateListener.closeUpdateFragment();
     }
 
-    private String listNewFeaturesGenerator(){
-        String [] newAppFeatures = AppInfoHolder.getInstance().getVersionApp().getmNewVersionFeatures();
-        StringBuilder resultString = new StringBuilder();
-        int size = newAppFeatures.length;
+    private CharSequence listNewFeaturesGenerator(){
+        final String [] newAppFeatures = AppInfoHolder.getInstance().getVersionApp().getmNewVersionFeatures();
+        final StringBuilder resultString = new StringBuilder();
+        final int size = newAppFeatures.length;
 
         for(int i = 0; i < size; ++i){
             resultString.append(newAppFeatures[i]);

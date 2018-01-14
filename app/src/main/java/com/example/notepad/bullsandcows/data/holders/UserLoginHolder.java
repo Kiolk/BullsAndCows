@@ -8,8 +8,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.notepad.bullsandcows.data.databases.DBOperationsSingleTone;
+import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.CurrentUserDB;
+import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
 import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
@@ -20,8 +21,9 @@ import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 //TODO reduce count of singletone google low coupling and higher cohesion
 public final class UserLoginHolder {
 
+    private static final int SINGLE_ROW_ABOUT_CURRENT_USER = 1;
+
     public interface checkTokenCallback {
-//        void isValidToken(boolean isValid);
 
         void validToken();
 
@@ -113,23 +115,22 @@ public final class UserLoginHolder {
         this.mToken = mToken;
     }
 
-    @Deprecated
-    public void setOffline() {
-        if (!mKeepOnline && isLogged()) {
-            final UserDataBase userInfo = mUserInfo;
-            userInfo.setMLastUserVisit(System.currentTimeMillis());
-            userInfo.setIsOnline(false);
-            new UserBaseManager().updateLastUserVisit(userInfo, false);
-        }
-        mKeepOnline = false;
-    }
+//    @Deprecated
+//    public void setOffline() {
+//        if (!mKeepOnline && isLogged()) {
+//            final UserDataBase userInfo = mUserInfo;
+//            userInfo.setMLastUserVisit(System.currentTimeMillis());
+//            userInfo.setIsOnline(false);
+//            new UserBaseManager().updateLastUserVisit(userInfo, false);
+//        }
+//        mKeepOnline = false;
+//    }
 
     public void setUserOffline() {
 
         if (mUserInfo != null && isLogged()) {
             final UserDataBase userInfo = mUserInfo;
             userInfo.setMLastUserVisit(System.currentTimeMillis());
-//            userInfo.setIsOnline(false);
             new UserBaseManager().updateLastUserVisit(userInfo, false);
             Log.d(TAG, "setUserOffline: ");
         }
@@ -173,16 +174,16 @@ public final class UserLoginHolder {
             @Override
             public void run() {
                 final ContentValues cv = new ContentValues();
-                cv.put(CurrentUserDB.ID, 1);
+                cv.put(CurrentUserDB.ID, SINGLE_ROW_ABOUT_CURRENT_USER);
                 cv.put(CurrentUserDB.USER_NAME, pName);
                 cv.put(CurrentUserDB.TOKEN, pToken);
                 cv.put(CurrentUserDB.IS_KIPPING_LOGIN, pKeepLogin);
                 cv.put(CurrentUserDB.LAST_USER_VISIT, System.currentTimeMillis());
 
-                final int res = DBOperationsSingleTone.getInstance().update(CurrentUserDB.TABLE, cv);
+                final int res = DBOperations.getInstance().update(CurrentUserDB.TABLE, cv);
 
                 if (res <= 0) {
-                    DBOperationsSingleTone.getInstance().insert(CurrentUserDB.TABLE, cv);
+                    DBOperations.getInstance().insert(CurrentUserDB.TABLE, cv);
                 }
                 Log.d(TAG, "keepUserData: end");
             }
@@ -196,7 +197,7 @@ public final class UserLoginHolder {
 
             @Override
             public void run() {
-                final Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
+                final Cursor cursor = DBOperations.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
                 cursorHandler.post(new Runnable() {
 
                     @Override
@@ -211,24 +212,40 @@ public final class UserLoginHolder {
                             cursor.close();
 
                             final UserBaseManager userBaseManager = new UserBaseManager();
-                            userBaseManager.getUserInfo(pContext, userName, new UserLoginCallback() {
+                            userBaseManager.getUserInfo(pContext, userName, new OnResultCallback<UserDataBase>() {
 
                                 @Override
-                                public void getUserInfoCallback(final UserDataBase pUserInfo) {
-                                    if (pUserInfo != null && pUserInfo.getMSex().equals(savedToken)) {
-                                        initHolder(pUserInfo);
-//                                        pCallback.isValidToken(true);
+                                public void onSuccess(final UserDataBase pResult) {
+                                    if (pResult != null && pResult.getMSex().equals(savedToken)) {
+                                        initHolder(pResult);
                                         pCallback.validToken();
                                     } else {
-//                                        pCallback.isValidToken(false);
                                         pCallback.unValidToken();
                                     }
                                 }
+
+                                @Override
+                                public void onError(final Exception pException) {
+                                    pCallback.unValidToken();
+                                }
                             });
+
+//                            new UserLoginCallback() {
+//
+//                                @Override
+//                                public void getUserInfoCallback(final UserDataBase pUserInfo) {
+//
+//                                    if (pUserInfo != null && pUserInfo.getMSex().equals(savedToken)) {
+//                                        initHolder(pUserInfo);
+//                                        pCallback.validToken();
+//                                    } else {
+//                                        pCallback.unValidToken();
+//                                    }
+//                                }
+//                            });
 
                         } else {
                             pCallback.unValidToken();
-//                            pCallback.isValidToken(false);
                         }
                     }
                 });
@@ -243,7 +260,7 @@ public final class UserLoginHolder {
 
             @Override
             public void run() {
-                final Cursor cursor = DBOperationsSingleTone.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
+                final Cursor cursor = DBOperations.getInstance().query(CurrentUserDB.TABLE, null, null, null, null, null, null);
                 @Nullable final Long lastVisit;
 
                 if (cursor != null && cursor.moveToFirst()) {

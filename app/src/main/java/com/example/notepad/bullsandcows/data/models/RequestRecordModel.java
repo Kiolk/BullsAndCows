@@ -7,7 +7,7 @@ public class RequestRecordModel {
     public RequestRecordModel() {
     }
 
-    public RequestRecordModel(String pRequest){
+    public RequestRecordModel(final String pRequest){
         mCursor = pRequest;
     }
 
@@ -15,7 +15,7 @@ public class RequestRecordModel {
         return mCursor;
     }
 
-    public void setCursor(String mCursor) {
+    public void setCursor(final String mCursor) {
         this.mCursor = mCursor;
     }
 }
