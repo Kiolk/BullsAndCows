@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/win_background_color" android:state_pressed="true"></item>
-    <item android:color="@color/colorPrimaryDark" android:state_selected="true"></item>
-    <item android:color="@color/MING_COLOR"></item>
+    <item android:color="@color/win_background_color" android:state_pressed="true"/>
+    <item android:color="@color/COLOR_PRIMARY_DARK" android:state_selected="true"/>
+    <item android:color="@color/MING_COLOR"/>
 </selector>

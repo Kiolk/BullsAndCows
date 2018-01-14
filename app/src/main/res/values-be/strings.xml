@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="APP_NAME">BullsAndCows</string>
     <string name="SET_YOUR_NAME_HINT">Set your name</string>
@@ -96,7 +95,7 @@
     <string name="SUCCESS_UPDATE">Success update</string>
     <string name="WRONG_UPDATE">Wrong update</string>
     <string name="LAST_USER_VISIT">Last visit: "</string>
-    <string name="TOTAL_PLAYED_GAMES">Total played games "</string>
+    <string name="TOTAL_PLAYED_GAMES">Total played games: "</string>
     <string name="NUMBER_GAME_BY_COD">Played games</string>
     <string name="UPDATE_YOUR_APP">Press, for download new version</string>
     <string name="UPDATE_RESULT_TO_ONLINE">Update result to online</string>
@@ -157,6 +156,12 @@
     <string name="WEEK_RATING">Week rating</string>
     <string name="EDIT_YOUR_PROFILE">Edit your profile</string>
     <string name="CONFIRM_PASSWORDS_FOR_SAVE_CHANGES">Confirm passwords for save changes</string>
+    <string name="ONLY_ONLINE_RESULT">Only online results</string>
+    <string name="TRY_LOGIN_LATE">Try login later</string>
+    <string name="DEFAULT_AGE">0</string>
+    <string name="CODED_SYMBOL">C:</string>
+    <string name="RATING_POSITION_SYMBOL">P:</string>
+    <string name="ACTUAL_POSITION_SIMBOL">A:</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

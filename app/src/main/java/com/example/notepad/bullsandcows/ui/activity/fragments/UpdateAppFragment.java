@@ -16,7 +16,7 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.AppInfoHolder;
 import com.example.notepad.bullsandcows.services.UpdateAppService;
 
-import kiolk.com.github.pen.utils.ConstantsUtil;
+import kiolk.com.github.pen.utils.PenConstantsUtil;
 
 public class UpdateAppFragment extends Fragment implements View.OnClickListener {
 
@@ -57,7 +57,7 @@ public class UpdateAppFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public void onClick(final View v) {
-        Log.d(ConstantsUtil.Log.LOG_TAG, "Press update button on Fragment");
+        Log.d(PenConstantsUtil.Log.LOG_TAG, "Press update button on Fragment");
 
         final Intent uploadAppIntent = new Intent(getActivity(), UpdateAppService.class);
         getActivity().startService(uploadAppIntent);

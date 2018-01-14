@@ -3,7 +3,7 @@ package kiolk.com.github.pen.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import static kiolk.com.github.pen.utils.ConstantsUtil.EMPTY_STRING;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.EMPTY_STRING;
 
 public final class MD5Util {
 
@@ -21,8 +21,8 @@ public final class MD5Util {
             }
 
             return buffer.toString();
-        } catch (final NoSuchAlgorithmException e) {
-            e.printStackTrace();
+        } catch (final NoSuchAlgorithmException ignored) {
+
         }
 
         return EMPTY_STRING;

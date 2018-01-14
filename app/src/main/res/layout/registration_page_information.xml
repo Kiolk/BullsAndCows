@@ -15,5 +15,5 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/MESSAGE_FOR_REGISTRATION"
-        android:textSize="20sp" />
+        android:textSize="@dimen/LARGE_TEXT_SIZE" />
 </LinearLayout>

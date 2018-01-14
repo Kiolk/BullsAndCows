@@ -29,19 +29,18 @@
 
         <ImageView
             android:id="@+id/bull_splash_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/BIG_MARGIN"
+            android:layout_width="@dimen/SMALL_WIDTH_IMAGE"
+            android:layout_height="@dimen/HEIGHT_IMAGE"
             android:contentDescription="@string/BULL"
             android:cropToPadding="true"
             android:src="@drawable/ic_bull_big_size"/>
 
         <ImageView
             android:id="@+id/cow_splash_image_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/EXTRA_BIG_MARGIN"
+            android:layout_width="@dimen/SMALL_WIDTH_IMAGE"
+            android:layout_height="@dimen/HEIGHT_IMAGE"
             android:contentDescription="@string/COW"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_cow_big_size"/>
 
     </LinearLayout>

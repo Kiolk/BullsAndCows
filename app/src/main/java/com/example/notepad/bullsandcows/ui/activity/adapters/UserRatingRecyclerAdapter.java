@@ -15,7 +15,6 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 
-//TODO convert cursor to List<Model> then use in adopter
 public class UserRatingRecyclerAdapter extends RecyclerView.Adapter<UserRatingRecyclerAdapter.UserRatingViewHolder> {
 
     private final Cursor mCursor;

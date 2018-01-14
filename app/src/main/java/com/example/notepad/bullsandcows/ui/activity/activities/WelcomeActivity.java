@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +26,15 @@ import com.example.notepad.bullsandcows.data.httpclient.models.HttpRequest;
 import com.example.notepad.bullsandcows.data.managers.AppInfoManager;
 import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
-import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.fragments.UpdateAppFragment;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CustomFonts;
+import com.example.notepad.bullsandcows.utils.animation.SlideAnimationUtil;
 import com.example.notepad.myapplication.backend.VersionOfApp;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
+import kiolk.com.github.pen.Pen;
 import kiolk.com.github.pen.utils.MD5Util;
 
 import static com.example.notepad.bullsandcows.utils.Constants.INT_FALSE_VALUE;
@@ -42,15 +46,23 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
     public static final String DEFAULT_PASSWORD_FOR_GUEST = "1111";
     public static final int REGISTRATION_REQUEST_CODE = 3;
     public static final String REQUEST_PARAM = "name";
+    public static final String BACKGROUND_WELCOME_IMAGE = "https://media.mnn.com/assets/images/2015/02/highland-3.jpg";
+    public static final String BACKGROUND_WELCOME_IMAGE_OTHER = "https://www.nationalgeographic.com/content/dam/photography/photos/000/252/25295.jpg";
 
     private VersionOfApp mVersionOfApp;
+
     private EditText mLogin;
     private EditText mPassword;
+
     private CheckBox mCheckBox;
+
     private UpdateAppFragment mUpdateFragment;
+
     private FragmentTransaction mFragmentTransaction;
     private FragmentManager mFragmentManager;
+
     private FrameLayout mUpdateFrame;
+
     private SharedPreferences mWelcomePreferences;
 
     @Override
@@ -87,25 +99,23 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
 
             }
         });
-
-//                new AppInfoCallbacks() {
-//
-//            @Override
-//            public void getInfoAppCallback(final VersionOfApp versionOfApp) {
-//                mVersionOfApp = versionOfApp;
-//                AppInfoHolder.getInstance().setVersionApp(mVersionOfApp);
-//                final String version = AppInfoHolder.getInstance().getVersionApp().getVersionOfApp();
-//
-//                if (!version.equals(String.valueOf(BuildConfig.VERSION_CODE))) {
-//                    showUpdateAppFragment();
-//                }
-//            }
-//        });
     }
 
     private void initView() {
+
+        final ImageView backgroundImage = findViewById(R.id.background_welcome_image);
+        Pen.getInstance().getImageFromUrl(BACKGROUND_WELCOME_IMAGE).inputTo(backgroundImage);
+        Pen.getInstance().getImageFromUrl(BACKGROUND_WELCOME_IMAGE_OTHER).inputTo(backgroundImage);
+
+        final LinearLayout upperBlock = findViewById(R.id.upper_block_welcome_linear_layout);
+        SlideAnimationUtil.slideInFromTop(this, upperBlock, null, SlideAnimationUtil.NORMAL);
+        final LinearLayout middleBlock = findViewById(R.id.middle_block_welcome_linear_layout);
+        SlideAnimationUtil.slideInFromRight(this, middleBlock, null, SlideAnimationUtil.NORMAL);
+
         final Button loginButton = findViewById(R.id.login_button);
         final Button registrationButton = findViewById(R.id.registration_welcome_button);
+        final Button visitSiteButton = findViewById(R.id.visit_site_button);
+        SlideAnimationUtil.slideInToTop(this, visitSiteButton, null, SlideAnimationUtil.NORMAL);
         mLogin = findViewById(R.id.login_welcome_page_edit_text);
         mPassword = findViewById(R.id.password_welcome_page_edit_text);
         mCheckBox = findViewById(R.id.keep_password_check_box);
@@ -258,14 +268,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                             Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.TRY_LOGIN_LATE), Toast.LENGTH_LONG).show();
                         }
                     });
-//
-//                        new UserLoginCallback() {
-//
-//                            @Override
-//                            public void getUserInfoCallback(final UserDataBase pUserInfo) {
-//
-//                            }
-//                        });
                 } else {
                     UserLoginHolder.getInstance().initHolder(pUserInfo);
                     checkForSavingToken(pUserInfo.getUserName(), pUserInfo.getMSex());
@@ -279,56 +281,6 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
                 Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
             }
         });
-
-//        new UserLoginCallback() {
-//
-//            @Override
-//            public void getUserInfoCallback(final UserDataBase pUserInfo) {
-//
-//                if (pUserInfo != null && pPassword.equals(pUserInfo.getPassword())) {
-//                    UserLoginHolder.getInstance().initHolder(pUserInfo);
-//
-//                    if (pUserInfo.getMSex() == null) {
-//                        final String token = tokenGeneration(pUserInfo);
-//                        pUserInfo.setMSex(token);
-//
-//                        final UserBaseManager userBaseManager = new UserBaseManager();
-//                        userBaseManager.patchNewUserInformation(pUserInfo, new OnResultCallback<UserDataBase>() {
-//
-//                            @Override
-//                            public void onSuccess(final UserDataBase pResult) {
-//                                if (token.equals(pUserInfo.getMSex())) {
-//                                    UserLoginHolder.getInstance().initHolder(pUserInfo);
-//                                    checkForSavingToken(pUserInfo.getUserName(), token);
-//                                }
-//                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-//                                startMainActivity();
-//                            }
-//
-//                            @Override
-//                            public void onError(final Exception pException) {
-//                                Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.TRY_LOGIN_LATE), Toast.LENGTH_LONG).show();
-//                            }
-//                        });
-////
-////                        new UserLoginCallback() {
-////
-////                            @Override
-////                            public void getUserInfoCallback(final UserDataBase pUserInfo) {
-////
-////                            }
-////                        });
-//                    } else {
-//                        UserLoginHolder.getInstance().initHolder(pUserInfo);
-//                        checkForSavingToken(pUserInfo.getUserName(), pUserInfo.getMSex());
-//                        Toast.makeText(WelcomeActivity.this, getResources().getString(R.string.SUCCESS_LOGGED), Toast.LENGTH_LONG).show();
-//                        startMainActivity();
-//                    }
-//                } else {
-//                    Toast.makeText(WelcomeActivity.this, getString(R.string.LOGIN_OR_PASSWORD_WRONG), Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
     }
 
     protected String tokenGeneration(final UserDataBase pUserInfo) {
@@ -346,5 +298,10 @@ public class WelcomeActivity extends AppCompatActivity implements UpdateAppFragm
         } else {
             UserLoginHolder.getInstance().keepUserData(null, null, INT_FALSE_VALUE);
         }
+    }
+
+    public void visitSite(final View view){
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/Kiolk/BullsAndCows"));
+        startActivity(intent);
     }
 }

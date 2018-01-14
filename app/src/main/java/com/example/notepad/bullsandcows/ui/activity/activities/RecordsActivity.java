@@ -31,7 +31,7 @@ import com.example.notepad.bullsandcows.data.models.QuerySelectionArgsModel;
 import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.RecordRecyclerViewAdapter;
-import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordCursorLoaderFragment;
+import com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.bullsandcows.utils.converters.QuerySelectionFormer;
 import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
@@ -45,12 +45,11 @@ import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.LAST_
 import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.USER_NAME_BUNDLE_KEY;
 import static com.example.notepad.bullsandcows.utils.Constants.IntentKeys.RECORDS_FROM_BACKEND_ON_DAY;
 
-//TODO refactor implements to small class and create instances inside activitt
 public class RecordsActivity extends AppCompatActivity
         implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>{
 
-    private UserInfoRecordCursorLoaderFragment mUserInfoFragment;
+    private UserInfoRecordFragment mUserInfoFragment;
     private FrameLayout mInfoFrameLayout;
     private FragmentTransaction mFragmentTransaction;
     private EditText mSortByName;
@@ -97,7 +96,7 @@ public class RecordsActivity extends AppCompatActivity
     private void initFragments() {
         mInfoFrameLayout = findViewById(R.id.user_info_record_frame_layout);
         mInfoFrameLayout.setOnClickListener(this);
-        mUserInfoFragment = new UserInfoRecordCursorLoaderFragment();
+        mUserInfoFragment = new UserInfoRecordFragment();
     }
 
     void startWaiterRecordService() {
@@ -230,17 +229,4 @@ public class RecordsActivity extends AppCompatActivity
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
     }
-
-//    @Override
-//    public void successSetResultListener(final RecordsToNet pRecord) {
-//        Log.d(TAG, "Start callback setResult for update i bd");
-//        if (pRecord != null) {
-//            final ContentValues cv = ModelConverterUtil.fromRecordToNetToCv(pRecord);
-//
-//            cv.put(UserRecordsDB.IS_UPDATE_ONLINE, UserRecordsDB.UPDATE_ONLINE_HACK);
-//
-//            new UserBaseManager().checkNewBestRecord(ModelConverterUtil.fromRecordToNetToBestUserRecords(pRecord));
-//            getContentResolver().update(RecordsContentProvider.CONTENT_URI, cv, null, null);
-//        }
-//    }
 }

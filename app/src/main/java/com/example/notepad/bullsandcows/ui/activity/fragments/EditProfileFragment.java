@@ -19,7 +19,6 @@ import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.holders.UserLoginHolder;
 import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
-import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
 import com.example.notepad.bullsandcows.ui.activity.listeners.CloseEditProfileListener;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
@@ -148,19 +147,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                             closeFragment();
                         }
                     });
-//
-//                    new UserLoginCallback() {
-//
-//                        @Override
-//                        public void getUserInfoCallback(final UserDataBase pUserInfo) {
-//                            if (pUserInfo != null) {
-//                                Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_SUCCES_UPDATE, Toast.LENGTH_LONG).show();
-//                            } else {
-//                                Toast.makeText(getActivity().getBaseContext(), R.string.PROFILE_NOT_UPDATE, Toast.LENGTH_LONG).show();
-//                            }
-//                            closeFragment();
-//                        }
-//                    });
                 }
 
                 break;

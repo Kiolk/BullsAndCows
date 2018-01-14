@@ -4,8 +4,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryDark">@color/COLOR_PRIMARY_DARK</item>
+        <item name="colorAccent">@color/COLOR_ACCENT</item>
         <item name="colorButtonNormal">#FF9800</item>
     </style>
 
@@ -27,7 +27,6 @@
 
     <style name="GeneralBlock">
         <item name="android:background">@drawable/myrect</item>
-        <item name="android:elevation">@dimen/BLOCK_ELEVATION</item>
         <item name="android:layout_marginTop">@dimen/BLOCK_MARGIN</item>
         <item name="android:layout_marginLeft">@dimen/BLOCK_MARGIN</item>
         <item name="android:layout_marginRight">@dimen/BLOCK_MARGIN</item>
@@ -42,14 +41,12 @@
     </style>
 
     <style name="ShadowOfBlock">
-        <item name="android:elevation">4dp</item>
         <item name="android:layout_marginTop">@dimen/SMALL_MARGIN</item>
     </style>
 
     <style name="RegisteredButton">
         <item name="android:background">@drawable/ripple_selector_for_cycle_button</item>
-        <item name="android:elevation">40dp</item>
-        <item name="android:layout_margin">4dp</item>
+        <item name="android:layout_margin">@dimen/SIZE_OF_MARGIN</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
@@ -88,6 +85,7 @@
     <style name="RoundedButtonStyle">
         <item name="android:layout_marginTop">@dimen/SMALL_MARGIN</item>
         <item name="android:clickable">true</item>
+        <item name="android:layout_marginBottom">@dimen/SMALL_MARGIN</item>
         <item name="android:padding">@dimen/BLOCK_PADDING</item>
         <item name="android:textColor">@color/WHITE_COLOR_TEXT</item>
         <item name="android:textSize">@dimen/LARGE_TEXT_SIZE</item>
@@ -136,4 +134,6 @@
         <item name="android:textColor">@color/WHITE_COLOR_TEXT</item>
         <item name="android:textSize">@dimen/BIGEST_TEXT_SIZE</item>
     </style>
+
+    <dimen name="BIG_ELEVATION">40dp</dimen>
 </resources>

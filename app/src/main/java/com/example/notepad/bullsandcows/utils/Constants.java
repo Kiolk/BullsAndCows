@@ -34,6 +34,11 @@ public class Constants {
         String LAST_RESULT_BUNDLE_KEY = "lastResult";
     }
 
+    public  interface BackgroundImages{
+         String BACKGROUND_MAIN_PICTURE_URL = "https://i.pinimg.com/736x/f0/f6/56/f0f656e5f331aa25ba8dd38447435be4--cow-pics-highland-cattle.jpg";
+
+    }
+
     public final static String TAG = "MyLogs";
     public final static String FOLDER_DESTINATION_IN_SD = "Download";
     public static final String UTF_8 = "UTF-8";

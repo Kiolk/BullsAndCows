@@ -34,8 +34,6 @@ public final class DBConnector extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
-        //TODO foreach by tables
-        //istin2007@gmail.com
         db.execSQL(UserRecordsDB.CRATE_USERS_RECORDS_TABLE);
         db.execSQL(UserInfoDB.CRATE_USER_INFO_TABLE);
         db.execSQL(CurrentUserDB.CRATE_CURRENT_USER_TABLE);

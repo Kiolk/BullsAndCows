@@ -26,7 +26,7 @@ public final class TimeConvertersUtil {
         return days * oneDay + shiftConstant + oneDay;
     }
 
-    public static long getActualWeek(final long pActualTime) {
+    static long getActualWeek(final long pActualTime) {
         final long actualTime = Constants.BACK_EPOCH_TIME_NOTATION - pActualTime;
         final long days = actualTime / DateUtils.WEEK_IN_MILLIS;
         return days * DateUtils.WEEK_IN_MILLIS + SHIFT_CONSTANT_FOR_BACKEND + DateUtils.WEEK_IN_MILLIS - DateUtils.DAY_IN_MILLIS;

@@ -12,7 +12,7 @@ public final class LogUtil  {
     public static void msg(final String message){
 
         if(BuildConfig.DEBUG){
-            Log.d(ConstantsUtil.Log.LOG_TAG, message);
+            Log.d(PenConstantsUtil.Log.LOG_TAG, message);
         }
     }
 }

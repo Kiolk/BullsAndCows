@@ -13,7 +13,6 @@ import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.NOT_U
 import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.UPDATE;
 import static com.example.notepad.bullsandcows.utils.Constants.EMPTY_STRING;
 
-//TODO rename to clear name, maybe split to bussines entities
 public final class QuerySelectionFormer {
 
     private static final String AND = " and ";

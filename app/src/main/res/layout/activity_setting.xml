@@ -1,53 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.notepad.bullsandcows.ui.activity.activities.SettingActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.example.notepad.bullsandcows.ui.activity.activities.SettingActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="@dimen/BLOCK_PADDING">
 
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:textSize="38sp" />
+            android:layout_margin="@dimen/SIZE_OF_MARGIN"
+            android:textSize="@dimen/LARGE_TEXT_SIZE"/>
 
         <SeekBar
             android:id="@+id/coded_number_seek_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/CODED_NUMBER"
-            android:textSize="24sp" />
+            android:textSize="@dimen/LARGE_TEXT_SIZE"/>
 
         <Button
             android:id="@+id/apply_all_changes_button"
-            android:layout_width="200dp"
-            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/APPLY_CHANGES"
-            android:textSize="24sp" />
+            android:textSize="@dimen/LARGE_TEXT_SIZE"/>
 
     </LinearLayout>
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="@dimen/WIDTH_IMAGE"
+        android:layout_height="@dimen/HEIGHT_IMAGE"
         android:layout_alignParentBottom="true"
         android:contentDescription="@string/BELARUS_LANGUAGE"
-        android:padding="8dp"
-        android:src="@drawable/ic_cow_big_size" />
+        android:padding="@dimen/BLOCK_PADDING"
+        android:src="@drawable/ic_cow_big_size"/>
 </RelativeLayout>

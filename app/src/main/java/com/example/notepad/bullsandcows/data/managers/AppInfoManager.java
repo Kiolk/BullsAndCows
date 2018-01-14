@@ -16,7 +16,7 @@ public class AppInfoManager {
     public AppInfoManager() {
     }
 
-    public void getCurrentAppInfo(final HttpRequest pRequest, final OnResultCallback appInfoCallbacks) {
+    public void getCurrentAppInfo(final HttpRequest pRequest, final OnResultCallback<VersionOfApp> appInfoCallbacks) {
         final Handler handler = new Handler();
         final Thread thread = new Thread(new Runnable() {
 

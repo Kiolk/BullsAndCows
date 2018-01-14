@@ -17,7 +17,6 @@ import java.util.List;
 
 public class CountrySpinnerAdapter extends ArrayAdapter<ItemCountryData> {
 
-    //todo accessors
     private final int mGroupId;
 
     private final List<ItemCountryData> mList;

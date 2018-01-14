@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
@@ -78,8 +77,9 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
         holder.mTimeTextView.setText(mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.TIME)));
 
         final String url = mCursor.getString(mCursor.getColumnIndex(UserRecordsDB.USER_PHOTO_URL));
-            Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
+        Pen.getInstance().getImageFromUrl(url).inputTo(holder.mUserImage);
         holder.setClickNikListener(new UserNikClickListener.ClickUserNik() {
+
             @Override
             public void clickItemNik(final View pView, final int pPosition) {
                 showInfoFragment(nikName);
@@ -148,7 +148,6 @@ public class RecordRecyclerViewAdapter extends RecyclerView.Adapter<RecordRecycl
             mToUpdateResult = itemView.findViewById(R.id.online_update_record_image_view);
             mToUpdateResult.setOnClickListener(this);
         }
-
 
         @Override
         public void onClick(final View v) {

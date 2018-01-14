@@ -19,6 +19,7 @@ import com.example.notepad.bullsandcows.data.providers.RecordsContentProvider;
 import com.example.notepad.bullsandcows.services.WaiterNewRecordsService;
 import com.example.notepad.bullsandcows.ui.activity.adapters.MovesRecyclerViewAdapter;
 import com.example.notepad.bullsandcows.utils.CheckConnection;
+import com.example.notepad.bullsandcows.utils.IOCloseUtils;
 import com.example.notepad.bullsandcows.utils.converters.ModelConverterUtil;
 import com.example.notepad.bullsandcows.utils.converters.QuerySelectionFormer;
 import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
@@ -168,41 +169,40 @@ public class Game {
                 mContext.getResources().getString(R.string.YOUR_RESULT) +
                 mCountMoves +
                 mContext.getResources().getString(R.string.WIN_TIME) +
-                mGameTimer.getWinTime() +(Integer.parseInt(getActualPosition(true)) - 1);
+                mGameTimer.getWinTime() +
+                "\n"+
+                mContext.getResources().getString(R.string.YOUR_POSITION) +
+                (Integer.parseInt(getActualPosition(true)));
     }
 
     public int calculateUserRating(final int pNumberCodedDigits) {
-        //TODO move to separate class that works with DB.
-        //example Operation with AsyncTask or Loader
-//        String[] request = new String[]{EMPTY_STRING, String.valueOf(DIG), Tables.LAST_DAY};
         final String sortOrder = UserRecordsDB.MOVES + ASC + ", " + UserRecordsDB.TIME + ASC;
         int position = 0;
         boolean hasResult = false;
 
-        //TODO clear all warnings Map vs HashMap, List vs ArrayList
         final Map<String, String> selectionArgs = new HashMap<>();
         selectionArgs.put(UserRecordsDB.NIK_NAME, EMPTY_STRING);
         selectionArgs.put(UserRecordsDB.CODES, String.valueOf(pNumberCodedDigits));
         selectionArgs.put(UserRecordsDB.ID, LAST_DAY);
 
-//        Cursor cursor = getContentResolver().query(RecordsContentProvider.CONTENT_URI,
-//                null, null, request, sortOrder);
         final QuerySelectionArgsModel readySelection = QuerySelectionFormer.convertSelectionArg(selectionArgs);
 
         final Cursor cursor = mContext.getContentResolver().query(RecordsContentProvider.CONTENT_URI,
                 null, readySelection.getSelection(), readySelection.getSelectionArgs(), sortOrder);
 
         if (cursor != null && cursor.moveToFirst()) {
+            final String userName = cursor.getString(cursor.getColumnIndex(UserRecordsDB.NIK_NAME));
+            final String currentUser = UserLoginHolder.getInstance().getUserName();
             do {
-                if (cursor.getString(cursor.getColumnIndex(UserRecordsDB.NIK_NAME))
-                        .equals(UserLoginHolder.getInstance().getUserName())) {
+                if (userName
+                        .equals(currentUser)) {
                     ++position;
                     hasResult = true;
                     break;
                 }
                 ++position;
-            } while (!cursor.getString(cursor.getColumnIndex(UserRecordsDB.NIK_NAME))
-                    .equals(UserLoginHolder.getInstance().getUserName()) && !cursor.isLast() && cursor.moveToNext());
+            } while (!userName
+                    .equals(currentUser) && !cursor.isLast() && cursor.moveToNext());
             setRatingList(cursor);
         } else {
             position = 0;
@@ -216,6 +216,7 @@ public class Game {
         if (cursor != null) {
             cursor.close();
         }
+
         return position;
     }
 

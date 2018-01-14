@@ -56,11 +56,11 @@
     <string name="BELARUS_LANGUAGE">Belarus</string>
     <string name="CHOICE_LANGUAGE_BUTTON">Language setting</string>
     <string name="WON_MESSAGE">WON!</string>
-    <string name="CONGRATULATIONS">Congratulations, </string>
-    <string name="YOU_WIN">! You Won!</string>
-    <string name="YOUR_RESULT">You result: </string>
-    <string name="NUMBER_OF_DIGITS">-digits number, your find on </string>
-    <string name="WIN_TIME"> moves, by </string>
+    <string name="CONGRATULATIONS">Congratulations, "</string>
+    <string name="YOU_WIN">! \nYou Won! "\n</string>
+    <string name="YOUR_RESULT">You result: "</string>
+    <string name="NUMBER_OF_DIGITS">-digits number, your find on "</string>
+    <string name="WIN_TIME">" moves, by "</string>
     <string name="LANGUAGE_COD">ENG</string>
     <string name="ENTER_NUMBER">Enter </string>
     <string name="TOAST_MESSAGE_WITH_RULE">-digits number, without repeating digits!</string>
@@ -159,6 +159,10 @@
     <string name="ONLY_ONLINE_RESULT">Only online results</string>
     <string name="TRY_LOGIN_LATE">Try login later</string>
     <string name="DEFAULT_AGE">0</string>
+    <string name="CODED_SYMBOL">C:</string>
+    <string name="RATING_POSITION_SYMBOL">P:</string>
+    <string name="ACTUAL_POSITION_SIMBOL">A:</string>
+    <string name="YOUR_POSITION">Your position: "</string>
 
     <string-array name="countries_array">
         <item>Not selected</item>

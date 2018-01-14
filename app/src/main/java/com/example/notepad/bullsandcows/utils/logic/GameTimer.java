@@ -12,6 +12,8 @@ import java.util.TimerTask;
 
 class GameTimer {
 
+    private static final int TIMER_INTERVAL = 1000;
+
     interface Callback {
 
         void refreshTimer(String pNewTime);
@@ -43,7 +45,7 @@ class GameTimer {
                     }
                 });
             }
-        }, 0, 1000);
+        }, 0, TIMER_INTERVAL);
     }
 
     void cancelTimer() {

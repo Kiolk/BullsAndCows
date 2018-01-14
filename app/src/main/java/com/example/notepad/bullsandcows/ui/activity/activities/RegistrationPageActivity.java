@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.example.notepad.bullsandcows.R;
 import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
-import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.bullsandcows.ui.activity.adapters.CountrySpinnerAdapter;
 import com.example.notepad.bullsandcows.utils.Constants;
 import com.example.notepad.bullsandcows.utils.CountryUtils;
@@ -43,7 +42,6 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
 
     private Spinner mSpinnerEx;
 
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +63,7 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
 
                         @Override
                         public void onSuccess(final UserDataBase pResult) {
-                            if ( !pResult.getUserName().equals(mUserName.getText().toString())) {
+                            if (!pResult.getUserName().equals(mUserName.getText().toString())) {
                                 mUserName.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
                                 mNikFree = true;
                             } else {
@@ -79,19 +77,6 @@ public class RegistrationPageActivity extends AppCompatActivity implements View.
                             mNikFree = true;
                         }
                     });
-
-//                    new UserLoginCallback() {
-//
-//                        @Override
-//                        public void getUserInfoCallback(final UserDataBase pUserInfo) {
-//                            if (pUserInfo == null || !pUserInfo.getUserName().equals(mUserName.getText().toString())) {
-//                                mUserName.setTextColor(getResources().getColor(R.color.CORRECT_EDIT_TEXT));
-//                                mNikFree = true;
-//                            } else {
-//                                mUserName.setTextColor(getResources().getColor(R.color.ERROR_EDIT_TEXT));
-//                            }
-//                        }
-//                    });
                 }
             }
         }

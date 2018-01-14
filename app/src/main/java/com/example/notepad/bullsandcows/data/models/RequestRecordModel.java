@@ -1,6 +1,6 @@
 package com.example.notepad.bullsandcows.data.models;
 
-public class RequestRecordModel {
+class RequestRecordModel {
 
     private String mCursor;
 

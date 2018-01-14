@@ -19,8 +19,8 @@ public class UserRecordsRecyclerViewAdapter extends RecyclerView.Adapter<UserRec
 
     private final List<BestUserRecords> mBestUserRecords;
 
-    public UserRecordsRecyclerViewAdapter(final List<BestUserRecords> mBestUserRecords) {
-        this.mBestUserRecords = mBestUserRecords;
+    public UserRecordsRecyclerViewAdapter(final List<BestUserRecords> pBestUserRecords) {
+        mBestUserRecords = pBestUserRecords;
     }
 
     @Override

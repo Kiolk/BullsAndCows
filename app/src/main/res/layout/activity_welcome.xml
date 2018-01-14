@@ -7,77 +7,60 @@
                 android:orientation="vertical"
                 tools:context=".ui.activity.activities.WelcomeActivity">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/background_welcome_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/LIGHT_COLOR"
+        android:contentDescription="@string/BULL"
+        android:scaleType="centerCrop"/>
+
+    <LinearLayout
+        android:id="@+id/upper_block_welcome_linear_layout"
+        style="@style/GeneralBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/upper_block_information"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/middle_block_welcome_linear_layout"
+        style="@style/GeneralBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <LinearLayout
-            style="@style/GeneralBlock"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <include layout="@layout/upper_block_information"/>
+            <include layout="@layout/login_password_block_welcome_page"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <LinearLayout
-                style="@style/GeneralBlock"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <include layout="@layout/login_password_block_welcome_page"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                style="@style/GeneralBlock"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:orientation="horizontal">
-
-                <include layout="@layout/registration_button_welcome_page"/>
-
-            </LinearLayout>
-
+            <include layout="@layout/registration_button_welcome_page"/>
         </LinearLayout>
-
-        <LinearLayout
-            style="@style/GeneralBlock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <include layout="@layout/applection_information"/>
-
-            </LinearLayout>
-
-            <include layout="@layout/button_visit_site_welcome_page"/>
-
-        </LinearLayout>
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/visit_site_button"
+        style="@style/RegisteredButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="visitSite"
+        android:text="@string/VISIT_SITE_OF_APP_BUTTON"/>
 
     <FrameLayout
         android:id="@+id/for_update_fragment_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
-
     </FrameLayout>
 </RelativeLayout>

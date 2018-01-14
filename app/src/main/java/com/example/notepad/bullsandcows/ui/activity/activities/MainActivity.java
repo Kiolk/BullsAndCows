@@ -43,18 +43,13 @@ import java.util.List;
 
 import kiolk.com.github.pen.Pen;
 
+import static com.example.notepad.bullsandcows.utils.Constants.BackgroundImages.BACKGROUND_MAIN_PICTURE_URL;
 import static com.example.notepad.bullsandcows.utils.Constants.EMPTY_STRING;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private static final String INPUT_NUMBER = "InputNumber";
-//    private static final String DEFAULT_VALUE_FOR_STRING = "Error";
-//    private static final String CODED_NUMBER = "codedNumber";
-//    private static final String START_STATE = "startState";
-//    private static final String NUMBER_OF_CODED_DIGITS = "numberOfCodedDigits";
     private static final int SETTING_REQUEST_CODE = 1;
     private static final int VIBRATION_MILLISECONDS = 500;
-    private static final String BACKGROUND_PICTURE_URL = "https://i.pinimg.com/736x/f0/f6/56/f0f656e5f331aa25ba8dd38447435be4--cow-pics-highland-cattle.jpg";
     private static final int DEFAULT_NUMBER_CODED_DIGITS = 4;
 
     private int DIG = DEFAULT_NUMBER_CODED_DIGITS;
@@ -124,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void animationEnd() {
                         closeFragment(mEditProfileFragment);
+                        mEditInfoFrameLayout.setVisibility(View.INVISIBLE);
                     }
                 }, SlideAnimationUtil.NORMAL);
             }
@@ -135,32 +131,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-//        outState.putString(INPUT_NUMBER, mInputNumberView.getText().toString());
-//        outState.putString(CODED_NUMBER, mCodedNumber);
-//        outState.putBoolean(START_STATE, start);
-//        outState.putInt(NUMBER_OF_CODED_DIGITS, DIG);
     }
 
     @Override
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
-//        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
-//            final Intent intent = new Intent(this, WelcomeActivity.class);
-//            startActivity(intent);
-//            finish();
-//            Log.d(Constants.TAG, "onRestoreInstanceState: ");
-//        }
-//        super.onRestoreInstanceState(savedInstanceState);
-//        mInputNumberView.setText(savedInstanceState.getString(INPUT_NUMBER, DEFAULT_VALUE_FOR_STRING));
-//        //TODO put to Serializable / Parcelable
-//        mCodedNumber = savedInstanceState.getString(CODED_NUMBER, DEFAULT_VALUE_FOR_STRING);
-//        start = savedInstanceState.getBoolean(START_STATE, false);
-//        DIG = savedInstanceState.getInt(NUMBER_OF_CODED_DIGITS, 4);
     }
 
     public void initializationOfView() {
 
         final ImageView backgroundImage = findViewById(R.id.background_picture_image_view);
-        Pen.getInstance().getImageFromUrl(BACKGROUND_PICTURE_URL).inputTo(backgroundImage);
+        Pen.getInstance().getImageFromUrl(BACKGROUND_MAIN_PICTURE_URL).inputTo(backgroundImage);
         mActualRating = findViewById(R.id.actual_rating_position_text_view);
         mDailyRating = findViewById(R.id.daily_rating_position_text_view);
 
@@ -193,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(UserLoginHolder.getInstance().getUserName());
         }
-        mToolBar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_supervisor_account_black_24px, null));
+        mToolBar.setNavigationIcon(getResources().getDrawable(R.drawable.ic_supervisor_account_black_24px));
         final View.OnClickListener navigationButton = new View.OnClickListener() {
 
             @Override
@@ -211,11 +191,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (!mEditProfileFragment.isVisible() && !mRatingFragment.isVisible()) {
+        if (!mEditProfileFragment.isVisible() && !mRatingFragment.isVisible() && !mWinFragment.isVisible()) {
             super.onBackPressed();
         } else if (mEditProfileFragment.isVisible()) {
             mCloseEditListener.onCloseFragment();
-        } else {
+        } else if (mWinFragment.isVisible()){
+            closeWinFragment(null);
+        }else {
             closeRatingFragment();
         }
     }
@@ -267,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showEditProfileFragment() {
+        mEditInfoFrameLayout.setVisibility(View.VISIBLE);
         SlideAnimationUtil.slideInFromRight(this, mEditInfoFrameLayout, null, SlideAnimationUtil.NORMAL);
         showFragment(R.id.for_fragments_in_main_frame_layout, mEditProfileFragment);
         mEditProfileFragment.editUserProfile();
@@ -322,7 +305,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void showWinFragment() {
         mFrameLayout.setVisibility(View.VISIBLE);
-//        new AnimationOfView().enteredView(mFrameLayout);
 
         showFragment(R.id.for_fragments_in_main_frame_layout, mWinFragment);
 
@@ -411,12 +393,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUserRating() {
-        mCodedNumberTitle.setText(String.valueOf(DIG));
+        final String codedNumber = getString(R.string.CODED_SYMBOL) + DIG;
+        mCodedNumberTitle.setText(codedNumber);
         final int position = mGame.calculateUserRating(DIG);
+
         if (position == 0) {
             mDailyRating.setText(R.string.DASH);
         } else {
-            mDailyRating.setText(String.valueOf(position));
+            final String dayRating = getString(R.string.RATING_POSITION_SYMBOL) + position;
+            mDailyRating.setText(dayRating);
         }
     }
 

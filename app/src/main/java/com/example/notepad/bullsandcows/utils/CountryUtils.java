@@ -10,8 +10,6 @@ public final class CountryUtils {
 
     public static List<ItemCountryData> getCountryList() {
         final List<ItemCountryData> listOfCountry = new ArrayList<>();
-        //TODO not very good idea show countries and it flahs like this
-        //TODO move to resource or on your backend
         listOfCountry.add(new ItemCountryData("Belarus", R.drawable.ic_belarus));
         listOfCountry.add(new ItemCountryData("USA", R.drawable.ic_us));
         listOfCountry.add(new ItemCountryData("England", R.drawable.ic_gb_eng));
@@ -22,7 +20,6 @@ public final class CountryUtils {
     }
 
     public static int getCountryResources(final String pCountry) {
-        //TODO use interface List instead of and for others
         final List<ItemCountryData> listOfCountry = getCountryList();
         int i = 0;
         while (!pCountry.equals(listOfCountry.get(i).getCountry())) {

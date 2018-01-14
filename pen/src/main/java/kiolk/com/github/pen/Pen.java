@@ -14,85 +14,79 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import kiolk.com.github.pen.utils.ConstantsUtil;
+import kiolk.com.github.pen.utils.PenConstantsUtil;
 import kiolk.com.github.pen.utils.LogUtil;
 import kiolk.com.github.pen.utils.MD5Util;
 import kiolk.com.github.pen.utils.PlaceHolderUtil;
 
-public class Pen {
+import static kiolk.com.github.pen.utils.PenConstantsUtil.DEFAULT_COMPRESSION;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.INNER_FILE_CACHE;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.MAX_COMPRESSION;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.MIN_COMPRESSION;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.SAVE_FULL_IMAGE_STRATEGY;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.SAVE_SCALING_IMAGE_STRATEGY;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.WITHOUT_CACHE;
 
-    //TODO move to enums
-    public static final int WITHOUT_CACHE = 0;
-    public static final int MEMORY_CACHE = 1;
-    public static final int INNER_FILE_CACHE = 2;
-    public static final int SAVE_SCALING_IMAGE_STRATEGY = 0;
-    public static final int SAVE_FULL_IMAGE_STRATEGY = 1;
-    public static final int MIN_COMPRESSION = 0;
-    public static final int MAX_COMPRESSION = 100;
-    public static final int DEFAULT_COMPRESSION = 80;
+public final class Pen {
 
-    //TODO What style are used for static fields?
-    static File CACHE_DIR;
-    static int QUALITY_OF_COMPRESSION_BMP;
-    //TODO rename, why it's static?
-    private static int mTypeOfMemoryCache;
+    private File mCacheDir;
 
-    private static Pen instance = null;
+    private int mQualityOfCompressionBmp;
+    private int mTypeOfMemoryCache;
 
-    private BlockingDeque<ImageRequest> mQueue;
-    private ExecutorService mExecutor;
+    private static Pen sInstance;
+
+    private final BlockingDeque<ImageRequest> mQueue;
+    private final ExecutorService mExecutor;
     private LruCache<String, Bitmap> mBitmapLruCache;
 
     private int mStrategySaveImage;
-    private Builder mBuilder;
-
-    final Object mLock;
+    private final Builder mBuilder;
 
     private Pen() {
         mQueue = new LinkedBlockingDeque<>();
         mExecutor = Executors.newFixedThreadPool(3);
-        mLock = new Object();
         mBuilder = new Builder();
         mTypeOfMemoryCache = WITHOUT_CACHE;
         mStrategySaveImage = SAVE_SCALING_IMAGE_STRATEGY;
 
         initialisationLruCache();
-        //TODO need to be later, do not require to be static
         DiskCache.getInstance();
         LogUtil.msg("Create object of Pen");
     }
 
     private void initialisationLruCache() {
-        //TODO move calculations to separate methods
-        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / ConstantsUtil.KILOBYTE_SIZE);
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / PenConstantsUtil.KILOBYTE_SIZE);
 
-        //TODO should be clear that size in KB
-        final int cacheSize = maxMemory / ConstantsUtil.PART_OF_MEMORY_CACHE;
-
-        //TODO move Runtime.getRuntime().maxMemory() to var
-        LogUtil.msg("maxMemory = " + maxMemory + ". MaxMemory from Runtime: "
-                + Runtime.getRuntime().maxMemory() + ". CacheSize: " + cacheSize);
+        final int cacheSize = maxMemory / PenConstantsUtil.PART_OF_MEMORY_CACHE;
 
         mBitmapLruCache = new LruCache<String, Bitmap>(cacheSize) {
 
             @Override
             protected int sizeOf(final String key, final Bitmap value) {
-                //TODO wrong calculation
-                return value.getByteCount() / ConstantsUtil.KILOBYTE_SIZE;
+                return value.getByteCount() / PenConstantsUtil.KILOBYTE_SIZE;
             }
         };
     }
 
     public static Pen getInstance() {
-        if (instance == null) {
-            instance = new Pen();
+        if (sInstance == null) {
+            sInstance = new Pen();
         }
 
-        return instance;
+        return sInstance;
     }
 
     int getTypeOfMemoryCache() {
         return mTypeOfMemoryCache;
+    }
+
+    File getCacheDir() {
+        return mCacheDir;
+    }
+
+    int getQualityOfCompressionBmp() {
+        return mQualityOfCompressionBmp;
     }
 
     int getStrategySaveImage() {
@@ -107,8 +101,6 @@ public class Pen {
 
         final ImageView imageView = imageRequest.getTarget().get();
 
-        //TODO What is best practice: check through if or covered it try-catch? How get resources in module?
-        //TODO put to ImageRequest model
         if (PlaceHolderUtil.getInstance().getDefaultDrawable() != null) {
             imageView.setImageDrawable(PlaceHolderUtil.getInstance().getDefaultDrawable());
         }
@@ -128,12 +120,13 @@ public class Pen {
             imageView.setTag(tag);
             LogUtil.msg(" get image " + tag + " " + imageRequest.getUrl());
             mQueue.addFirst(imageRequest);
-            LogUtil.msg("Image view" + imageRequest.getTarget().get().toString() + " start setup");
+            LogUtil.msg("Image view" + imageRequest.getTarget().get() + " start setup");
             try {
                 //TODO to use ExecutorService / executeOnExecutor
-                new ImageLoadingAsyncTask().execute(mQueue.takeFirst());
-            } catch (final InterruptedException e) {
-                e.printStackTrace();
+//                new ImageLoadingAsyncTask().execute(mQueue.takeFirst());
+                new ImageLoadingAsyncTask().executeOnExecutor(mExecutor, mQueue.takeFirst());
+            } catch (final InterruptedException ignored) {
+
             }
         } else {
             waiterImageViewShow(imageRequest);
@@ -166,7 +159,7 @@ public class Pen {
     }
 
     private void waiterImageViewShow(final ImageRequest pRequest) {
-        LogUtil.msg("Image view" + pRequest.getTarget().get().toString() + " wait for draw");
+        LogUtil.msg("Image view" + pRequest.getTarget().get() + " wait for draw");
 
         final ImageView viewWaitDraw = pRequest.getTarget().get();
 
@@ -181,13 +174,11 @@ public class Pen {
                 }
 
                 if (v.getWidth() > 0 && v.getHeight() > 0) {
-                    LogUtil.msg("Image view" + pRequest.getTarget().get().toString() + " start draw");
+                    LogUtil.msg("Image view" + pRequest.getTarget().get() + " start draw");
 
                     pRequest.setWidth(v.getWidth());
                     pRequest.setHeight(v.getHeight());
                     enqueue(pRequest);
-                    //TODO remove comments correct variant for remove OnPreDrawListener
-                    //TODO memory leak! should be removed in any case
                     v.getViewTreeObserver().removeOnPreDrawListener(this);
                 }
                 v.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -211,7 +202,7 @@ public class Pen {
         return mBitmapLruCache.get(key);
     }
 
-    public class Builder {
+    public final class Builder {
 
         private Builder() {
         }
@@ -257,7 +248,7 @@ public class Pen {
         }
 
         public Builder setContext(final Context pContext) {
-            CACHE_DIR = pContext.getCacheDir();
+            mCacheDir = pContext.getCacheDir();
 
             return mBuilder;
         }
@@ -276,7 +267,7 @@ public class Pen {
 
         public Builder setQualityImageCompression(final int pCompression) {
             if (pCompression > MIN_COMPRESSION && pCompression <= MAX_COMPRESSION) {
-                QUALITY_OF_COMPRESSION_BMP = pCompression;
+                mQualityOfCompressionBmp = pCompression;
             }
 
             return mBuilder;
@@ -285,12 +276,12 @@ public class Pen {
         public void getBitmapDirect(final GetBitmapCallback pCallBack) {
 
             final ImageRequest request = new ImageRequest(mBuilder.mUrl, pCallBack);
-            new ImageLoadingAsyncTask().execute(request);
+            new ImageLoadingAsyncTask().executeOnExecutor(mExecutor, request);
         }
 
         public void setUp() {
-            if (QUALITY_OF_COMPRESSION_BMP == MIN_COMPRESSION) {
-                QUALITY_OF_COMPRESSION_BMP = DEFAULT_COMPRESSION;
+            if (mQualityOfCompressionBmp == MIN_COMPRESSION) {
+                mQualityOfCompressionBmp = DEFAULT_COMPRESSION;
             }
         }
     }

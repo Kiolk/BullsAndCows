@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.notepad.bullsandcows">
+<manifest package="com.example.notepad.bullsandcows"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".BullsAndCowsApp"
@@ -15,44 +15,47 @@
         android:label="@string/APP_NAME"
         android:roundIcon="@drawable/ic_bull_big_size"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="true">
         <activity android:name=".ui.activity.activities.SplashStartActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.activities.MainActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"/>
         <activity
             android:name=".ui.activity.activities.RulesPageActivity"
-            android:parentActivityName=".ui.activity.activities.MainActivity" />
+            android:parentActivityName=".ui.activity.activities.MainActivity"/>
         <activity
             android:name=".ui.activity.activities.SettingActivity"
-            android:parentActivityName=".ui.activity.activities.MainActivity" />
+            android:parentActivityName=".ui.activity.activities.MainActivity"/>
         <activity
             android:name=".ui.activity.activities.AboutActivity"
-            android:parentActivityName=".ui.activity.activities.MainActivity" />
+            android:parentActivityName=".ui.activity.activities.MainActivity"/>
         <activity
             android:name=".ui.activity.activities.WelcomeActivity"
-            android:parentActivityName=".ui.activity.activities.MainActivity" />
+            android:parentActivityName=".ui.activity.activities.MainActivity"/>
 
-        <service android:name=".services.WinSoundService" />
+        <service android:name=".services.WinSoundService"/>
         <service android:name=".services.WaiterNewRecordsService"/>
-        <service android:name=".services.UpdateAppService" />
+        <service android:name=".services.UpdateAppService"/>
 
-        <activity android:name=".ui.activity.activities.RegistrationPageActivity" />
-        <activity android:name=".ui.activity.activities.RecordsActivity" />
+        <activity android:name=".ui.activity.activities.RegistrationPageActivity"/>
+        <activity android:name=".ui.activity.activities.RecordsActivity"/>
+
         <provider
+            android:name=".data.providers.RecordsContentProvider"
             android:authorities="com.example.notepad.bullsandcows.data.providers"
-            android:name=".data.providers.RecordsContentProvider">
+            android:exported="false">
 
         </provider>
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="5461e4d1143447088c0d753d7daa1aa0904a2876" />
+            android:value="5461e4d1143447088c0d753d7daa1aa0904a2876"/>
     </application>
 
 </manifest>

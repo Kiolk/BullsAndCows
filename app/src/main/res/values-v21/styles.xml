@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RoundedButtonStyle">
+        <item name="android:layout_marginTop">@dimen/SMALL_MARGIN</item>
+        <item name="android:clickable">true</item>
+        <item name="android:elevation">@dimen/BLOCK_ELEVATION</item>
+        <item name="android:layout_marginBottom">@dimen/SMALL_MARGIN</item>
+        <item name="android:padding">@dimen/BLOCK_PADDING</item>
+        <item name="android:textColor">@color/WHITE_COLOR_TEXT</item>
+        <item name="android:textSize">@dimen/LARGE_TEXT_SIZE</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="RegisteredButton">
+        <item name="android:background">@drawable/ripple_selector_for_cycle_button</item>
+        <item name="android:elevation">@dimen/BIG_ELEVATION</item>
+        <item name="android:layout_margin">@dimen/SIZE_OF_MARGIN</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="ShadowOfBlock">
+        <item name="android:elevation">@dimen/BLOCK_ELEVATION</item>
+        <item name="android:layout_marginTop">@dimen/SMALL_MARGIN</item>
+    </style>
+
+    <style name="GeneralBlock">
+        <item name="android:background">@drawable/myrect</item>
+        <item name="android:elevation">@dimen/BLOCK_ELEVATION</item>
+        <item name="android:layout_marginTop">@dimen/BLOCK_MARGIN</item>
+        <item name="android:layout_marginLeft">@dimen/BLOCK_MARGIN</item>
+        <item name="android:layout_marginRight">@dimen/BLOCK_MARGIN</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/BLACK_COLOR_TEXT</item>
+        <item name="android:textSize">@dimen/MIDDLE_TEXT_SIZE</item>
+        <item name="android:padding">@dimen/BLOCK_PADDING</item>
+    </style>
+</resources>

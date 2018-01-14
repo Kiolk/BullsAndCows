@@ -36,8 +36,8 @@ public class WaiterNewRecordsService extends Service {
 
                     @Override
                     public void run() {
-                        //TODO separate operation
                         final ContentValues[] arrayValues = ModelConverterUtil
+
                                 .fromArrayRecordToNetToCv(pResult.getRecordsArray());
                         getContentResolver().bulkInsert(RecordsContentProvider.CONTENT_URI, arrayValues);
 
@@ -52,18 +52,6 @@ public class WaiterNewRecordsService extends Service {
                 stopSelf();
             }
         });
-
-//        new RecordsCallbacks() {
-//
-//            @Override
-//            public void getRecordsBackendCallback(final ResponseRecordModel pResponse) {
-//
-//                if (pResponse.getRecordsArray() != null) {
-//
-//                }
-//                stopSelf();
-//            }
-//        });
 
         return super.onStartCommand(intent, flags, startId);
     }

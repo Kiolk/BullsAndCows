@@ -26,4 +26,9 @@
     <dimen name="BIGEST_TEXT_SIZE">50sp</dimen>
     <dimen name="BIG_MARGIN">20dp</dimen>
     <dimen name="EXTRA_BIG_MARGIN">40dp</dimen>
+    <dimen name="MIDDLE_ELEVATION">10dp</dimen>
+    <dimen name="WIDTH_IMAGE">200dp</dimen>
+    <dimen name="USER_IMAGE">200dp</dimen>
+    <dimen name="HEIGHT_IMAGE">200dp</dimen>
+    <dimen name="SMALL_WIDTH_IMAGE">150dp</dimen>
 </resources>

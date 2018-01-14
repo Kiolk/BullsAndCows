@@ -2,9 +2,9 @@ package com.example.notepad.bullsandcows.data.managers;
 
 import android.os.Handler;
 
-import com.example.notepad.bullsandcows.data.parsers.RecordJsonParser;
 import com.example.notepad.bullsandcows.data.httpclient.BackendEndpointClient;
 import com.example.notepad.bullsandcows.data.models.ResponseRecordModel;
+import com.example.notepad.bullsandcows.data.parsers.RecordJsonParser;
 import com.example.notepad.bullsandcows.utils.converters.TimeConvertersUtil;
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
@@ -12,32 +12,31 @@ import java.io.IOException;
 
 import javax.annotation.Nullable;
 
+public class RecordsManager {
 
-//TODO threads management in one class - operations in another
-//generic Callback<Result> onSuccess(Result result) and onException(Exception ex)
-public class RecordsManager{
-
-    public void postRecordOnBackend(final RecordsToNet pRecord, @Nullable final OnResultCallback<RecordsToNet> pCallback){
+    public void postRecordOnBackend(final RecordsToNet pRecord, @Nullable final OnResultCallback<RecordsToNet> pCallback) {
         final Handler handler = new Handler();
 
         final Thread thread = new Thread(new Runnable() {
+
             @Override
             public void run() {
-               RecordsToNet setupRecord = null;
+                RecordsToNet setupRecord = null;
                 Exception gettingException = null;
                 try {
-                   setupRecord = BackendEndpointClient.getRecordToNetApi().insert(pRecord).execute();
+                    setupRecord = BackendEndpointClient.getRecordToNetApi().insert(pRecord).execute();
                 } catch (final IOException pException) {
                     gettingException = pException;
                 }
                 final RecordsToNet responseRecord = setupRecord;
                 final Exception exception = gettingException;
                 handler.post(new Runnable() {
+
                     @Override
                     public void run() {
-                        if(pCallback != null && responseRecord != null ){
+                        if (pCallback != null && responseRecord != null) {
                             pCallback.onSuccess(pRecord);
-                        }else if (pCallback != null){
+                        } else if (pCallback != null) {
                             pCallback.onError(exception);
                         }
                     }
@@ -51,6 +50,7 @@ public class RecordsManager{
     public void getRecordsFromBackend(@Nullable final Long pAllRecordsOnDate, final OnResultCallback<ResponseRecordModel> pCallback) {
         final Handler handler = new Handler();
         final Thread thread = new Thread(new Runnable() {
+
             @Override
             public void run() {
                 ResponseRecordModel response = new ResponseRecordModel();
@@ -67,15 +67,19 @@ public class RecordsManager{
                     } while (pAllRecordsOnDate != null
                             && TimeConvertersUtil.convertToBackendTime(pAllRecordsOnDate) > response.getRecordsArray().get(response.getRecordsArray().size() - 1).getDate());
 
-                } catch (IOException pE) {
-                    pE.printStackTrace();
+                } catch (final IOException pE) {
                     response.setException(pE);
                 }
                 final ResponseRecordModel readyResponse = response;
                 handler.post(new Runnable() {
+
                     @Override
                     public void run() {
-                        pCallback.onSuccess(readyResponse);
+                        if (readyResponse.getException() == null) {
+                            pCallback.onSuccess(readyResponse);
+                        } else {
+                            pCallback.onError(readyResponse.getException());
+                        }
                     }
                 });
             }

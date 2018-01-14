@@ -3,8 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@color/LIGHT_GREY"
-              android:orientation="vertical"
-              tools:context="com.example.notepad.bullsandcows.ui.activity.fragments.UserInfoRecordFragment">
+              android:orientation="vertical">
 
     <RelativeLayout
         style="@style/GeneralBlock"

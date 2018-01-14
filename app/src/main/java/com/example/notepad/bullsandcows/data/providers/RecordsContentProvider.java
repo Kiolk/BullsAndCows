@@ -19,12 +19,10 @@ import com.example.notepad.bullsandcows.data.databases.models.UserRecordsDB;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 import static com.example.notepad.bullsandcows.utils.Constants.DBConstants.ASC;
 import static com.example.notepad.bullsandcows.utils.Constants.TAG;
 
-//TODO split logic i
 public class RecordsContentProvider extends ContentProvider {
 
     private static final String AUTHORITY_PATH = "com.example.notepad.bullsandcows.data.providers";
@@ -32,9 +30,6 @@ public class RecordsContentProvider extends ContentProvider {
     private static final String USERS_PATH = "users";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY_PATH + "/" + BASE_PATH);
     public static final Uri CONTENT_USERS_URI = Uri.parse("content://" + AUTHORITY_PATH + "/" + USERS_PATH);
-//    public static final String BASE_DIRECT_CONTENT_PATH =
-//            ContentResolver.CURSOR_DIR_BASE_TYPE + "/records";
-//    public static final String ITEM_CONTENT_PATH = ContentResolver.CURSOR_ITEM_BASE_TYPE;
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -75,13 +70,7 @@ public class RecordsContentProvider extends ContentProvider {
         switch (uriType) {
 
             case RECORDS:
-//                DBOperations dbOperations;
                 queryBuilder.setTables(UserRecordsDB.TABLE);
-                Log.d(TAG, "Records case");
-//                dbOperations = new DBOperations();
-
-//                Cursor cursor = dbOperations.query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
-                //TODO create one
                 final Cursor cursor = DBOperations.getInstance().query(UserRecordsDB.TABLE, projection, selection, selectionArgs, null, null, sortOrder);
 
                 cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -94,9 +83,6 @@ public class RecordsContentProvider extends ContentProvider {
                 return queryBuilder.query(db, projection, selection, selectionArgs, null,
                         null, sortOrder);
             case USERS:
-//                DBOperations dbOperation;
-//                dbOperation = new DBOperations();
-//                return dbOperation.query(UserInfoDB.TABLE, null, selection, selectionArgs, null, null, null);
                 return DBOperations.getInstance().query(UserInfoDB.TABLE, null, selection, selectionArgs, null, null, null);
             default:
                 throw new IllegalArgumentException("Not correct Uri");
@@ -124,18 +110,15 @@ public class RecordsContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull final Uri uri, @Nullable final ContentValues values) {
-//        DBOperations dbOperations = new DBOperations();
         final long id;
 
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case RECORDS:
-//                id = dbOperations.insert(UserRecordsDB.TABLE, values);
                 id = DBOperations.getInstance().insert(UserRecordsDB.TABLE, values);
                 Log.d(TAG, "insert: record with id " + id);
                 break;
             case USERS:
-//                id = dbOperations.insert(UserInfoDB.TABLE, values);
                 id = DBOperations.getInstance().insert(UserInfoDB.TABLE, values);
                 Log.d(TAG, "insert: user info with id" + id);
                 break;
@@ -155,17 +138,14 @@ public class RecordsContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull final Uri uri, @Nullable final ContentValues values, @Nullable final String selection, @Nullable final String[] selectionArgs) {
-//        DBOperations dbOperations = new DBOperations();
         int result = 0;
 
         final int uriType = URI_MATCHER.match(uri);
         switch (uriType) {
             case RECORDS:
-//                result = dbOperations.update(UserRecordsDB.TABLE, values);
                 result = DBOperations.getInstance().update(UserRecordsDB.TABLE, values);
                 break;
             case USERS:
-//                result = dbOperations.update(UserInfoDB.TABLE, values);
                 result = DBOperations.getInstance().update(UserInfoDB.TABLE, values);
                 break;
             default:
@@ -178,7 +158,6 @@ public class RecordsContentProvider extends ContentProvider {
     @Override
     public int bulkInsert(@NonNull final Uri uri, @NonNull final ContentValues[] values) {
         Log.d(TAG, "bulkInsert in content provider start");
-//        DBOperations dbOperations = new DBOperations();
         boolean isNew = false;
         int successAdd = 0;
 
@@ -186,7 +165,6 @@ public class RecordsContentProvider extends ContentProvider {
         switch (uriType) {
             case RECORDS:
                 successAdd = DBOperations.getInstance().bulkInsert(UserRecordsDB.TABLE, values);
-//                successAdd = dbOperations.bulkInsert(UserRecordsDB.TABLE, values);
                 if (successAdd > 0) {
                     isNew = true;
                 }

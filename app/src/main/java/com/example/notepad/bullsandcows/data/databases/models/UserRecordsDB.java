@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import com.example.notepad.myapplication.backend.recordsToNetApi.model.RecordsToNet;
 
-//TODO add method convertToContentValues() maybe move to separate interface
 public final class UserRecordsDB {
 
     public static final String TABLE = "Records";

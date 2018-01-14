@@ -12,37 +12,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import kiolk.com.github.pen.utils.LogUtil;
 
-import static kiolk.com.github.pen.utils.ConstantsUtil.KILOBYTE_SIZE;
-import static kiolk.com.github.pen.utils.ConstantsUtil.STORAGE_FILE_FORMAT;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.DEFAULT_FILE_CACHE_SIZE;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.IMAGE_CACHE_DESTINATION;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.KILOBYTE_SIZE;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.STORAGE_FILE_FORMAT;
 
-class DiskCache {
+final class DiskCache {
 
-    private static final long DEFAULT_FILE_CACHE_SIZE = 10 * 1024 * 1024;
-    private static final String IMAGE_CACHE_DESTINATION = "ImageCache";
+    private static DiskCache sDiskCache;
 
-    //TODO needs to be usual class not a singleton
-    private static DiskCache mDiskCache;
     private long mAvailableCacheSize;
-    final Object mLock;
     private File mCacheDir;
     private long mCurrentSizeCache;
 
     private DiskCache() {
-        mLock = new Object();
         mAvailableCacheSize = DEFAULT_FILE_CACHE_SIZE;
     }
 
     static DiskCache getInstance() {
 
-        if (mDiskCache == null) {
-            mDiskCache = new DiskCache();
+        if (sDiskCache == null) {
+            sDiskCache = new DiskCache();
             LogUtil.msg("Create object of DiskCache");
         }
 
-        return mDiskCache;
+        return sDiskCache;
     }
 
     void setUserCacheSize(final long userCacheSize) {
@@ -63,18 +61,17 @@ class DiskCache {
 
         try {
             fileOutputStream = new FileOutputStream(myPath);
-            pBitmap.compress(Bitmap.CompressFormat.PNG, Pen.QUALITY_OF_COMPRESSION_BMP, fileOutputStream);
+            pBitmap.compress(Bitmap.CompressFormat.PNG, Pen.getInstance().getQualityOfCompressionBmp(), fileOutputStream);
             isSaved = true;
-        } catch (final Exception e) {
-            e.printStackTrace();
+        } catch (final Exception ignored) {
+
         } finally {
             try {
                 if (fileOutputStream != null) {
                     fileOutputStream.close();
                     keepSizeCacheFolder();
                 }
-            } catch (final IOException e) {
-                e.printStackTrace();
+            } catch (final IOException ignored) {
             }
         }
 
@@ -88,8 +85,7 @@ class DiskCache {
 
         try {
             bitmap = BitmapFactory.decodeStream(new FileInputStream(myPath));
-        } catch (final FileNotFoundException e) {
-            e.printStackTrace();
+        } catch (final FileNotFoundException ignored) {
         }
 
         return bitmap;
@@ -112,7 +108,7 @@ class DiskCache {
         sizeCacheFolder();
         if (mCurrentSizeCache > mAvailableCacheSize) {
             final File[] listFiles = mCacheDir.listFiles();
-            final ArrayList<File> arrayFiles = new ArrayList<>();
+            final List<File> arrayFiles = new ArrayList<>();
             arrayFiles.addAll(Arrays.asList(listFiles));
 
             final Comparator<File> comparator = new Comparator<File>() {
@@ -146,7 +142,7 @@ class DiskCache {
     }
 
     private void getCacheDir() {
-        final File cachePath = Pen.CACHE_DIR;
+        final File cachePath = Pen.getInstance().getCacheDir();
         final File imageFolder = new File(cachePath, IMAGE_CACHE_DESTINATION);
 
         if (!imageFolder.exists()) {

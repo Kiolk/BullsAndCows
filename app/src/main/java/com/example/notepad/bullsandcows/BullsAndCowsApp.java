@@ -10,6 +10,7 @@ import com.example.notepad.bullsandcows.utils.KeepUserOnlineUtil;
 
 import io.fabric.sdk.android.Fabric;
 import kiolk.com.github.pen.Pen;
+import kiolk.com.github.pen.utils.PenConstantsUtil;
 
 public class BullsAndCowsApp extends Application {
 
@@ -29,9 +30,8 @@ public class BullsAndCowsApp extends Application {
         Pen.getInstance().setLoaderSettings()
                 .setContext(this)
                 .setDefaultDrawable(getResources().getDrawable(R.drawable.ic_bull_big_size))
-//                .setErrorDrawable(getResources().getDrawable(R.drawable.ic_image_no_load))
-                .setSavingStrategy(Pen.SAVE_SCALING_IMAGE_STRATEGY)
-                .setTypeOfCache(Pen.INNER_FILE_CACHE)
+                .setSavingStrategy(PenConstantsUtil.SAVE_SCALING_IMAGE_STRATEGY)
+                .setTypeOfCache(PenConstantsUtil.INNER_FILE_CACHE)
                 .setSizeInnerFileCache(Constants.INNER_FILE_CACHE_SIZE_MB)
                 .setQualityImageCompression(Constants.QUALITY_IMAGE_COMPRESSION)
                 .setUp();

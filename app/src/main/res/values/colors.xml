@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="COLOR_PRIMARY">#3F51B5</color>
+    <color name="COLOR_PRIMARY_DARK">#303F9F</color>
+    <color name="COLOR_ACCENT">#FF4081</color>
     <color name="BACKGROUND_TITLE_COLOR">#ff9900</color>
     <color name="WHITE_COLOR_TEXT">#FFFFFF</color>
     <color name="BLACK_COLOR_TEXT">#000000</color>
@@ -29,5 +29,4 @@
     <drawable name="BACKGROUND_COLOR_BUTTON">#467082</drawable>
     <drawable name="PRESS_BUTTON">#303F9F</drawable>
     <drawable name="SELECT_BUTTON">#ED474F</drawable>
-
 </resources>

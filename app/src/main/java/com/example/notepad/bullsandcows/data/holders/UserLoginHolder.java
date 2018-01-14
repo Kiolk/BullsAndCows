@@ -12,7 +12,6 @@ import com.example.notepad.bullsandcows.data.databases.DBOperations;
 import com.example.notepad.bullsandcows.data.databases.models.CurrentUserDB;
 import com.example.notepad.bullsandcows.data.managers.OnResultCallback;
 import com.example.notepad.bullsandcows.data.managers.UserBaseManager;
-import com.example.notepad.bullsandcows.data.managers.UserLoginCallback;
 import com.example.notepad.myapplication.backend.userDataBaseApi.model.UserDataBase;
 
 import static com.example.notepad.bullsandcows.utils.Constants.INT_TRUE_VALUE;

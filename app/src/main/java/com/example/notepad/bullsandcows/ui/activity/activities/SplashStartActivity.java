@@ -24,7 +24,6 @@ public class SplashStartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_start);
 
-        prepareService();
         initView();
     }
 
@@ -46,6 +45,7 @@ public class SplashStartActivity extends Activity {
 
             @Override
             public void validToken() {
+                prepareService();
                 final Intent intent = new Intent(SplashStartActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();

@@ -11,20 +11,21 @@ import com.example.notepad.bullsandcows.utils.IOCloseUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-//TODO split logic to: HttpRequest, FileCache, Parser -> join them in one operation.
-public class NewAppVersionLoader extends AsyncTask<RequestUpdateModel, Void, RequestUpdateModel> {
+import static kiolk.com.github.pen.utils.PenConstantsUtil.KILOBYTE_SIZE;
+
+class NewAppVersionLoader extends AsyncTask<RequestUpdateModel, Void, RequestUpdateModel> {
 
     private static final String APK_FILE_RESOLUTION = ".apk";
+    public static final String REQUEST_METHOD_GET = "GET";
 
     @Override
     protected void onPostExecute(final RequestUpdateModel requestUpdateModel) {
         final UploadNewVersionAppCallback callback = requestUpdateModel.getCallback();
-        callback.sendUploadResultsCallback(requestUpdateModel);
+        callback.onUploadRes(requestUpdateModel);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class NewAppVersionLoader extends AsyncTask<RequestUpdateModel, Void, Req
 
             final URL mUrl = new URL(downloadUrl);
             final HttpURLConnection connection = (HttpURLConnection) mUrl.openConnection();
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod(REQUEST_METHOD_GET);
             connection.connect();
 
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -71,7 +72,7 @@ public class NewAppVersionLoader extends AsyncTask<RequestUpdateModel, Void, Req
 
             fOS = new FileOutputStream(outputFile);
             in = connection.getInputStream();
-            final byte[] buffer = new byte[1024];
+            final byte[] buffer = new byte[KILOBYTE_SIZE];
             int lin1;
 
             while ((lin1 = in.read(buffer)) != -1) {
@@ -84,21 +85,6 @@ public class NewAppVersionLoader extends AsyncTask<RequestUpdateModel, Void, Req
             request.setException(pE);
         } finally {
             new IOCloseUtils().addForClose(fOS).addForClose(in).close();
-//            try {
-//                if (fOS != null) {
-//                    fOS.close();
-//                }
-//            } catch (final IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            try {
-//                if (in != null) {
-//                    in.close();
-//                }
-//            } catch (final IOException e) {
-//                e.printStackTrace();
-//            }
         }
 
         return request;

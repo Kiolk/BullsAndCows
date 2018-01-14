@@ -12,19 +12,21 @@ import java.net.URL;
 import kiolk.com.github.pen.utils.LogUtil;
 import kiolk.com.github.pen.utils.MD5Util;
 
-import static kiolk.com.github.pen.utils.ConstantsUtil.KILOBYTE_SIZE;
-import static kiolk.com.github.pen.utils.ConstantsUtil.LOG;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.INNER_FILE_CACHE;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.KILOBYTE_SIZE;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.LOG;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.MEMORY_CACHE;
+import static kiolk.com.github.pen.utils.PenConstantsUtil.SAVE_SCALING_IMAGE_STRATEGY;
 
 final class ImageFactory {
 
     private static final Object mLock = new Object();
 
-
     static ImageResult creteBitmapFromUrl(ImageResult pResult) {
         final String url = pResult.getRequest().getUrl();
 
         switch (Pen.getInstance().getTypeOfMemoryCache()) {
-            case Pen.MEMORY_CACHE:
+            case MEMORY_CACHE:
                 synchronized (mLock) {
 
                     if (Pen.getInstance().getBitmapFromLruCache(url) != null) {
@@ -35,7 +37,7 @@ final class ImageFactory {
                     }
                 }
                 break;
-            case Pen.INNER_FILE_CACHE:
+            case INNER_FILE_CACHE:
                 synchronized (mLock) {
                     final String name = getName(pResult);
                     final Bitmap bitmap = DiskCache.getInstance().loadBitmapFromDiskCache(name);
@@ -55,18 +57,18 @@ final class ImageFactory {
         pResult = creteBitmap(pResult);
 
         switch (Pen.getInstance().getTypeOfMemoryCache()) {
-            case Pen.MEMORY_CACHE:
+            case MEMORY_CACHE:
 
                 synchronized (mLock) {
-                    if(pResult.getException() == null) { //Checking  for no correct saving bmp
+                    if (pResult.getException() == null) { //Checking  for no correct saving bmp
                         Pen.getInstance().addBitmapForLruCache(pResult.getRequest().getUrl(), pResult.getBitmap());
                     }
                 }
 
                 break;
-            case Pen.INNER_FILE_CACHE:
+            case INNER_FILE_CACHE:
 
-                synchronized (mLock){
+                synchronized (mLock) {
                     final boolean resultOfSave;
 
                     final String name = getName(pResult);
@@ -102,7 +104,7 @@ final class ImageFactory {
 
             final byte[] bytes = byteArrayInputStream.toByteArray();
 
-            if (Pen.getInstance().getStrategySaveImage() == Pen.SAVE_SCALING_IMAGE_STRATEGY) {
+            if (Pen.getInstance().getStrategySaveImage() == SAVE_SCALING_IMAGE_STRATEGY) {
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
 
@@ -121,7 +123,6 @@ final class ImageFactory {
 
             return pResult;
         } catch (final IOException e) {
-            e.printStackTrace();
             pResult.setException(e);
 
             return pResult;

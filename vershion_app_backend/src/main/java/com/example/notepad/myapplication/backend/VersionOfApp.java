@@ -8,12 +8,12 @@ public class VersionOfApp {
     private String mPowered;
     private String mFeatures;
     private String mUrlNewVersionOfApp;
-    private String [] mNewVersionFeatures;
+    private String[] mNewVersionFeatures;
     private String mUserRecordBackend;
 
-    public VersionOfApp(String pNameOfApp, String pVersionOfApp, Long pDateOfRelease,
-                        String pPowered, String pFeatures, String pUrlNewVersionOfApp,
-                        String pUserRecordBackend, String [] pNewVersionFeatures) {
+    VersionOfApp(final String pNameOfApp, final String pVersionOfApp, final Long pDateOfRelease,
+                 final String pPowered, final String pFeatures, final String pUrlNewVersionOfApp,
+                 final String pUserRecordBackend, final String[] pNewVersionFeatures) {
         mNameOfApp = pNameOfApp;
         mVersionOfApp = pVersionOfApp;
         mDateOfRelease = pDateOfRelease;
@@ -24,23 +24,22 @@ public class VersionOfApp {
         mUserRecordBackend = pUserRecordBackend;
     }
 
-    public VersionOfApp(){
+    public VersionOfApp() {
     }
 
     public String getUrlNewVersionOfApp() {
         return mUrlNewVersionOfApp;
     }
 
-    public void setUrlNewVersionOfApp(String pUrlNewVersionOfApp) {
+    public void setUrlNewVersionOfApp(final String pUrlNewVersionOfApp) {
         mUrlNewVersionOfApp = pUrlNewVersionOfApp;
     }
-
 
     public String getNameOfApp() {
         return mNameOfApp;
     }
 
-    public void setNameOfApp(String pNameOfApp) {
+    public void setNameOfApp(final String pNameOfApp) {
         mNameOfApp = pNameOfApp;
     }
 
@@ -48,7 +47,7 @@ public class VersionOfApp {
         return mVersionOfApp;
     }
 
-    public void setVersionOfApp(String pVersionOfApp) {
+    public void setVersionOfApp(final String pVersionOfApp) {
         mVersionOfApp = pVersionOfApp;
     }
 
@@ -56,7 +55,7 @@ public class VersionOfApp {
         return mDateOfRelease;
     }
 
-    public void setDateOfRelease(Long pDateOfRelease) {
+    public void setDateOfRelease(final Long pDateOfRelease) {
         mDateOfRelease = pDateOfRelease;
     }
 
@@ -64,7 +63,7 @@ public class VersionOfApp {
         return mPowered;
     }
 
-    public void setPowered(String pPowered) {
+    public void setPowered(final String pPowered) {
         mPowered = pPowered;
     }
 
@@ -72,7 +71,7 @@ public class VersionOfApp {
         return mFeatures;
     }
 
-    public void setFeatures(String pFeatures) {
+    public void setFeatures(final String pFeatures) {
         mFeatures = pFeatures;
     }
 
@@ -80,15 +79,15 @@ public class VersionOfApp {
         return mNewVersionFeatures;
     }
 
-    public void setmNewVersionFeatures(String[] mNewVersionFeatures) {
+    public void setNewVersionFeatures(final String[] mNewVersionFeatures) {
         this.mNewVersionFeatures = mNewVersionFeatures;
     }
 
-    public String getmUserRecordBackend() {
+    public String getUserRecordBackend() {
         return mUserRecordBackend;
     }
 
-    public void setmUserRecordBackend(String mUserRecordBackend) {
+    public void setUserRecordBackend(final String mUserRecordBackend) {
         this.mUserRecordBackend = mUserRecordBackend;
     }
 }

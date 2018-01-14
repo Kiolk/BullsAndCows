@@ -5,19 +5,17 @@ import com.example.notepad.bullsandcows.services.UploadNewVersionAppCallback;
 
 public class RequestUpdateModel {
 
-    //TODO move callback to another place
     private UploadNewVersionAppCallback mCallback;
 
     private VersionOfApp mVersionApp;
 
     private Exception mException;
 
-    //TODO move method to another place
     public UploadNewVersionAppCallback getCallback() {
         return mCallback;
     }
 
-    public void setCallback(UploadNewVersionAppCallback mCallback) {
+    public void setCallback(final UploadNewVersionAppCallback mCallback) {
         this.mCallback = mCallback;
     }
 
@@ -25,7 +23,7 @@ public class RequestUpdateModel {
         return mVersionApp;
     }
 
-    public void setVersionApp(VersionOfApp mVersionApp) {
+    public void setVersionApp(final VersionOfApp mVersionApp) {
         this.mVersionApp = mVersionApp;
     }
 
@@ -33,7 +31,7 @@ public class RequestUpdateModel {
         return mException;
     }
 
-    public void setException(Exception mException) {
+    public void setException(final Exception mException) {
         this.mException = mException;
     }
 }

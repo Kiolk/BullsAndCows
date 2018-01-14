@@ -10,22 +10,14 @@
                                    app:layout_collapseMode="pin"
                                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-    <!--<ImageView-->
-        <!--android:id="@+id/user_photo_tool_bar_image_view"-->
-        <!--android:layout_width="40dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:src="@drawable/ic_bull_big_size"-->
-        <!--android:contentDescription="@string/USER_PHOTO"/>-->
-
     <TextView
         android:id="@+id/user_nik_tool_bar_text_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="@dimen/SIZE_OF_MARGIN"
+        android:layout_marginStart="@dimen/SIZE_OF_MARGIN"
         android:gravity="center_vertical"
         android:maxLength="20"
-        android:textSize="24sp"
+        android:textSize="@dimen/LARGE_TEXT_SIZE"
         tool:text="Maria"/>
-
-
 </android.support.v7.widget.Toolbar>
